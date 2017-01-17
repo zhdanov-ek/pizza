@@ -1,0 +1,103 @@
+package com.example.gek.pizza.data;
+
+import android.os.Parcel;
+import android.os.Parcelable;
+
+/**
+ * Model of news
+ */
+
+public class News implements Parcelable {
+    private String title;
+    private String description;
+    private String photoUrl;
+    private String photoName;
+    private String key;
+
+    public String getPhotoName() {
+        return photoName;
+    }
+
+    public void setPhotoName(String photoName) {
+        this.photoName = photoName;
+    }
+
+
+    public News() {
+    }
+
+    public News(String title, String description, String photoUrl, String photoName) {
+        this.title = title;
+        this.description = description;
+        this.photoUrl = photoUrl;
+        this.photoName = photoName;
+        this.key = key;
+    }
+
+    public String getKey() {
+        return key;
+    }
+
+    public void setKey(String key) {
+        this.key = key;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getPhotoUrl() {
+        return photoUrl;
+    }
+
+    public void setPhotoUrl(String photoUrl) {
+        this.photoUrl = photoUrl;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.title);
+        dest.writeString(this.description);
+        dest.writeString(this.photoUrl);
+        dest.writeString(this.photoName);
+        dest.writeString(this.key);
+    }
+
+    protected News(Parcel in) {
+        this.title = in.readString();
+        this.description = in.readString();
+        this.photoUrl = in.readString();
+        this.photoName = in.readString();
+        this.key = in.readString();
+    }
+
+    public static final Creator<News> CREATOR = new Creator<News>() {
+        @Override
+        public News createFromParcel(Parcel source) {
+            return new News(source);
+        }
+
+        @Override
+        public News[] newArray(int size) {
+            return new News[size];
+        }
+    };
+}

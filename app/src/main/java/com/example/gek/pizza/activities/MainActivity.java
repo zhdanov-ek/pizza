@@ -1,5 +1,6 @@
-package com.example.gek.pizza;
+package com.example.gek.pizza.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -12,6 +13,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
+
+import com.example.gek.pizza.R;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener{
@@ -107,7 +110,8 @@ public class MainActivity extends AppCompatActivity
                 Toast.makeText(this, "Menu Order", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.cvNews:
-                Toast.makeText(this, "News", Toast.LENGTH_SHORT).show();
+                Intent newsIntent = new Intent(this, NewsActivity.class);
+                startActivity(newsIntent);
                 break;
             case R.id.cvOrders:
                 Toast.makeText(this, "Orders", Toast.LENGTH_SHORT).show();
