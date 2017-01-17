@@ -6,12 +6,17 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener{
+
+    CardView cvMenuOrder, cvNews, cvOrders;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,6 +24,13 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        cvMenuOrder = (CardView) findViewById(R.id.cvMenuOrder);
+        cvMenuOrder.setOnClickListener(this);
+        cvNews = (CardView) findViewById(R.id.cvNews);
+        cvNews.setOnClickListener(this);
+        cvOrders = (CardView) findViewById(R.id.cvOrders);
+        cvOrders.setOnClickListener(this);
 
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -86,5 +98,22 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()){
+            case R.id.cvMenuOrder:
+                Toast.makeText(this, "Menu Order", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.cvNews:
+                Toast.makeText(this, "News", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.cvOrders:
+                Toast.makeText(this, "Orders", Toast.LENGTH_SHORT).show();
+                break;
+
+        }
+
     }
 }

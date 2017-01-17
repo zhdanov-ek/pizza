@@ -5,4 +5,14 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
     <string name="action_settings">Settings</string>
+
+
+
+    <string name="order_menu">Menu for order</string>
+    <string name="news">News</string>
+    <string name="orders">Orders</string>
+
+    <string name="text_order_menu">Choose and order what you want</string>
+    <string name="text_news">News about pizza and others</string>
+    <string name="text_orders">Order processing</string>
 </resources>
