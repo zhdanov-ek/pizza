@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
@@ -35,6 +36,7 @@ public class NewsEditActivity extends AppCompatActivity implements View.OnClickL
     private News changedNews;
     private Uri uriPhoto;
 
+    ProgressBar progressBar;
     EditText etTitle, etDescription;
     ImageView ivPhoto;
     Button btnRemovePhoto, btnOk;
@@ -47,6 +49,7 @@ public class NewsEditActivity extends AppCompatActivity implements View.OnClickL
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_news_edit);
 
+        progressBar = (ProgressBar) findViewById(R.id.progressBar);
         etTitle = (EditText) findViewById(R.id.etTitle);
         etDescription = (EditText) findViewById(R.id.etDescription);
         ivPhoto = (ImageView) findViewById(R.id.ivPhoto);
@@ -88,6 +91,11 @@ public class NewsEditActivity extends AppCompatActivity implements View.OnClickL
                 Uri uri = data.getData();
                 ivPhoto.setImageURI(uri);
                 uriPhoto = uri;
+
+                if ((!isNewNews) && (oldNews.getPhotoName().length() > 0)) {
+                    isNeedRemovePhoto = true;
+                }
+                btnRemovePhoto.setVisibility(View.VISIBLE);
             }
         } else {
             uriPhoto = null;
@@ -123,6 +131,7 @@ public class NewsEditActivity extends AppCompatActivity implements View.OnClickL
         final String title = etTitle.getText().toString();
         final String description = etDescription.getText().toString();
 
+        progressBar.setVisibility(View.VISIBLE);
 
         // Если выбранно фото с галереи то сначало грузим фото, а потом запишем карточку в БД
         // Удаляем старое фото если оно было
@@ -136,13 +145,14 @@ public class NewsEditActivity extends AppCompatActivity implements View.OnClickL
                 @Override
                 public void onFailure(@NonNull Exception exception) {
                     Toast.makeText(getBaseContext(), "Loading image to server: ERROR", Toast.LENGTH_LONG).show();
+                    progressBar.setVisibility(View.GONE);
                 }
             }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                     // Получаем ссылку на закачанный файл и сохраняем ее
                     Uri photoUrl = taskSnapshot.getDownloadUrl();
-                    News newNews = new News(title, description, photoName, photoUrl.toString());
+                    News newNews = new News(title, description, photoUrl.toString(), photoName);
                     if (isNewNews){
                         String key = db.child(Const.CHILD_NEWS).push().getKey();
                         newNews.setKey(key);
@@ -157,6 +167,7 @@ public class NewsEditActivity extends AppCompatActivity implements View.OnClickL
                         changedNews = newNews;
                     }
                     fillValues(null);
+                    progressBar.setVisibility(View.GONE);
                     if (!isNewNews) {
                         Intent resultIntent = new Intent();
                         resultIntent.putExtra(Const.EXTRA_NEWS, changedNews);
@@ -188,6 +199,7 @@ public class NewsEditActivity extends AppCompatActivity implements View.OnClickL
                 db.child(Const.CHILD_NEWS).child(oldKey).setValue(newNews);
                 changedNews = newNews;
             }
+            progressBar.setVisibility(View.GONE);
             if (!isNewNews) {
                 Intent resultIntent = new Intent();
                 resultIntent.putExtra(Const.EXTRA_NEWS, changedNews);
