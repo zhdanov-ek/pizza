@@ -18,6 +18,7 @@
     <string name="text_orders">Order processing</string>
 
     <string name="mes_no_internet">No internet connection</string>
+    <string name="mes_no_records">No data in the program</string>
 
     <string name="hint_title_news">Title of news</string>
     <string name="hint_description_news">Full text of news</string>
