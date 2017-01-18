@@ -2,6 +2,9 @@
     <string name="app_name">Pizza</string>
 
     <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
+    <string name="edit">Edit</string>
+    <string name="remove">Remove</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -18,6 +21,8 @@
     <string name="text_orders">Order processing</string>
 
     <string name="mes_no_internet">No internet connection</string>
+    <string name="mes_no_records">No data in the program</string>
+    <string name="confirm_remove_item">Do you want remove item?</string>
 
     <string name="hint_title_news">Title of news</string>
     <string name="hint_description_news">Full text of news</string>
