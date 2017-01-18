@@ -1,6 +1,7 @@
 package com.example.gek.pizza.data;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +12,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.gek.pizza.R;
+import com.example.gek.pizza.activities.NewsShowActivity;
 
 import java.util.ArrayList;
 
@@ -51,7 +53,6 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder>{
         } else {
             holder.ivPhoto.setImageResource(R.drawable.news_icon);
         }
-
     }
 
     @Override
@@ -59,14 +60,23 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder>{
         return listNews.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder{
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         private TextView tvTitle;
         private ImageView ivPhoto;
 
         public ViewHolder(View itemView) {
             super(itemView);
+            itemView.setOnClickListener(this);
             tvTitle = (TextView) itemView.findViewById(R.id.tvTitle);
             ivPhoto = (ImageView) itemView.findViewById(R.id.ivPhoto);
+        }
+
+        @Override
+        public void onClick(View view) {
+            News chooseNews = listNews.get(getAdapterPosition());
+            Intent openIntent = new Intent(ctx, NewsShowActivity.class);
+            openIntent.putExtra(Const.EXTRA_NEWS, chooseNews);
+            ctx.startActivity(openIntent);
         }
     }
 }

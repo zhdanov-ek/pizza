@@ -19,7 +19,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".activities.NewsActivity" />
-        <activity android:name=".activities.NewsEditActivity"></activity>
+        <activity android:name=".activities.NewsEditActivity" />
+        <activity android:name=".activities.NewsShowActivity"></activity>
     </application>
 
 </manifest>

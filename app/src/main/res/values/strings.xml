@@ -2,6 +2,8 @@
     <string name="app_name">Pizza</string>
 
     <string name="ok">OK</string>
+    <string name="edit">Edit</string>
+    <string name="remove">Remove</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
