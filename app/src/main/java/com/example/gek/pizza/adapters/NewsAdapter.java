@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.RemoteViews;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -79,6 +80,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder>{
         private LinearLayout llDescription;
         private Button btnEdit;
         private Button btnRemove;
+        private ImageView ivLess;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -88,10 +90,12 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder>{
             llDescription = (LinearLayout) itemView.findViewById(R.id.llDescription);
             btnEdit = (Button) itemView.findViewById(R.id.btnEdit);
             btnRemove = (Button) itemView.findViewById(R.id.btnRemove);
+            ivLess = (ImageView) itemView.findViewById(R.id.ivLess);
 
             itemView.setOnClickListener(this);
             btnRemove.setOnClickListener(this);
             btnEdit.setOnClickListener(this);
+            ivLess.setOnClickListener(this);
 
         }
 
@@ -108,8 +112,16 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder>{
                 case R.id.btnRemove:
                     removeNews(listNews.get(getAdapterPosition()));
                     break;
+                case R.id.ivLess:
+                    llDescription.setVisibility(View.GONE);
+                    break;
                 default:
                     llDescription.setVisibility(View.VISIBLE);
+                    //todo если админ то показываем и кнопки редактирования и удаления карточки
+                    if (true){
+                        btnEdit.setVisibility(View.VISIBLE);
+                        btnRemove.setVisibility(View.VISIBLE);
+                    }
             }
         }
     }

@@ -6,6 +6,8 @@ import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -49,6 +51,10 @@ public class NewsEditActivity extends AppCompatActivity implements View.OnClickL
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_news_edit);
 
+        Toolbar myToolbar = (Toolbar) findViewById(R.id.toolBar);
+        myToolbar.setTitle("");
+        setSupportActionBar(myToolbar);
+
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
         etTitle = (EditText) findViewById(R.id.etTitle);
         etDescription = (EditText) findViewById(R.id.etDescription);
@@ -70,9 +76,12 @@ public class NewsEditActivity extends AppCompatActivity implements View.OnClickL
                 (getIntent().getIntExtra(Const.MODE, Const.MODE_NEW) == Const.MODE_EDIT)){
             isNewNews = false;
             oldNews = getIntent().getParcelableExtra(Const.EXTRA_NEWS);
+            String title = getResources().getString(R.string.edit) + " - " + oldNews.getTitle();
+            myToolbar.setTitle(title);
             fillValues(oldNews);
         } else {
             fillValues(null);
+            myToolbar.setTitle(R.string.create_new);
         }
 
         // Получаем ссылку на наше хранилище
@@ -252,6 +261,12 @@ public class NewsEditActivity extends AppCompatActivity implements View.OnClickL
         if (namePhoto.length() > 0){
             storageRef.child(Const.NEWS_IMAGES_FOLDER).child(namePhoto).delete();
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu, menu);
+        return true;
     }
 
 
