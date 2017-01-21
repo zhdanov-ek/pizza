@@ -96,7 +96,6 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder>{
             btnRemove.setOnClickListener(this);
             btnEdit.setOnClickListener(this);
             ivLess.setOnClickListener(this);
-
         }
 
         @Override

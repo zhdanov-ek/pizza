@@ -107,7 +107,8 @@ public class MainActivity extends AppCompatActivity
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.cvMenuOrder:
-                Toast.makeText(this, "Menu Order", Toast.LENGTH_SHORT).show();
+                Intent menuIntent = new Intent(this, MenuOrdersActivity.class);
+                startActivity(menuIntent);
                 break;
             case R.id.cvNews:
                 Intent newsIntent = new Intent(this, NewsActivity.class);

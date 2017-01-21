@@ -3,10 +3,10 @@
     package="com.example.gek.pizza">
 
     <application
+        android:name=".helpers.PizzaApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:name=".helpers.PizzaApplication"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
@@ -21,7 +21,9 @@
         </activity>
         <activity android:name=".activities.NewsActivity" />
         <activity android:name=".activities.NewsEditActivity" />
-        <activity android:name=".activities.NewsShowActivity"/>
+        <activity android:name=".activities.NewsShowActivity" />
+        <activity android:name=".activities.MenuOrdersActivity" />
+        <activity android:name=".activities.MenuOrdersEditActivity"></activity>
     </application>
 
 </manifest>
