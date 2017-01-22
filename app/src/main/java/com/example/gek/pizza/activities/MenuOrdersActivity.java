@@ -10,7 +10,9 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.GestureDetector;
 import android.view.Menu;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Toast;
 
@@ -36,6 +38,7 @@ public class MenuOrdersActivity extends AppCompatActivity {
     private ArrayList<MenuGroup> listMenuGroup;
     private GridLayoutManager lLayout;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,6 +53,24 @@ public class MenuOrdersActivity extends AppCompatActivity {
         // задаем лаяют с твумя столбцами
         lLayout = new GridLayoutManager(MenuOrdersActivity.this, 2);
         rv.setLayoutManager(lLayout);
+
+
+        rv.addOnItemTouchListener(new RecyclerTouchListener(this, rv, new ClickListener() {
+
+            @Override
+            public void onClick(View view, int position) {
+                //Values are passing to activity & to fragment as well
+                Toast.makeText(MenuOrdersActivity.this, "Single Click on position : " + position,
+                        Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onLongClick(View view, int position) {
+                Toast.makeText(MenuOrdersActivity.this, "Long press on position : " + position,
+                        Toast.LENGTH_LONG).show();
+            }
+
+        }));
 
         fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(fabListener);
@@ -104,5 +125,56 @@ public class MenuOrdersActivity extends AppCompatActivity {
             startActivity(addMenuGroup);
         }
     };
+
+
+
+    public interface ClickListener{
+         void onClick(View view,int position);
+         void onLongClick(View view,int position);
+    }
+
+
+    class RecyclerTouchListener implements RecyclerView.OnItemTouchListener{
+
+        private ClickListener clicklistener;
+        private GestureDetector gestureDetector;
+
+        public RecyclerTouchListener(Context context, final RecyclerView recycleView, final ClickListener clicklistener){
+
+            this.clicklistener=clicklistener;
+            gestureDetector=new GestureDetector(context,new GestureDetector.SimpleOnGestureListener(){
+                @Override
+                public boolean onSingleTapUp(MotionEvent e) {
+                    return true;
+                }
+
+                @Override
+                public void onLongPress(MotionEvent e) {
+                    View child=recycleView.findChildViewUnder(e.getX(),e.getY());
+                    if(child!=null && clicklistener!=null){
+                        clicklistener.onLongClick(child,recycleView.getChildAdapterPosition(child));
+                    }
+                }
+            });
+        }
+
+        @Override
+        public boolean onInterceptTouchEvent(RecyclerView rv, MotionEvent e) {
+            View child=rv.findChildViewUnder(e.getX(),e.getY());
+            if(child!=null && clicklistener!=null && gestureDetector.onTouchEvent(e)){
+                clicklistener.onClick(child,rv.getChildAdapterPosition(child));
+            }
+            return false;
+        }
+
+        @Override
+        public void onTouchEvent(RecyclerView rv, MotionEvent e) {
+        }
+
+
+        @Override
+        public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
+        }
+    }
 
 }
