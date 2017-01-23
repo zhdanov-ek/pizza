@@ -23,7 +23,9 @@
         <activity android:name=".activities.NewsEditActivity" />
         <activity android:name=".activities.NewsShowActivity" />
         <activity android:name=".activities.MenuOrdersActivity" />
-        <activity android:name=".activities.MenuOrdersEditActivity"></activity>
+        <activity android:name=".activities.MenuOrdersEditActivity" />
+        <activity android:name=".activities.DishesActivity" />
+        <activity android:name=".activities.DishEditActivity"></activity>
     </application>
 
 </manifest>

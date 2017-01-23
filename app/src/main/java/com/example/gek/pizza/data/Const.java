@@ -10,6 +10,7 @@ import com.google.firebase.database.FirebaseDatabase;
 public class Const {
     // DataBase
     public static final DatabaseReference db = FirebaseDatabase.getInstance().getReference();
+    public static final String CHILD_DISHES = "dishes";
     public static final String CHILD_NEWS = "news";
     public static final String CHILD_MENU_GROUPS = "menu_groups";
 
@@ -18,6 +19,7 @@ public class Const {
 
     public static final String MENU_GROUP_IMAGES_FOLDER = "menu_group_images";
     public static final String NEWS_IMAGES_FOLDER = "news_images";
+    public static final String DISHES_IMAGES_FOLDER = "dishes_images";
 
 
     // Константы для редактирования и создания элементов
@@ -26,7 +28,10 @@ public class Const {
     public static final int MODE_EDIT = 1;
 
     public static final String EXTRA_NEWS = "news_object";
+    public static final String EXTRA_DISH = "dish_object";
     public static final String EXTRA_MENU_GROUP = "menu_group_object";
+
+    public static final String DISH_GROUP = "dish_group";
 
 
     // id используемые при вызовах активити через интент

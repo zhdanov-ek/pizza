@@ -1,6 +1,7 @@
 package com.example.gek.pizza.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,9 +13,12 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.gek.pizza.R;
+import com.example.gek.pizza.activities.DishesActivity;
+import com.example.gek.pizza.data.Const;
 import com.example.gek.pizza.data.MenuGroup;
 
 import java.util.ArrayList;
+
 
 /**
  * Адаптер для наполнения главного меню заказов
@@ -57,7 +61,6 @@ public class MenuOrdersAdapter extends RecyclerView.Adapter<MenuOrdersAdapter.Vi
         return menuList.size();
     }
 
-
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         private TextView tvName;
         private ImageView ivPhoto;
@@ -69,9 +72,13 @@ public class MenuOrdersAdapter extends RecyclerView.Adapter<MenuOrdersAdapter.Vi
             itemView.setOnClickListener(this);
         }
 
+        // Запускаем активити с блюдами выбранной категории
         @Override
         public void onClick(View view) {
             Toast.makeText(ctx, tvName.getText().toString(), Toast.LENGTH_SHORT).show();
+            Intent dishGroupOpen = new Intent(ctx, DishesActivity.class);
+            dishGroupOpen.putExtra(Const.DISH_GROUP, tvName.getText());
+            ctx.startActivity(dishGroupOpen);
         }
     }
 }
