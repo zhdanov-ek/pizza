@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+<item  android:state_pressed="true">
+    <shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle" >
+        <corners
+            android:radius="@dimen/button_flat_radius"
+            />
+        <size
+            android:height="@dimen/button_flat_height"
+            android:width="@dimen/button_flat_width"/>
+
+        <solid
+            android:color="@color/colorButtonFlatBackgroundPress"
+            />
+    </shape>
+</item>
+
+<item android:state_focused="true">
+    <shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle" >
+        <corners
+            android:radius="@dimen/button_flat_radius"
+            />
+
+        <size
+            android:height="@dimen/button_flat_height"
+            android:width="@dimen/button_flat_width"/>
+        <solid
+            android:color="@color/colorButtonFlatBackgroundFocus"
+            />
+
+    </shape>
+</item>
+
+<item >
+    <shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle" >
+        <corners
+            android:radius="@dimen/button_flat_radius"
+            />
+        <size
+            android:height="@dimen/button_flat_height"
+            android:width="@dimen/button_flat_width"/>
+
+        <solid
+            android:color="@color/colorButtonFlatBackground"
+            />
+
+    </shape>
+</item>
+</selector>
