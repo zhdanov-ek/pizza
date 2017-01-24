@@ -30,7 +30,8 @@
         <activity android:name=".activities.AboutActivity" />
         <activity android:name=".activities.PlaceOrderActivity" />
         <activity android:name=".activities.TrackingOrderActivity" />
-        <activity android:name=".activities.OrdersActivity"></activity>
+        <activity android:name=".activities.OrdersActivity" />
+        <activity android:name=".activities.DishShowActivity"></activity>
     </application>
 
 </manifest>
