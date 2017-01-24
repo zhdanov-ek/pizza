@@ -149,7 +149,7 @@ public class MenuOrdersEditActivity extends AppCompatActivity implements View.On
         // Если выбранно фото с галереи то сначало грузим фото, а потом запишем карточку в БД
         // Удаляем старое фото если оно было
         if (uriPhoto != null) {
-            final String photoName = makePhotoName();
+            final String photoName = Utils.makePhotoName(tvName.getText().toString());
             StorageReference currentImageRef = folderRef.child(photoName);
             UploadTask uploadTask = currentImageRef.putFile(uriPhoto);
 
@@ -221,22 +221,6 @@ public class MenuOrdersEditActivity extends AppCompatActivity implements View.On
             finish();
         }
     }
-
-
-
-    /** Формируем имя для фотки из данных пользователя. Убираем нежелательные символы */
-    private String makePhotoName(){
-        String time = Calendar.getInstance().getTime().toString();
-        String name = tvName.getText().toString() + time;
-        name = name.replace(".", "");
-        name = name.replace("@", "");
-        name = name.replace(" ", "");
-        name = name.replace("#", "");
-        name = name + ".jpg";
-        return  name;
-    }
-
-
 
 
     @Override

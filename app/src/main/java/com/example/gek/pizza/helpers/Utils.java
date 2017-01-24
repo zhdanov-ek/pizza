@@ -11,6 +11,7 @@ import com.example.gek.pizza.data.Const;
 import com.example.gek.pizza.data.Dish;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 /**
  * Created by gek on 17.01.17.
@@ -50,6 +51,19 @@ public class Utils {
             }
         }
         return resultList;
+    }
+
+    /** Формируем уникальное имя для фотки на базе входящей строки.
+     *  Убираем нежелательные символы для нормального хранения в файрбейс */
+    public static String makePhotoName(String name){
+        String time = Calendar.getInstance().getTime().toString();
+        String nameFile = name + time;
+        nameFile = nameFile.replace(".", "");
+        nameFile = nameFile.replace("@", "");
+        nameFile = nameFile.replace(" ", "");
+        nameFile = nameFile.replace("#", "");
+        nameFile = nameFile + ".jpg";
+        return  nameFile;
     }
 
 }

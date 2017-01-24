@@ -5,6 +5,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context="com.example.gek.pizza.activities.NewsEditActivity">
+
     <include layout="@layout/toolbar" />
 
     <ScrollView
@@ -14,6 +15,7 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
+
             <ProgressBar
                 android:id="@+id/progressBar"
                 android:layout_width="wrap_content"
@@ -54,30 +56,32 @@
                 <android.support.design.widget.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
-                <EditText
-                    android:id="@+id/etTitle"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/hint_title_news"
-                    android:maxLength="50" />
-                </android.support.design.widget.TextInputLayout>
 
+                    <EditText
+                        android:id="@+id/etTitle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/hint_title_news"
+                        android:inputType="textCapSentences"
+                        android:maxLength="50" />
+                </android.support.design.widget.TextInputLayout>
 
 
                 <android.support.design.widget.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
-                <EditText
-                    android:id="@+id/etDescription"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="top|left"
-                    android:hint="@string/hint_description_news"
-                    android:inputType="textMultiLine"
-                    android:lines="8"
-                    android:maxLines="10"
-                    android:minLines="6"
-                    android:scrollbars="vertical" />
+
+                    <EditText
+                        android:id="@+id/etDescription"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="top|left"
+                        android:hint="@string/hint_description_news"
+                        android:inputType="textMultiLine|textCapSentences"
+                        android:lines="8"
+                        android:maxLines="10"
+                        android:minLines="6"
+                        android:scrollbars="vertical" />
                 </android.support.design.widget.TextInputLayout>
 
 
