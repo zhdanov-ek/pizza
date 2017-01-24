@@ -88,10 +88,10 @@ public class NewsShowActivity extends AppCompatActivity {
             Glide.with(this)
                     .load(news.getPhotoUrl())
                     .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                    .error(R.drawable.news_icon)
+                    .error(R.drawable.news_empty)
                     .into(ivPhoto);
         } else {
-            ivPhoto.setImageResource(R.drawable.news_icon);
+            ivPhoto.setImageResource(R.drawable.news_empty);
         }
     }
 

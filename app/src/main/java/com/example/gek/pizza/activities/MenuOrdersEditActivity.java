@@ -124,17 +124,17 @@ public class MenuOrdersEditActivity extends AppCompatActivity implements View.On
         if (menuGroup == null) {
             tvName.setText("");
             uriPhoto = null;
-            ivPhoto.setImageResource(R.drawable.news_icon);
+            ivPhoto.setImageResource(R.drawable.dish_empty);
         } else {
             tvName.setText(menuGroup.getName());
             if (menuGroup.getPhotoUrl().length() > 0){
                 Glide.with(this)
                         .load(menuGroup.getPhotoUrl())
                         .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                        .error(R.drawable.news_icon)
+                        .error(R.drawable.dish_empty)
                         .into(ivPhoto);
             } else
-                ivPhoto.setImageResource(R.drawable.news_icon);
+                ivPhoto.setImageResource(R.drawable.dish_empty);
         }
     }
 
@@ -250,11 +250,15 @@ public class MenuOrdersEditActivity extends AppCompatActivity implements View.On
                     isNeedRemovePhoto = true;
                 }
                 uriPhoto = null;
-                ivPhoto.setImageResource(R.drawable.news_icon);
+                ivPhoto.setImageResource(R.drawable.dish_empty);
                 break;
             case R.id.ivPhoto:
                 Utils.choosePhoto(this);
                 break;
+            case R.id.btnCancel:
+                finish();
+                break;
+
         }
     }
 

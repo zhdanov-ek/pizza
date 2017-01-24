@@ -45,10 +45,10 @@ public class DishesAdapter  extends RecyclerView.Adapter<DishesAdapter.ViewHolde
             Glide.with(ctx)
                     .load(currentDish.getPhotoUrl())
                     .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                    .error(R.drawable.news_icon)
+                    .error(R.drawable.dish_empty)
                     .into(holder.ivPhoto);
         } else {
-            holder.ivPhoto.setImageResource(R.drawable.news_icon);
+            holder.ivPhoto.setImageResource(R.drawable.dish_empty);
         }
     }
 

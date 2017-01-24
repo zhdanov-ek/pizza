@@ -116,7 +116,7 @@ public class NewsEditActivity extends AppCompatActivity implements View.OnClickL
             etTitle.setText("");
             etDescription.setText("");
             uriPhoto = null;
-            ivPhoto.setImageResource(R.drawable.news_icon);
+            ivPhoto.setImageResource(R.drawable.news_empty);
             btnRemovePhoto.setVisibility(View.INVISIBLE);
         } else {
             etTitle.setText(news.getTitle());
@@ -125,11 +125,11 @@ public class NewsEditActivity extends AppCompatActivity implements View.OnClickL
                 Glide.with(this)
                         .load(news.getPhotoUrl())
                         .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                        .error(R.drawable.news_icon)
+                        .error(R.drawable.news_empty)
                         .into(ivPhoto);
                 btnRemovePhoto.setVisibility(View.VISIBLE);
             } else
-                ivPhoto.setImageResource(R.drawable.news_icon);
+                ivPhoto.setImageResource(R.drawable.news_empty);
         }
     }
 
@@ -246,7 +246,7 @@ public class NewsEditActivity extends AppCompatActivity implements View.OnClickL
                     isNeedRemovePhoto = true;
                 }
                 uriPhoto = null;
-                ivPhoto.setImageResource(R.drawable.news_icon);
+                ivPhoto.setImageResource(R.drawable.news_empty);
                 btnRemovePhoto.setVisibility(View.INVISIBLE);
                 break;
             case R.id.ivPhoto:

@@ -121,7 +121,7 @@ public class DishEditActivity extends AppCompatActivity implements View.OnClickL
             etDescription.setText("");
             etPrice.setText("");
             uriPhoto = null;
-            ivPhoto.setImageResource(R.drawable.news_icon);
+            ivPhoto.setImageResource(R.drawable.dish_empty);
             btnRemovePhoto.setVisibility(View.INVISIBLE);
         } else {
             etName.setText(dish.getName());
@@ -131,11 +131,11 @@ public class DishEditActivity extends AppCompatActivity implements View.OnClickL
                 Glide.with(this)
                         .load(dish.getPhotoUrl())
                         .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                        .error(R.drawable.news_icon)
+                        .error(R.drawable.dish_empty)
                         .into(ivPhoto);
                 btnRemovePhoto.setVisibility(View.VISIBLE);
             } else
-                ivPhoto.setImageResource(R.drawable.news_icon);
+                ivPhoto.setImageResource(R.drawable.dish_empty);
         }
     }
 
@@ -255,7 +255,7 @@ public class DishEditActivity extends AppCompatActivity implements View.OnClickL
                     isNeedRemovePhoto = true;
                 }
                 uriPhoto = null;
-                ivPhoto.setImageResource(R.drawable.news_icon);
+                ivPhoto.setImageResource(R.drawable.dish_empty);
                 btnRemovePhoto.setVisibility(View.INVISIBLE);
                 break;
             case R.id.ivPhoto:
