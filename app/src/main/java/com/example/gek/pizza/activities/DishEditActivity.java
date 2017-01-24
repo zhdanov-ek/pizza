@@ -43,6 +43,7 @@ public class DishEditActivity extends AppCompatActivity implements View.OnClickL
     Button btnRemovePhoto, btnOk;
     private StorageReference folderRef;
     private Boolean isNeedRemovePhoto = false;
+    private String keyGroup = "";
 
 
     @Override
@@ -71,6 +72,8 @@ public class DishEditActivity extends AppCompatActivity implements View.OnClickL
             btnOk.setVisibility(View.GONE);
         }
 
+
+
         // Определяем это новое блюдо или редактирование старого
         if (getIntent().hasExtra(Const.MODE) &&
                 (getIntent().getIntExtra(Const.MODE, Const.MODE_NEW) == Const.MODE_EDIT)){
@@ -81,6 +84,7 @@ public class DishEditActivity extends AppCompatActivity implements View.OnClickL
             fillValues(oldDish);
         } else {
             fillValues(null);
+            keyGroup = getIntent().getStringExtra(Const.DISH_GROUP_KEY);
             myToolbar.setTitle(R.string.create_new);
         }
 
@@ -165,7 +169,7 @@ public class DishEditActivity extends AppCompatActivity implements View.OnClickL
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                     // Получаем ссылку на закачанный файл и сохраняем ее
                     Uri photoUrl = taskSnapshot.getDownloadUrl();
-                    Dish newDish = new Dish(title, description, price, photoUrl.toString(), photoName);
+                    Dish newDish = new Dish(title, description, price, photoUrl.toString(), photoName, keyGroup);
                     if (isNewDish){
                         String key = db.child(Const.CHILD_DISHES).push().getKey();
                         newDish.setKey(key);
@@ -193,7 +197,7 @@ public class DishEditActivity extends AppCompatActivity implements View.OnClickL
             // Если фото не выбирали то просто делаем запись в БД с изменениями
             // Удаляем старое фото если его удалил пользователь
         } else {
-            Dish newDish = new Dish(title, description, price, "", "");
+            Dish newDish = new Dish(title, description, price, "", "", keyGroup);
             if (isNewDish){
                 String newKey = db.child(Const.CHILD_DISHES).push().getKey();
                 newDish.setKey(newKey);

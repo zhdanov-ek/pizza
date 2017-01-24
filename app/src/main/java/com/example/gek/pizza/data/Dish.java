@@ -12,25 +12,21 @@ public class Dish implements Parcelable {
     private String description;
     private float price;
     private String photoUrl;
+    private String photoName;
+    private String keyGroup;
     private String key;
 
-    public String getKey() {
-        return key;
+    public Dish() {
     }
 
-    public void setKey(String key) {
-        this.key = key;
-    }
-
-    public Dish(String name, String description, float price, String photoUrl, String photoName) {
+    public Dish(String name, String description, float price, String photoUrl, String photoName, String keyGroup) {
         this.name = name;
         this.description = description;
         this.price = price;
         this.photoUrl = photoUrl;
         this.photoName = photoName;
+        this.keyGroup = keyGroup;
     }
-
-    private String photoName;
 
     public String getPhotoUrl() {
         return photoUrl;
@@ -72,6 +68,21 @@ public class Dish implements Parcelable {
         this.price = price;
     }
 
+    public String getKeyGroup() {
+        return keyGroup;
+    }
+
+    public void setKeyGroup(String keyGroup) {
+        this.keyGroup = keyGroup;
+    }
+
+    public String getKey() {
+        return key;
+    }
+
+    public void setKey(String key) {
+        this.key = key;
+    }
 
     @Override
     public int describeContents() {
@@ -84,8 +95,9 @@ public class Dish implements Parcelable {
         dest.writeString(this.description);
         dest.writeFloat(this.price);
         dest.writeString(this.photoUrl);
-        dest.writeString(this.key);
         dest.writeString(this.photoName);
+        dest.writeString(this.keyGroup);
+        dest.writeString(this.key);
     }
 
     protected Dish(Parcel in) {
@@ -93,11 +105,12 @@ public class Dish implements Parcelable {
         this.description = in.readString();
         this.price = in.readFloat();
         this.photoUrl = in.readString();
-        this.key = in.readString();
         this.photoName = in.readString();
+        this.keyGroup = in.readString();
+        this.key = in.readString();
     }
 
-    public static final Parcelable.Creator<Dish> CREATOR = new Parcelable.Creator<Dish>() {
+    public static final Creator<Dish> CREATOR = new Creator<Dish>() {
         @Override
         public Dish createFromParcel(Parcel source) {
             return new Dish(source);

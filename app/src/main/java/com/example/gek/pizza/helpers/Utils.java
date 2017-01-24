@@ -8,6 +8,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
 import com.example.gek.pizza.data.Const;
+import com.example.gek.pizza.data.Dish;
+
+import java.util.ArrayList;
 
 /**
  * Created by gek on 17.01.17.
@@ -36,4 +39,17 @@ public class Utils {
             Toast.makeText(apa, "No program for choose image!", Toast.LENGTH_LONG).show();
         }
     }
+
+
+    // Отбирает блюда по ключу группы
+    public static ArrayList<Dish> selectGroup(ArrayList<Dish> allDishes, String keyGroup){
+        ArrayList<Dish> resultList = new ArrayList<>();
+        for (Dish dish: allDishes) {
+            if (dish.getKeyGroup().contentEquals(keyGroup)){
+                resultList.add(dish);
+            }
+        }
+        return resultList;
+    }
+
 }

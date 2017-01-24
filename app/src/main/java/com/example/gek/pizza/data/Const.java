@@ -31,7 +31,8 @@ public class Const {
     public static final String EXTRA_DISH = "dish_object";
     public static final String EXTRA_MENU_GROUP = "menu_group_object";
 
-    public static final String DISH_GROUP = "dish_group";
+    public static final String DISH_GROUP_KEY = "dish_group_key";
+    public static final String DISH_GROUP_NAME = "dish_group_name";
 
 
     // id используемые при вызовах активити через интент

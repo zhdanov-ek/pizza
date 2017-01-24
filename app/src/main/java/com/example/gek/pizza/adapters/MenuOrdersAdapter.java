@@ -72,12 +72,14 @@ public class MenuOrdersAdapter extends RecyclerView.Adapter<MenuOrdersAdapter.Vi
             itemView.setOnClickListener(this);
         }
 
-        // Запускаем активити с блюдами выбранной категории
+
+        // Запускаем активити с блюдами выбранной категории (передаем ключ группы)
         @Override
         public void onClick(View view) {
             Toast.makeText(ctx, tvName.getText().toString(), Toast.LENGTH_SHORT).show();
             Intent dishGroupOpen = new Intent(ctx, DishesActivity.class);
-            dishGroupOpen.putExtra(Const.DISH_GROUP, tvName.getText());
+            dishGroupOpen.putExtra(Const.DISH_GROUP_NAME, menuList.get(getAdapterPosition()).getName());
+            dishGroupOpen.putExtra(Const.DISH_GROUP_KEY, menuList.get(getAdapterPosition()).getKey());
             ctx.startActivity(dishGroupOpen);
         }
     }
