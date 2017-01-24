@@ -25,7 +25,12 @@
         <activity android:name=".activities.MenuOrdersActivity" />
         <activity android:name=".activities.MenuOrdersEditActivity" />
         <activity android:name=".activities.DishesActivity" />
-        <activity android:name=".activities.DishEditActivity"></activity>
+        <activity android:name=".activities.DishEditActivity" />
+        <activity android:name=".activities.MakePizzaActivity" />
+        <activity android:name=".activities.AboutActivity" />
+        <activity android:name=".activities.PlaceOrderActivity" />
+        <activity android:name=".activities.TrackingOrderActivity" />
+        <activity android:name=".activities.OrdersActivity"></activity>
     </application>
 
 </manifest>
