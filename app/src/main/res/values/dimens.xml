@@ -14,7 +14,6 @@
     <dimen name="card_view_main_menu_iv_width">150dp</dimen>
 
 
-
     <!-- GLOBAL -->
     <dimen name="item_list_corner_radius">2dp</dimen>
     <dimen name="button_flat_radius">2dp</dimen>
@@ -24,6 +23,11 @@
 
     <dimen name="floating_button_layout_margin">8dp</dimen>
     <dimen name="activity_padding">5dp</dimen>
+
+    <!-- MENU_ORDERS -->
+    <dimen name="item_menu_orders_width">150dp</dimen>
+    <dimen name="item_menu_orders_height">200dp</dimen>
+    <dimen name="item_menu_orders_photo_height">130dp</dimen>
 
 
     <!-- NEWS -->

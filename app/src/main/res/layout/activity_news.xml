@@ -25,7 +25,6 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|end"
             android:layout_margin="@dimen/floating_button_layout_margin"
-            android:src="@drawable/ic_add"
-            app:fabSize="normal" />
+            android:src="@drawable/ic_add" />
     </FrameLayout>
 </LinearLayout>
