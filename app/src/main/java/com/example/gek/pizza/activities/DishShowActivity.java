@@ -9,10 +9,12 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.gek.pizza.R;
+import com.example.gek.pizza.data.Basket;
 import com.example.gek.pizza.data.Const;
 import com.example.gek.pizza.data.Dish;
 import com.google.firebase.storage.FirebaseStorage;
@@ -57,6 +59,9 @@ public class DishShowActivity extends AppCompatActivity implements View.OnClickL
             case R.id.btnEdit:
                 editDish(dishOpen);
             case R.id.btnAdd:
+                Basket.getInstance().addDish(dishOpen);
+                int num = Basket.getInstance().orders.size();
+                Toast.makeText(this, "Всего в заказе " + num, Toast.LENGTH_SHORT).show();
                 //todo добавить блюдо в заказ, скрыть кнопку показать "- х +"
                 break;
         }
