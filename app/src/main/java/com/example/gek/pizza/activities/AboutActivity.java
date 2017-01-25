@@ -3,6 +3,7 @@ package com.example.gek.pizza.activities;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -26,14 +27,19 @@ public class AboutActivity extends AppCompatActivity implements OnMapReadyCallba
 
     TextView tvPhone, tvEmail, tvAddress, tvLatitude, tvLongitude;
     String textPhone, textEmail, textAddress, textLatitude, textLongitude;
+    public static final String TAG = "Init map :";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_about);
 
-        MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.fMapView);
-        mapFragment.getMapAsync(this);
+        try {
+            MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.fMapView);
+            mapFragment.getMapAsync(this);
+        } catch (NullPointerException exception){
+            Log.e(TAG, exception.toString());
+        }
 
         Toolbar myToolbar = (Toolbar) findViewById(R.id.toolBar);
         myToolbar.setTitle(R.string.title_about);
