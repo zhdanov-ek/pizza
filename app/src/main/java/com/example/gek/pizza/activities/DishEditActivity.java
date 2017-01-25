@@ -43,6 +43,7 @@ public class DishEditActivity extends AppCompatActivity implements View.OnClickL
     Button btnRemovePhoto, btnOk;
     private StorageReference folderRef;
     private Boolean isNeedRemovePhoto = false;
+    private String keyGroup = "";
 
 
     @Override
@@ -71,16 +72,20 @@ public class DishEditActivity extends AppCompatActivity implements View.OnClickL
             btnOk.setVisibility(View.GONE);
         }
 
+
+
         // Определяем это новое блюдо или редактирование старого
         if (getIntent().hasExtra(Const.MODE) &&
                 (getIntent().getIntExtra(Const.MODE, Const.MODE_NEW) == Const.MODE_EDIT)){
             isNewDish = false;
             oldDish = getIntent().getParcelableExtra(Const.EXTRA_DISH);
+            keyGroup = oldDish.getKeyGroup();
             String title = getResources().getString(R.string.edit) + " - " + oldDish.getName();
             myToolbar.setTitle(title);
             fillValues(oldDish);
         } else {
             fillValues(null);
+            keyGroup = getIntent().getStringExtra(Const.DISH_GROUP_KEY);
             myToolbar.setTitle(R.string.create_new);
         }
 
@@ -117,7 +122,7 @@ public class DishEditActivity extends AppCompatActivity implements View.OnClickL
             etDescription.setText("");
             etPrice.setText("");
             uriPhoto = null;
-            ivPhoto.setImageResource(R.drawable.news_icon);
+            ivPhoto.setImageResource(R.drawable.dish_empty);
             btnRemovePhoto.setVisibility(View.INVISIBLE);
         } else {
             etName.setText(dish.getName());
@@ -127,11 +132,11 @@ public class DishEditActivity extends AppCompatActivity implements View.OnClickL
                 Glide.with(this)
                         .load(dish.getPhotoUrl())
                         .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                        .error(R.drawable.news_icon)
+                        .error(R.drawable.dish_empty)
                         .into(ivPhoto);
                 btnRemovePhoto.setVisibility(View.VISIBLE);
             } else
-                ivPhoto.setImageResource(R.drawable.news_icon);
+                ivPhoto.setImageResource(R.drawable.dish_empty);
         }
     }
 
@@ -149,7 +154,7 @@ public class DishEditActivity extends AppCompatActivity implements View.OnClickL
         // Если выбранно фото с галереи то сначало грузим фото, а потом запишем карточку в БД
         // Удаляем старое фото если оно было
         if (uriPhoto != null) {
-            final String photoName = makePhotoName();
+            final String photoName = Utils.makePhotoName(etName.getText().toString());
             StorageReference currentImageRef = folderRef.child(photoName);
             UploadTask uploadTask = currentImageRef.putFile(uriPhoto);
 
@@ -165,7 +170,7 @@ public class DishEditActivity extends AppCompatActivity implements View.OnClickL
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                     // Получаем ссылку на закачанный файл и сохраняем ее
                     Uri photoUrl = taskSnapshot.getDownloadUrl();
-                    Dish newDish = new Dish(title, description, price, photoUrl.toString(), photoName);
+                    Dish newDish = new Dish(title, description, price, photoUrl.toString(), photoName, keyGroup);
                     if (isNewDish){
                         String key = db.child(Const.CHILD_DISHES).push().getKey();
                         newDish.setKey(key);
@@ -183,7 +188,7 @@ public class DishEditActivity extends AppCompatActivity implements View.OnClickL
                     progressBar.setVisibility(View.GONE);
                     if (!isNewDish) {
                         Intent resultIntent = new Intent();
-                        resultIntent.putExtra(Const.CHILD_DISHES, changedDish);
+                        resultIntent.putExtra(Const.EXTRA_DISH, changedDish);
                         setResult(RESULT_OK, resultIntent);
                         finish();
                     }
@@ -193,7 +198,7 @@ public class DishEditActivity extends AppCompatActivity implements View.OnClickL
             // Если фото не выбирали то просто делаем запись в БД с изменениями
             // Удаляем старое фото если его удалил пользователь
         } else {
-            Dish newDish = new Dish(title, description, price, "", "");
+            Dish newDish = new Dish(title, description, price, "", "", keyGroup);
             if (isNewDish){
                 String newKey = db.child(Const.CHILD_DISHES).push().getKey();
                 newDish.setKey(newKey);
@@ -215,30 +220,13 @@ public class DishEditActivity extends AppCompatActivity implements View.OnClickL
             progressBar.setVisibility(View.GONE);
             if (!isNewDish) {
                 Intent resultIntent = new Intent();
-                resultIntent.putExtra(Const.CHILD_DISHES, changedDish);
+                resultIntent.putExtra(Const.EXTRA_DISH, changedDish);
                 setResult(RESULT_OK, resultIntent);
             }
             finish();
+
         }
     }
-
-
-
-    /** Формируем имя для фотки из данных пользователя. Убираем нежелательные символы */
-    //todo довести до ума код и вынести его в класс Utils
-    private String makePhotoName(){
-        String time = Calendar.getInstance().getTime().toString();
-        String name = etName.getText().toString() + time;
-        name = name.replace(".", "");
-        name = name.replace("@", "");
-        name = name.replace(" ", "");
-        name = name.replace("#", "");
-        name = name + ".jpg";
-        return  name;
-    }
-
-
-
 
     @Override
     public void onClick(View view) {
@@ -251,7 +239,7 @@ public class DishEditActivity extends AppCompatActivity implements View.OnClickL
                     isNeedRemovePhoto = true;
                 }
                 uriPhoto = null;
-                ivPhoto.setImageResource(R.drawable.news_icon);
+                ivPhoto.setImageResource(R.drawable.dish_empty);
                 btnRemovePhoto.setVisibility(View.INVISIBLE);
                 break;
             case R.id.ivPhoto:

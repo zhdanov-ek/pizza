@@ -5,6 +5,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context="com.example.gek.pizza.activities.DishEditActivity">
+
     <include layout="@layout/toolbar" />
 
     <ScrollView
@@ -14,6 +15,7 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
+
             <ProgressBar
                 android:id="@+id/progressBar"
                 android:layout_width="wrap_content"
@@ -32,14 +34,14 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center">
+                    android:gravity="start|center_vertical">
 
 
                     <ImageView
                         android:id="@+id/ivPhoto"
                         android:layout_width="100dp"
                         android:layout_height="100dp"
-                        tools:background="@drawable/news_icon" />
+                        tools:background="@drawable/dish_empty" />
 
 
                     <Button
@@ -50,35 +52,48 @@
                         android:visibility="visible" />
                 </LinearLayout>
 
-
-                <EditText
-                    android:id="@+id/etName"
+                <android.support.design.widget.TextInputLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/hint_name_dish"
-                    android:maxLength="40" />
+                    android:layout_height="wrap_content">
 
+                    <EditText
+                        android:id="@+id/etName"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/hint_name_dish"
+                        android:inputType="textCapSentences"
+                        android:maxLength="40" />
+                </android.support.design.widget.TextInputLayout>
 
-                <EditText
-                    android:id="@+id/etPrice"
+                <android.support.design.widget.TextInputLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/hint_price"
-                    android:maxLength="10" />
+                    android:layout_height="wrap_content">
 
+                    <EditText
+                        android:id="@+id/etPrice"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/hint_price"
+                        android:maxLength="10"
+                        android:inputType="numberDecimal" />
+                </android.support.design.widget.TextInputLayout>
 
-                <EditText
-                    android:id="@+id/etDescription"
+                <android.support.design.widget.TextInputLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="top|left"
-                    android:hint="@string/hint_description_dish"
-                    android:inputType="textMultiLine"
-                    android:lines="8"
-                    android:maxLines="10"
-                    android:minLines="6"
-                    android:scrollbars="vertical" />
+                    android:layout_height="wrap_content">
 
+                    <EditText
+                        android:id="@+id/etDescription"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="top|left"
+                        android:hint="@string/hint_description_dish"
+                        android:inputType="textMultiLine|textCapSentences"
+                        android:lines="8"
+                        android:maxLines="10"
+                        android:minLines="6"
+                        android:scrollbars="vertical" />
+                </android.support.design.widget.TextInputLayout>
 
                 <Button
                     android:id="@+id/btnOk"

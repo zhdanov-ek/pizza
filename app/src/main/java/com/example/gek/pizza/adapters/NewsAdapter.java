@@ -61,10 +61,10 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder>{
             Glide.with(ctx)
                     .load(currentNews.getPhotoUrl())
                     .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                    .error(R.drawable.news_icon)
+                    .error(R.drawable.news_empty)
                     .into(holder.ivPhoto);
         } else {
-            holder.ivPhoto.setImageResource(R.drawable.news_icon);
+            holder.ivPhoto.setImageResource(R.drawable.news_empty);
         }
     }
 

@@ -8,4 +8,16 @@
     <color name="colorButtonFlatBackgroundFocus">#eceaea</color>
     <color name="colorButtonFlatBackgroundPress">#c4c2c2</color>
     <color name="colorButtonFlatText">#e53935</color>
+
+    <color name="colorButtonRaisedGreen">#43a047</color>
+    <color name="colorButtonRaisedDarkGreen">#1b5e20</color>
+    <color name="colorButtonRaisedLightGreen">#81c784</color>
+    <color name="colorButtonRaisedText">#ECEFF1</color>
+
+    <color name="colorFont1">#607D8B</color>
+
+    <color name="colorWhite">#ffffff</color>
+
+    <color name="colorPriceBackground">#8BC34A</color>
+    <color name="colorPriceFont">#000000</color>
 </resources>

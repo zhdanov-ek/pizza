@@ -6,6 +6,7 @@
     <string name="edit">Edit</string>
     <string name="remove">Remove</string>
     <string name="create_new">Create new</string>
+    <string name="add">Add</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -33,4 +34,6 @@
     <string name="hint_name_dish">Name of dish</string>
     <string name="hint_description_dish">The best pizza include chicken and ananas</string>
     <string name="hint_price">119,99 грн</string>
+
+    <string name="hint_name_group">Name of group</string>
 </resources>

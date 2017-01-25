@@ -27,7 +27,6 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
-import java.util.Calendar;
 
 import static com.example.gek.pizza.data.Const.db;
 
@@ -116,7 +115,7 @@ public class NewsEditActivity extends AppCompatActivity implements View.OnClickL
             etTitle.setText("");
             etDescription.setText("");
             uriPhoto = null;
-            ivPhoto.setImageResource(R.drawable.news_icon);
+            ivPhoto.setImageResource(R.drawable.news_empty);
             btnRemovePhoto.setVisibility(View.INVISIBLE);
         } else {
             etTitle.setText(news.getTitle());
@@ -125,11 +124,11 @@ public class NewsEditActivity extends AppCompatActivity implements View.OnClickL
                 Glide.with(this)
                         .load(news.getPhotoUrl())
                         .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                        .error(R.drawable.news_icon)
+                        .error(R.drawable.news_empty)
                         .into(ivPhoto);
                 btnRemovePhoto.setVisibility(View.VISIBLE);
             } else
-                ivPhoto.setImageResource(R.drawable.news_icon);
+                ivPhoto.setImageResource(R.drawable.news_empty);
         }
     }
 
@@ -145,7 +144,7 @@ public class NewsEditActivity extends AppCompatActivity implements View.OnClickL
         // Если выбранно фото с галереи то сначало грузим фото, а потом запишем карточку в БД
         // Удаляем старое фото если оно было
         if (uriPhoto != null) {
-            final String photoName = makePhotoName();
+            final String photoName = Utils.makePhotoName(etTitle.getText().toString());
             StorageReference currentImageRef = folderRef.child(photoName);
             UploadTask uploadTask = currentImageRef.putFile(uriPhoto);
 
@@ -219,22 +218,6 @@ public class NewsEditActivity extends AppCompatActivity implements View.OnClickL
     }
 
 
-
-    /** Формируем имя для фотки из данных пользователя. Убираем нежелательные символы */
-    private String makePhotoName(){
-        String time = Calendar.getInstance().getTime().toString();
-        String name = etTitle.getText().toString() + time;
-        name = name.replace(".", "");
-        name = name.replace("@", "");
-        name = name.replace(" ", "");
-        name = name.replace("#", "");
-        name = name + ".jpg";
-        return  name;
-    }
-
-
-
-
     @Override
     public void onClick(View view) {
         switch (view.getId()){
@@ -246,7 +229,7 @@ public class NewsEditActivity extends AppCompatActivity implements View.OnClickL
                     isNeedRemovePhoto = true;
                 }
                 uriPhoto = null;
-                ivPhoto.setImageResource(R.drawable.news_icon);
+                ivPhoto.setImageResource(R.drawable.news_empty);
                 btnRemovePhoto.setVisibility(View.INVISIBLE);
                 break;
             case R.id.ivPhoto:

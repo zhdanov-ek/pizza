@@ -49,10 +49,10 @@ public class MenuOrdersAdapter extends RecyclerView.Adapter<MenuOrdersAdapter.Vi
             Glide.with(ctx)
                     .load(menuGroup.getPhotoUrl())
                     .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                    .error(R.drawable.news_icon)
+                    .error(R.drawable.dish_empty)
                     .into(holder.ivPhoto);
         } else {
-            holder.ivPhoto.setImageResource(R.drawable.news_icon);
+            holder.ivPhoto.setImageResource(R.drawable.dish_empty);
         }
     }
 
@@ -72,12 +72,13 @@ public class MenuOrdersAdapter extends RecyclerView.Adapter<MenuOrdersAdapter.Vi
             itemView.setOnClickListener(this);
         }
 
-        // Запускаем активити с блюдами выбранной категории
+
+        // Запускаем активити с блюдами выбранной категории (передаем ключ группы)
         @Override
         public void onClick(View view) {
-            Toast.makeText(ctx, tvName.getText().toString(), Toast.LENGTH_SHORT).show();
             Intent dishGroupOpen = new Intent(ctx, DishesActivity.class);
-            dishGroupOpen.putExtra(Const.DISH_GROUP, tvName.getText());
+            dishGroupOpen.putExtra(Const.DISH_GROUP_NAME, menuList.get(getAdapterPosition()).getName());
+            dishGroupOpen.putExtra(Const.DISH_GROUP_KEY, menuList.get(getAdapterPosition()).getKey());
             ctx.startActivity(dishGroupOpen);
         }
     }

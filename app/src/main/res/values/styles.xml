@@ -26,4 +26,37 @@
         <item name="android:textColor">@color/colorButtonFlatText</item>
     </style>
 
+    <style name="RaisedButton" parent="@android:style/Widget.Button.Small">
+        <item name="android:layout_width">@dimen/button_raised_width</item>
+        <item name="android:layout_height">@dimen/button_raised_height</item>
+        <item name="android:textSize">@dimen/button_raised_font_size</item>
+        <item name="android:background">@drawable/bg_raised_button_add</item>
+        <item name="android:textColor">@color/colorButtonRaisedText</item>
+    </style>
+
+    <style name="textBig">
+        <item name="android:textSize">@dimen/text_size_big</item>
+        <item name="android:textColor">@color/colorFont1</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="textMiddle">
+    <item name="android:textSize">@dimen/text_size_middle</item>
+    <item name="android:textColor">@color/colorFont1</item>
+    <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="textSmall">
+        <item name="android:textSize">@dimen/text_size_small</item>
+        <item name="android:textColor">@color/colorFont1</item>
+    </style>
+
+    <style name="textViewPrice">
+        <item name="android:textColor">@color/colorPriceFont</item>
+        <item name="android:padding">@dimen/dish_show_price_padding</item>
+        <item name="android:layout_margin">@dimen/dish_show_price_layout_margin</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
 </resources>
