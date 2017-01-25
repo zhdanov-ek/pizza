@@ -23,6 +23,7 @@
 
             <TextView
                 android:id="@+id/tvName"
+                style="@style/textBig"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="@dimen/ll_padding"
@@ -30,30 +31,46 @@
                 tools:text="Name of dish" />
         </LinearLayout>
 
-
-        <ImageView
-            android:id="@+id/ivPhoto"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="@dimen/ll_dish_photo_height"
-            tools:background="@color/colorAccent" />
+            android:layout_height="@dimen/ll_dish_photo_height">
+            <ImageView
+                android:id="@+id/ivPhoto"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/ll_dish_photo_height"
+                android:background="@color/colorWhite" />
 
-        <LinearLayout
-            android:id="@+id/llAdminButtons"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center">
+            <TextView
+                android:id="@+id/tvPrice"
+                style="@style/textViewPrice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="76.32 usd"
+                android:background="@color/colorPriceBackground"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true" />
 
-            <Button
-                android:id="@+id/btnEdit"
-                style="@style/FlatButton"
-                android:text="@string/edit" />
+            <LinearLayout
+                android:id="@+id/llAdminButtons"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:background="@color/colorWhite"
+                android:gravity="start">
 
-            <Button
-                android:id="@+id/btnRemove"
-                style="@style/FlatButton"
-                android:text="@string/remove" />
-        </LinearLayout>
+                <Button
+                    android:id="@+id/btnEdit"
+                    style="@style/FlatButton"
+                    android:text="@string/edit" />
+
+                <Button
+                    android:id="@+id/btnRemove"
+                    style="@style/FlatButton"
+                    android:text="@string/remove" />
+            </LinearLayout>
+        </RelativeLayout>
+
 
 
         <LinearLayout
@@ -62,24 +79,19 @@
             android:padding="@dimen/ll_padding"
             android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/tvPrice"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                tools:text="76.32 usd" />
 
             <TextView
                 android:id="@+id/tvDescription"
+                style="@style/textSmall"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="@dimen/tv_dish_description_height"
                 android:gravity="center"
+                android:padding="@dimen/ll_padding"
                 tools:text="Text of description" />
 
             <Button
                 android:id="@+id/btnAdd"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                style="@style/RaisedButton"
                 android:layout_gravity="center"
                 android:text="@string/add" />
 
