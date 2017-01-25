@@ -13,6 +13,7 @@ public class Const {
     public static final String CHILD_DISHES = "dishes";
     public static final String CHILD_NEWS = "news";
     public static final String CHILD_MENU_GROUPS = "menu_groups";
+    public static final String CHILD_SETTINGS = "settings";
 
     // Storage
     public static final String STORAGE = "gs://pizza-7ee24.appspot.com";
@@ -37,4 +38,14 @@ public class Const {
     // id используемые при вызовах активити через интент
     public static final int REQUEST_LOAD_IMG = 1;
     public static final int REQUEST_EDIT_NEWS = 10;
+
+    //key для настроек
+    public static final String SETTINGS_KEY             = "com.example.gek.pizza";
+    public static final String SETTINGS_PHONE_KEY       = "phone";
+    public static final String SETTINGS_ADDRESS_KEY     = "address";
+    public static final String SETTINGS_EMAIL_KEY       = "email";
+    public static final String SETTINGS_LATITUDE_KEY    = "latitude";
+    public static final String SETTINGS_LONGITUDE_KEY   = "longitude";
+    public static final Integer ZOOM_MAP                = 17;
+
 }
