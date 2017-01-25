@@ -1,6 +1,8 @@
 package com.example.gek.pizza.activities;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -9,17 +11,23 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
 import com.example.gek.pizza.R;
+import com.example.gek.pizza.data.Const;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener{
 
     CardView cvMenuOrder, cvNews, cvOrders;
+    private static final String TAG = "List of settings ";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +52,24 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        //Получение настроек приложения
+        final SharedPreferences prefs = this.getSharedPreferences(Const.SETTINGS_KEY, Context.MODE_PRIVATE);
+        ValueEventListener settingsListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                long num = dataSnapshot.getChildrenCount();
+                Log.d(TAG, "Load all list Settings: total Children objects:" + num);
+                for (DataSnapshot child: dataSnapshot.getChildren()) {
+                    prefs.edit().putString(child.getKey(), child.getValue().toString()).apply();
+                }
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.w(TAG, "loadPost:onCancelled", databaseError.toException());
+            }
+        };
+        Const.db.child(Const.CHILD_SETTINGS).addValueEventListener(settingsListener);
     }
 
     @Override
@@ -72,6 +98,10 @@ public class MainActivity extends AppCompatActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            return true;
+        } else if (id == R.id.action_about){
+            Intent aboutIntent = new Intent(this, AboutActivity.class);
+            startActivity(aboutIntent);
             return true;
         }
 
