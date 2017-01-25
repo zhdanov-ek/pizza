@@ -35,6 +35,8 @@
 
             <TextView
                 android:id="@+id/tvPrice"
+                android:textColor="@color/colorButtonRaisedGreen"
+                android:textStyle="bold"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"

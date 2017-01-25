@@ -38,4 +38,5 @@ public class Const {
     // id используемые при вызовах активити через интент
     public static final int REQUEST_LOAD_IMG = 1;
     public static final int REQUEST_EDIT_NEWS = 10;
+    public static final int REQUEST_EDIT_DISH = 11;
 }

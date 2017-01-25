@@ -12,6 +12,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.gek.pizza.R;
@@ -29,6 +30,7 @@ import java.util.ArrayList;
 
 public class DishesActivity extends AppCompatActivity {
 
+    private TextView tvEmpty;
     private RecyclerView rv;
     private Context ctx = this;
     private FloatingActionButton fab;
@@ -44,6 +46,8 @@ public class DishesActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu_dishes);
 
+
+        tvEmpty = (TextView) findViewById(R.id.tvEmpty);
         rv = (RecyclerView) findViewById(R.id.rv);
         // задаем лаяют с твумя столбцами
         GridLayoutManager lLayout = new GridLayoutManager(DishesActivity.this, 2);
@@ -76,14 +80,18 @@ public class DishesActivity extends AppCompatActivity {
                     Dish currentDish = child.getValue(Dish.class);
                     allDishes.add(currentDish);
                 }
-                if (allDishes.size() == 0) {
-                    Toast.makeText(ctx, R.string.mes_no_records, Toast.LENGTH_LONG).show();
+
+                selectedDishes = Utils.selectGroup(allDishes, keyGroup);
+                if (selectedDishes.size() == 0){
+                    tvEmpty.setVisibility(View.VISIBLE);
+                    rv.setVisibility(View.GONE);
+                } else {
+                    tvEmpty.setVisibility(View.GONE);
+                    rv.setVisibility(View.VISIBLE);
+                    dishesAdapter = new DishesAdapter(ctx, selectedDishes);
+                    rv.setAdapter(dishesAdapter);
                 }
 
-                //todo отфильтровать нужные блюда по разделу и потом уже подать их в адаптер
-                selectedDishes = Utils.selectGroup(allDishes, keyGroup);
-                dishesAdapter = new DishesAdapter(ctx, selectedDishes);
-                rv.setAdapter(dishesAdapter);
             }
 
             @Override

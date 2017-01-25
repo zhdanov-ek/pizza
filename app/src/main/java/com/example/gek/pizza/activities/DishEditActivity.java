@@ -79,6 +79,7 @@ public class DishEditActivity extends AppCompatActivity implements View.OnClickL
                 (getIntent().getIntExtra(Const.MODE, Const.MODE_NEW) == Const.MODE_EDIT)){
             isNewDish = false;
             oldDish = getIntent().getParcelableExtra(Const.EXTRA_DISH);
+            keyGroup = oldDish.getKeyGroup();
             String title = getResources().getString(R.string.edit) + " - " + oldDish.getName();
             myToolbar.setTitle(title);
             fillValues(oldDish);
@@ -187,7 +188,7 @@ public class DishEditActivity extends AppCompatActivity implements View.OnClickL
                     progressBar.setVisibility(View.GONE);
                     if (!isNewDish) {
                         Intent resultIntent = new Intent();
-                        resultIntent.putExtra(Const.CHILD_DISHES, changedDish);
+                        resultIntent.putExtra(Const.EXTRA_DISH, changedDish);
                         setResult(RESULT_OK, resultIntent);
                         finish();
                     }
@@ -219,15 +220,13 @@ public class DishEditActivity extends AppCompatActivity implements View.OnClickL
             progressBar.setVisibility(View.GONE);
             if (!isNewDish) {
                 Intent resultIntent = new Intent();
-                resultIntent.putExtra(Const.CHILD_DISHES, changedDish);
+                resultIntent.putExtra(Const.EXTRA_DISH, changedDish);
                 setResult(RESULT_OK, resultIntent);
             }
             finish();
+
         }
     }
-
-
-
 
     @Override
     public void onClick(View view) {
