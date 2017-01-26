@@ -42,4 +42,7 @@
     <string name="hint_on_map">Pizza</string>
     <string name="snipset_on_map">Best pizza</string>
 
+    <string name="symbol_minus">-</string>
+    <string name="symbol_plus">+</string>
+
 </resources>

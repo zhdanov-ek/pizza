@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -17,6 +18,7 @@ import com.example.gek.pizza.R;
 import com.example.gek.pizza.data.Basket;
 import com.example.gek.pizza.data.Const;
 import com.example.gek.pizza.data.Dish;
+import com.example.gek.pizza.helpers.Utils;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
@@ -26,6 +28,8 @@ public class DishShowActivity extends AppCompatActivity implements View.OnClickL
     private Button btnAdd;
     private Button btnRemove;
     private Button btnEdit;
+    private LinearLayout llCounter;
+    private TextView tvMinus, tvCounter, tvPlus;
     private Dish dishOpen;
 
     @Override
@@ -44,9 +48,24 @@ public class DishShowActivity extends AppCompatActivity implements View.OnClickL
         btnEdit = (Button) findViewById(R.id.btnEdit);
         btnEdit.setOnClickListener(this);
 
+        llCounter = (LinearLayout) findViewById(R.id.llCounter);
+        tvCounter = (TextView) findViewById(R.id.tvCounter);
+        tvMinus = (TextView) findViewById(R.id.tvMinus);
+        tvMinus.setOnClickListener(this);
+        tvPlus = (TextView) findViewById(R.id.tvPlus);
+        tvPlus.setOnClickListener(this);
+
         if (getIntent().hasExtra(Const.EXTRA_DISH)){
             dishOpen = getIntent().getParcelableExtra(Const.EXTRA_DISH);
             fillValues(dishOpen);
+
+            // смотрим в корзине в заказе ли это блюдо
+            int countDishInOrder = Utils.findInBasket(dishOpen);
+            if (countDishInOrder != 0) {
+                btnAdd.setVisibility(View.GONE);
+                llCounter.setVisibility(View.VISIBLE);
+                tvCounter.setText(String.valueOf(countDishInOrder));
+            }
         }
     }
 
@@ -58,13 +77,47 @@ public class DishShowActivity extends AppCompatActivity implements View.OnClickL
                 break;
             case R.id.btnEdit:
                 editDish(dishOpen);
+                break;
             case R.id.btnAdd:
-                Basket.getInstance().addDish(dishOpen);
-                int num = Basket.getInstance().orders.size();
-                Toast.makeText(this, "Всего в заказе " + num, Toast.LENGTH_SHORT).show();
-                //todo добавить блюдо в заказ, скрыть кнопку показать "- х +"
+                addNewDish();
+                break;
+            case R.id.tvMinus:
+                pressMinus();
+                break;
+            case R.id.tvPlus:
+                pressPlus();
                 break;
         }
+    }
+
+
+
+    /** Увеличиваем количество в заказе на 1 */
+    private void pressPlus(){
+        int count = Integer.parseInt(tvCounter.getText().toString()) + 1;
+        tvCounter.setText(String.valueOf(count));
+        Basket.getInstance().changeCount(dishOpen, count);
+    }
+
+    /** Уменьшаем количество в заказе на 1 или удаляем заказ если 0 */
+    private void pressMinus(){
+        int count = Integer.parseInt(tvCounter.getText().toString()) - 1;
+        Basket.getInstance().changeCount(dishOpen, count);
+        if (count == 0) {
+            llCounter.setVisibility(View.GONE);
+            btnAdd.setVisibility(View.VISIBLE);
+        } else {
+            tvCounter.setText(String.valueOf(count));
+        }
+    }
+
+
+    /** Добавляем блюдо в корзину, заменяем кнопку на цифру с количеством */
+    private void addNewDish(){
+        Basket.getInstance().addDish(dishOpen);
+        tvCounter.setText("1");
+        btnAdd.setVisibility(View.GONE);
+        llCounter.setVisibility(View.VISIBLE);
     }
 
     /** После удачного редактирования карточки обновляем инфу и тут */
@@ -93,6 +146,8 @@ public class DishShowActivity extends AppCompatActivity implements View.OnClickL
         tvPrice.setText(Float.toString(dish.getPrice()));
         tvDescription.setText(dish.getDescription());
     }
+
+
     /** Открываем активити для редактирования текущего блюда */
     private void editDish(Dish dish){
         Intent editIntent = new Intent(this, DishEditActivity.class);

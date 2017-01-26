@@ -37,10 +37,8 @@ public class Basket {
                     orders.get(i).setCount(count);
                 }
             }
-
+            i++;
         }
     }
-
-
 
 }

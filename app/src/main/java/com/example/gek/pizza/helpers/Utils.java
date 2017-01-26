@@ -8,6 +8,7 @@ import android.net.NetworkInfo;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
+import com.example.gek.pizza.data.Basket;
 import com.example.gek.pizza.data.Const;
 import com.example.gek.pizza.data.Dish;
 
@@ -72,5 +73,16 @@ public class Utils {
         SharedPreferences prefs = app.getSharedPreferences(Const.SETTINGS_KEY, Context.MODE_PRIVATE);
 
         return prefs.getString(settingKey, "");
+    }
+
+
+    // Ищет блюдо в корзине. Возвращает 0 если его там нет и кол-во если блюдо уже в заказе
+    public static int findInBasket(Dish dish){
+        for (int i = 0; i < Basket.getInstance().orders.size(); i++) {
+            if (dish.getKey().contentEquals(Basket.getInstance().orders.get(i).getKeyDish())){
+                return Basket.getInstance().orders.get(i).getCount();
+            }
+        }
+        return 0;
     }
 }
