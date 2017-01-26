@@ -27,10 +27,10 @@ public class Basket {
     }
 
     // Устанавливаем новое кол-во в заказе (увеличиваем "2"/уменьшаем "-2"/удаляем "0")
-    public void changeCount(Dish dish, int count){
+    public void changeCount(String dishKey, int count){
         int i = 0;
         while (orders.size() > i){
-            if (orders.get(i).getKeyDish().contentEquals(dish.getKey())){
+            if (orders.get(i).getKeyDish().contentEquals(dishKey)){
                 if (count == 0) {
                     orders.remove(i);
                 } else {

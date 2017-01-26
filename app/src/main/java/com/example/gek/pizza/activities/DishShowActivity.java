@@ -66,14 +66,21 @@ public class DishShowActivity extends AppCompatActivity implements View.OnClickL
             Toolbar myToolbar = (Toolbar) findViewById(R.id.toolBar);
             myToolbar.setTitle(dishOpen.getName());
             setSupportActionBar(myToolbar);
+        }
+    }
 
-            // смотрим в корзине в заказе ли это блюдо
-            int countDishInOrder = Utils.findInBasket(dishOpen);
-            if (countDishInOrder != 0) {
-                btnAdd.setVisibility(View.GONE);
-                llCounter.setVisibility(View.VISIBLE);
-                tvCounter.setText(String.valueOf(countDishInOrder));
-            }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // смотрим в корзине в заказе ли это блюдо
+        int countDishInOrder = Utils.findInBasket(dishOpen);
+        if (countDishInOrder != 0) {
+            btnAdd.setVisibility(View.GONE);
+            llCounter.setVisibility(View.VISIBLE);
+            tvCounter.setText(String.valueOf(countDishInOrder));
+        } else {
+            btnAdd.setVisibility(View.VISIBLE);
+            llCounter.setVisibility(View.GONE);
         }
     }
 
@@ -103,13 +110,13 @@ public class DishShowActivity extends AppCompatActivity implements View.OnClickL
     private void pressPlus(){
         int count = Integer.parseInt(tvCounter.getText().toString()) + 1;
         tvCounter.setText(String.valueOf(count));
-        Basket.getInstance().changeCount(dishOpen, count);
+        Basket.getInstance().changeCount(dishOpen.getKey(), count);
     }
 
     /** Уменьшаем количество в заказе на 1 или удаляем заказ если 0 */
     private void pressMinus(){
         int count = Integer.parseInt(tvCounter.getText().toString()) - 1;
-        Basket.getInstance().changeCount(dishOpen, count);
+        Basket.getInstance().changeCount(dishOpen.getKey(), count);
         if (count == 0) {
             llCounter.setVisibility(View.GONE);
             btnAdd.setVisibility(View.VISIBLE);
