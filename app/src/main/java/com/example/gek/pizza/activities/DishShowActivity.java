@@ -32,7 +32,8 @@ public class DishShowActivity extends AppCompatActivity implements View.OnClickL
     private Button btnRemove;
     private Button btnEdit;
     private LinearLayout llCounter;
-    private TextView tvMinus, tvCounter, tvPlus;
+    private TextView tvCounter;
+    private ImageView ivMinus, ivPlus;
     private Dish dishOpen;
 
     @Override
@@ -53,10 +54,10 @@ public class DishShowActivity extends AppCompatActivity implements View.OnClickL
 
         llCounter = (LinearLayout) findViewById(R.id.llCounter);
         tvCounter = (TextView) findViewById(R.id.tvCounter);
-        tvMinus = (TextView) findViewById(R.id.tvMinus);
-        tvMinus.setOnClickListener(this);
-        tvPlus = (TextView) findViewById(R.id.tvPlus);
-        tvPlus.setOnClickListener(this);
+        ivMinus = (ImageView) findViewById(R.id.ivMinus);
+        ivMinus.setOnClickListener(this);
+        ivPlus = (ImageView) findViewById(R.id.ivPlus);
+        ivPlus.setOnClickListener(this);
 
         if (getIntent().hasExtra(Const.EXTRA_DISH)){
             dishOpen = getIntent().getParcelableExtra(Const.EXTRA_DISH);
@@ -88,15 +89,14 @@ public class DishShowActivity extends AppCompatActivity implements View.OnClickL
             case R.id.btnAdd:
                 addNewDish();
                 break;
-            case R.id.tvMinus:
+            case R.id.ivMinus:
                 pressMinus();
                 break;
-            case R.id.tvPlus:
+            case R.id.ivPlus:
                 pressPlus();
                 break;
         }
     }
-
 
 
     /** Увеличиваем количество в заказе на 1 */

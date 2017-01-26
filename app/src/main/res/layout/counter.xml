@@ -1,29 +1,30 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/llCounter"
-    android:visibility="gone"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:gravity="center"
     android:orientation="horizontal"
-    android:layout_gravity="center">
-    <TextView
-        style="@style/textCounter"
-        android:id="@+id/tvMinus"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/symbol_minus"/>
+    android:visibility="gone">
+
+    <ImageView
+        android:id="@+id/ivMinus"
+        android:layout_width="@dimen/image_counter_size"
+        android:layout_height="@dimen/image_counter_size"
+        android:src="@drawable/ic_remove_circle" />
 
     <TextView
-        style="@style/textCounter"
         android:id="@+id/tvCounter"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        tools:text="0"/>
-
-    <TextView
         style="@style/textCounter"
-        android:id="@+id/tvPlus"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/symbol_plus"/>
+        android:gravity="center"
+        tools:text="0" />
+
+    <ImageView
+        android:id="@+id/ivPlus"
+        android:layout_width="@dimen/image_counter_size"
+        android:layout_height="@dimen/image_counter_size"
+        android:src="@drawable/ic_add_circle" />
 </LinearLayout>

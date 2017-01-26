@@ -63,8 +63,8 @@
     <style name="textCounter">
         <item name="android:textSize">@dimen/text_size_big</item>
         <item name="android:textColor">@color/colorButtonRaisedDarkGreen</item>
-        <item name="android:padding">@dimen/dish_show_price_padding</item>
-        <item name="android:layout_margin">@dimen/dish_show_price_layout_margin</item>
+        <item name="android:layout_marginLeft">@dimen/counter_margin</item>
+        <item name="android:layout_marginRight">@dimen/counter_margin</item>
         <item name="android:gravity">center</item>
         <item name="android:textStyle">bold</item>
     </style>
