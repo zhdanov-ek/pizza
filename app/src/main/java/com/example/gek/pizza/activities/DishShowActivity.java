@@ -5,16 +5,23 @@ import android.content.Intent;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.gek.pizza.R;
+import com.example.gek.pizza.data.Basket;
 import com.example.gek.pizza.data.Const;
 import com.example.gek.pizza.data.Dish;
+import com.example.gek.pizza.helpers.Utils;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
@@ -24,6 +31,9 @@ public class DishShowActivity extends AppCompatActivity implements View.OnClickL
     private Button btnAdd;
     private Button btnRemove;
     private Button btnEdit;
+    private LinearLayout llCounter;
+    private TextView tvCounter;
+    private ImageView ivMinus, ivPlus;
     private Dish dishOpen;
 
     @Override
@@ -42,9 +52,35 @@ public class DishShowActivity extends AppCompatActivity implements View.OnClickL
         btnEdit = (Button) findViewById(R.id.btnEdit);
         btnEdit.setOnClickListener(this);
 
+        llCounter = (LinearLayout) findViewById(R.id.llCounter);
+        tvCounter = (TextView) findViewById(R.id.tvCounter);
+        ivMinus = (ImageView) findViewById(R.id.ivMinus);
+        ivMinus.setOnClickListener(this);
+        ivPlus = (ImageView) findViewById(R.id.ivPlus);
+        ivPlus.setOnClickListener(this);
+
         if (getIntent().hasExtra(Const.EXTRA_DISH)){
             dishOpen = getIntent().getParcelableExtra(Const.EXTRA_DISH);
             fillValues(dishOpen);
+
+            Toolbar myToolbar = (Toolbar) findViewById(R.id.toolBar);
+            myToolbar.setTitle(dishOpen.getName());
+            setSupportActionBar(myToolbar);
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // смотрим в корзине в заказе ли это блюдо
+        int countDishInOrder = Utils.findInBasket(dishOpen);
+        if (countDishInOrder != 0) {
+            btnAdd.setVisibility(View.GONE);
+            llCounter.setVisibility(View.VISIBLE);
+            tvCounter.setText(String.valueOf(countDishInOrder));
+        } else {
+            btnAdd.setVisibility(View.VISIBLE);
+            llCounter.setVisibility(View.GONE);
         }
     }
 
@@ -56,10 +92,46 @@ public class DishShowActivity extends AppCompatActivity implements View.OnClickL
                 break;
             case R.id.btnEdit:
                 editDish(dishOpen);
+                break;
             case R.id.btnAdd:
-                //todo добавить блюдо в заказ, скрыть кнопку показать "- х +"
+                addNewDish();
+                break;
+            case R.id.ivMinus:
+                pressMinus();
+                break;
+            case R.id.ivPlus:
+                pressPlus();
                 break;
         }
+    }
+
+
+    /** Увеличиваем количество в заказе на 1 */
+    private void pressPlus(){
+        int count = Integer.parseInt(tvCounter.getText().toString()) + 1;
+        tvCounter.setText(String.valueOf(count));
+        Basket.getInstance().changeCount(dishOpen.getKey(), count);
+    }
+
+    /** Уменьшаем количество в заказе на 1 или удаляем заказ если 0 */
+    private void pressMinus(){
+        int count = Integer.parseInt(tvCounter.getText().toString()) - 1;
+        Basket.getInstance().changeCount(dishOpen.getKey(), count);
+        if (count == 0) {
+            llCounter.setVisibility(View.GONE);
+            btnAdd.setVisibility(View.VISIBLE);
+        } else {
+            tvCounter.setText(String.valueOf(count));
+        }
+    }
+
+
+    /** Добавляем блюдо в корзину, заменяем кнопку на цифру с количеством */
+    private void addNewDish(){
+        Basket.getInstance().addDish(dishOpen);
+        tvCounter.setText("1");
+        btnAdd.setVisibility(View.GONE);
+        llCounter.setVisibility(View.VISIBLE);
     }
 
     /** После удачного редактирования карточки обновляем инфу и тут */
@@ -85,9 +157,11 @@ public class DishShowActivity extends AppCompatActivity implements View.OnClickL
             ivPhoto.setImageResource(R.drawable.dish_empty);
         }
         tvName.setText(dish.getName());
-        tvPrice.setText(Float.toString(dish.getPrice()));
+        tvPrice.setText(Utils.toPrice(dish.getPrice()));
         tvDescription.setText(dish.getDescription());
     }
+
+
     /** Открываем активити для редактирования текущего блюда */
     private void editDish(Dish dish){
         Intent editIntent = new Intent(this, DishEditActivity.class);
@@ -129,4 +203,24 @@ public class DishShowActivity extends AppCompatActivity implements View.OnClickL
         builder.show();
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.action_basket:
+                startActivity(new Intent(this, BasketActivity.class));
+                break;
+            case R.id.action_settings:
+                break;
+            case R.id.action_about:
+                startActivity(new Intent(this, AboutActivity.class));
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 }

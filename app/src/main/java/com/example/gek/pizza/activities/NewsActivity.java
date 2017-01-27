@@ -79,8 +79,6 @@ public class NewsActivity extends AppCompatActivity {
 
         // устанавливаем слушатель на изменения в нашей базе в разделе контактов
         Const.db.child(Const.CHILD_NEWS).addValueEventListener(contactCardListener);
-
-
     }
 
     /** Запуск активити на добавление новости */

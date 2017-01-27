@@ -2,11 +2,13 @@ package com.example.gek.pizza.helpers;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
+import com.example.gek.pizza.data.Basket;
 import com.example.gek.pizza.data.Const;
 import com.example.gek.pizza.data.Dish;
 
@@ -14,7 +16,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 
 /**
- * Created by gek on 17.01.17.
+ * Вспомогательные методы
  */
 
 public class Utils {
@@ -63,6 +65,31 @@ public class Utils {
         nameFile = nameFile.replace("#", "");
         nameFile = nameFile + ".jpg";
         return  nameFile;
+    }
+
+
+    // возвращает значение настроек
+    public static String getSetting(AppCompatActivity app, String settingKey) {
+        SharedPreferences prefs = app.getSharedPreferences(Const.SETTINGS_KEY, Context.MODE_PRIVATE);
+
+        return prefs.getString(settingKey, "");
+    }
+
+
+    // Ищет блюдо в корзине. Возвращает 0 если его там нет и кол-во если блюдо уже в заказе
+    public static int findInBasket(Dish dish){
+        for (int i = 0; i < Basket.getInstance().orders.size(); i++) {
+            if (dish.getKey().contentEquals(Basket.getInstance().orders.get(i).getKeyDish())){
+                return Basket.getInstance().orders.get(i).getCount();
+            }
+        }
+        return 0;
+    }
+
+    // Convert float "50.2" to string "50.20 usd"
+    public static String toPrice(float f){
+        String s = String.format("%.2f", f) + " грн";
+        return s;
     }
 
 }

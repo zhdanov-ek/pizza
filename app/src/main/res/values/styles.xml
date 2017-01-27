@@ -59,4 +59,16 @@
         <item name="android:textStyle">bold</item>
     </style>
 
+
+    <style name="textCounter">
+        <item name="android:textSize">@dimen/text_size_big</item>
+        <item name="android:textColor">@color/colorButtonRaisedDarkGreen</item>
+        <item name="android:layout_marginLeft">@dimen/counter_margin</item>
+        <item name="android:layout_marginRight">@dimen/counter_margin</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+
+
 </resources>

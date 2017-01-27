@@ -57,7 +57,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder>{
         final News currentNews = listNews.get(position);
         holder.tvTitle.setText(currentNews.getTitle());
         holder.tvDescription.setText(currentNews.getDescription());
-        if ((currentNews.getPhotoUrl() != null) && (currentNews.getPhotoUrl().length() > 0)){
+        if (currentNews.getPhotoUrl().length() > 0){
             Glide.with(ctx)
                     .load(currentNews.getPhotoUrl())
                     .diskCacheStrategy(DiskCacheStrategy.SOURCE)
