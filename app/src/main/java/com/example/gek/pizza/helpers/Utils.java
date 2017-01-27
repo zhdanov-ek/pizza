@@ -85,5 +85,10 @@ public class Utils {
         }
         return 0;
     }
-    
+
+    // Convert float "50.2" to string "50.20 usd"
+    public static String toPrice(float f){
+        String s = String.format("%.2f", f) + " грн";
+        return s;
+    }
 }

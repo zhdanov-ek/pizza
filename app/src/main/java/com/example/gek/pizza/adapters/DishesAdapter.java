@@ -16,6 +16,7 @@ import com.example.gek.pizza.R;
 import com.example.gek.pizza.activities.DishShowActivity;
 import com.example.gek.pizza.data.Const;
 import com.example.gek.pizza.data.Dish;
+import com.example.gek.pizza.helpers.Utils;
 
 import java.util.ArrayList;
 
@@ -43,7 +44,7 @@ public class DishesAdapter  extends RecyclerView.Adapter<DishesAdapter.ViewHolde
     public void onBindViewHolder(ViewHolder holder, int position) {
         Dish currentDish = listDishes.get(position);
         holder.tvName.setText(currentDish.getName());
-        holder.tvPrice.setText(Float.toString(listDishes.get(position).getPrice()));
+        holder.tvPrice.setText(Utils.toPrice(listDishes.get(position).getPrice()));
         if ((currentDish.getPhotoUrl() != null) && (currentDish.getPhotoUrl().length() > 0)){
             Glide.with(ctx)
                     .load(currentDish.getPhotoUrl())

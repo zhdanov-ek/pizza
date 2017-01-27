@@ -15,6 +15,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.gek.pizza.R;
 import com.example.gek.pizza.data.Basket;
 import com.example.gek.pizza.data.Order;
+import com.example.gek.pizza.helpers.Utils;
 
 
 /**
@@ -49,9 +50,9 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder>{
         }
 
         holder.tvName.setText(order.getNameDish());
-        holder.tvPrice.setText(String.valueOf(order.getPriceDish()));
+        holder.tvPrice.setText(Utils.toPrice(order.getPriceDish()));
         holder.tvCounter.setText(String.valueOf(order.getCount()));
-        holder.tvSum.setText(String.valueOf(order.getSum()));
+        holder.tvSum.setText(Utils.toPrice(order.getSum()));
     }
 
     @Override
@@ -119,9 +120,10 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder>{
         /** Увеличиваем количество в заказе на 1 */
         private void pressPlus(int position){
             int count = Integer.parseInt(tvCounter.getText().toString()) + 1;
-            tvCounter.setText(String.valueOf(count));
             Basket.getInstance().changeCount(Basket.getInstance().orders.get(position).getKeyDish(), count);
-            notifyItemChanged(position);
+            tvCounter.setText(String.valueOf(count));
+            tvSum.setText(Utils.toPrice(Basket.getInstance().orders.get(position).getSum()));
+
         }
 
         /** Уменьшаем количество в заказе на 1 (до 1 минимум) */
@@ -131,7 +133,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder>{
                 count--;
                 Basket.getInstance().changeCount(Basket.getInstance().orders.get(position).getKeyDish(), count);
                 tvCounter.setText(String.valueOf(count));
-                notifyItemChanged(position);
+                tvSum.setText(Utils.toPrice(Basket.getInstance().orders.get(position).getSum()));
             }
 
 

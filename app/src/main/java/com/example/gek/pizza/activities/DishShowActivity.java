@@ -157,7 +157,7 @@ public class DishShowActivity extends AppCompatActivity implements View.OnClickL
             ivPhoto.setImageResource(R.drawable.dish_empty);
         }
         tvName.setText(dish.getName());
-        tvPrice.setText(Float.toString(dish.getPrice()));
+        tvPrice.setText(Utils.toPrice(dish.getPrice()));
         tvDescription.setText(dish.getDescription());
     }
 

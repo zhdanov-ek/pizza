@@ -2,6 +2,7 @@ package com.example.gek.pizza.activities;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -34,6 +35,10 @@ public class BasketActivity extends AppCompatActivity {
         // если заказы выбраны то показываем список
         if (Basket.getInstance().orders.size() > 0) {
             rv.setLayoutManager(new LinearLayoutManager(this));
+            // определяем разделители для айтемов
+            DividerItemDecoration dividerItemDecoration =
+                    new DividerItemDecoration(this,DividerItemDecoration.VERTICAL );
+            rv.addItemDecoration(dividerItemDecoration);
             OrderAdapter orderAdapter = new OrderAdapter(this);
             rv.setAdapter(orderAdapter);
         } else {
