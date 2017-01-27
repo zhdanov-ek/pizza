@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.gek.pizza.R;
+import com.example.gek.pizza.activities.BasketActivity;
 import com.example.gek.pizza.data.Basket;
 import com.example.gek.pizza.data.Order;
 import com.example.gek.pizza.helpers.Utils;
@@ -24,9 +25,22 @@ import com.example.gek.pizza.helpers.Utils;
 
 public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder>{
     private Context ctx;
+    private RefreshTotalCallback refreshTotalCallback;
 
     public OrderAdapter(Context ctx) {
         this.ctx = ctx;
+        // проверяем реализует ли активити интерфейс нашего адаптера
+        try {
+            this.refreshTotalCallback = (RefreshTotalCallback) ctx;
+        } catch (ClassCastException e){
+            throw new ClassCastException("Activity must implement RefreshTotalCallback.");
+        }
+        refreshTotalCallback.refreshTotal();
+    }
+
+    // Интерфейс, который должен быть реализован в активити, вызываем в адаптере
+    public interface RefreshTotalCallback{
+        void refreshTotal();
     }
 
     @Override
@@ -64,12 +78,10 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder>{
         private TextView tvName;
         private ImageView ivPhoto;
         private TextView tvPrice;
-
         private LinearLayout llCounter;
         private TextView tvCounter;
         private ImageView ivMinus;
         private ImageView ivPlus;
-
         private TextView tvSum;
         private ImageView ivClear;
 
@@ -110,10 +122,11 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder>{
         private void removeDish(int position){
             Basket.getInstance().orders.remove(position);
             if (Basket.getInstance().orders.size() == 0) {
-                //todo закрыть окно или лучше показать, что корзина пустая
-                notifyItemRemoved(position);
+                //todo Скрыть ТВ и кнопки для заказа, т.е. покзаать что корзина пустая
+                refreshTotalCallback.refreshTotal();
             } else {
                 notifyItemRemoved(position);
+                refreshTotalCallback.refreshTotal();
             }
         }
 
@@ -123,7 +136,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder>{
             Basket.getInstance().changeCount(Basket.getInstance().orders.get(position).getKeyDish(), count);
             tvCounter.setText(String.valueOf(count));
             tvSum.setText(Utils.toPrice(Basket.getInstance().orders.get(position).getSum()));
-
+            refreshTotalCallback.refreshTotal();
         }
 
         /** Уменьшаем количество в заказе на 1 (до 1 минимум) */
@@ -134,9 +147,9 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder>{
                 Basket.getInstance().changeCount(Basket.getInstance().orders.get(position).getKeyDish(), count);
                 tvCounter.setText(String.valueOf(count));
                 tvSum.setText(Utils.toPrice(Basket.getInstance().orders.get(position).getSum()));
+                refreshTotalCallback.refreshTotal();
             }
-
-
         }
+
     }
 }

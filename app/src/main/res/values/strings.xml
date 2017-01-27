@@ -7,6 +7,8 @@
     <string name="remove">Remove</string>
     <string name="create_new">Create new</string>
     <string name="add">Add</string>
+    <string name="to_order">Order now</string>
+    <string name="total">Total</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>

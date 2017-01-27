@@ -8,15 +8,15 @@
     tools:context="com.example.gek.pizza.activities.BasketActivity">
     <include layout="@layout/toolbar" />
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-
+        android:layout_height="match_parent">
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rv"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:paddingBottom="@dimen/order_now_panel_height"
+            android:clipToPadding="false" />
 
         <TextView
             style="@style/textBig"
@@ -27,7 +27,35 @@
             android:gravity="center"
             android:visibility="gone"
             android:text="@string/mes_no_orders"/>
-    </LinearLayout>
+
+        <RelativeLayout
+            android:id="@+id/rlOrderPanel"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/order_now_panel_height"
+            android:background="@color/colorButtonRaisedLightGreen"
+            android:layout_alignParentBottom="true">
+
+            <TextView
+                android:id="@+id/tvTotal"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:paddingLeft="@dimen/ll_padding"
+                style="@style/textMiddle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="Total: 231 грн"/>
+
+            <Button
+                android:id="@+id/btnOrderNow"
+                android:paddingRight="@dimen/ll_padding"
+                android:layout_centerVertical="true"
+                android:layout_alignParentRight="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/to_order"/>
+        </RelativeLayout>
+    </RelativeLayout>
+
 
 
 
