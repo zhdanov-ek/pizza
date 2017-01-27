@@ -2,7 +2,6 @@ package com.example.gek.pizza.helpers;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.support.v7.app.AppCompatActivity;
@@ -66,11 +65,4 @@ public class Utils {
         return  nameFile;
     }
 
-
-    // возвращает значение настроек
-    public static String getSetting(AppCompatActivity app, String settingKey) {
-        SharedPreferences prefs = app.getSharedPreferences(Const.SETTINGS_KEY, Context.MODE_PRIVATE);
-
-        return prefs.getString(settingKey, "");
-    }
 }

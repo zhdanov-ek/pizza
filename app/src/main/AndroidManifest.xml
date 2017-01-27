@@ -34,6 +34,7 @@
         <activity android:name=".activities.TrackingOrderActivity" />
         <activity android:name=".activities.OrdersActivity" />
         <activity android:name=".activities.DishShowActivity"></activity>
+        <activity android:name=".activities.SettingsActivity" />
 
         <meta-data
             android:name="com.google.android.gms.version"

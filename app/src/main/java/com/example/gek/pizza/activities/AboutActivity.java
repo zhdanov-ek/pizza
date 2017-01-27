@@ -1,6 +1,8 @@
 package com.example.gek.pizza.activities;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -9,7 +11,6 @@ import android.widget.TextView;
 
 import com.example.gek.pizza.R;
 import com.example.gek.pizza.data.Const;
-import com.example.gek.pizza.helpers.Utils;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
@@ -36,7 +37,9 @@ public class AboutActivity extends AppCompatActivity implements OnMapReadyCallba
 
         try {
             MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.fMapView);
-            mapFragment.getMapAsync(this);
+            if(mapFragment !=null) {
+                mapFragment.getMapAsync(this);
+            }
         } catch (NullPointerException exception){
             Log.e(TAG, exception.toString());
         }
@@ -45,15 +48,17 @@ public class AboutActivity extends AppCompatActivity implements OnMapReadyCallba
         myToolbar.setTitle(R.string.title_about);
         setSupportActionBar(myToolbar);
 
-        textAddress = Utils.getSetting(this, Const.SETTINGS_ADDRESS_KEY);
-        textEmail = Utils.getSetting(this, Const.SETTINGS_EMAIL_KEY);
-        textLatitude = Utils.getSetting(this, Const.SETTINGS_LATITUDE_KEY);
-        textLongitude = Utils.getSetting(this, Const.SETTINGS_LONGITUDE_KEY);
-        textPhone = Utils.getSetting(this, Const.SETTINGS_PHONE_KEY);
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 
-        tvPhone = (TextView) findViewById(R.id.tvSettingsPhone);
-        tvEmail = (TextView) findViewById(R.id.tvSettingsEmail);
-        tvAddress = (TextView) findViewById(R.id.tvSettingsAddress);
+        textAddress   = sharedPreferences.getString(Const.SETTINGS_ADDRESS_KEY, "");
+        textEmail     = sharedPreferences.getString(Const.SETTINGS_EMAIL_KEY, "");
+        textLatitude  = sharedPreferences.getString(Const.SETTINGS_LATITUDE_KEY, "");
+        textLongitude = sharedPreferences.getString(Const.SETTINGS_LONGITUDE_KEY, "");
+        textPhone     = sharedPreferences.getString(Const.SETTINGS_PHONE_KEY, "");
+
+        tvPhone = (TextView) findViewById(R.id.tvAboutPhone);
+        tvEmail = (TextView) findViewById(R.id.tvAboutEmail);
+        tvAddress = (TextView) findViewById(R.id.tvAboutAddress);
 //        tvLatitude = (TextView) findViewById(R.id.tvSettingsLatitude);
 //        tvLongitude = (TextView) findViewById(R.id.tvSettingsLongitude);
 
@@ -67,13 +72,15 @@ public class AboutActivity extends AppCompatActivity implements OnMapReadyCallba
 
     @Override
     public void onMapReady(GoogleMap map) {
-        LatLng pizza = new LatLng(Double.parseDouble(textLatitude),Double.parseDouble(textLongitude));
+        if (map != null) {
+            LatLng pizza = new LatLng(Double.parseDouble(textLatitude), Double.parseDouble(textLongitude));
 
-        map.moveCamera(CameraUpdateFactory.newLatLngZoom(pizza, Const.ZOOM_MAP));
-        map.addMarker(new MarkerOptions()
-                .title(getString(R.string.hint_on_map))
-                .snippet(getString(R.string.snipset_on_map))
-                .position(pizza));
+            map.moveCamera(CameraUpdateFactory.newLatLngZoom(pizza, Const.ZOOM_MAP));
+            map.addMarker(new MarkerOptions()
+                    .title(getString(R.string.hint_on_map))
+                    .snippet(getString(R.string.snipset_on_map))
+                    .position(pizza));
+        }
     }
 
     public void setSettingsToView(TextView view, String setting) {

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory android:title="@string/title_settings_category_contacts">
+
+        <EditTextPreference
+            android:key="phone"
+            android:title="@string/title_settings_phone"
+            android:numeric="integer" />
+
+        <EditTextPreference
+            android:key="email"
+            android:title="@string/title_settings_email" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/title_settings_category_address">
+
+        <EditTextPreference
+            android:key="address"
+            android:title="@string/title_settings_address" />
+
+        <EditTextPreference
+            android:key="latitude"
+            android:title="@string/title_settings_latitude" />
+
+        <EditTextPreference
+            android:key="longitude"
+            android:title="@string/title_settings_longitude" />
+
+    </PreferenceCategory>
+
+
+
+</PreferenceScreen>

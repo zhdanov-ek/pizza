@@ -1,9 +1,9 @@
 package com.example.gek.pizza.activities;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -54,14 +54,16 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         //Получение настроек приложения
-        final SharedPreferences prefs = this.getSharedPreferences(Const.SETTINGS_KEY, Context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        final SharedPreferences.Editor editor = sharedPreferences.edit();
+
         ValueEventListener settingsListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 long num = dataSnapshot.getChildrenCount();
                 Log.d(TAG, "Load all list Settings: total Children objects:" + num);
                 for (DataSnapshot child: dataSnapshot.getChildren()) {
-                    prefs.edit().putString(child.getKey(), child.getValue().toString()).apply();
+                    editor.putString(child.getKey(), child.getValue().toString()).apply();
                 }
             }
             @Override
@@ -98,6 +100,8 @@ public class MainActivity extends AppCompatActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            Intent aboutIntent = new Intent(this, SettingsActivity.class);
+            startActivity(aboutIntent);
             return true;
         } else if (id == R.id.action_about){
             Intent aboutIntent = new Intent(this, AboutActivity.class);
