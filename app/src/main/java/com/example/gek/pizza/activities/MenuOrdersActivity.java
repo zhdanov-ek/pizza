@@ -105,6 +105,7 @@ public class MenuOrdersActivity extends AppCompatActivity {
                 startActivity(new Intent(this, BasketActivity.class));
                 break;
             case R.id.action_settings:
+                startActivity(new Intent(this, SettingsActivity.class));
                 break;
             case R.id.action_about:
                 startActivity(new Intent(this, AboutActivity.class));
