@@ -22,7 +22,7 @@
     <string name="title_about">About us</string>
     <string name="title_settings">Settings</string>
     <string name="title_basket">Basket</string>
-
+    <string name="title_delivery">Shipping clearance</string>
 
 
     <string name="order_menu">Menu for order</string>
@@ -35,7 +35,9 @@
 
     <string name="mes_no_internet">No internet connection</string>
     <string name="mes_no_records">No data in the program</string>
+    <string name="mes_check_data">Please check data</string>
     <string name="mes_no_orders">Here is empty. First, you need to add one or more dish.</string>
+
     <string name="confirm_remove_item">Do you want remove item?</string>
 
     <string name="hint_title_news">Title of news</string>
@@ -48,6 +50,15 @@
 
     <string name="hint_on_map">Pizza</string>
     <string name="snipset_on_map">Best pizza</string>
+
+    <!-- DELIVERY CREATION -->
+    <string name="text_delivery_creation">Please input your data</string>
+    <string name="name_delivery">Your name</string>
+    <string name="address_delivery">Shipping address</string>
+    <string name="phone_delivery">Contact phone number</string>
+    <string name="comment_delivery">Comment</string>
+    <string name="create_delivery">Create delivery</string>
+
 
 
     <string name="title_settings_category_contacts">Contacts</string>

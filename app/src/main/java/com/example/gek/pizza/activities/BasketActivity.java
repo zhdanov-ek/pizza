@@ -1,5 +1,6 @@
 package com.example.gek.pizza.activities;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DividerItemDecoration;
@@ -83,8 +84,8 @@ public class BasketActivity extends AppCompatActivity implements OrderAdapter.Re
     View.OnClickListener orderNowListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            //todo send data to FireBase
-            Toast.makeText(getBaseContext(), "Sending order to FireBase", Toast.LENGTH_LONG).show();
+            Intent intentDelivery = new Intent(getBaseContext(), DeliveryCreationActivity.class);
+            startActivity(intentDelivery);
         }
     };
 }
