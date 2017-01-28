@@ -8,6 +8,10 @@ public class Order {
     private Dish dish;
     private int count;
 
+
+    public Order() {
+    }
+
     public Order(Dish dish) {
         this.dish = dish;
         this.count = 1;

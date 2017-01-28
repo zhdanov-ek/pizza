@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/content_main"
     android:layout_width="match_parent"
-    android:orientation="vertical"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
@@ -14,95 +14,118 @@
     tools:context="com.example.gek.pizza.activities.MainActivity"
     tools:showIn="@layout/app_bar_main">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/order_menu"
-        android:textSize="@dimen/main_menu_title_size"/>
-
-    <android.support.v7.widget.CardView
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="@dimen/card_view_main_menu_height"
-        android:id="@+id/cvMenuOrder">
+        android:layout_height="match_parent">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="horizontal">
-            <ImageView
-                android:layout_width="@dimen/card_view_main_menu_iv_width"
-                android:layout_height="match_parent"
-                android:background="@color/colorAccent"/>
+            android:orientation="vertical">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/text_order_menu"
-                android:textSize="@dimen/main_menu_text_size"/>
-        </LinearLayout>
+                android:text="@string/order_menu"
+                android:textSize="@dimen/main_menu_title_size" />
 
-    </android.support.v7.widget.CardView>
+            <android.support.v7.widget.CardView
+                android:id="@+id/cvMenuOrder"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/card_view_main_menu_height">
 
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/news"
-        android:textSize="@dimen/main_menu_title_size"/>
+                    <ImageView
+                        android:layout_width="@dimen/card_view_main_menu_iv_width"
+                        android:layout_height="match_parent"
+                        android:background="@color/colorAccent" />
 
-    <android.support.v7.widget.CardView
-        android:id="@+id/cvNews"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/card_view_main_menu_height">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/text_order_menu"
+                        android:textSize="@dimen/main_menu_text_size" />
+                </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal">
-            <ImageView
-                android:layout_width="@dimen/card_view_main_menu_iv_width"
-                android:layout_height="match_parent"
-                android:background="@color/colorAccent"/>
+            </android.support.v7.widget.CardView>
+
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/text_news"
-                android:textSize="@dimen/main_menu_text_size"/>
-        </LinearLayout>
+                android:text="@string/news"
+                android:textSize="@dimen/main_menu_title_size" />
 
-    </android.support.v7.widget.CardView>
+            <android.support.v7.widget.CardView
+                android:id="@+id/cvNews"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/card_view_main_menu_height">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/orders"
-        android:textSize="@dimen/main_menu_title_size"/>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
 
-    <android.support.v7.widget.CardView
-        android:id="@+id/cvOrders"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/card_view_main_menu_height">
+                    <ImageView
+                        android:layout_width="@dimen/card_view_main_menu_iv_width"
+                        android:layout_height="match_parent"
+                        android:background="@color/colorAccent" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal">
-            <ImageView
-                android:layout_width="@dimen/card_view_main_menu_iv_width"
-                android:layout_height="match_parent"
-                android:background="@color/colorAccent"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/text_news"
+                        android:textSize="@dimen/main_menu_text_size" />
+                </LinearLayout>
+
+            </android.support.v7.widget.CardView>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/text_orders"
-                android:textSize="@dimen/main_menu_text_size"/>
+                android:text="@string/orders"
+                android:textSize="@dimen/main_menu_title_size" />
+
+            <android.support.v7.widget.CardView
+                android:id="@+id/cvOrders"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/card_view_main_menu_height">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="@dimen/card_view_main_menu_iv_width"
+                        android:layout_height="match_parent"
+                        android:background="@color/colorAccent" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/text_orders"
+                        android:textSize="@dimen/main_menu_text_size" />
+                </LinearLayout>
+
+            </android.support.v7.widget.CardView>
+
+            <Button
+                android:id="@+id/btnStartService"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="startService delivery" />
+
+            <Button
+                android:id="@+id/btnStopService"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="stopService delivery" />
+
         </LinearLayout>
-
-    </android.support.v7.widget.CardView>
-
-
-
-
+    </ScrollView>
 </LinearLayout>

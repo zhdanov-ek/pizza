@@ -19,6 +19,7 @@ import android.widget.Toast;
 
 import com.example.gek.pizza.R;
 import com.example.gek.pizza.data.Const;
+import com.example.gek.pizza.services.CheckDeliveryService;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
@@ -42,6 +43,10 @@ public class MainActivity extends AppCompatActivity
         cvNews.setOnClickListener(this);
         cvOrders = (CardView) findViewById(R.id.cvOrders);
         cvOrders.setOnClickListener(this);
+
+        //todo move to settings
+        findViewById(R.id.btnStartService).setOnClickListener(this);
+        findViewById(R.id.btnStopService).setOnClickListener(this);
 
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -146,6 +151,14 @@ public class MainActivity extends AppCompatActivity
                 break;
             case R.id.cvOrders:
                 Toast.makeText(this, "Orders", Toast.LENGTH_SHORT).show();
+                break;
+
+            //todo переместить запуск сервиса в настройки куда-нибудь
+            case R.id.btnStartService:
+                startService(new Intent(this, CheckDeliveryService.class));
+                break;
+            case R.id.btnStopService:
+                stopService(new Intent(this, CheckDeliveryService.class));
                 break;
 
         }
