@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+import com.bumptech.glide.util.Util;
 import com.example.gek.pizza.R;
 import com.example.gek.pizza.activities.AboutActivity;
 import com.example.gek.pizza.activities.MainActivity;
@@ -20,6 +21,7 @@ import com.example.gek.pizza.adapters.DishesAdapter;
 import com.example.gek.pizza.data.Const;
 import com.example.gek.pizza.data.Delivery;
 import com.example.gek.pizza.data.Dish;
+import com.example.gek.pizza.data.Order;
 import com.example.gek.pizza.helpers.Utils;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -34,6 +36,7 @@ public class CheckDeliveryService extends Service {
     int notifId = 555;
     NotificationManager notificationManager;
     Context ctx;
+    ValueEventListener newDeliveriesListener;
 
     public CheckDeliveryService() {
     }
@@ -54,10 +57,11 @@ public class CheckDeliveryService extends Service {
     }
 
 
+
     private void setListenerNewDeliveries(){
         // Описываем слушатель, который мониторит новые заказы на доставку,
         // которые находятся в child(CHILD_ORDERS_NEW)
-        ValueEventListener newDeliveriesListener = new ValueEventListener() {
+        newDeliveriesListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 long num = dataSnapshot.getChildrenCount();
@@ -78,6 +82,7 @@ public class CheckDeliveryService extends Service {
         };
 
         // устанавливаем слушатель на изменения в разделе новых заявок на доставку
+        // События будут срабатывать даже когда сервис будет уничтожен.
         Const.db.child(Const.CHILD_ORDERS_NEW).addValueEventListener(newDeliveriesListener);
     }
 
@@ -87,22 +92,36 @@ public class CheckDeliveryService extends Service {
         NotificationCompat.Builder ntfBuilder = new NotificationCompat.Builder(ctx);
         // Формируем его наполняя информацией
         // Следующие три параметра являются ОБЯЗАТЕЛЬНЫМИ
-        ntfBuilder.setSmallIcon(R.drawable.ic_warning);
-        ntfBuilder.setContentTitle("my title ");
-        ntfBuilder.setContentText("уведомление");
+        ntfBuilder.setSmallIcon(R.drawable.ic_notification);
+        ntfBuilder.setContentTitle(delivery.getClientName());
+
+        // Выбираем названия блюд и их количество
+        //todo Список orders не получается получить с файрбейс
+//        String listDish = "";
+//        for (Order order: delivery.getOrders()) {
+//            listDish = listDish + order.getNameDish();
+//            if (order.getCount() > 1){
+//                listDish = listDish + " (" + order.getCount() + "), ";
+//            } else {
+//                listDish = listDish + ", ";
+//            }
+//        }
+//        ntfBuilder.setContentText(listDish);
+
+        ntfBuilder.setContentText(delivery.getAddressClient());
 
 
-        // ************   Не обязательные параметры  *************
-        ntfBuilder.setContentInfo("my Content Info");
+        // ************   Не обязательные параметры (для Notification) *************
+        ntfBuilder.setContentInfo(Utils.toPrice(delivery.getTotalSum()));
         // ставим флаг, чтобы уведомление пропало после нажатия
         ntfBuilder.setAutoCancel(true);
         // Устанавливаем большую картинку в само уведомление
-        ntfBuilder.setLargeIcon(BitmapFactory.decodeResource(ctx.getResources(), R.drawable.logo));
+        ntfBuilder.setLargeIcon(BitmapFactory.decodeResource(ctx.getResources(), R.drawable.ic_notification));
         // В екшен баре появляется на секунду строка вместе со значком
         ntfBuilder.setTicker("New delivery!");
 
         // Устанавливаем параметры для уведомления (звук, вибро, подсветка и т.д.)
-        ntfBuilder.setDefaults(Notification.DEFAULT_SOUND | Notification.DEFAULT_VIBRATE);
+//        ntfBuilder.setDefaults(Notification.DEFAULT_SOUND | Notification.DEFAULT_VIBRATE);
 
         // Указываем явный интент для запуска окна по нажатию на уведомление
         Intent intent = new Intent(ctx, AboutActivity.class);
@@ -121,4 +140,12 @@ public class CheckDeliveryService extends Service {
         // TODO: Return the communication channel to the service.
         throw new UnsupportedOperationException("Not yet implemented");
     }
+
+    @Override
+    public void onDestroy() {
+        Log.d(TAG, "onDestroy: ");
+        Const.db.child(Const.CHILD_ORDERS_NEW).removeEventListener(newDeliveriesListener);
+        super.onDestroy();
+    }
+
 }
