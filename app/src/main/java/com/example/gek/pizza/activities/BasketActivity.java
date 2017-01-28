@@ -46,7 +46,13 @@ public class BasketActivity extends AppCompatActivity implements OrderAdapter.Re
         rv = (RecyclerView) findViewById(R.id.rv);
         tvEmpty = (TextView) findViewById(R.id.tvEmpty);
 
-        // если заказы выбраны то показываем список
+    }
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // если в корзине есть, что-то то показываем
         if (Basket.getInstance().orders.size() > 0) {
             rv.setLayoutManager(new LinearLayoutManager(this));
             // определяем разделители для айтемов
@@ -55,12 +61,18 @@ public class BasketActivity extends AppCompatActivity implements OrderAdapter.Re
             rv.addItemDecoration(dividerItemDecoration);
             OrderAdapter orderAdapter = new OrderAdapter(this);
             rv.setAdapter(orderAdapter);
+
         } else {
+            // Если корзина пуста то проверяем нет ли действующей доставки
             rv.setVisibility(View.GONE);
             rlOrderPanel.setVisibility(View.GONE);
+            if (Basket.getInstance().getNumberDelivery().length() > 0) {
+                String mes = getResources().getString(R.string.mes_your_order_performed) + "\n" +
+                        Basket.getInstance().getNumberDelivery();
+                tvEmpty.setText(mes);
+            }
             tvEmpty.setVisibility(View.VISIBLE);
         }
-
     }
 
     /** Реализация интерфейса адаптера в которой мы обновляем итоговую сумму или скрываем РВ */
@@ -71,12 +83,7 @@ public class BasketActivity extends AppCompatActivity implements OrderAdapter.Re
             rlOrderPanel.setVisibility(View.GONE);
             tvEmpty.setVisibility(View.VISIBLE);
         } else {
-            String s = getResources().getString(R.string.total) + ": ";
-            float sum = 0;
-            for (Order order: Basket.getInstance().orders) {
-                sum = sum + order.getSum();
-            }
-            s = s + Utils.toPrice(sum);
+            String s = getResources().getString(R.string.total) + ": " + Utils.toPrice(Basket.getInstance().getTotalSum());
             tvTotal.setText(s);
         }
     }

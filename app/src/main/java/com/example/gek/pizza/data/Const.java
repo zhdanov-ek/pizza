@@ -15,6 +15,12 @@ public class Const {
     public static final String CHILD_MENU_GROUPS = "menu_groups";
     public static final String CHILD_SETTINGS = "settings";
 
+    public static final String CHILD_ORDERS_NEW = "orders/new";
+    public static final String CHILD_ORDERS_COOKING = "orders/cooking";
+    public static final String CHILD_ORDERS_TRANSPORTATION = "orders/transportation";
+    public static final String CHILD_ORDERS_ARCHIVE = "orders/archive";
+
+
     // Storage
     public static final String STORAGE = "gs://pizza-7ee24.appspot.com";
 

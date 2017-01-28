@@ -8,10 +8,13 @@ import java.util.ArrayList;
 
 public class Basket {
     public ArrayList<Order> orders;
+    private String numberDelivery;
     private static Basket instance;
+
 
     private Basket() {
         orders = new ArrayList<>();
+        numberDelivery = "";
     }
 
     // Получаем инстанс через метод, а не конструктор, который скрыт
@@ -39,6 +42,33 @@ public class Basket {
             }
             i++;
         }
+    }
+
+    // возвращает итоговую сумму по всем заказам
+    public float getTotalSum(){
+        float sum = 0;
+        for (Order order: orders) {
+            sum = sum + order.getSum();
+        }
+        return sum;
+    }
+
+    // после отправки заявки на доставку в этот метод подаем номер заявки и очищаем корзину
+    public void makeDelivery(String numberDelivery){
+        // todo по умному номер нужно куда-нибудь сохранить на случай когда апп перезапустят
+        // по этому номер потом будем отслеживать состояние выполнения заявки
+        this.numberDelivery = numberDelivery;
+        orders.clear();
+    }
+
+
+
+    public String getNumberDelivery() {
+        return numberDelivery;
+    }
+
+    public void setNumberDelivery(String numberDelivery) {
+        this.numberDelivery = numberDelivery;
     }
 
 }

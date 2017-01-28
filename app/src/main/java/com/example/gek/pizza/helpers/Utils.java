@@ -21,6 +21,8 @@ import java.util.Calendar;
 
 public class Utils {
 
+    // todo Написать метод для получения текущего времени и приведения его в нормальный вид
+
     // Проверяет есть ли инет
     public static boolean hasInternet(Context context) {
         if (context == null) {
@@ -55,7 +57,8 @@ public class Utils {
     }
 
     /** Формируем уникальное имя для фотки на базе входящей строки.
-     *  Убираем нежелательные символы для нормального хранения в файрбейс */
+     *  Убираем нежелательные символы для нормального хранения в файрбейс
+     *               . $ [ ] # /            */
     public static String makePhotoName(String name){
         String time = Calendar.getInstance().getTime().toString();
         String nameFile = name + time;
@@ -65,6 +68,19 @@ public class Utils {
         nameFile = nameFile.replace("#", "");
         nameFile = nameFile + ".jpg";
         return  nameFile;
+    }
+
+    /** Create name of key for delivery child */
+    public static String makeDeliveryNumber(String phone){
+        String s = Calendar.getInstance().getTime().toString();
+        s = phone + s;
+        s = s.replace(".", "");
+        s = s.replace("$", "");
+        s = s.replace("[", "");
+        s = s.replace("]", "");
+        s = s.replace("#", "");
+        s = s.replace("/", "");
+        return s;
     }
 
 

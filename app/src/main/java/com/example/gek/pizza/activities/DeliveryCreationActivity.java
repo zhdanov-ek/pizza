@@ -9,6 +9,14 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.gek.pizza.R;
+import com.example.gek.pizza.data.Basket;
+import com.example.gek.pizza.data.Const;
+import com.example.gek.pizza.data.Delivery;
+import com.example.gek.pizza.helpers.Utils;
+
+import java.util.ArrayList;
+
+import static com.example.gek.pizza.data.Const.db;
 
 public class DeliveryCreationActivity extends AppCompatActivity {
 
@@ -39,7 +47,21 @@ public class DeliveryCreationActivity extends AppCompatActivity {
         @Override
         public void onClick(View view) {
             if (checkData()) {
-                //todo send data to server
+                Delivery delivery = new Delivery();
+                delivery.setClientName(etName.getText().toString());
+                delivery.setPhoneClient(etPhone.getText().toString());
+                delivery.setAddressClient(etAddress.getText().toString());
+                delivery.setCommentClient(etComment.getText().toString());
+                delivery.setTotalSum(Basket.getInstance().getTotalSum());
+                delivery.setOrders(Basket.getInstance().orders);
+
+                // Create name for key of delivery and send data to server
+                String numberDelivery = Utils.makeDeliveryNumber(etPhone.getText().toString());
+                db.child(Const.CHILD_ORDERS_NEW).child(numberDelivery).setValue(delivery);
+
+                // очищаем корзину и сохраняем текущий номер заказа
+                Basket.getInstance().makeDelivery(numberDelivery);
+                finish();
             }
         }
     };
