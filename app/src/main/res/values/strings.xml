@@ -60,7 +60,9 @@
     <string name="comment_delivery">Comment</string>
     <string name="create_delivery">Create delivery</string>
 
-
+    <!-- DELIVERY NOTIFICATION -->
+    <string name="notification_delivery_title">New orders</string>
+    <string name="notification_delivery_content">Total orders</string>
 
     <string name="title_settings_category_contacts">Contacts</string>
     <string name="title_settings_category_address">Address</string>

@@ -29,14 +29,18 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
+// https://developer.android.com/guide/topics/ui/notifiers/notifications.html?hl=ru
+
+
 public class CheckDeliveryService extends Service {
     private static String TAG = "CheckDeliveryService";
     // По этому ID мы сможем обращаться к нашему уведомлению, что бы изменить его например
     // Для изменения уведомления достаточно повторно создать его с тем же номером ID
     int notifId = 555;
-    NotificationManager notificationManager;
-    Context ctx;
-    ValueEventListener newDeliveriesListener;
+    private NotificationManager notificationManager;
+    private ArrayList<Delivery> listDeliveries;
+    private Context ctx;
+    private ValueEventListener newDeliveriesListener;
 
     public CheckDeliveryService() {
     }
@@ -45,6 +49,7 @@ public class CheckDeliveryService extends Service {
     public void onCreate() {
         super.onCreate();
         ctx = getBaseContext();
+        listDeliveries = new ArrayList<>();
         // Получаем системный менеджер уведомлений
         notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         Log.d(TAG, "onCreate: ");
@@ -65,19 +70,22 @@ public class CheckDeliveryService extends Service {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 long num = dataSnapshot.getChildrenCount();
+                listDeliveries.clear();
 
-                // Перебираем все новые заказы и выводим для каждого нотификейшн
+                // Получаем изменения по заказам и если они есть то выводим уведомление
                 Log.d(TAG, "Load new deliveries: total Children objects:" + num);
                 for (DataSnapshot child: dataSnapshot.getChildren()) {
-                    Delivery currentDelivery = child.getValue(Delivery.class);
-                    showNotification(currentDelivery);
+                    listDeliveries.add(child.getValue(Delivery.class));
+                }
+                if (listDeliveries.size() != 0){
+                    showNotification();
                 }
 
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                Log.w(TAG, "newDeliveriesListener: onCancelled", databaseError.toException());
+                Log.w(TAG, "load data from FireBase: onCancelled", databaseError.toException());
             }
         };
 
@@ -86,42 +94,39 @@ public class CheckDeliveryService extends Service {
         Const.db.child(Const.CHILD_ORDERS_NEW).addValueEventListener(newDeliveriesListener);
     }
 
-    private void showNotification(Delivery delivery){
+    private void showNotification(){
+        int count = 0;
+        float totalPrice = 0;
+        for (Delivery d: listDeliveries) {
+            count++;
+            totalPrice += d.getTotalSum();
+        }
+
+        String title = getResources().getString(R.string.notification_delivery_title);
+        String content = getResources().getString(R.string.notification_delivery_content) + ": " + count;
+        String contentInfo = Utils.toPrice(totalPrice);
 
         // Создаем наше уведомление
         NotificationCompat.Builder ntfBuilder = new NotificationCompat.Builder(ctx);
         // Формируем его наполняя информацией
         // Следующие три параметра являются ОБЯЗАТЕЛЬНЫМИ
-        ntfBuilder.setSmallIcon(R.drawable.ic_notification);
-        ntfBuilder.setContentTitle(delivery.getClientName());
-
-        // Выбираем названия блюд и их количество
-        //todo Список orders не получается получить с файрбейс
-//        String listDish = "";
-//        for (Order order: delivery.getOrders()) {
-//            listDish = listDish + order.getNameDish();
-//            if (order.getCount() > 1){
-//                listDish = listDish + " (" + order.getCount() + "), ";
-//            } else {
-//                listDish = listDish + ", ";
-//            }
-//        }
-//        ntfBuilder.setContentText(listDish);
-
-        ntfBuilder.setContentText(delivery.getAddressClient());
+        ntfBuilder.setSmallIcon(R.drawable.ic_money);
+        ntfBuilder.setContentTitle(title);
+        ntfBuilder.setContentText(content);
 
 
         // ************   Не обязательные параметры (для Notification) *************
-        ntfBuilder.setContentInfo(Utils.toPrice(delivery.getTotalSum()));
-        // ставим флаг, чтобы уведомление пропало после нажатия
+        ntfBuilder.setContentInfo(contentInfo);
+        // ставим флаг, чтобы уведомление пропало после нажатия. Потом надо убрать его и снимать
+        // нотификейшн после того реально обработается заказ и переместится с папки NEW
         ntfBuilder.setAutoCancel(true);
         // Устанавливаем большую картинку в само уведомление
         ntfBuilder.setLargeIcon(BitmapFactory.decodeResource(ctx.getResources(), R.drawable.ic_notification));
         // В екшен баре появляется на секунду строка вместе со значком
-        ntfBuilder.setTicker("New delivery!");
+        ntfBuilder.setTicker(title + " (" + contentInfo + ")");
 
         // Устанавливаем параметры для уведомления (звук, вибро, подсветка и т.д.)
-//        ntfBuilder.setDefaults(Notification.DEFAULT_SOUND | Notification.DEFAULT_VIBRATE);
+        ntfBuilder.setDefaults(Notification.DEFAULT_SOUND | Notification.DEFAULT_VIBRATE);
 
         // Указываем явный интент для запуска окна по нажатию на уведомление
         Intent intent = new Intent(ctx, AboutActivity.class);
@@ -131,7 +136,7 @@ public class CheckDeliveryService extends Service {
 
         // Даем ему команду отобразить наше уведомление
         // айди инкрементируем, что бы были на каждый заказ свой нотификейшн
-        notificationManager.notify(notifId++, ntfBuilder.build());
+        notificationManager.notify(notifId, ntfBuilder.build());
     }
 
 
@@ -144,6 +149,7 @@ public class CheckDeliveryService extends Service {
     @Override
     public void onDestroy() {
         Log.d(TAG, "onDestroy: ");
+        // перед уничтожением сервиса убираем наш лисенер. Иначе он будет отрабатывать и без службы
         Const.db.child(Const.CHILD_ORDERS_NEW).removeEventListener(newDeliveriesListener);
         super.onDestroy();
     }
