@@ -169,9 +169,6 @@ public class AboutActivity extends AppCompatActivity implements
                 Intent callIntent = new Intent(Intent.ACTION_VIEW);
                 callIntent.setData(Uri.parse("tel:"+textPhone));
                 startActivity(callIntent);
-
-
-
             }
         });
 //        устанавливаем тип маршрута по умолчанию
@@ -385,10 +382,10 @@ public class AboutActivity extends AppCompatActivity implements
                                 .setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY)
                                 .setInterval(Const.LOCATION_INTERVAL_UPDATE * 1000);  // проверка положение каждые 10 сек.
                         LocationServices.FusedLocationApi.requestLocationUpdates(googleApiClient, locationRequest, this);
-            } else {
-                googleApiClient.connect();
-            }
-        }
+                }
+         }else {
+            googleApiClient.connect();
+         }
     }
 
     @Override
