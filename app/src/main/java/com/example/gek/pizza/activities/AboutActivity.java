@@ -259,13 +259,13 @@ public class AboutActivity extends AppCompatActivity implements
         super.onStop();
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        if (isPermissionsGranted) {
-            locationAndMapSettings();
-        }
-    }
+//    @Override
+//    protected void onStart() {
+//        super.onStart();
+//        if (isPermissionsGranted) {
+//            locationAndMapSettings();
+//        }
+//    }
 
     @Override
     public void onConnected(Bundle bundle) {
@@ -309,11 +309,12 @@ public class AboutActivity extends AppCompatActivity implements
 
             // провека разрешений
             verifyLocationPermissions();
+            if(textLatitude!="" && textLongitude!=""){
+                pizzeriaLocation = new LatLng(Double.parseDouble(textLatitude), Double.parseDouble(textLongitude));
 
-            pizzeriaLocation = new LatLng(Double.parseDouble(textLatitude), Double.parseDouble(textLongitude));
-
-            // добавление данных на карту
-            addPizzeriaOnMap();
+                // добавление данных на карту
+                addPizzeriaOnMap();
+            }
         }
     }
 
