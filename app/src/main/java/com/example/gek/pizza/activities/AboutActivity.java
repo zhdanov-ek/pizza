@@ -260,6 +260,14 @@ public class AboutActivity extends AppCompatActivity implements
     }
 
     @Override
+    protected void onStart() {
+        super.onStart();
+        if (isPermissionsGranted) {
+            locationAndMapSettings();
+        }
+    }
+
+    @Override
     public void onConnected(Bundle bundle) {
         if (isPermissionsGranted) {
             locationAndMapSettings();
