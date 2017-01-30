@@ -50,4 +50,13 @@ public class Const {
     public static final String SETTINGS_LONGITUDE_KEY   = "longitude";
     public static final Integer ZOOM_MAP                = 17;
 
+    public static final int REQUEST_CODE_LOCATION  = 20;
+
+    public static final String GOOGLE_DIRECTIONS_API   = "https://maps.googleapis.com/maps/";
+
+    public static final Integer LOCATION_INTERVAL_UPDATE = 10;
+    public static final Integer LOCATION_DISTANCE_UPDATE = 30;
+    public static final Integer OFFSET_FROM_EDGES_OF_THE_MAP= 150;
+
+
 }

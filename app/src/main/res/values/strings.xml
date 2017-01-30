@@ -52,4 +52,8 @@
     <string name="title_settings_latitude">Latitude</string>
     <string name="title_settings_longitude">Longitude</string>
 
+    <string name="title_button_drive">Drive</string>
+    <string name="title_button_walk">Walk</string>
+    <string name="title_button_fullscreen">Fullscreen</string>
+
 </resources>
