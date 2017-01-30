@@ -10,6 +10,7 @@
     <include layout="@layout/toolbar" />
 
     <ScrollView
+        android:id="@+id/svAboutUs"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="2">
@@ -25,15 +26,16 @@
                 android:id="@+id/ivAboutPhoto"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
-                android:src="@drawable/logo"
                 android:layout_gravity="center_horizontal"
-                android:visibility="visible"/>
+                android:src="@drawable/logo"
+                android:visibility="visible" />
 
             <TextView
                 android:id="@+id/tvAboutPhone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
+                android:textSize="@dimen/text_size_middle"
                 android:visibility="visible" />
 
             <TextView
@@ -41,6 +43,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
+                android:textSize="@dimen/text_size_middle"
                 android:visibility="visible" />
 
             <TextView
@@ -48,6 +51,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
+                android:textSize="@dimen/text_size_middle"
                 android:visibility="visible" />
 
             <TextView
@@ -68,14 +72,67 @@
 
     </ScrollView>
 
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <RadioGroup
+            android:id="@+id/rgDriveWalk"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+
+            android:layout_weight="1"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/rbtnDrive"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/title_button_drive" />
+
+            <RadioButton
+                android:id="@+id/rbtnWalk"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/title_button_walk" />
+
+
+        </RadioGroup>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tvRouteInformationDistance"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                />
+
+            <TextView
+                android:id="@+id/tvRouteInformationTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                />
+
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/ivArrow"
+            style="@style/arrowUpDownStyle" />
+
+    </LinearLayout>
+
     <fragment xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/fMapView"
         class="com.google.android.gms.maps.MapFragment"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="3"
-        android:layout_marginLeft="@dimen/activity_horizontal_margin"
-        android:layout_marginRight="@dimen/activity_horizontal_margin"
-        android:layout_marginBottom="@dimen/activity_horizontal_margin"/>
+        android:layout_weight="3" />
 
 </LinearLayout>

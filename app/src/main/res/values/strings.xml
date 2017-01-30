@@ -76,5 +76,8 @@
     <string name="symbol_minus">-</string>
     <string name="symbol_plus">+</string>
 
+    <string name="title_button_drive">Drive</string>
+    <string name="title_button_walk">Walk</string>
+    <string name="title_button_fullscreen">Fullscreen</string>
 
 </resources>

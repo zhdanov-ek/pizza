@@ -35,6 +35,14 @@ dependencies {
     compile 'com.google.firebase:firebase-storage:10.0.1'
 
     compile 'com.google.android.gms:play-services-maps:10.0.1'
+    compile 'com.google.android.gms:play-services-location:10.0.1'
+
+
+    compile ('com.squareup.retrofit2:retrofit:2.1.0'){
+        exclude module: 'okhttp'
+    }
+    compile 'com.squareup.retrofit2:converter-gson:2.1.0'
+    compile 'com.squareup.okhttp3:okhttp:3.5.0'
 
     testCompile 'junit:junit:4.12'
 }

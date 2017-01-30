@@ -59,7 +59,6 @@
         <item name="android:textStyle">bold</item>
     </style>
 
-
     <style name="textCounter">
         <item name="android:textSize">@dimen/text_size_big</item>
         <item name="android:textColor">@color/colorButtonRaisedDarkGreen</item>
@@ -69,6 +68,11 @@
         <item name="android:textStyle">bold</item>
     </style>
 
-
-
+    <style name="arrowUpDownStyle" parent="AppTheme">
+        <item name="android:layout_width">@dimen/arrow_up_down_width</item>
+        <item name="android:layout_height">@dimen/arrow_up_down_height</item>
+        <item name="android:scaleX">1.5</item>
+        <item name="android:src">@drawable/ic_expand_less</item>
+    </style>
+    
 </resources>
