@@ -50,9 +50,8 @@
         <service android:name=".services.CheckDeliveryService" />
 
         <activity
-            android:name=".activities.OrdersActivity"
-            android:label="@string/title_activity_orders"
-            android:theme="@style/AppTheme"></activity>
+            android:name=".activities.DeliveriesActivity"
+            android:theme="@style/AppTheme"/>
     </application>
 
 </manifest>

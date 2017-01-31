@@ -15,7 +15,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 
 import com.example.gek.pizza.R;
 import com.example.gek.pizza.data.Const;
@@ -150,7 +149,7 @@ public class MainActivity extends AppCompatActivity
                 startActivity(newsIntent);
                 break;
             case R.id.cvOrders:
-                startActivity(new Intent(this, OrdersActivity.class));
+                startActivity(new Intent(this, DeliveriesActivity.class));
                 break;
 
             //todo переместить запуск сервиса в настройки куда-нибудь

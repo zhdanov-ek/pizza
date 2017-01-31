@@ -41,6 +41,9 @@ public class Const {
     public static final String DISH_GROUP_KEY = "dish_group_key";
     public static final String DISH_GROUP_NAME = "dish_group_name";
 
+    public static final int DELIVERY_STATUS_NEW = 1;
+    public static final int DELIVERY_STATUS_COOK = 2;
+    public static final int DELIVERY_STATUS_TRANSIT = 3;
 
     // id используемые при вызовах активити через интент
     public static final int REQUEST_LOAD_IMG = 1;
