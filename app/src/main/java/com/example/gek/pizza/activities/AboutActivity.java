@@ -107,30 +107,6 @@ public class AboutActivity extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_about);
 
-        googleApiClient = new GoogleApiClient.Builder(this)
-                .addApi(LocationServices.API)
-                .addConnectionCallbacks(this)
-                .addOnConnectionFailedListener(this)
-                .build();
-
-        // проверека доступности гугл сервисов
-        GoogleApiAvailability googleApiAvailability = GoogleApiAvailability.getInstance();
-        int status = googleApiAvailability.isGooglePlayServicesAvailable(this);
-
-        markerPoints = new ArrayList<>();
-
-        if (status == ConnectionResult.SUCCESS) {
-            try {
-                // отрисовка карты
-                MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.fMapView);
-                if (mapFragment != null) {
-                    mapFragment.getMapAsync(this);
-                }
-            } catch (NullPointerException exception) {
-                Log.e(TAG, exception.toString());
-            }
-        }
-
         Toolbar myToolbar = (Toolbar) findViewById(R.id.toolBar);
         myToolbar.setTitle(R.string.title_about);
         setSupportActionBar(myToolbar);
@@ -155,6 +131,32 @@ public class AboutActivity extends AppCompatActivity implements
         ivFullScreen  = (ImageView) findViewById(R.id.ivArrow);
         svAboutUs = (ScrollView) findViewById(R.id.svAboutUs);
 
+        googleApiClient = new GoogleApiClient.Builder(this)
+                .addApi(LocationServices.API)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .build();
+
+        // проверека доступности гугл сервисов
+        GoogleApiAvailability googleApiAvailability = GoogleApiAvailability.getInstance();
+        int status = googleApiAvailability.isGooglePlayServicesAvailable(this);
+
+        markerPoints = new ArrayList<>();
+
+        if (status == ConnectionResult.SUCCESS) {
+            try {
+                // отрисовка карты
+                MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.fMapView);
+                if (mapFragment != null) {
+                    mapFragment.getMapAsync(this);
+                }
+            } catch (NullPointerException exception) {
+                Log.e(TAG, exception.toString());
+            }
+        }
+
+
+
         tvEmail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -169,9 +171,6 @@ public class AboutActivity extends AppCompatActivity implements
                 Intent callIntent = new Intent(Intent.ACTION_VIEW);
                 callIntent.setData(Uri.parse("tel:"+textPhone));
                 startActivity(callIntent);
-
-
-
             }
         });
 //        устанавливаем тип маршрута по умолчанию
@@ -262,6 +261,14 @@ public class AboutActivity extends AppCompatActivity implements
         super.onStop();
     }
 
+//    @Override
+//    protected void onStart() {
+//        super.onStart();
+//        if (isPermissionsGranted) {
+//            locationAndMapSettings();
+//        }
+//    }
+
     @Override
     public void onConnected(Bundle bundle) {
         if (isPermissionsGranted) {
@@ -304,11 +311,12 @@ public class AboutActivity extends AppCompatActivity implements
 
             // провека разрешений
             verifyLocationPermissions();
+//            if(textLatitude!="" && textLongitude!=""){
+                pizzeriaLocation = new LatLng(Double.parseDouble(textLatitude), Double.parseDouble(textLongitude));
 
-            pizzeriaLocation = new LatLng(Double.parseDouble(textLatitude), Double.parseDouble(textLongitude));
-
-            // добавление данных на карту
-            addPizzeriaOnMap();
+                // добавление данных на карту
+                addPizzeriaOnMap();
+//            }
         }
     }
 
@@ -385,10 +393,10 @@ public class AboutActivity extends AppCompatActivity implements
                                 .setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY)
                                 .setInterval(Const.LOCATION_INTERVAL_UPDATE * 1000);  // проверка положение каждые 10 сек.
                         LocationServices.FusedLocationApi.requestLocationUpdates(googleApiClient, locationRequest, this);
-            } else {
-                googleApiClient.connect();
-            }
-        }
+                }
+         }else {
+            googleApiClient.connect();
+         }
     }
 
     @Override
