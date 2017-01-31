@@ -48,6 +48,7 @@ public class DeliveriesAdapter extends RecyclerView.Adapter<DeliveriesAdapter.Vi
         holder.tvPhoneClient.setText(delivery.getPhoneClient());
         holder.tvAddressClient.setText(delivery.getAddressClient());
         holder.tvTotalSum.setText(Utils.toPrice(delivery.getTotalSum()));
+        holder.tvCommentClient.setText(delivery.getCommentClient());
         //todo write other fields
     }
 

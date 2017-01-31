@@ -12,6 +12,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -21,9 +22,21 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.gek.pizza.R;
+import com.example.gek.pizza.adapters.DeliveriesAdapter;
+import com.example.gek.pizza.adapters.DishesAdapter;
+import com.example.gek.pizza.data.Const;
+import com.example.gek.pizza.data.Delivery;
+import com.example.gek.pizza.data.Dish;
+import com.example.gek.pizza.helpers.Utils;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
 
 public class DeliveriesActivity extends AppCompatActivity {
 
+    private static final String TAG = "DeliveriesActivity";
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
      * fragments for each of the sections. We use a
@@ -34,10 +47,13 @@ public class DeliveriesActivity extends AppCompatActivity {
      */
     private SectionsPagerAdapter mSectionsPagerAdapter;
 
-    /**
-     * The {@link ViewPager} that will host the section contents.
-     */
+    // The ViewPager that will host the section contents.
+
     private ViewPager mViewPager;
+
+//    private ArrayList<Delivery> mNewDeliveries = new ArrayList<>();
+//    private ArrayList<Delivery> mCookDeliveries = new ArrayList<>();
+//    private ArrayList<Delivery> mTransitDeliveries = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,18 +77,18 @@ public class DeliveriesActivity extends AppCompatActivity {
     }
 
 
-
-
     /** Фрагмент, содержащий контент наших вкладок */
     public static class PlaceholderFragment extends Fragment {
 
         // Через эту переменную будет указывать номер выбранной вкладки
         private static final String ARG_SECTION_NUMBER = "section_number";
-
+        private ArrayList<Delivery> listDeliveries = new ArrayList<>();
+        private RecyclerView rv;
         public PlaceholderFragment() {
         }
 
         // Создаем фрагмент и передаем ему параметр с номером, соответствующим вкладке
+        //
         public static PlaceholderFragment newInstance(int sectionNumber) {
             PlaceholderFragment fragment = new PlaceholderFragment();
             Bundle args = new Bundle();
@@ -85,22 +101,70 @@ public class DeliveriesActivity extends AppCompatActivity {
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_deliveries, container, false);
-            TextView textView = (TextView) rootView.findViewById(R.id.section_label);
 
-            RecyclerView rv = (RecyclerView) rootView.findViewById(R.id.rv);
+            View rootView = inflater.inflate(R.layout.fragment_deliveries, container, false);
+
+            rv = (RecyclerView) rootView.findViewById(R.id.rv);
             rv.setLayoutManager(new LinearLayoutManager(container.getContext()));
 
+            final int num = getArguments().getInt(ARG_SECTION_NUMBER);
 
+            // В зависимости от номера вкладки ставим слушатель на нужный нам раздел в БД
+            // и создаем адаптер с соответствующим параметром
+            ValueEventListener contactCardListener = new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    listDeliveries.clear();
+                    for (DataSnapshot child: dataSnapshot.getChildren()) {
+                        Delivery delivery = child.getValue(Delivery.class);
+                        listDeliveries.add(delivery);
+                    }
+                    switch (num) {
+                        case 1:
+                            rv.setAdapter(new DeliveriesAdapter(
+                                    listDeliveries,
+                                    getContext(),
+                                    Const.DELIVERY_STATUS_NEW));
+                            break;
+                        case 2:
+                            rv.setAdapter(new DeliveriesAdapter(
+                                    listDeliveries,
+                                    getContext(),
+                                    Const.DELIVERY_STATUS_COOK));
+                            break;
+                        case 3:
+                            rv.setAdapter(new DeliveriesAdapter(
+                                    listDeliveries,
+                                    getContext(),
+                                    Const.DELIVERY_STATUS_TRANSIT));
+                            break;
+                    }
+                }
 
-            int num = getArguments().getInt(ARG_SECTION_NUMBER);
-            textView.setText(getString(R.string.section_format, num));
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                    Log.w(TAG, "loadDeliveries:onCancelled", databaseError.toException());
+                }
+            };
+
+            switch (num){
+                case 1:
+                    Const.db.child(Const.CHILD_DELIVERIES_NEW).addValueEventListener(contactCardListener);
+                    break;
+                case 2:
+                    Const.db.child(Const.CHILD_DELIVERIES_COOKING).addValueEventListener(contactCardListener);
+                    break;
+                case 3:
+                    Const.db.child(Const.CHILD_DELIVERIES_TRANSIT).addValueEventListener(contactCardListener);
+                    break;
+            }
+
             return rootView;
         }
     }
 
 
-    /** Фрагмент адаптер, который хранит наши фрагменты и обеспечивает к ним доступ */
+    /** Фрагмент адаптер, который хранит наши фрагменты в памяти и обеспечивает к ним доступ */
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
         public SectionsPagerAdapter(FragmentManager fm) {

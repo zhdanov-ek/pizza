@@ -15,10 +15,10 @@ public class Const {
     public static final String CHILD_MENU_GROUPS = "menu_groups";
     public static final String CHILD_SETTINGS = "settings";
 
-    public static final String CHILD_ORDERS_NEW = "orders/new";
-    public static final String CHILD_ORDERS_COOKING = "orders/cooking";
-    public static final String CHILD_ORDERS_TRANSPORTATION = "orders/transportation";
-    public static final String CHILD_ORDERS_ARCHIVE = "orders/archive";
+    public static final String CHILD_DELIVERIES_NEW = "deliveries/new";
+    public static final String CHILD_DELIVERIES_COOKING = "deliveries/cooking";
+    public static final String CHILD_DELIVERIES_TRANSIT = "deliveries/transit";
+    public static final String CHILD_DELIVERIES_ARCHIVE = "deliveries/archive";
 
 
     // Storage

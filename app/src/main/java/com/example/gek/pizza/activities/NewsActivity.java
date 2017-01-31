@@ -57,10 +57,7 @@ public class NewsActivity extends AppCompatActivity {
         ValueEventListener contactCardListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                long num = dataSnapshot.getChildrenCount();
                 allNews.clear();
-
-                Log.d(TAG, "Load all list ContactCards: total Children objects:" + num);
                 for (DataSnapshot child: dataSnapshot.getChildren()) {
                     News currentNews = child.getValue(News.class);
                     allNews.add(currentNews);

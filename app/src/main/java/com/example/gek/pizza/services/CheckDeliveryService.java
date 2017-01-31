@@ -91,7 +91,7 @@ public class CheckDeliveryService extends Service {
 
         // устанавливаем слушатель на изменения в разделе новых заявок на доставку
         // События будут срабатывать даже когда сервис будет уничтожен.
-        Const.db.child(Const.CHILD_ORDERS_NEW).addValueEventListener(newDeliveriesListener);
+        Const.db.child(Const.CHILD_DELIVERIES_NEW).addValueEventListener(newDeliveriesListener);
     }
 
     private void showNotification(){
@@ -150,7 +150,7 @@ public class CheckDeliveryService extends Service {
     public void onDestroy() {
         Log.d(TAG, "onDestroy: ");
         // перед уничтожением сервиса убираем наш лисенер. Иначе он будет отрабатывать и без службы
-        Const.db.child(Const.CHILD_ORDERS_NEW).removeEventListener(newDeliveriesListener);
+        Const.db.child(Const.CHILD_DELIVERIES_NEW).removeEventListener(newDeliveriesListener);
         super.onDestroy();
     }
 

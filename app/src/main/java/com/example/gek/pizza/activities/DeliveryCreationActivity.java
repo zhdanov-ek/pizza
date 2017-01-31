@@ -55,7 +55,7 @@ public class DeliveryCreationActivity extends AppCompatActivity {
 
                 // Create name for key of delivery and send data to server
                 String numberDelivery = Utils.makeDeliveryNumber(etPhone.getText().toString());
-                db.child(Const.CHILD_ORDERS_NEW).child(numberDelivery).setValue(delivery);
+                db.child(Const.CHILD_DELIVERIES_NEW).child(numberDelivery).setValue(delivery);
 
                 // очищаем корзину и сохраняем текущий номер заказа
                 Basket.getInstance().makeDelivery(numberDelivery);
