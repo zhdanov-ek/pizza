@@ -150,7 +150,7 @@ public class MainActivity extends AppCompatActivity
                 startActivity(newsIntent);
                 break;
             case R.id.cvOrders:
-                Toast.makeText(this, "Orders", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(this, OrdersActivity.class));
                 break;
 
             //todo переместить запуск сервиса в настройки куда-нибудь

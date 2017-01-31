@@ -74,4 +74,5 @@
 
     <dimen name="arrow_up_down_width">36dp</dimen>
     <dimen name="arrow_up_down_height">24dp</dimen>
+    <dimen name="appbar_padding_top">8dp</dimen>
 </resources>

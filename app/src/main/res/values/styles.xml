@@ -41,9 +41,9 @@
     </style>
 
     <style name="textMiddle">
-    <item name="android:textSize">@dimen/text_size_middle</item>
-    <item name="android:textColor">@color/colorFont1</item>
-    <item name="android:textStyle">bold</item>
+        <item name="android:textSize">@dimen/text_size_middle</item>
+        <item name="android:textColor">@color/colorFont1</item>
+        <item name="android:textStyle">bold</item>
     </style>
 
     <style name="textSmall">
@@ -74,5 +74,5 @@
         <item name="android:scaleX">1.5</item>
         <item name="android:src">@drawable/ic_expand_less</item>
     </style>
-    
+
 </resources>

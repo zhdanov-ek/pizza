@@ -79,5 +79,7 @@
     <string name="title_button_drive">Drive</string>
     <string name="title_button_walk">Walk</string>
     <string name="title_button_fullscreen">Fullscreen</string>
+    <string name="title_activity_orders">OrdersActivity</string>
+    <string name="section_format">Hello World from section: %1$d</string>
 
 </resources>

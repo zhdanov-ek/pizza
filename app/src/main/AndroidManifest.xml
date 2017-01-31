@@ -3,7 +3,7 @@
     package="com.example.gek.pizza">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.VIBRATE"/>
+    <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
     <application
@@ -34,7 +34,6 @@
         <activity android:name=".activities.AboutActivity" />
         <activity android:name=".activities.PlaceOrderActivity" />
         <activity android:name=".activities.TrackingOrderActivity" />
-        <activity android:name=".activities.OrdersActivity" />
         <activity android:name=".activities.SettingsActivity" />
         <activity android:name=".activities.DishShowActivity" />
 
@@ -48,7 +47,12 @@
         <activity android:name=".activities.BasketActivity" />
         <activity android:name=".activities.DeliveryCreationActivity" />
 
-        <service  android:name=".services.CheckDeliveryService"/>
+        <service android:name=".services.CheckDeliveryService" />
+
+        <activity
+            android:name=".activities.OrdersActivity"
+            android:label="@string/title_activity_orders"
+            android:theme="@style/AppTheme"></activity>
     </application>
 
 </manifest>
