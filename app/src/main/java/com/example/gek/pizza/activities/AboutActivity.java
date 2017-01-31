@@ -107,6 +107,30 @@ public class AboutActivity extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_about);
 
+        Toolbar myToolbar = (Toolbar) findViewById(R.id.toolBar);
+        myToolbar.setTitle(R.string.title_about);
+        setSupportActionBar(myToolbar);
+
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+
+        textAddress = sharedPreferences.getString(Const.SETTINGS_ADDRESS_KEY, "");
+        textEmail = sharedPreferences.getString(Const.SETTINGS_EMAIL_KEY, "");
+        textLatitude = sharedPreferences.getString(Const.SETTINGS_LATITUDE_KEY, "");
+        textLongitude = sharedPreferences.getString(Const.SETTINGS_LONGITUDE_KEY, "");
+        textPhone = sharedPreferences.getString(Const.SETTINGS_PHONE_KEY, "");
+
+        tvPhone = (TextView) findViewById(R.id.tvAboutPhone);
+        tvEmail = (TextView) findViewById(R.id.tvAboutEmail);
+        tvAddress = (TextView) findViewById(R.id.tvAboutAddress);
+        tvRouteInformationDistance = (TextView) findViewById(R.id.tvRouteInformationDistance);
+        tvRouteInformationTime = (TextView) findViewById(R.id.tvRouteInformationTime);
+
+        rgDriveWalk = (RadioGroup) findViewById(R.id.rgDriveWalk);
+        rbtnDrive = (RadioButton) findViewById(R.id.rbtnDrive);
+        rbtnWalk  = (RadioButton) findViewById(R.id.rbtnWalk);
+        ivFullScreen  = (ImageView) findViewById(R.id.ivArrow);
+        svAboutUs = (ScrollView) findViewById(R.id.svAboutUs);
+
         googleApiClient = new GoogleApiClient.Builder(this)
                 .addApi(LocationServices.API)
                 .addConnectionCallbacks(this)
@@ -131,29 +155,7 @@ public class AboutActivity extends AppCompatActivity implements
             }
         }
 
-        Toolbar myToolbar = (Toolbar) findViewById(R.id.toolBar);
-        myToolbar.setTitle(R.string.title_about);
-        setSupportActionBar(myToolbar);
 
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-
-        textAddress = sharedPreferences.getString(Const.SETTINGS_ADDRESS_KEY, "");
-        textEmail = sharedPreferences.getString(Const.SETTINGS_EMAIL_KEY, "");
-        textLatitude = sharedPreferences.getString(Const.SETTINGS_LATITUDE_KEY, "");
-        textLongitude = sharedPreferences.getString(Const.SETTINGS_LONGITUDE_KEY, "");
-        textPhone = sharedPreferences.getString(Const.SETTINGS_PHONE_KEY, "");
-
-        tvPhone = (TextView) findViewById(R.id.tvAboutPhone);
-        tvEmail = (TextView) findViewById(R.id.tvAboutEmail);
-        tvAddress = (TextView) findViewById(R.id.tvAboutAddress);
-        tvRouteInformationDistance = (TextView) findViewById(R.id.tvRouteInformationDistance);
-        tvRouteInformationTime = (TextView) findViewById(R.id.tvRouteInformationTime);
-
-        rgDriveWalk = (RadioGroup) findViewById(R.id.rgDriveWalk);
-        rbtnDrive = (RadioButton) findViewById(R.id.rbtnDrive);
-        rbtnWalk  = (RadioButton) findViewById(R.id.rbtnWalk);
-        ivFullScreen  = (ImageView) findViewById(R.id.ivArrow);
-        svAboutUs = (ScrollView) findViewById(R.id.svAboutUs);
 
         tvEmail.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -309,12 +311,12 @@ public class AboutActivity extends AppCompatActivity implements
 
             // провека разрешений
             verifyLocationPermissions();
-            if(textLatitude!="" && textLongitude!=""){
+//            if(textLatitude!="" && textLongitude!=""){
                 pizzeriaLocation = new LatLng(Double.parseDouble(textLatitude), Double.parseDouble(textLongitude));
 
                 // добавление данных на карту
                 addPizzeriaOnMap();
-            }
+//            }
         }
     }
 
