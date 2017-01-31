@@ -7,7 +7,7 @@ import java.util.ArrayList;
  */
 
 public class Delivery {
-    private String clientName;
+    private String nameClient;
     private String phoneClient;
     private String addressClient;
     private String commentClient;
@@ -20,9 +20,9 @@ public class Delivery {
     public Delivery() {
     }
 
-    public Delivery(String clientName, String phoneClient, String addressClient,
+    public Delivery(String nameClient, String phoneClient, String addressClient,
                     String commentClient, String commentShop, float totalSum, ArrayList<Order> orders) {
-        this.clientName = clientName;
+        this.nameClient = nameClient;
         this.phoneClient = phoneClient;
         this.addressClient = addressClient;
         this.commentClient = commentClient;
@@ -31,12 +31,12 @@ public class Delivery {
         this.orders = orders;
     }
 
-    public String getClientName() {
-        return clientName;
+    public String getNameClient() {
+        return nameClient;
     }
 
-    public void setClientName(String clientName) {
-        this.clientName = clientName;
+    public void setNameClient(String nameClient) {
+        this.nameClient = nameClient;
     }
 
     public String getPhoneClient() {

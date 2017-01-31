@@ -1,6 +1,5 @@
 package com.example.gek.pizza.activities;
 
-import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -14,9 +13,6 @@ import com.example.gek.pizza.data.Basket;
 import com.example.gek.pizza.data.Const;
 import com.example.gek.pizza.data.Delivery;
 import com.example.gek.pizza.helpers.Utils;
-import com.example.gek.pizza.services.CheckDeliveryService;
-
-import java.util.ArrayList;
 
 import static com.example.gek.pizza.data.Const.db;
 
@@ -50,7 +46,7 @@ public class DeliveryCreationActivity extends AppCompatActivity {
         public void onClick(View view) {
             if (checkData()) {
                 Delivery delivery = new Delivery();
-                delivery.setClientName(etName.getText().toString());
+                delivery.setNameClient(etName.getText().toString());
                 delivery.setPhoneClient(etPhone.getText().toString());
                 delivery.setAddressClient(etAddress.getText().toString());
                 delivery.setCommentClient(etComment.getText().toString());
