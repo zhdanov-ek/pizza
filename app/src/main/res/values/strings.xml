@@ -78,10 +78,16 @@
     <string name="symbol_minus">-</string>
     <string name="symbol_plus">+</string>
 
-    <!-- ORDERS -->
+    <!-- DELIVERIES -->
     <string name="tab_orders_new">New</string>
     <string name="tab_orders_cook">Cook</string>
     <string name="tab_orders_in_transit">In transit</string>
+    
+    <string name="btn_cook">Cook</string>
+    <string name="btn_cancel">Cancel</string>
+    <string name="btn_transit">Courier</string>
+    <string name="btn_paid">Paid</string>
+    <string name="btn_failure">Failure</string>
 
     <!-- Строка куда передается значение переменной из кода -->
     <string name="section_format">Вкладка №: %1$d</string>

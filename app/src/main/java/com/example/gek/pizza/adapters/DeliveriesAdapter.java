@@ -11,6 +11,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.gek.pizza.R;
+import com.example.gek.pizza.data.Const;
 import com.example.gek.pizza.data.Delivery;
 import com.example.gek.pizza.helpers.Utils;
 
@@ -48,7 +49,31 @@ public class DeliveriesAdapter extends RecyclerView.Adapter<DeliveriesAdapter.Vi
         holder.tvPhoneClient.setText(delivery.getPhoneClient());
         holder.tvAddressClient.setText(delivery.getAddressClient());
         holder.tvTotalSum.setText(Utils.toPrice(delivery.getTotalSum()));
-        holder.tvCommentClient.setText(delivery.getCommentClient());
+        if (delivery.getCommentClient().isEmpty()){
+            holder.tvCommentClient.setVisibility(View.GONE);
+        } else {
+            holder.tvCommentClient.setText(delivery.getCommentClient());
+        }
+        if (delivery.getCommentShop() == null) {
+            holder.tvCommentShop.setVisibility(View.GONE);
+        } else {
+            holder.tvCommentShop.setText(delivery.getCommentShop());
+        }
+
+        switch (statusDeliveries){
+            case Const.DELIVERY_STATUS_NEW:
+                holder.btnPositive.setText(R.string.btn_cook);
+                holder.btnNegative.setText(R.string.btn_cancel);
+                break;
+            case Const.DELIVERY_STATUS_COOK:
+                holder.btnPositive.setText(R.string.btn_transit);
+                holder.btnNegative.setText(R.string.btn_cancel);
+                break;
+            case Const.DELIVERY_STATUS_TRANSIT:
+                holder.btnPositive.setText(R.string.btn_paid);
+                holder.btnNegative.setText(R.string.btn_failure);
+                break;
+        }
         //todo write other fields
     }
 
@@ -94,8 +119,10 @@ public class DeliveriesAdapter extends RecyclerView.Adapter<DeliveriesAdapter.Vi
                 case R.id.ivExpand:
                     if (llDetails.getVisibility() == View.GONE) {
                         llDetails.setVisibility(View.VISIBLE);
+                        ivExpand.setImageResource(R.drawable.ic_expand_more);
                     } else {
                         llDetails.setVisibility(View.GONE);
+                        ivExpand.setImageResource(R.drawable.ic_expand_less);
                     }
                     break;
                 case R.id.btnPositive:

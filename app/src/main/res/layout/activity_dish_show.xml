@@ -62,12 +62,12 @@
 
                 <Button
                     android:id="@+id/btnEdit"
-                    style="@style/FlatButton"
+                    style="@style/FlatButtonPositive"
                     android:text="@string/edit" />
 
                 <Button
                     android:id="@+id/btnRemove"
-                    style="@style/FlatButton"
+                    style="@style/FlatButtonNegative"
                     android:text="@string/remove" />
             </LinearLayout>
         </RelativeLayout>

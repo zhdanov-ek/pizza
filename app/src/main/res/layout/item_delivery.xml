@@ -103,6 +103,7 @@
             <TextView
                 android:id="@+id/tvCommentShop"
                 style="@style/textSmall"
+                android:background="@color/colorAccent"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="right"
@@ -114,13 +115,13 @@
                 android:orientation="horizontal">
 
                 <Button
-                    style="@style/FlatButton"
+                    style="@style/FlatButtonPositive"
                     android:id="@+id/btnPositive"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Positive"/>
                 <Button
-                    style="@style/FlatButton"
+                    style="@style/FlatButtonNegative"
                     android:id="@+id/btnNegative"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

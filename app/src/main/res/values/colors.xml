@@ -7,7 +7,8 @@
     <color name="colorButtonFlatBackground">#FFFFFF</color>
     <color name="colorButtonFlatBackgroundFocus">#eceaea</color>
     <color name="colorButtonFlatBackgroundPress">#c4c2c2</color>
-    <color name="colorButtonFlatText">#e53935</color>
+    <color name="colorButtonFlatTextPositive">#43a047</color>
+    <color name="colorButtonFlatTextNegative">#e53935</color>
 
     <color name="colorButtonRaisedGreen">#43a047</color>
     <color name="colorButtonRaisedDarkGreen">#1b5e20</color>

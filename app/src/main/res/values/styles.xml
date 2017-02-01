@@ -18,13 +18,22 @@
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
 
-    <style name="FlatButton" parent="@android:style/Widget.Button.Small">
+    <style name="FlatButtonNegative" parent="@android:style/Widget.Button.Small">
         <item name="android:layout_width">@dimen/button_flat_width</item>
         <item name="android:layout_height">@dimen/button_flat_height</item>
         <item name="android:textSize">@dimen/button_flat_font_size</item>
         <item name="android:background">@drawable/bg_flat_button_item</item>
-        <item name="android:textColor">@color/colorButtonFlatText</item>
+        <item name="android:textColor">@color/colorButtonFlatTextNegative</item>
     </style>
+
+    <style name="FlatButtonPositive" parent="@android:style/Widget.Button.Small">
+        <item name="android:layout_width">@dimen/button_flat_width</item>
+        <item name="android:layout_height">@dimen/button_flat_height</item>
+        <item name="android:textSize">@dimen/button_flat_font_size</item>
+        <item name="android:background">@drawable/bg_flat_button_item</item>
+        <item name="android:textColor">@color/colorButtonFlatTextPositive</item>
+    </style>
+
 
     <style name="RaisedButton" parent="@android:style/Widget.Button.Small">
         <item name="android:layout_width">@dimen/button_raised_width</item>
