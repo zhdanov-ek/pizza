@@ -15,6 +15,8 @@ public class Delivery {
     private float totalSum;
     private ArrayList<Integer> numbersDishes;   // количество каждого блюда в заказе
     private ArrayList<String> keysDishes;       // ключи каждого из блюд в заказе
+    private String key;
+
 
     //todo Добавить время создания, принятия, отправки и получения (закрытия) доставки
 
@@ -97,6 +99,14 @@ public class Delivery {
 
     public void setKeysDishes(ArrayList<String> keysDishes) {
         this.keysDishes = keysDishes;
+    }
+
+    public String getKey() {
+        return key;
+    }
+
+    public void setKey(String key) {
+        this.key = key;
     }
 
 }

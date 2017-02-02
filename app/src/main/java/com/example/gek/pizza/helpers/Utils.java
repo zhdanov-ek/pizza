@@ -110,7 +110,7 @@ public class Utils {
 
     // Формирует строку для доставки в виде: Пельмени (30 грн) х 2 шт = 60 грн
     public static String makeOrderString(Dish dish, int count){
-        String s = dish.getName() + " (" + Utils.toPrice(dish.getPrice()) + ") x " +
+        String s = dish.getName() + " \n\t\t" + Utils.toPrice(dish.getPrice()) + " x " +
                 count + " = " + Utils.toPrice(dish.getPrice()*count);
         return s;
     }

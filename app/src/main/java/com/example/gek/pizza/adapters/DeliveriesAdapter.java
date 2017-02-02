@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.util.Util;
 import com.example.gek.pizza.R;
@@ -70,7 +71,7 @@ public class DeliveriesAdapter extends RecyclerView.Adapter<DeliveriesAdapter.Vi
         String details = "";
         for (int i = 0; i < delivery.getNumbersDishes().size(); i++) {
             Dish nextDish = AllDishes.getInstance().getDish(delivery.getKeysDishes().get(i));
-            details += Utils.makeOrderString(nextDish, delivery.getNumbersDishes().get(i));
+            details += Utils.makeOrderString(nextDish, delivery.getNumbersDishes().get(i)) +"\n";
         }
         holder.tvDetails.setText(details);
 
@@ -122,7 +123,7 @@ public class DeliveriesAdapter extends RecyclerView.Adapter<DeliveriesAdapter.Vi
             btnNegative = (Button) itemView.findViewById(R.id.btnNegative);
             ivExpand = (ImageView) itemView.findViewById(R.id.ivExpand);
 
-            btnPositive.setOnClickListener(this);
+            btnPositive.setOnClickListener(positiveListener);
             btnNegative.setOnClickListener(this);
             ivExpand.setOnClickListener(this);
         }
@@ -139,14 +140,58 @@ public class DeliveriesAdapter extends RecyclerView.Adapter<DeliveriesAdapter.Vi
                         ivExpand.setImageResource(R.drawable.ic_expand_less);
                     }
                     break;
-                case R.id.btnPositive:
-                    break;
                 case R.id.btnNegative:
+
                     break;
                 default:
                     break;
             }
         }
+
+
+        /** При нажатии на позитивную кнопку перемещаем доставу в следующую группу */
+        private View.OnClickListener positiveListener =  new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // Используя ключ доставки переносим ее другую категорию
+                String keyDelivery = listDeliveries.get(getAdapterPosition()).getKey();
+                String text = listDeliveries.get(getAdapterPosition()).getNameClient();
+                switch (statusDeliveries){
+                    case Const.DELIVERY_STATUS_NEW:
+                        db.child(Const.CHILD_DELIVERIES_NEW)
+                                .child(keyDelivery)
+                                .removeValue();
+                        db.child(Const.CHILD_DELIVERIES_COOKING)
+                                .child(keyDelivery)
+                                .setValue(listDeliveries.get(getAdapterPosition()));
+                        listDeliveries.remove(getAdapterPosition());
+                        Toast.makeText(ctx, text + " Send to cook", Toast.LENGTH_SHORT).show();
+                        break;
+
+                    case Const.DELIVERY_STATUS_COOK:
+                        db.child(Const.CHILD_DELIVERIES_COOKING)
+                                .child(keyDelivery)
+                                .removeValue();
+                        db.child(Const.CHILD_DELIVERIES_TRANSIT)
+                                .child(keyDelivery)
+                                .setValue(listDeliveries.get(getAdapterPosition()));
+                        listDeliveries.remove(getAdapterPosition());
+                        Toast.makeText(ctx, text + "Send to transit", Toast.LENGTH_SHORT).show();
+                        break;
+
+                    case Const.DELIVERY_STATUS_TRANSIT:
+                        db.child(Const.CHILD_DELIVERIES_TRANSIT)
+                                .child(keyDelivery)
+                                .removeValue();
+                        db.child(Const.CHILD_DELIVERIES_ARCHIVE)
+                                .child(keyDelivery)
+                                .setValue(listDeliveries.get(getAdapterPosition()));
+                        listDeliveries.remove(getAdapterPosition());
+                        Toast.makeText(ctx, text + "Send to archive", Toast.LENGTH_LONG).show();
+                        break;
+                }
+            }
+        };
     }
 
 
