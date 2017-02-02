@@ -51,10 +51,6 @@ public class DeliveriesActivity extends AppCompatActivity {
     // Хранит все наши вкладки с переключателем
     private ViewPager mViewPager;
 
-//    private ArrayList<Delivery> mNewDeliveries = new ArrayList<>();
-//    private ArrayList<Delivery> mCookDeliveries = new ArrayList<>();
-//    private ArrayList<Delivery> mTransitDeliveries = new ArrayList<>();
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -114,9 +110,6 @@ public class DeliveriesActivity extends AppCompatActivity {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     listDeliveries.clear();
-//                    GenericTypeIndicator<Delivery> genericTypeIndicator =
-//                            new GenericTypeIndicator<Delivery>() {};
-
                     for (DataSnapshot child: dataSnapshot.getChildren()) {
                         Delivery delivery = child.getValue(Delivery.class);
                         listDeliveries.add(delivery);

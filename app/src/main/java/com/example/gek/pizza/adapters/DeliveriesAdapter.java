@@ -1,18 +1,23 @@
 package com.example.gek.pizza.adapters;
 
 import android.content.Context;
+import android.content.DialogInterface;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.util.Util;
 import com.example.gek.pizza.R;
+import com.example.gek.pizza.activities.DeliveriesActivity;
 import com.example.gek.pizza.data.AllDishes;
 import com.example.gek.pizza.data.Const;
 import com.example.gek.pizza.data.Delivery;
@@ -108,6 +113,7 @@ public class DeliveriesAdapter extends RecyclerView.Adapter<DeliveriesAdapter.Vi
         private LinearLayout llDetails;
         private Button btnPositive, btnNegative;
         private ImageView ivExpand;
+        private ImageView ivShopComment;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -122,10 +128,12 @@ public class DeliveriesAdapter extends RecyclerView.Adapter<DeliveriesAdapter.Vi
             btnPositive = (Button) itemView.findViewById(R.id.btnPositive);
             btnNegative = (Button) itemView.findViewById(R.id.btnNegative);
             ivExpand = (ImageView) itemView.findViewById(R.id.ivExpand);
+            ivShopComment = (ImageView) itemView.findViewById(R.id.ivShopComment);
 
             btnPositive.setOnClickListener(positiveListener);
             btnNegative.setOnClickListener(this);
             ivExpand.setOnClickListener(this);
+            ivShopComment.setOnClickListener(editShopComment);
         }
 
         @Override
@@ -140,13 +148,66 @@ public class DeliveriesAdapter extends RecyclerView.Adapter<DeliveriesAdapter.Vi
                         ivExpand.setImageResource(R.drawable.ic_expand_less);
                     }
                     break;
-                case R.id.btnNegative:
-
-                    break;
                 default:
                     break;
             }
         }
+
+
+        /** Добавление (изменение) комментария заведения */
+        private View.OnClickListener editShopComment = new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(ctx);
+                builder.setTitle("Enter comment");
+                builder.setIcon(R.drawable.ic_comment);
+
+                // Добавляем вью для ввода в стандартный диалог
+                final EditText etCommentShop = new EditText(ctx);
+                LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+                        LinearLayout.LayoutParams.MATCH_PARENT,
+                        LinearLayout.LayoutParams.MATCH_PARENT);
+                etCommentShop.setLayoutParams(lp);
+                builder.setView(etCommentShop);
+
+                if (tvCommentShop.getText().length() != 0){
+                    etCommentShop.setText(tvCommentShop.getText());
+                }
+
+                // Кнопки с обработчиками
+                builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        Delivery delivery = listDeliveries.get(getAdapterPosition());
+                        delivery.setCommentShop(etCommentShop.getText().toString());
+                        String status;
+
+                        // определяем в каком разделе находится объект и перезаписываем его
+                        switch (statusDeliveries){
+                            case Const.DELIVERY_STATUS_NEW:
+                                status = Const.CHILD_DELIVERIES_NEW;
+                                break;
+                            case Const.DELIVERY_STATUS_COOK:
+                                status = Const.CHILD_DELIVERIES_COOKING;
+                                break;
+                            case Const.DELIVERY_STATUS_TRANSIT:
+                                status = Const.CHILD_DELIVERIES_TRANSIT;
+                                break;
+                            default:
+                                status = Const.CHILD_DELIVERIES_NEW;
+                                break;
+                        }
+                        db.child(status).child(delivery.getKey()).setValue(delivery);
+                    }
+                });
+                builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                    }
+                });
+                builder.show();
+            }
+        };
 
 
         /** При нажатии на позитивную кнопку перемещаем доставу в следующую группу */

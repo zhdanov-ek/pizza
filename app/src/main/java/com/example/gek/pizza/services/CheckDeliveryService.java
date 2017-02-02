@@ -16,6 +16,7 @@ import android.widget.Toast;
 import com.bumptech.glide.util.Util;
 import com.example.gek.pizza.R;
 import com.example.gek.pizza.activities.AboutActivity;
+import com.example.gek.pizza.activities.DeliveriesActivity;
 import com.example.gek.pizza.activities.MainActivity;
 import com.example.gek.pizza.adapters.DishesAdapter;
 import com.example.gek.pizza.data.Const;
@@ -129,7 +130,7 @@ public class CheckDeliveryService extends Service {
         ntfBuilder.setDefaults(Notification.DEFAULT_SOUND | Notification.DEFAULT_VIBRATE);
 
         // Указываем явный интент для запуска окна по нажатию на уведомление
-        Intent intent = new Intent(ctx, AboutActivity.class);
+        Intent intent = new Intent(ctx, DeliveriesActivity.class);
         // Формируем ОЖИДАЮЩИЙ интент на основе обычного и задаем его в билдере
         PendingIntent pendingIntent = PendingIntent.getActivity(ctx, 0, intent, 0);
         ntfBuilder.setContentIntent(pendingIntent);
