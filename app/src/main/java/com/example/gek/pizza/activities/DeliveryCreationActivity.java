@@ -35,7 +35,6 @@ public class DeliveryCreationActivity extends AppCompatActivity {
         etAddress = (EditText) findViewById(R.id.etAddress);
         etComment = (EditText) findViewById(R.id.etComment);
         btnCreateDelivery = (Button) findViewById(R.id.btnCreateDelivery);
-
         btnCreateDelivery.setOnClickListener(createDelivery);
 
     }
@@ -51,7 +50,8 @@ public class DeliveryCreationActivity extends AppCompatActivity {
                 delivery.setAddressClient(etAddress.getText().toString());
                 delivery.setCommentClient(etComment.getText().toString());
                 delivery.setTotalSum(Basket.getInstance().getTotalSum());
-                delivery.setOrders(Basket.getInstance().orders);
+                delivery.setNumbersDishes(Basket.getInstance().getNumberDishes());
+                delivery.setKeysDishes(Basket.getInstance().getKeysDishes());
 
                 // Create name for key of delivery and send data to server
                 String numberDelivery = Utils.makeDeliveryNumber(etPhone.getText().toString());

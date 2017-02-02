@@ -13,22 +13,26 @@ public class Delivery {
     private String commentClient;
     private String commentShop;
     private float totalSum;
-    private ArrayList<Order> orders;
+    private ArrayList<Integer> numbersDishes;   // количество каждого блюда в заказе
+    private ArrayList<String> keysDishes;       // ключи каждого из блюд в заказе
 
     //todo Добавить время создания, принятия, отправки и получения (закрытия) доставки
 
     public Delivery() {
     }
 
+
     public Delivery(String nameClient, String phoneClient, String addressClient,
-                    String commentClient, String commentShop, float totalSum, ArrayList<Order> orders) {
+                    String commentClient, String commentShop, float totalSum,
+                    ArrayList<Integer> numbersDishes, ArrayList<String> keysDishes) {
         this.nameClient = nameClient;
         this.phoneClient = phoneClient;
         this.addressClient = addressClient;
         this.commentClient = commentClient;
         this.commentShop = commentShop;
         this.totalSum = totalSum;
-        this.orders = orders;
+        this.numbersDishes = numbersDishes;
+        this.keysDishes = keysDishes;
     }
 
     public String getNameClient() {
@@ -79,12 +83,20 @@ public class Delivery {
         this.totalSum = totalSum;
     }
 
-    public ArrayList<Order> getOrders() {
-        return orders;
+    public ArrayList<Integer> getNumbersDishes() {
+        return numbersDishes;
     }
 
-    public void setOrders(ArrayList<Order> orders) {
-        this.orders = orders;
+    public void setNumbersDishes(ArrayList<Integer> numbersDishes) {
+        this.numbersDishes = numbersDishes;
+    }
+
+    public ArrayList<String> getKeysDishes() {
+        return keysDishes;
+    }
+
+    public void setKeysDishes(ArrayList<String> keysDishes) {
+        this.keysDishes = keysDishes;
     }
 
 }

@@ -53,6 +53,24 @@ public class Basket {
         return sum;
     }
 
+    // Возвращает количество блюд
+    public ArrayList<Integer> getNumberDishes(){
+        ArrayList<Integer> list = new ArrayList<>();
+        for (Order order: orders) {
+            list.add(order.getCount());
+        }
+        return list;
+    }
+
+    // Возвращает список ключей блюд
+    public ArrayList<String> getKeysDishes(){
+        ArrayList<String> list = new ArrayList<>();
+        for (Order order: orders) {
+            list.add(order.getDish().getKey());
+        }
+        return list;
+    }
+
     // после отправки заявки на доставку в этот метод подаем номер заявки и очищаем корзину
     public void makeDelivery(String numberDelivery){
         // todo по умному номер нужно куда-нибудь сохранить на случай когда апп перезапустят

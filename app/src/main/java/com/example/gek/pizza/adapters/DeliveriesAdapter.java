@@ -10,13 +10,18 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.util.Util;
 import com.example.gek.pizza.R;
+import com.example.gek.pizza.data.AllDishes;
 import com.example.gek.pizza.data.Const;
 import com.example.gek.pizza.data.Delivery;
+import com.example.gek.pizza.data.Dish;
 import com.example.gek.pizza.helpers.Utils;
 import com.google.firebase.database.GenericTypeIndicator;
 
 import java.util.ArrayList;
+
+import static com.example.gek.pizza.data.Const.db;
 
 /**
  * Адаптер отображающий заказы на доставку (новые, готовка и доставка)
@@ -60,6 +65,14 @@ public class DeliveriesAdapter extends RecyclerView.Adapter<DeliveriesAdapter.Vi
         } else {
             holder.tvCommentShop.setText(delivery.getCommentShop());
         }
+
+        // По ключу блюда находим его в списке и получаем полную инфу. Берем кол-во и формируем строку
+        String details = "";
+        for (int i = 0; i < delivery.getNumbersDishes().size(); i++) {
+            Dish nextDish = AllDishes.getInstance().getDish(delivery.getKeysDishes().get(i));
+            details += Utils.makeOrderString(nextDish, delivery.getNumbersDishes().get(i));
+        }
+        holder.tvDetails.setText(details);
 
         switch (statusDeliveries){
             case Const.DELIVERY_STATUS_NEW:
@@ -135,5 +148,6 @@ public class DeliveriesAdapter extends RecyclerView.Adapter<DeliveriesAdapter.Vi
             }
         }
     }
+
 
 }
