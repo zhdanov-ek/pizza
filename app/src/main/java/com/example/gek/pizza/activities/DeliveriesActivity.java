@@ -30,6 +30,7 @@ import com.example.gek.pizza.data.Dish;
 import com.example.gek.pizza.helpers.Utils;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
@@ -47,8 +48,7 @@ public class DeliveriesActivity extends AppCompatActivity {
      */
     private SectionsPagerAdapter mSectionsPagerAdapter;
 
-    // The ViewPager that will host the section contents.
-
+    // Хранит все наши вкладки с переключателем
     private ViewPager mViewPager;
 
 //    private ArrayList<Delivery> mNewDeliveries = new ArrayList<>();
@@ -88,7 +88,6 @@ public class DeliveriesActivity extends AppCompatActivity {
         }
 
         // Создаем фрагмент и передаем ему параметр с номером, соответствующим вкладке
-        //
         public static PlaceholderFragment newInstance(int sectionNumber) {
             PlaceholderFragment fragment = new PlaceholderFragment();
             Bundle args = new Bundle();
@@ -115,6 +114,9 @@ public class DeliveriesActivity extends AppCompatActivity {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     listDeliveries.clear();
+//                    GenericTypeIndicator<Delivery> genericTypeIndicator =
+//                            new GenericTypeIndicator<Delivery>() {};
+
                     for (DataSnapshot child: dataSnapshot.getChildren()) {
                         Delivery delivery = child.getValue(Delivery.class);
                         listDeliveries.add(delivery);

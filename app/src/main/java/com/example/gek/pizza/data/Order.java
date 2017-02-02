@@ -8,6 +8,13 @@ public class Order {
     private Dish dish;
     private int count;
 
+    public Dish getDish() {
+        return dish;
+    }
+
+    public void setDish(Dish dish) {
+        this.dish = dish;
+    }
 
     public Order() {
     }
