@@ -118,7 +118,7 @@ public class DeliveriesActivity extends AppCompatActivity {
                         case 1:
                             rv.setAdapter(new DeliveriesAdapter(
                                     listDeliveries,
-                                    getContext(),
+                                    getActivity(),
                                     Const.DELIVERY_STATUS_NEW));
                             break;
                         case 2:
