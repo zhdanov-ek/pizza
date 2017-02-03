@@ -1,6 +1,7 @@
 package com.example.gek.pizza.data;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 /**
  * Класс используется для передачи заявки на доставку в заведение
@@ -16,25 +17,15 @@ public class Delivery {
     private ArrayList<Integer> numbersDishes;   // количество каждого блюда в заказе
     private ArrayList<String> keysDishes;       // ключи каждого из блюд в заказе
     private String key;
+    private Date dateNew;                       // время смены состояния доставки
+    private Date dateCooking;
+    private Date dateTransport;
+    private Date dateArchive;
+    private Boolean isPaid;
 
-
-    //todo Добавить время создания, принятия, отправки и получения (закрытия) доставки
 
     public Delivery() {
-    }
-
-
-    public Delivery(String nameClient, String phoneClient, String addressClient,
-                    String commentClient, String commentShop, float totalSum,
-                    ArrayList<Integer> numbersDishes, ArrayList<String> keysDishes) {
-        this.nameClient = nameClient;
-        this.phoneClient = phoneClient;
-        this.addressClient = addressClient;
-        this.commentClient = commentClient;
-        this.commentShop = commentShop;
-        this.totalSum = totalSum;
-        this.numbersDishes = numbersDishes;
-        this.keysDishes = keysDishes;
+        this.dateNew = new Date();
     }
 
     public String getNameClient() {
@@ -109,4 +100,43 @@ public class Delivery {
         this.key = key;
     }
 
+    public Date getDateNew() {
+        return dateNew;
+    }
+
+    public void setDateNew(Date dateNew) {
+        this.dateNew = dateNew;
+    }
+
+    public Date getDateCooking() {
+        return dateCooking;
+    }
+
+    public void setDateCooking(Date dateCooking) {
+        this.dateCooking = dateCooking;
+    }
+
+    public Date getDateTransport() {
+        return dateTransport;
+    }
+
+    public void setDateTransport(Date dateTransport) {
+        this.dateTransport = dateTransport;
+    }
+
+    public Date getDateArchive() {
+        return dateArchive;
+    }
+
+    public void setDateArchive(Date dateArchive) {
+        this.dateArchive = dateArchive;
+    }
+
+    public Boolean getPaid() {
+        return isPaid;
+    }
+
+    public void setPaid(Boolean paid) {
+        isPaid = paid;
+    }
 }

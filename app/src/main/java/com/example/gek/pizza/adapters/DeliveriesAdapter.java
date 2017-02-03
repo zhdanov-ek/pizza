@@ -22,6 +22,7 @@ import com.example.gek.pizza.data.Delivery;
 import com.example.gek.pizza.data.Dish;
 import com.example.gek.pizza.helpers.Utils;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 import static com.example.gek.pizza.data.Const.db;
@@ -35,11 +36,13 @@ public class DeliveriesAdapter extends RecyclerView.Adapter<DeliveriesAdapter.Vi
     private ArrayList<Delivery> listDeliveries;
     private Context ctx;
     private String statusDeliveries;
+    private SimpleDateFormat formatTime;
 
     public DeliveriesAdapter(ArrayList<Delivery> listDeliveries, Context ctx, String statusDeliveries) {
         this.listDeliveries = listDeliveries;
         this.ctx = ctx;
         this.statusDeliveries = statusDeliveries;
+        this.formatTime = new SimpleDateFormat("HH:mm:ss");
     }
 
 
@@ -56,7 +59,9 @@ public class DeliveriesAdapter extends RecyclerView.Adapter<DeliveriesAdapter.Vi
         holder.tvNameClient.setText(delivery.getNameClient());
         holder.tvPhoneClient.setText(delivery.getPhoneClient());
         holder.tvAddressClient.setText(delivery.getAddressClient());
-        holder.tvTotalSum.setText(Utils.toPrice(delivery.getTotalSum()));
+        //todo прикрутить время в нормальное место, в тч в других вкладках
+        holder.tvTotalSum.setText(Utils.toPrice(delivery.getTotalSum()) + "\n" +
+                formatTime.format(delivery.getDateNew()));
         if (delivery.getCommentClient().isEmpty()){
             holder.tvCommentClient.setVisibility(View.GONE);
         } else {
