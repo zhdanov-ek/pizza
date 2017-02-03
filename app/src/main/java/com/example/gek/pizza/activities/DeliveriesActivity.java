@@ -119,19 +119,19 @@ public class DeliveriesActivity extends AppCompatActivity {
                             rv.setAdapter(new DeliveriesAdapter(
                                     listDeliveries,
                                     getActivity(),
-                                    Const.DELIVERY_STATUS_NEW));
+                                    Const.CHILD_DELIVERIES_NEW));
                             break;
                         case 2:
                             rv.setAdapter(new DeliveriesAdapter(
                                     listDeliveries,
                                     getContext(),
-                                    Const.DELIVERY_STATUS_COOK));
+                                    Const.CHILD_DELIVERIES_COOKING));
                             break;
                         case 3:
                             rv.setAdapter(new DeliveriesAdapter(
                                     listDeliveries,
                                     getContext(),
-                                    Const.DELIVERY_STATUS_TRANSIT));
+                                    Const.CHILD_DELIVERIES_ARCHIVE));
                             break;
                     }
                 }
@@ -203,6 +203,9 @@ public class DeliveriesActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
+            case R.id.action_archive:
+                startActivity(new Intent(this, ArchiveDeliveriesActivity.class));
+                break;
             case R.id.action_settings:
                 startActivity(new Intent(this, SettingsActivity.class));
                 break;

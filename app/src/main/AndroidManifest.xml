@@ -51,7 +51,8 @@
 
         <activity
             android:name=".activities.DeliveriesActivity"
-            android:theme="@style/AppTheme"/>
+            android:theme="@style/AppTheme" />
+        <activity android:name=".activities.ArchiveDeliveriesActivity"></activity>
     </application>
 
 </manifest>

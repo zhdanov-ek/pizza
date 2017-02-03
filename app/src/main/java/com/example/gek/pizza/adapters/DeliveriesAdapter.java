@@ -12,38 +12,33 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bumptech.glide.util.Util;
 import com.example.gek.pizza.R;
-import com.example.gek.pizza.activities.DeliveriesActivity;
 import com.example.gek.pizza.data.AllDishes;
 import com.example.gek.pizza.data.Const;
 import com.example.gek.pizza.data.Delivery;
 import com.example.gek.pizza.data.Dish;
 import com.example.gek.pizza.helpers.Utils;
-import com.google.firebase.database.GenericTypeIndicator;
 
 import java.util.ArrayList;
 
 import static com.example.gek.pizza.data.Const.db;
 
 /**
- * Адаптер отображающий заказы на доставку (новые, готовка и доставка)
+ * Адаптер отображающий заказы на доставку (новые, готовка, доставка и архив)
  */
 
 public class DeliveriesAdapter extends RecyclerView.Adapter<DeliveriesAdapter.ViewHolder>{
 
     private ArrayList<Delivery> listDeliveries;
     private Context ctx;
-    private int statusDeliveries;
+    private String statusDeliveries;
 
-    public DeliveriesAdapter(ArrayList<Delivery> listDeliveries, Context ctx, int statusDeliveries) {
+    public DeliveriesAdapter(ArrayList<Delivery> listDeliveries, Context ctx, String statusDeliveries) {
         this.listDeliveries = listDeliveries;
         this.ctx = ctx;
-        // нужно для понимания какие действия выполнять по нажатию на кнопки
         this.statusDeliveries = statusDeliveries;
     }
 
@@ -82,17 +77,21 @@ public class DeliveriesAdapter extends RecyclerView.Adapter<DeliveriesAdapter.Vi
         holder.tvDetails.setText(details);
 
         switch (statusDeliveries){
-            case Const.DELIVERY_STATUS_NEW:
+            case Const.CHILD_DELIVERIES_NEW:
                 holder.btnPositive.setText(R.string.btn_cook);
                 holder.btnNegative.setText(R.string.btn_cancel);
                 break;
-            case Const.DELIVERY_STATUS_COOK:
+            case Const.CHILD_DELIVERIES_COOKING:
                 holder.btnPositive.setText(R.string.btn_transit);
                 holder.btnNegative.setText(R.string.btn_cancel);
                 break;
-            case Const.DELIVERY_STATUS_TRANSIT:
+            case Const.CHILD_DELIVERIES_TRANSIT:
                 holder.btnPositive.setText(R.string.btn_paid);
                 holder.btnNegative.setText(R.string.btn_failure);
+                break;
+            case Const.CHILD_DELIVERIES_ARCHIVE:
+                holder.btnPositive.setText(R.string.btn_restore);
+                holder.btnNegative.setText(R.string.remove);
                 break;
         }
         //todo write other fields
@@ -103,6 +102,8 @@ public class DeliveriesAdapter extends RecyclerView.Adapter<DeliveriesAdapter.Vi
         return listDeliveries.size();
     }
 
+
+    // Описываем холдер, который будет прорисовывать айтемы и обрабатывать клики по ним
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         private TextView tvNameClient;
         private TextView tvPhoneClient;
@@ -116,7 +117,7 @@ public class DeliveriesAdapter extends RecyclerView.Adapter<DeliveriesAdapter.Vi
         private ImageView ivExpand;
         private ImageView ivShopComment;
 
-        public ViewHolder(View itemView) {
+        private ViewHolder(View itemView) {
             super(itemView);
             tvNameClient = (TextView) itemView.findViewById(R.id.tvNameClient);
             tvPhoneClient = (TextView) itemView.findViewById(R.id.tvPhoneClient);
@@ -131,36 +132,104 @@ public class DeliveriesAdapter extends RecyclerView.Adapter<DeliveriesAdapter.Vi
             ivExpand = (ImageView) itemView.findViewById(R.id.ivExpand);
             ivShopComment = (ImageView) itemView.findViewById(R.id.ivShopComment);
 
-            btnPositive.setOnClickListener(positiveListener);
-            btnNegative.setOnClickListener(cancelDelivery);
+            btnPositive.setOnClickListener(this);
+            btnNegative.setOnClickListener(this);
             ivExpand.setOnClickListener(this);
-            ivShopComment.setOnClickListener(editShopComment);
+            ivShopComment.setOnClickListener(this);
         }
+
 
         @Override
         public void onClick(View view) {
             switch (view.getId()){
                 case R.id.ivExpand:
-                    if (llDetails.getVisibility() == View.GONE) {
-                        llDetails.setVisibility(View.VISIBLE);
-                        ivExpand.setImageResource(R.drawable.ic_expand_more);
-                    } else {
-                        llDetails.setVisibility(View.GONE);
-                        ivExpand.setImageResource(R.drawable.ic_expand_less);
-                    }
+                    doExpand();
                     break;
-                default:
+                case R.id.ivShopComment:
+                    editShopComment();
                     break;
+                case R.id.btnPositive:
+                    pressPositive();
+                    break;
+                case R.id.btnNegative:
+                    pressNegative();
+                    break;
+            }
+
+        }
+
+        /** Разворачивает/сворачивает дополнительную информацию о доставке  */
+        private void doExpand() {
+            if (llDetails.getVisibility() == View.GONE) {
+                llDetails.setVisibility(View.VISIBLE);
+                ivExpand.setImageResource(R.drawable.ic_expand_more);
+            } else {
+                llDetails.setVisibility(View.GONE);
+                ivExpand.setImageResource(R.drawable.ic_expand_less);
             }
         }
 
-        /** Отклонение доставки: запись переносится в архив и перед этим вносится комментарий */
-        private View.OnClickListener cancelDelivery = new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(ctx);
+
+        /** Добавление (изменение) комментария заведения */
+        private void editShopComment(){
+            AlertDialog.Builder builder = new AlertDialog.Builder(ctx);
+            builder.setTitle(R.string.dialog_title_edit_comment);
+            builder.setIcon(R.drawable.ic_comment);
+
+            // Добавляем вью для ввода в стандартный диалог
+            final EditText etCommentShop = new EditText(ctx);
+            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.MATCH_PARENT,
+                    LinearLayout.LayoutParams.MATCH_PARENT);
+            etCommentShop.setLayoutParams(lp);
+            builder.setView(etCommentShop);
+
+            if (tvCommentShop.getText().length() != 0){
+                etCommentShop.setText(tvCommentShop.getText());
+            }
+
+            // Кнопки добавления записи в объект
+            builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    Delivery delivery = listDeliveries.get(getAdapterPosition());
+                    delivery.setCommentShop(etCommentShop.getText().toString());
+                    db.child(statusDeliveries).child(delivery.getKey()).setValue(delivery);
+                }
+            });
+            builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                }
+            });
+            builder.show();
+        }
+
+        /** Отклонение доставки: запись переносится в архив и перед этим вносится комментарий.
+         * В архиве эта кнопка удаляет запись */
+        private void pressNegative(){
+            final Delivery delivery = listDeliveries.get(getAdapterPosition());
+            AlertDialog.Builder builder = new AlertDialog.Builder(ctx);
+            builder.setIcon(R.drawable.ic_warning);
+            builder.setNegativeButton(R.string.btn_cancel, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                }
+            });
+
+            // Если запись в архиве то удаляем ее. Иначе перемещаем заказ в архив
+            if (statusDeliveries.contentEquals(Const.CHILD_DELIVERIES_ARCHIVE)){
+                builder.setTitle(R.string.dialog_title_delivery_remove);
+                builder.setMessage(R.string.confirm_remove_item);
+                builder.setPositiveButton(R.string.remove, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        db.child(statusDeliveries).child(delivery.getKey()).removeValue();
+                        Toast.makeText(ctx, R.string.mes_removed, Toast.LENGTH_LONG).show();
+                    }
+                });
+            } else {
                 builder.setTitle(R.string.dialog_title_delivery_reject);
-                builder.setIcon(R.drawable.ic_warning);
 
                 // подгружаем вью в базовый диалог и наполняем его данными
                 View customPart = ((AppCompatActivity) ctx).getLayoutInflater().inflate(R.layout.dialog_reason, null);
@@ -168,140 +237,70 @@ public class DeliveriesAdapter extends RecyclerView.Adapter<DeliveriesAdapter.Vi
                 final EditText etInput = (EditText) customPart.findViewById(R.id.etInput);
                 etInput.setText(listDeliveries.get(getAdapterPosition()).getCommentShop());
 
-                // Вносим комментарий заведения в доставку и перемещаем ее в архив
+                // Добавляем комментарий заведения в доставку и перемещаем ее в архив
                 builder.setPositiveButton(R.string.btn_to_archive, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        Delivery delivery = listDeliveries.get(getAdapterPosition());
                         delivery.setCommentShop(etInput.getText().toString());
                         db.child(Const.CHILD_DELIVERIES_ARCHIVE).child(delivery.getKey()).setValue(delivery);
-
-                        String status = Const.CHILD_DELIVERIES_NEW;
-                        // определяем в каком разделе находится объект сейчас и удаляем его
-                        switch (statusDeliveries){
-                            case Const.DELIVERY_STATUS_NEW:
-                                status = Const.CHILD_DELIVERIES_NEW;
-                                break;
-                            case Const.DELIVERY_STATUS_COOK:
-                                status = Const.CHILD_DELIVERIES_COOKING;
-                                break;
-                            case Const.DELIVERY_STATUS_TRANSIT:
-                                status = Const.CHILD_DELIVERIES_TRANSIT;
-                                break;
-                        }
-                        db.child(status).child(delivery.getKey()).removeValue();
+                        db.child(statusDeliveries).child(delivery.getKey()).removeValue();
+                        Toast.makeText(ctx, R.string.mes_pass_archive, Toast.LENGTH_LONG).show();
                     }
                 });
-
-                builder.setNegativeButton(R.string.btn_cancel, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-
-                    }
-                });
-
-                builder.show();
             }
-        };
+            builder.show();
+        }
 
 
+        /** При нажатии на позитивную кнопку перемещаем доставу в следующую группу
+         *  или восстанавливаем из архива */
+        private void pressPositive(){
+            // Используя ключ доставки переносим ее другую категорию
+            String keyDelivery = listDeliveries.get(getAdapterPosition()).getKey();
+            switch (statusDeliveries){
+                case Const.CHILD_DELIVERIES_NEW:
+                    db.child(Const.CHILD_DELIVERIES_NEW)
+                            .child(keyDelivery)
+                            .removeValue();
+                    db.child(Const.CHILD_DELIVERIES_COOKING)
+                            .child(keyDelivery)
+                            .setValue(listDeliveries.get(getAdapterPosition()));
+                    Toast.makeText(ctx, R.string.mes_pass_kitchen, Toast.LENGTH_SHORT).show();
+                    break;
 
-        /** Добавление (изменение) комментария заведения */
-        private View.OnClickListener editShopComment = new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(ctx);
-                builder.setTitle("Enter comment");
-                builder.setIcon(R.drawable.ic_comment);
+                case Const.CHILD_DELIVERIES_COOKING:
+                    db.child(Const.CHILD_DELIVERIES_COOKING)
+                            .child(keyDelivery)
+                            .removeValue();
+                    db.child(Const.CHILD_DELIVERIES_TRANSIT)
+                            .child(keyDelivery)
+                            .setValue(listDeliveries.get(getAdapterPosition()));
+                    Toast.makeText(ctx, R.string.mes_pass_courier, Toast.LENGTH_SHORT).show();
+                    break;
 
-                // Добавляем вью для ввода в стандартный диалог
-                final EditText etCommentShop = new EditText(ctx);
-                LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
-                        LinearLayout.LayoutParams.MATCH_PARENT,
-                        LinearLayout.LayoutParams.MATCH_PARENT);
-                etCommentShop.setLayoutParams(lp);
-                builder.setView(etCommentShop);
+                case Const.CHILD_DELIVERIES_TRANSIT:
+                    db.child(Const.CHILD_DELIVERIES_TRANSIT)
+                            .child(keyDelivery)
+                            .removeValue();
+                    db.child(Const.CHILD_DELIVERIES_ARCHIVE)
+                            .child(keyDelivery)
+                            .setValue(listDeliveries.get(getAdapterPosition()));
+                    Toast.makeText(ctx, R.string.mes_pass_archive, Toast.LENGTH_LONG).show();
+                    break;
 
-                if (tvCommentShop.getText().length() != 0){
-                    etCommentShop.setText(tvCommentShop.getText());
-                }
-
-                // Кнопки с обработчиками
-                builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        Delivery delivery = listDeliveries.get(getAdapterPosition());
-                        delivery.setCommentShop(etCommentShop.getText().toString());
-                        String status;
-
-                        // определяем в каком разделе находится объект и перезаписываем его
-                        switch (statusDeliveries){
-                            case Const.DELIVERY_STATUS_NEW:
-                                status = Const.CHILD_DELIVERIES_NEW;
-                                break;
-                            case Const.DELIVERY_STATUS_COOK:
-                                status = Const.CHILD_DELIVERIES_COOKING;
-                                break;
-                            case Const.DELIVERY_STATUS_TRANSIT:
-                                status = Const.CHILD_DELIVERIES_TRANSIT;
-                                break;
-                            default:
-                                status = Const.CHILD_DELIVERIES_NEW;
-                                break;
-                        }
-                        db.child(status).child(delivery.getKey()).setValue(delivery);
-                    }
-                });
-                builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                    }
-                });
-                builder.show();
+                case Const.CHILD_DELIVERIES_ARCHIVE:
+                    db.child(Const.CHILD_DELIVERIES_ARCHIVE)
+                            .child(keyDelivery)
+                            .removeValue();
+                    db.child(Const.CHILD_DELIVERIES_NEW)
+                            .child(keyDelivery)
+                            .setValue(listDeliveries.get(getAdapterPosition()));
+                    Toast.makeText(ctx, R.string.mes_restored, Toast.LENGTH_LONG).show();
             }
-        };
+        }
 
 
-        /** При нажатии на позитивную кнопку перемещаем доставу в следующую группу */
-        private View.OnClickListener positiveListener =  new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // Используя ключ доставки переносим ее другую категорию
-                String keyDelivery = listDeliveries.get(getAdapterPosition()).getKey();
-                String text = listDeliveries.get(getAdapterPosition()).getNameClient();
-                switch (statusDeliveries){
-                    case Const.DELIVERY_STATUS_NEW:
-                        db.child(Const.CHILD_DELIVERIES_NEW)
-                                .child(keyDelivery)
-                                .removeValue();
-                        db.child(Const.CHILD_DELIVERIES_COOKING)
-                                .child(keyDelivery)
-                                .setValue(listDeliveries.get(getAdapterPosition()));
-                        Toast.makeText(ctx, text + " Send to cook", Toast.LENGTH_SHORT).show();
-                        break;
 
-                    case Const.DELIVERY_STATUS_COOK:
-                        db.child(Const.CHILD_DELIVERIES_COOKING)
-                                .child(keyDelivery)
-                                .removeValue();
-                        db.child(Const.CHILD_DELIVERIES_TRANSIT)
-                                .child(keyDelivery)
-                                .setValue(listDeliveries.get(getAdapterPosition()));
-                        Toast.makeText(ctx, text + "Send to transit", Toast.LENGTH_SHORT).show();
-                        break;
-
-                    case Const.DELIVERY_STATUS_TRANSIT:
-                        db.child(Const.CHILD_DELIVERIES_TRANSIT)
-                                .child(keyDelivery)
-                                .removeValue();
-                        db.child(Const.CHILD_DELIVERIES_ARCHIVE)
-                                .child(keyDelivery)
-                                .setValue(listDeliveries.get(getAdapterPosition()));
-                        Toast.makeText(ctx, text + "Send to archive", Toast.LENGTH_LONG).show();
-                        break;
-                }
-            }
-        };
     }
 
 
