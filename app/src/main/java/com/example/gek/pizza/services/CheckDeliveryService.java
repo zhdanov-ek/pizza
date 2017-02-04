@@ -24,6 +24,7 @@ import com.example.gek.pizza.data.Delivery;
 import com.example.gek.pizza.data.Dish;
 import com.example.gek.pizza.data.Order;
 import com.example.gek.pizza.helpers.Utils;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
@@ -37,11 +38,10 @@ public class CheckDeliveryService extends Service {
     private static String TAG = "CheckDeliveryService";
     // По этому ID мы сможем обращаться к нашему уведомлению, что бы изменить его например
     // Для изменения уведомления достаточно повторно создать его с тем же номером ID
-    int notifId = 555;
+    int notifId = 1;
     private NotificationManager notificationManager;
-    private ArrayList<Delivery> listDeliveries;
     private Context ctx;
-    private ValueEventListener newDeliveriesListener;
+    private ChildEventListener newDeliveriesListener;
 
     public CheckDeliveryService() {
     }
@@ -50,10 +50,8 @@ public class CheckDeliveryService extends Service {
     public void onCreate() {
         super.onCreate();
         ctx = getBaseContext();
-        listDeliveries = new ArrayList<>();
         // Получаем системный менеджер уведомлений
         notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-        Log.d(TAG, "onCreate: ");
     }
 
     @Override
@@ -66,21 +64,26 @@ public class CheckDeliveryService extends Service {
 
     private void setListenerNewDeliveries(){
         // Описываем слушатель, который мониторит новые заказы на доставку,
-        // которые находятся в child(CHILD_ORDERS_NEW)
-        newDeliveriesListener = new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                long num = dataSnapshot.getChildrenCount();
-                listDeliveries.clear();
+        // которые находятся в child(CHILD_DELIVERIES_NEW)
+        newDeliveriesListener = new ChildEventListener(){
 
-                // Получаем изменения по заказам и если они есть то выводим уведомление
-                Log.d(TAG, "Load new deliveries: total Children objects:" + num);
-                for (DataSnapshot child: dataSnapshot.getChildren()) {
-                    listDeliveries.add(child.getValue(Delivery.class));
-                }
-                if (listDeliveries.size() != 0){
-                    showNotification();
-                }
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                showNotification(dataSnapshot.getValue(Delivery.class));
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
 
             }
 
@@ -90,21 +93,14 @@ public class CheckDeliveryService extends Service {
             }
         };
 
-        // устанавливаем слушатель на изменения в разделе новых заявок на доставку
-        // События будут срабатывать даже когда сервис будет уничтожен.
-        Const.db.child(Const.CHILD_DELIVERIES_NEW).addValueEventListener(newDeliveriesListener);
+        Const.db.child(Const.CHILD_DELIVERIES_NEW).addChildEventListener(newDeliveriesListener);
     }
 
-    private void showNotification(){
-        int count = 0;
-        float totalPrice = 0;
-        for (Delivery d: listDeliveries) {
-            count++;
-            totalPrice += d.getTotalSum();
-        }
-
-        String title = getResources().getString(R.string.notification_delivery_title);
-        String content = getResources().getString(R.string.notification_delivery_content) + ": " + count;
+    private void showNotification(Delivery delivery){
+        float totalPrice = delivery.getTotalSum();
+        String time = Utils.formatDate(delivery.getDateNew());
+        String title = getResources().getString(R.string.notification_delivery_title) + " (" + time + ")";
+        String content = delivery.getAddressClient() +" (" + delivery.getNameClient() + ")";
         String contentInfo = Utils.toPrice(totalPrice);
 
         // Создаем наше уведомление
@@ -137,7 +133,7 @@ public class CheckDeliveryService extends Service {
 
         // Даем ему команду отобразить наше уведомление
         // айди инкрементируем, что бы были на каждый заказ свой нотификейшн
-        notificationManager.notify(notifId, ntfBuilder.build());
+        notificationManager.notify(notifId++, ntfBuilder.build());
     }
 
 

@@ -120,7 +120,7 @@ public class Utils {
 
     /** Формируем строку с временем с учетом сегодняшней даты */
     public static String formatDate(Date date){
-        SimpleDateFormat formatShort = new SimpleDateFormat("HH:mm:ss");
+        SimpleDateFormat formatShort = new SimpleDateFormat("HH:mm");
         SimpleDateFormat formatFull = new SimpleDateFormat();
         SimpleDateFormat fetchDate = new SimpleDateFormat("yyyy.MM.dd");
 

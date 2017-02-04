@@ -86,7 +86,7 @@
 
 
     <!-- DELIVERY NOTIFICATION -->
-    <string name="notification_delivery_title">New orders</string>
+    <string name="notification_delivery_title">New order</string>
     <string name="notification_delivery_content">Total orders</string>
 
     <string name="title_settings_category_contacts">Contacts</string>
