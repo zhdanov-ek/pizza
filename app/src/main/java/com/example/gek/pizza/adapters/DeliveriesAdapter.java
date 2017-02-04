@@ -22,8 +22,8 @@ import com.example.gek.pizza.data.Delivery;
 import com.example.gek.pizza.data.Dish;
 import com.example.gek.pizza.helpers.Utils;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import static com.example.gek.pizza.data.Const.db;
 
@@ -36,13 +36,11 @@ public class DeliveriesAdapter extends RecyclerView.Adapter<DeliveriesAdapter.Vi
     private ArrayList<Delivery> listDeliveries;
     private Context ctx;
     private String statusDeliveries;
-    private SimpleDateFormat formatTime;
 
     public DeliveriesAdapter(ArrayList<Delivery> listDeliveries, Context ctx, String statusDeliveries) {
         this.listDeliveries = listDeliveries;
         this.ctx = ctx;
         this.statusDeliveries = statusDeliveries;
-        this.formatTime = new SimpleDateFormat("HH:mm:ss");
     }
 
 
@@ -59,28 +57,32 @@ public class DeliveriesAdapter extends RecyclerView.Adapter<DeliveriesAdapter.Vi
         holder.tvNameClient.setText(delivery.getNameClient());
         holder.tvPhoneClient.setText(delivery.getPhoneClient());
         holder.tvAddressClient.setText(delivery.getAddressClient());
-        //todo прикрутить время в нормальное место, в тч в других вкладках
         holder.tvTotalSum.setText(Utils.toPrice(delivery.getTotalSum()) + "\n" +
-                formatTime.format(delivery.getDateNew()));
+                Utils.formatDate(delivery.getDateNew()));
         if (delivery.getCommentClient().isEmpty()){
             holder.tvCommentClient.setVisibility(View.GONE);
         } else {
             holder.tvCommentClient.setText(delivery.getCommentClient());
         }
-        if (delivery.getCommentShop() == null) {
+        if ((delivery.getCommentShop() == null) || (delivery.getCommentShop().length() == 0)) {
             holder.tvCommentShop.setVisibility(View.GONE);
         } else {
             holder.tvCommentShop.setText(delivery.getCommentShop());
         }
+        holder.tvTime.setText(Utils.getTimeHistoryDelivery(delivery, ctx));
 
         // По ключу блюда находим его в списке и получаем полную инфу. Берем кол-во и формируем строку
         String details = "";
         for (int i = 0; i < delivery.getNumbersDishes().size(); i++) {
             Dish nextDish = AllDishes.getInstance().getDish(delivery.getKeysDishes().get(i));
-            details += Utils.makeOrderString(nextDish, delivery.getNumbersDishes().get(i)) +"\n";
+            details += Utils.makeOrderString(nextDish, delivery.getNumbersDishes().get(i));
+            if (i < delivery.getNumbersDishes().size()){
+                details += "\n";
+            }
         }
         holder.tvDetails.setText(details);
 
+        // Формируем надписи на кнопках в зависимости в каком состоянии доставка
         switch (statusDeliveries){
             case Const.CHILD_DELIVERIES_NEW:
                 holder.btnPositive.setText(R.string.btn_cook);
@@ -90,16 +92,18 @@ public class DeliveriesAdapter extends RecyclerView.Adapter<DeliveriesAdapter.Vi
                 holder.btnPositive.setText(R.string.btn_transit);
                 holder.btnNegative.setText(R.string.btn_cancel);
                 break;
-            case Const.CHILD_DELIVERIES_TRANSIT:
+            case Const.CHILD_DELIVERIES_TRANSPORT:
                 holder.btnPositive.setText(R.string.btn_paid);
                 holder.btnNegative.setText(R.string.btn_failure);
                 break;
             case Const.CHILD_DELIVERIES_ARCHIVE:
                 holder.btnPositive.setText(R.string.btn_restore);
                 holder.btnNegative.setText(R.string.remove);
+                if (!delivery.getPaid()){
+                    holder.ivFail.setVisibility(View.VISIBLE);
+                }
                 break;
         }
-        //todo write other fields
     }
 
     @Override
@@ -117,10 +121,12 @@ public class DeliveriesAdapter extends RecyclerView.Adapter<DeliveriesAdapter.Vi
         private TextView tvTotalSum;
         private TextView tvDetails;
         private TextView tvCommentShop;
+        private TextView tvTime;
         private LinearLayout llDetails;
         private Button btnPositive, btnNegative;
         private ImageView ivExpand;
         private ImageView ivShopComment;
+        private ImageView ivFail;
 
         private ViewHolder(View itemView) {
             super(itemView);
@@ -129,13 +135,15 @@ public class DeliveriesAdapter extends RecyclerView.Adapter<DeliveriesAdapter.Vi
             tvAddressClient = (TextView) itemView.findViewById(R.id.tvAddressClient);
             tvCommentClient = (TextView) itemView.findViewById(R.id.tvCommentClient);
             tvTotalSum = (TextView) itemView.findViewById(R.id.tvTotalSum);
-            tvDetails = (TextView) itemView.findViewById(R.id.tvDetails);
+            tvDetails = (TextView) itemView.findViewById(R.id.tvDishes);
             tvCommentShop = (TextView) itemView.findViewById(R.id.tvCommentShop);
+            tvTime = (TextView) itemView.findViewById(R.id.tvTime);
             llDetails = (LinearLayout) itemView.findViewById(R.id.llDetails);
             btnPositive = (Button) itemView.findViewById(R.id.btnPositive);
             btnNegative = (Button) itemView.findViewById(R.id.btnNegative);
             ivExpand = (ImageView) itemView.findViewById(R.id.ivExpand);
             ivShopComment = (ImageView) itemView.findViewById(R.id.ivShopComment);
+            ivFail = (ImageView) itemView.findViewById(R.id.ivFail);
 
             btnPositive.setOnClickListener(this);
             btnNegative.setOnClickListener(this);
@@ -222,7 +230,7 @@ public class DeliveriesAdapter extends RecyclerView.Adapter<DeliveriesAdapter.Vi
                 }
             });
 
-            // Если запись в архиве то удаляем ее. Иначе перемещаем заказ в архив
+            // Если запись в архиве то удаляем ее. Иначе перемещаем заказ в архив с пометкой о не оплате
             if (statusDeliveries.contentEquals(Const.CHILD_DELIVERIES_ARCHIVE)){
                 builder.setTitle(R.string.dialog_title_delivery_remove);
                 builder.setMessage(R.string.confirm_remove_item);
@@ -247,6 +255,7 @@ public class DeliveriesAdapter extends RecyclerView.Adapter<DeliveriesAdapter.Vi
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         delivery.setCommentShop(etInput.getText().toString());
+                        delivery.setPaid(false);
                         db.child(Const.CHILD_DELIVERIES_ARCHIVE).child(delivery.getKey()).setValue(delivery);
                         db.child(statusDeliveries).child(delivery.getKey()).removeValue();
                         Toast.makeText(ctx, R.string.mes_pass_archive, Toast.LENGTH_LONG).show();
@@ -258,12 +267,14 @@ public class DeliveriesAdapter extends RecyclerView.Adapter<DeliveriesAdapter.Vi
 
 
         /** При нажатии на позитивную кнопку перемещаем доставу в следующую группу
-         *  или восстанавливаем из архива */
+         *  или восстанавливаем из архива. Для этого удаляем запись в текущей месте и
+         *  создаем ее же уже в новом */
         private void pressPositive(){
-            // Используя ключ доставки переносим ее другую категорию
+            // Используя ключ доставки переносим ее в другую категорию
             String keyDelivery = listDeliveries.get(getAdapterPosition()).getKey();
             switch (statusDeliveries){
                 case Const.CHILD_DELIVERIES_NEW:
+                    listDeliveries.get(getAdapterPosition()).setDateCooking(new Date());
                     db.child(Const.CHILD_DELIVERIES_NEW)
                             .child(keyDelivery)
                             .removeValue();
@@ -274,17 +285,20 @@ public class DeliveriesAdapter extends RecyclerView.Adapter<DeliveriesAdapter.Vi
                     break;
 
                 case Const.CHILD_DELIVERIES_COOKING:
+                    listDeliveries.get(getAdapterPosition()).setDateTransport(new Date());
                     db.child(Const.CHILD_DELIVERIES_COOKING)
                             .child(keyDelivery)
                             .removeValue();
-                    db.child(Const.CHILD_DELIVERIES_TRANSIT)
+                    db.child(Const.CHILD_DELIVERIES_TRANSPORT)
                             .child(keyDelivery)
                             .setValue(listDeliveries.get(getAdapterPosition()));
                     Toast.makeText(ctx, R.string.mes_pass_courier, Toast.LENGTH_SHORT).show();
                     break;
 
-                case Const.CHILD_DELIVERIES_TRANSIT:
-                    db.child(Const.CHILD_DELIVERIES_TRANSIT)
+                case Const.CHILD_DELIVERIES_TRANSPORT:
+                    listDeliveries.get(getAdapterPosition()).setDateArchive(new Date());
+                    listDeliveries.get(getAdapterPosition()).setPaid(true);
+                    db.child(Const.CHILD_DELIVERIES_TRANSPORT)
                             .child(keyDelivery)
                             .removeValue();
                     db.child(Const.CHILD_DELIVERIES_ARCHIVE)
@@ -294,6 +308,11 @@ public class DeliveriesAdapter extends RecyclerView.Adapter<DeliveriesAdapter.Vi
                     break;
 
                 case Const.CHILD_DELIVERIES_ARCHIVE:
+                    // при восстановлении их архива затираем все даты кроме даты создания
+                    listDeliveries.get(getAdapterPosition()).setDateCooking(null);
+                    listDeliveries.get(getAdapterPosition()).setDateTransport(null);
+                    listDeliveries.get(getAdapterPosition()).setDateArchive(null);
+                    listDeliveries.get(getAdapterPosition()).setPaid(false);
                     db.child(Const.CHILD_DELIVERIES_ARCHIVE)
                             .child(keyDelivery)
                             .removeValue();

@@ -19,18 +19,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
-import android.widget.TextView;
-
 import com.example.gek.pizza.R;
 import com.example.gek.pizza.adapters.DeliveriesAdapter;
-import com.example.gek.pizza.adapters.DishesAdapter;
 import com.example.gek.pizza.data.Const;
 import com.example.gek.pizza.data.Delivery;
-import com.example.gek.pizza.data.Dish;
-import com.example.gek.pizza.helpers.Utils;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
@@ -131,7 +125,7 @@ public class DeliveriesActivity extends AppCompatActivity {
                             rv.setAdapter(new DeliveriesAdapter(
                                     listDeliveries,
                                     getContext(),
-                                    Const.CHILD_DELIVERIES_ARCHIVE));
+                                    Const.CHILD_DELIVERIES_TRANSPORT));
                             break;
                     }
                 }
@@ -150,7 +144,7 @@ public class DeliveriesActivity extends AppCompatActivity {
                     Const.db.child(Const.CHILD_DELIVERIES_COOKING).addValueEventListener(contactCardListener);
                     break;
                 case 3:
-                    Const.db.child(Const.CHILD_DELIVERIES_TRANSIT).addValueEventListener(contactCardListener);
+                    Const.db.child(Const.CHILD_DELIVERIES_TRANSPORT).addValueEventListener(contactCardListener);
                     break;
             }
 

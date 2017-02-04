@@ -4,7 +4,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 /**
- * Created by gek on 17.01.17.
+ * Constants: keys, urls, fields etc
  */
 
 public class Const {
@@ -17,7 +17,7 @@ public class Const {
 
     public static final String CHILD_DELIVERIES_NEW = "deliveries/new";
     public static final String CHILD_DELIVERIES_COOKING = "deliveries/cooking";
-    public static final String CHILD_DELIVERIES_TRANSIT = "deliveries/transit";
+    public static final String CHILD_DELIVERIES_TRANSPORT = "deliveries/transport";
     public static final String CHILD_DELIVERIES_ARCHIVE = "deliveries/archive";
 
 
@@ -40,11 +40,6 @@ public class Const {
 
     public static final String DISH_GROUP_KEY = "dish_group_key";
     public static final String DISH_GROUP_NAME = "dish_group_name";
-
-//    public static final int DELIVERY_STATUS_NEW = 1;
-//    public static final int DELIVERY_STATUS_COOK = 2;
-//    public static final int DELIVERY_STATUS_TRANSIT = 3;
-//    public static final int DELIVERY_STATUS_ARCHIVE = 4;
 
     // id используемые при вызовах активити через интент
     public static final int REQUEST_LOAD_IMG = 1;

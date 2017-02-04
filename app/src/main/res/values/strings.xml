@@ -121,6 +121,10 @@
     <string name="btn_failure">Failure</string>
     <string name="btn_to_archive">To archive</string>
     <string name="btn_restore">Restore</string>
+    <string name="delivery_time_new">Receive order</string>
+    <string name="delivery_time_cook">To kitchen</string>
+    <string name="delivery_time_transport">To courier</string>
+    <string name="delivery_time_archive">To archive</string>
 
     <!-- Строка куда передается значение переменной из кода -->
     <string name="section_format">Вкладка №: %1$d</string>
