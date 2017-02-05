@@ -6,7 +6,6 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -17,10 +16,8 @@ import android.widget.Toast;
 
 import com.example.gek.pizza.R;
 import com.example.gek.pizza.adapters.MenuOrdersAdapter;
-import com.example.gek.pizza.adapters.NewsAdapter;
 import com.example.gek.pizza.data.Const;
 import com.example.gek.pizza.data.MenuGroup;
-import com.example.gek.pizza.data.News;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
@@ -32,10 +29,8 @@ public class MenuOrdersActivity extends AppCompatActivity {
     private static final String TAG = "Menu orders ";
     private RecyclerView rv;
     private Context ctx = this;
-    private FloatingActionButton fab;
     private MenuOrdersAdapter menuOrdersAdapter;
     private ArrayList<MenuGroup> listMenuGroup;
-    private GridLayoutManager lLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,10 +44,10 @@ public class MenuOrdersActivity extends AppCompatActivity {
         rv = (RecyclerView) findViewById(R.id.rv);
 
         // задаем лаяют с твумя столбцами
-        lLayout = new GridLayoutManager(MenuOrdersActivity.this, 2);
+        GridLayoutManager lLayout = new GridLayoutManager(MenuOrdersActivity.this, 2);
         rv.setLayoutManager(lLayout);
 
-        fab = (FloatingActionButton) findViewById(R.id.fab);
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(fabListener);
 
         listMenuGroup = new ArrayList<>();

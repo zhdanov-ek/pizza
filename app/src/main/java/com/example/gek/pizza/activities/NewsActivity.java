@@ -20,6 +20,7 @@ import com.example.gek.pizza.data.News;
 import com.example.gek.pizza.adapters.NewsAdapter;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
@@ -31,7 +32,6 @@ public class NewsActivity extends AppCompatActivity {
     private RecyclerView rv;
     private NewsAdapter newsAdapter;
     private Context ctx = this;
-    private FloatingActionButton fab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,15 +46,16 @@ public class NewsActivity extends AppCompatActivity {
         rv = (RecyclerView) findViewById(R.id.rv);
         rv.setLayoutManager(new LinearLayoutManager(this));
 
-        fab = (FloatingActionButton) findViewById(R.id.fab);
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(fabListener);
 
         allNews = new ArrayList<>();
 
-        // Описываем слушатель, который возвращает в программу весь список данных,
-        // которые находятся в child(CHILD_NEWS)
+        // Описываем запрос, который отсортирует данные по ключу timeStamp и возвращает в программу
+        // весь список данных, которые находятся в child(CHILD_NEWS).
         // В итоге при любом изменении вся база перезаливается с БД в программу
-        ValueEventListener contactCardListener = new ValueEventListener() {
+        Query getNewsSorted = Const.db.child(Const.CHILD_NEWS).orderByChild("timeStamp");
+        getNewsSorted.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 allNews.clear();
@@ -71,12 +72,9 @@ public class NewsActivity extends AppCompatActivity {
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                Log.w(TAG, "loadPost:onCancelled", databaseError.toException());
+                Log.w(TAG, "onCancelled: ", databaseError.toException() );
             }
-        };
-
-        // устанавливаем слушатель на изменения в нашей базе в разделе контактов
-        Const.db.child(Const.CHILD_NEWS).addValueEventListener(contactCardListener);
+        });
     }
 
     /** Запуск активити на добавление новости */

@@ -3,6 +3,8 @@ package com.example.gek.pizza.data;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.util.Date;
+
 /**
  * Model of news
  */
@@ -13,6 +15,7 @@ public class News implements Parcelable {
     private String photoUrl;
     private String photoName;
     private String key;
+    private long timeStamp;
 
     public String getPhotoName() {
         return photoName;
@@ -26,12 +29,15 @@ public class News implements Parcelable {
     public News() {
     }
 
+
     public News(String title, String description, String photoUrl, String photoName) {
         this.title = title;
         this.description = description;
         this.photoUrl = photoUrl;
         this.photoName = photoName;
-        this.key = key;
+
+        // время со знаком минус для правильной сортировки при выводе: новые - выше.
+        this.timeStamp = -1 * new Date().getTime();
     }
 
     public String getKey() {
@@ -67,6 +73,14 @@ public class News implements Parcelable {
         this.photoUrl = photoUrl;
     }
 
+    public long getTimeStamp() {
+        return timeStamp;
+    }
+
+    public void setTimeStamp(long timeStamp) {
+        this.timeStamp = timeStamp;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -79,6 +93,7 @@ public class News implements Parcelable {
         dest.writeString(this.photoUrl);
         dest.writeString(this.photoName);
         dest.writeString(this.key);
+        dest.writeLong(this.timeStamp);
     }
 
     protected News(Parcel in) {
@@ -87,6 +102,7 @@ public class News implements Parcelable {
         this.photoUrl = in.readString();
         this.photoName = in.readString();
         this.key = in.readString();
+        this.timeStamp = in.readLong();
     }
 
     public static final Creator<News> CREATOR = new Creator<News>() {
