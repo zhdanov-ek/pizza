@@ -52,7 +52,8 @@
         <activity
             android:name=".activities.DeliveriesActivity"
             android:theme="@style/AppTheme" />
-        <activity android:name=".activities.ArchiveDeliveriesActivity"></activity>
+        <activity android:name=".activities.ArchiveDeliveriesActivity" />
+        <activity android:name=".activities.DeliveryStatus"></activity>
     </application>
 
 </manifest>

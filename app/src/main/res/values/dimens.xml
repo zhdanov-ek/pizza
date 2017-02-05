@@ -71,8 +71,14 @@
 
     <dimen name="item_news_photo_width">100dp</dimen>
     <dimen name="item_news_photo_height">100dp</dimen>
-    
+
     <dimen name="image_fail_width">100dp</dimen>
+
+    <!-- DELIVERY STATUS -->
+    <dimen name="image_step_size">24dp</dimen>
+    <dimen name="image_step_horizontal_margin">12dp</dimen>
+    <dimen name="image_step_vertical_margin">8dp</dimen>
+
 
     <dimen name="arrow_up_down_width">36dp</dimen>
     <dimen name="arrow_up_down_height">24dp</dimen>

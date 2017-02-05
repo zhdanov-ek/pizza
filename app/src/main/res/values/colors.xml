@@ -19,6 +19,10 @@
 
     <color name="colorWhite">#ffffff</color>
 
+    <color name="colorStep">#388e3c</color>
+    <color name="colorStepDisable">#aed581</color>
+    <color name="colorStepText">#ffffff</color>
+
     <color name="colorPriceBackground">#8BC34A</color>
     <color name="colorPriceFont">#000000</color>
 </resources>

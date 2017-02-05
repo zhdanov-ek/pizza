@@ -49,6 +49,7 @@ public class MainActivity extends AppCompatActivity
         //todo move to settings
         findViewById(R.id.btnStartService).setOnClickListener(this);
         findViewById(R.id.btnStopService).setOnClickListener(this);
+        findViewById(R.id.btnShowStatusOrder).setOnClickListener(this);
 
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -161,6 +162,9 @@ public class MainActivity extends AppCompatActivity
                 break;
             case R.id.btnStopService:
                 stopService(new Intent(this, CheckDeliveryService.class));
+                break;
+            case R.id.btnShowStatusOrder:
+                startActivity(new Intent(this, DeliveryStatus.class));
                 break;
 
         }
