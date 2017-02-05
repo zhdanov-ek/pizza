@@ -44,8 +44,8 @@ public class ArchiveDeliveriesActivity extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 list.clear();
-                for (DataSnapshot chield : dataSnapshot.getChildren()) {
-                    list.add(chield.getValue(Delivery.class));
+                for (DataSnapshot child : dataSnapshot.getChildren()) {
+                    list.add(child.getValue(Delivery.class));
                 }
                 rv.setAdapter(new DeliveriesAdapter(list, ctx, Const.CHILD_DELIVERIES_ARCHIVE));
             }

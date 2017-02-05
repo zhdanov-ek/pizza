@@ -13,6 +13,7 @@
         android:layout_height="match_parent">
 
         <LinearLayout
+            android:id="@+id/llContainer"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
@@ -31,11 +32,11 @@
                     android:layout_height="wrap_content">
 
                     <ImageView
+                        android:id="@+id/ivStep1"
                         android:layout_width="@dimen/image_step_size"
                         android:layout_height="@dimen/image_step_size"
                         android:layout_centerInParent="true"
-                        android:src="@drawable/step_circle_normal"
-                        android:id="@+id/ivStep1" />
+                        android:src="@drawable/step_circle_disable" />
 
                     <TextView
                         android:id="@+id/tvStep1Num"
@@ -43,19 +44,19 @@
                         android:layout_height="wrap_content"
                         android:layout_centerInParent="true"
                         android:gravity="center"
-                        android:textColor="@color/colorStepText"
-                        android:text="+" />
+                        android:text="1"
+                        android:textColor="@color/colorStepText" />
                 </RelativeLayout>
 
                 <TextView
+                    android:id="@+id/tvStep1Title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
+                    android:gravity="center_vertical|left"
                     android:paddingLeft="12dp"
+                    android:text="@string/delivery_state_title_step1"
                     android:textSize="20sp"
-                    android:textStyle="bold"
-                    android:text="Receive order (12:32)"
-                    android:id="@+id/tvStep1Title" />
+                    android:textStyle="bold" />
             </LinearLayout>
 
             <LinearLayout
@@ -73,14 +74,14 @@
                     android:background="@color/colorStep" />
 
                 <TextView
+                    android:id="@+id/tvStep1Description"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
                     android:paddingBottom="40dp"
                     android:paddingLeft="12dp"
-                    android:textSize="20sp"
-                    android:text="Your order received and passed to the kitchen"
-                    android:id="@+id/tvStep1Description" />
+                    tools:text="Your order received and passed to the kitchen"
+                    android:textSize="20sp" />
 
             </LinearLayout>
 
@@ -95,11 +96,11 @@
                     android:layout_height="wrap_content">
 
                     <ImageView
+                        android:id="@+id/ivStep2"
                         android:layout_width="@dimen/image_step_size"
                         android:layout_height="@dimen/image_step_size"
                         android:layout_centerInParent="true"
-                        android:src="@drawable/step_circle_normal"
-                        android:id="@+id/ivStep2" />
+                        android:src="@drawable/step_circle_disable" />
 
                     <TextView
                         android:id="@+id/tvStep2Num"
@@ -107,19 +108,19 @@
                         android:layout_height="wrap_content"
                         android:layout_centerInParent="true"
                         android:gravity="center"
-                        android:textColor="@color/colorStepText"
-                        android:text="+" />
+                        android:text="2"
+                        android:textColor="@color/colorStepText" />
                 </RelativeLayout>
 
                 <TextView
+                    android:id="@+id/tvStep2Title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
+                    android:gravity="center_vertical|left"
                     android:paddingLeft="12dp"
+                    android:text="@string/delivery_state_title_step2"
                     android:textSize="20sp"
-                    android:textStyle="bold"
-                    android:text="Cooking (26 minutes)"
-                    android:id="@+id/tvStep2Title" />
+                    android:textStyle="bold" />
             </LinearLayout>
 
             <LinearLayout
@@ -137,14 +138,14 @@
                     android:background="@color/colorStep" />
 
                 <TextView
+                    android:id="@+id/tvStep2Description"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
                     android:paddingBottom="40dp"
                     android:paddingLeft="12dp"
-                    android:textSize="20sp"
-                    android:text="Cooking start in 12:32 and finish in 12:58"
-                    android:id="@+id/tvStep2Description" />
+                    tools:text="Cooking start in 12:32 and finish in 12:58"
+                    android:textSize="20sp" />
 
             </LinearLayout>
 
@@ -159,31 +160,31 @@
                     android:layout_height="wrap_content">
 
                     <ImageView
+                        android:id="@+id/ivStep3"
                         android:layout_width="@dimen/image_step_size"
                         android:layout_height="@dimen/image_step_size"
                         android:layout_centerInParent="true"
-                        android:src="@drawable/step_circle_disable"
-                        android:id="@+id/ivStep3" />
+                        android:src="@drawable/step_circle_disable" />
 
                     <TextView
+                        android:id="@+id/tvStep3Num"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerInParent="true"
                         android:gravity="center"
-                        android:textColor="@color/colorStepText"
                         android:text="3"
-                        android:id="@+id/tvStep3Num" />
+                        android:textColor="@color/colorStepText" />
                 </RelativeLayout>
 
                 <TextView
+                    android:id="@+id/tvStep3Title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
+                    android:gravity="center_vertical|left"
                     android:paddingLeft="12dp"
+                    android:text="@string/delivery_state_title_step3"
                     android:textSize="20sp"
-                    android:textStyle="bold"
-                    android:text="Delivery (12:58)"
-                    android:id="@+id/tvStep3Title" />
+                    android:textStyle="bold" />
             </LinearLayout>
 
             <LinearLayout
@@ -201,14 +202,14 @@
                     android:background="@color/colorStep" />
 
                 <TextView
+                    android:id="@+id/tvStep3Description"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
                     android:paddingBottom="40dp"
                     android:paddingLeft="12dp"
-                    android:textSize="20sp"
-                    android:text="Now the courier delivers your order"
-                    android:id="@+id/tvStep3Description" />
+                    tools:text="Now the courier delivers your order"
+                    android:textSize="20sp" />
 
             </LinearLayout>
 
@@ -223,31 +224,31 @@
                     android:layout_height="wrap_content">
 
                     <ImageView
+                        android:id="@+id/ivStep4"
                         android:layout_width="@dimen/image_step_size"
                         android:layout_height="@dimen/image_step_size"
                         android:layout_centerInParent="true"
-                        android:src="@drawable/step_circle_disable"
-                        android:id="@+id/ivStep4" />
+                        android:src="@drawable/step_circle_disable" />
 
                     <TextView
+                        android:id="@+id/tvStep4Num"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerInParent="true"
                         android:gravity="center"
-                        android:textColor="@color/colorStepText"
                         android:text="4"
-                        android:id="@+id/tvStep4Num" />
+                        android:textColor="@color/colorStepText" />
                 </RelativeLayout>
 
                 <TextView
+                    android:id="@+id/tvStep4Title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
+                    android:gravity="center_vertical|left"
                     android:paddingLeft="12dp"
+                    tools:text="Finish"
                     android:textSize="20sp"
-                    android:textStyle="bold"
-                    android:text="Finish"
-                    android:id="@+id/tvStep4Title" />
+                    android:textStyle="bold" />
             </LinearLayout>
 
             <LinearLayout
@@ -264,14 +265,13 @@
                     android:layout_marginRight="12dp" />
 
                 <TextView
+                    android:id="@+id/tvStep4Description"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
-                    android:paddingBottom="40dp"
                     android:paddingLeft="12dp"
                     android:textSize="20sp"
-                    android:text="This status can have two states: delivered or failed "
-                    android:id="@+id/tvStep4Description" />
+                    tools:text="This status can have two states: delivered or failed " />
 
             </LinearLayout>
 

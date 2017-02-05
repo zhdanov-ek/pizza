@@ -255,6 +255,7 @@ public class DeliveriesAdapter extends RecyclerView.Adapter<DeliveriesAdapter.Vi
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         delivery.setCommentShop(etInput.getText().toString());
+                        delivery.setDateArchive(new Date());
                         delivery.setPaid(false);
                         db.child(Const.CHILD_DELIVERIES_ARCHIVE).child(delivery.getKey()).setValue(delivery);
                         db.child(statusDeliveries).child(delivery.getKey()).removeValue();

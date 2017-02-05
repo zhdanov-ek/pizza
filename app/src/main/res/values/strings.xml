@@ -126,6 +126,24 @@
     <string name="delivery_time_transport">To courier</string>
     <string name="delivery_time_archive">To archive</string>
 
+    <!-- DELIVERY SHOW STATE -->
+    <string name="delivery_state_title_step1">Receive</string>
+    <string name="delivery_state_title_step2">Cooking</string>
+    <string name="delivery_state_title_step3">Delivery</string>
+    <string name="delivery_state_title_step4_finish">Finish</string>
+    <string name="delivery_state_title_step4_complete">Complete</string>
+    <string name="delivery_state_title_step1_fail">Fail</string>
+    <string name="delivery_state_description_step1_finish">Your order received and passed to the kitchen</string>
+    <string name="delivery_state_description_step1_wait">The order has not been processed</string>
+    <string name="delivery_state_description_step2_start">Your order at kitchen now</string>
+    <string name="delivery_state_description_step2_finish">Cooking is complete</string>
+    <string name="delivery_state_description_step3_start">Now the courier delivers your order</string>
+    <string name="delivery_state_description_step3_finish">Delivery was performed</string>
+    <string name="delivery_state_description_step4_paid">Bon Appetit</string>
+    <string name="delivery_state_description_step4_fail">Fail</string>
+
+
+
     <!-- Строка куда передается значение переменной из кода -->
     <string name="section_format">Вкладка №: %1$d</string>
 
