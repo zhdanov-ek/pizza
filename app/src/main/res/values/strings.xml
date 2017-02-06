@@ -135,9 +135,9 @@
     <string name="delivery_state_title_step1_fail">Fail</string>
     <string name="delivery_state_description_step1_finish">Your order received and passed to the kitchen</string>
     <string name="delivery_state_description_step1_wait">The order has not been processed</string>
-    <string name="delivery_state_description_step2_start">Your order at kitchen now</string>
+    <string name="delivery_state_description_step2_start">Began cooking</string>
     <string name="delivery_state_description_step2_finish">Cooking is complete</string>
-    <string name="delivery_state_description_step3_start">Now the courier delivers your order</string>
+    <string name="delivery_state_description_step3_start">Courier went to you</string>
     <string name="delivery_state_description_step3_finish">Delivery was performed</string>
     <string name="delivery_state_description_step4_paid">Bon Appetit</string>
     <string name="delivery_state_description_step4_fail">Fail</string>

@@ -36,6 +36,7 @@ public class DeliveryStatus extends AppCompatActivity {
         setContentView(R.layout.activity_delivery_status);
         findAllView();
 
+        // На время отладки мы получаем случайный заказ с БД из любого раздела и выводим инфу о нем
         final ArrayList<Delivery> list = new ArrayList<>();
         final ValueEventListener listener = new ValueEventListener() {
             @Override
@@ -47,11 +48,11 @@ public class DeliveryStatus extends AppCompatActivity {
 
                 if (! list.isEmpty()){
                     int num = new Random().nextInt(list.size());
-                    Log.d("11111111111", "onDataChange: list.size = " + list.size() + " num = " + num);
-                    if (!deliveryClosed(list.get(num))) {
+                    if (list.get(num).getDateArchive() != null){
+                        showStateDeliveryClosed(list.get(num));
+                    } else {
                         showStateDelivery(list.get(num));
                     }
-
 
                 } else {
                     llContainer.setVisibility(View.GONE);
@@ -70,13 +71,15 @@ public class DeliveryStatus extends AppCompatActivity {
 
     }
 
-    /** Fill screen from new data of Delivery. */
-    private void showStateDelivery(Delivery d){
+    /**
+     * Show state of current not closed delivery
+     */
+    private void showStateDelivery(Delivery d) {
         String mes = "";
         // State 3 (Transport)
-        if ((d.getDateTransport() != null) && (d.getDateArchive() ==  null)){
-            ivStep3.setImageResource(R.drawable.step_circle_normal);
-            if (d.getDateArchive() != null){
+        if (d.getDateTransport() != null) {
+            ivStep3.setImageResource(R.drawable.step_circle_current);
+            if (d.getDateArchive() != null) {
                 tvStep3Num.setText("+");
                 mes = getResources().getString(R.string.delivery_state_description_step3_finish)
                         + " " + Utils.formatDate(d.getDateArchive());
@@ -87,34 +90,28 @@ public class DeliveryStatus extends AppCompatActivity {
                         + " " + Utils.formatDate(d.getDateTransport());
                 tvStep3Description.setText(mes);
             }
-        } else {
-            tvStep3Title.setText(R.string.delivery_state_title_step3);
-            ivStep3.setImageResource(R.drawable.step_circle_disable);
-            tvStep3Num.setText("3");
         }
 
         // State 2 (Cooking)
-        if ((d.getDateCooking() != null) && (d.getDateArchive() ==  null)){
-            ivStep2.setImageResource(R.drawable.step_circle_normal);
-            if (d.getDateTransport() != null){
+        if (d.getDateCooking() != null) {
+            if (d.getDateTransport() != null) {
                 tvStep2Num.setText("+");
-                mes = getResources().getString(R.string.delivery_state_description_step2_finish)
-                        + " " +  Utils.formatDate(d.getDateTransport());
+                mes = getResources().getString(R.string.delivery_state_description_step2_start) +
+                        " (" + Utils.formatDate(d.getDateCooking()) + ")\n" +
+                        getResources().getString(R.string.delivery_state_description_step2_finish) +
+                        " (" + Utils.formatDate(d.getDateTransport()) + ")\n";
                 tvStep2Description.setText(mes);
             } else {
+                ivStep2.setImageResource(R.drawable.step_circle_current);
                 tvStep2Num.setText("2");
                 mes = getResources().getString(R.string.delivery_state_description_step2_start)
                         + " " + Utils.formatDate(d.getDateCooking());
                 tvStep2Description.setText(mes);
             }
-        } else {
-            tvStep2Title.setText(R.string.delivery_state_title_step2);
-            ivStep2.setImageResource(R.drawable.step_circle_disable);
-            tvStep2Num.setText("2");
         }
 
         // State 1 (Receive)
-        if ((d.getDateNew() != null) && (d.getDateArchive() == null)){
+        if ((d.getDateNew() != null) && (d.getDateArchive() == null)) {
             if (d.getDateCooking() != null) {
                 tvStep1Num.setText("+");
                 mes = getResources().getString(R.string.delivery_state_description_step1_finish) +
@@ -131,57 +128,79 @@ public class DeliveryStatus extends AppCompatActivity {
             }
 
         } else {
-            if (d.getDateArchive() == null){
+            if (d.getDateArchive() == null) {
                 llContainer.setVisibility(View.GONE);
             }
         }
-
     }
 
-    private Boolean deliveryClosed(Delivery d) {
-        Boolean result = false;
+    /**
+     * Show state if delivery closed (paid or fail)
+     */
+    private void showStateDeliveryClosed(Delivery d) {
         String mes = "";
-        if (d.getDateArchive() != null) {
-            tvStep4Title.setText(R.string.delivery_state_title_step4_finish);
-            if (d.getPaid()) {
-                ivStep4.setImageResource(R.drawable.step_circle_normal);
-                tvStep4Num.setText("+");
-                mes = getResources().getString(R.string.delivery_state_description_step4_paid) +
-                        " (" + Utils.formatDate(d.getDateArchive()) + ")";
-                tvStep4Description.setText(mes);
-            } else {
-                // Отклонена доставка
-                result = true;
-                ivStep4.setImageResource(R.drawable.step_circle_fail);
-                tvStep4Num.setText("-");
-                mes = getResources().getString(R.string.delivery_state_description_step4_fail)
-                        + "\n" + d.getCommentShop();
-                tvStep4Description.setText(mes);
-                if (d.getDateTransport() != null) {
-                    ivStep3.setImageResource(R.drawable.step_circle_fail);
-                    tvStep3Num.setText("-");
-                    ivStep2.setImageResource(R.drawable.step_circle_normal);
-                    tvStep2Num.setText("+");
-                    ivStep1.setImageResource(R.drawable.step_circle_normal);
-                    tvStep1Num.setText("+");
-                } else if (d.getDateCooking() != null) {
-                    ivStep2.setImageResource(R.drawable.step_circle_fail);
-                    tvStep2Num.setText("-");
-                    ivStep1.setImageResource(R.drawable.step_circle_normal);
-                    tvStep1Num.setText("+");
-                } else {
-                    tvStep1Title.setText(getResources().getString(R.string.delivery_state_title_step1));
-                    tvStep1Description.setText(Utils.formatDate(d.getDateArchive()));
-                    ivStep1.setImageResource(R.drawable.step_circle_fail);
-                    tvStep1Num.setText("-");
-                }
-            }
+        if (d.getPaid()) {
+            ivStep4.setImageResource(R.drawable.step_circle_current);
+            tvStep1Num.setText("+");
+            mes = getResources().getString(R.string.delivery_state_description_step1_finish) +
+                    " (" + Utils.formatDate(d.getDateCooking()) + ")";
+            tvStep1Description.setText(mes);
+            tvStep2Num.setText("+");
+            mes = getResources().getString(R.string.delivery_state_description_step2_start) +
+                    " (" + Utils.formatDate(d.getDateCooking()) + ")\n" +
+                    getResources().getString(R.string.delivery_state_description_step2_finish) +
+                    " (" + Utils.formatDate(d.getDateTransport()) + ")\n";
+            tvStep2Description.setText(mes);
+            tvStep3Num.setText("+");
+            mes = getResources().getString(R.string.delivery_state_description_step3_start) +
+                    " (" + Utils.formatDate(d.getDateTransport()) + ")\n" +
+                    getResources().getString(R.string.delivery_state_description_step3_finish) +
+                    " (" + Utils.formatDate(d.getDateArchive()) + ")\n";
+            tvStep3Description.setText(mes);
+            tvStep4Num.setText("+");
+            mes = getResources().getString(R.string.delivery_state_description_step4_paid) +
+                    " (" + Utils.formatDate(d.getDateArchive()) + ")";
+            tvStep4Description.setText(mes);
         } else {
-            tvStep4Title.setText(R.string.delivery_state_title_step4_finish);
-            ivStep4.setImageResource(R.drawable.step_circle_disable);
-            tvStep4Num.setText("4");
+            // Отклонена доставка
+            mes = getResources().getString(R.string.delivery_state_description_step4_fail) +
+                    "\n" + d.getCommentShop();
+            if (d.getDateTransport() != null) {
+                ivStep3.setImageResource(R.drawable.step_circle_fail);
+                tvStep3Num.setText("-");
+                mes = getResources().getString(R.string.delivery_state_description_step4_fail) +
+                        "\n" + Utils.formatDate(d.getDateTransport()) +
+                        "\n" + d.getCommentShop();
+                tvStep3Description.setText(mes);
+
+                ivStep2.setImageResource(R.drawable.step_circle_disable);
+                tvStep2Num.setText("+");
+                mes = getResources().getString(R.string.delivery_state_description_step2_start) +
+                        " (" + Utils.formatDate(d.getDateCooking()) + ")\n" +
+                        getResources().getString(R.string.delivery_state_description_step2_finish) +
+                        " (" + Utils.formatDate(d.getDateTransport()) + ")\n";
+                tvStep2Description.setText(mes);
+
+                ivStep1.setImageResource(R.drawable.step_circle_disable);
+                tvStep1Num.setText("+");
+                mes = getResources().getString(R.string.delivery_state_description_step1_finish) +
+                        "\n" + Utils.formatDate(d.getDateCooking());
+                tvStep1Description.setText(mes);
+            } else if (d.getDateCooking() != null) {
+                ivStep2.setImageResource(R.drawable.step_circle_fail);
+                tvStep2Description.setText(mes + "\n" + Utils.formatDate(d.getDateCooking()));
+                tvStep2Num.setText("-");
+                tvStep1Num.setText("+");
+                mes = getResources().getString(R.string.delivery_state_description_step1_finish) +
+                        "\n" + Utils.formatDate(d.getDateCooking());
+                tvStep1Description.setText(mes);
+            } else {
+                tvStep1Title.setText(getResources().getString(R.string.delivery_state_title_step1));
+                tvStep1Description.setText(mes + "\n" + Utils.formatDate(d.getDateArchive()));
+                ivStep1.setImageResource(R.drawable.step_circle_fail);
+                tvStep1Num.setText("-");
+            }
         }
-        return result;
     }
 
     private void findAllView(){
@@ -213,7 +232,7 @@ public class DeliveryStatus extends AppCompatActivity {
     private String getDeliveryPath(){
         String path = "";
         int num = new Random().nextInt(3);
-        num = 3;
+        //num = 1;
         switch (num){
             case 0:
                 path = Const.CHILD_DELIVERIES_NEW;
@@ -228,7 +247,6 @@ public class DeliveryStatus extends AppCompatActivity {
                 path = Const.CHILD_DELIVERIES_ARCHIVE;
                 break;
         }
-        Log.d("11111111", "getDeliveryPath: num = " + num + " Path = " + path);
         return path;
     }
 

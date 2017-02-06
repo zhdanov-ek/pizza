@@ -19,7 +19,7 @@
 
     <color name="colorWhite">#ffffff</color>
 
-    <color name="colorStep">#388e3c</color>
+    <color name="colorStepLine">#BDBDBD</color>
     <color name="colorStepDisable">#aed581</color>
     <color name="colorStepText">#ffffff</color>
 

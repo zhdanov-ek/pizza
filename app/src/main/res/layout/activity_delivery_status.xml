@@ -71,7 +71,7 @@
                     android:layout_height="match_parent"
                     android:layout_marginLeft="12dp"
                     android:layout_marginRight="12dp"
-                    android:background="@color/colorStep" />
+                    android:background="@color/colorStepLine" />
 
                 <TextView
                     android:id="@+id/tvStep1Description"
@@ -135,7 +135,7 @@
                     android:layout_height="match_parent"
                     android:layout_marginLeft="12dp"
                     android:layout_marginRight="12dp"
-                    android:background="@color/colorStep" />
+                    android:background="@color/colorStepLine" />
 
                 <TextView
                     android:id="@+id/tvStep2Description"
@@ -199,7 +199,7 @@
                     android:layout_height="match_parent"
                     android:layout_marginLeft="12dp"
                     android:layout_marginRight="12dp"
-                    android:background="@color/colorStep" />
+                    android:background="@color/colorStepLine" />
 
                 <TextView
                     android:id="@+id/tvStep3Description"
@@ -246,7 +246,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical|left"
                     android:paddingLeft="12dp"
-                    tools:text="Finish"
+                    android:text="Finish"
                     android:textSize="20sp"
                     android:textStyle="bold" />
             </LinearLayout>
