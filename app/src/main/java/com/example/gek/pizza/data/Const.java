@@ -14,6 +14,7 @@ public class Const {
     public static final String CHILD_NEWS = "news";
     public static final String CHILD_MENU_GROUPS = "menu_groups";
     public static final String CHILD_SETTINGS = "settings";
+    public static final String CHILD_TABLES = "tables";
 
     public static final String CHILD_ORDERS_NEW = "orders/new";
     public static final String CHILD_ORDERS_COOKING = "orders/cooking";

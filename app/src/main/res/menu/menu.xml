@@ -21,4 +21,10 @@
         android:orderInCategory="100"
         android:title="@string/action_about"
         app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_reserve_table"
+        android:orderInCategory="100"
+        android:title="@string/action_reserve_table"
+        app:showAsAction="never" />
 </menu>

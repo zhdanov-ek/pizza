@@ -109,6 +109,9 @@ public class MainActivity extends AppCompatActivity
                 Intent aboutIntent = new Intent(this, AboutActivity.class);
                 startActivity(aboutIntent);
                 break;
+            case R.id.action_reserve_table:
+                startActivity(new Intent(this, ReserveTableActivity.class));
+                break;
         }
         return super.onOptionsItemSelected(item);
     }

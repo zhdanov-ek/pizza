@@ -1,6 +1,7 @@
 package com.example.gek.pizza.activities;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -14,8 +15,11 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Display;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -42,6 +46,7 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -71,10 +76,11 @@ public class AboutActivity extends AppCompatActivity implements
     TextView tvPhone, tvEmail, tvAddress, tvLatitude, tvLongitude, tvRouteInformationTime,tvRouteInformationDistance;
     RadioButton rbtnDrive, rbtnWalk;
     RadioGroup rgDriveWalk;
-    ImageView ivFullScreen;
+    ImageView ivArrowLeft, ivArrowRight;
     ScrollView svAboutUs;
     String textPhone, textEmail, textAddress, textLatitude, textLongitude;
     LatLng myLatLng;
+    private SlidingUpPanelLayout slidingUpPanelLayout;
 
     public static final String TAG = "Init map :";
     private final String PERMISSION_DIALOG_OPEN_KEY = "permission_dialog_opened";
@@ -92,6 +98,7 @@ public class AboutActivity extends AppCompatActivity implements
     private boolean isDrive = false;
     private boolean isWalk = false;
     private boolean isFullScreen = false;
+    private boolean isPanelExpanded = false;
 
     public GoogleMap googleMap;
     public GoogleApiClient googleApiClient;
@@ -128,8 +135,14 @@ public class AboutActivity extends AppCompatActivity implements
         rgDriveWalk = (RadioGroup) findViewById(R.id.rgDriveWalk);
         rbtnDrive = (RadioButton) findViewById(R.id.rbtnDrive);
         rbtnWalk  = (RadioButton) findViewById(R.id.rbtnWalk);
-        ivFullScreen  = (ImageView) findViewById(R.id.ivArrow);
-        svAboutUs = (ScrollView) findViewById(R.id.svAboutUs);
+        ivArrowLeft  = (ImageView) findViewById(R.id.ivArrowLeft);
+        ivArrowRight  = (ImageView) findViewById(R.id.ivArrowRight);
+
+//        Подключаем слушатель только если ориентация портрет
+        slidingUpPanelLayout = (SlidingUpPanelLayout) findViewById(R.id.slidingUpPanel);
+        if (isPortraitMode()) {
+            setSlidingUpPanelLayoutListeners();
+        }
 
         googleApiClient = new GoogleApiClient.Builder(this)
                 .addApi(LocationServices.API)
@@ -155,8 +168,6 @@ public class AboutActivity extends AppCompatActivity implements
             }
         }
 
-
-
         tvEmail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -173,27 +184,13 @@ public class AboutActivity extends AppCompatActivity implements
                 startActivity(callIntent);
             }
         });
+
 //        устанавливаем тип маршрута по умолчанию
         if (isWalk==false && isDrive==false){
             isDrive = true;
             rbtnDrive.setChecked(true);
         }
-        ivFullScreen.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (isFullScreen){
-                    svAboutUs.setVisibility(View.VISIBLE);
-                    isFullScreen = false;
-                    ivFullScreen.setRotation(0);
 
-                } else{
-                    svAboutUs.setVisibility(View.GONE);
-                    isFullScreen = true;
-                    ivFullScreen.setRotation(180);
-                }
-
-            }
-        });
         rgDriveWalk.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener()
         {
             @Override
@@ -218,6 +215,65 @@ public class AboutActivity extends AppCompatActivity implements
 
     }
 
+    private void setSlidingUpPanelLayoutListeners() {
+        final ImageView left = (ImageView) findViewById(R.id.ivArrowLeft);
+        final ImageView right = (ImageView) findViewById(R.id.ivArrowRight);
+        animationArrowRotation = AnimationUtils.loadAnimation(this, R.anim.panel_arrows);
+        animationArrowRotation.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                if (isPanelExpanded) {
+                    left.setRotation(0);
+                    right.setRotation(0);
+                    isPanelExpanded = false;
+                } else {
+                    left.setRotation(180);
+                    right.setRotation(180);
+                    isPanelExpanded = true;
+                }
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+            }
+        });
+        slidingUpPanelLayout.addPanelSlideListener(new SlidingUpPanelLayout.PanelSlideListener() {
+            @Override
+            public void onPanelSlide(View panel, float slideOffset) {
+            }
+
+            @Override
+            public void onPanelStateChanged(View panel,
+                                            SlidingUpPanelLayout.PanelState previousState,
+                                            SlidingUpPanelLayout.PanelState newState) {
+                if ((isPanelExpanded && newState == SlidingUpPanelLayout.PanelState.COLLAPSED)
+                        || (!isPanelExpanded && newState == SlidingUpPanelLayout.PanelState.EXPANDED)) {
+                    left.startAnimation(animationArrowRotation);
+                    right.startAnimation(animationArrowRotation);
+                }
+            }
+        });
+        slidingUpPanelLayout.setFadeOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                slidingUpPanelLayout.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
+            }
+        });
+    }
+
+    private boolean isPortraitMode() {
+        Display display = ((WindowManager) getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
+        int rotation = display.getRotation();
+        if (rotation == 0){
+            return true;
+        } else {
+            return false;
+        }
+    }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
@@ -246,10 +302,10 @@ public class AboutActivity extends AppCompatActivity implements
             listOfMarkers = savedInstanceState.getParcelableArrayList(ROUTE_MARKERS);
             tvRouteInformationDistance.setText(savedInstanceState.getString(DISTANCE_MAP,""));
             tvRouteInformationTime.setText(savedInstanceState.getString(TIME_MAP,""));
-            if (isFullScreen){
-                isFullScreen = false;
-                ivFullScreen.callOnClick();
-            }
+//            if (isFullScreen){
+//                isFullScreen = false;
+//                ivFullScreen.callOnClick();
+//            }
         }
     }
 

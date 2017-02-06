@@ -4,7 +4,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 /**
- * Model of news
+ * Model of tables
  */
 
 public class News implements Parcelable {
