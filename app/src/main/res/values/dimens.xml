@@ -44,9 +44,8 @@
 
     <!-- MENU_ORDERS -->
     <dimen name="item_menu_orders_width">150dp</dimen>
-    <dimen name="item_menu_orders_height">170dp</dimen>
-    <dimen name="item_menu_orders_title_height">40dp</dimen>
-    <dimen name="item_menu_orders_photo_height">130dp</dimen>
+    <dimen name="item_menu_orders_height">130dp</dimen>
+
 
     <!-- DISH ITEM -->
     <dimen name="item_dish_width">150dp</dimen>

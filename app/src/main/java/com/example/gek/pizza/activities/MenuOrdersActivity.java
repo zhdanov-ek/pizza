@@ -24,6 +24,11 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
+/**
+ * Показывает список групп меню. По клику на айтеме открывается другое окно со списком блюд
+ * Размер картинки 500х300 пикселей
+ * */
+
 public class MenuOrdersActivity extends AppCompatActivity {
 
     private static final String TAG = "Menu orders ";

@@ -127,6 +127,7 @@ public class MenuOrdersEditActivity extends AppCompatActivity implements View.On
             ivPhoto.setImageResource(R.drawable.dish_empty);
         } else {
             tvName.setText(menuGroup.getName());
+            etName.setText(menuGroup.getName());
             if (menuGroup.getPhotoUrl().length() > 0){
                 Glide.with(this)
                         .load(menuGroup.getPhotoUrl())

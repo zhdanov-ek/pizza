@@ -21,6 +21,7 @@ import com.example.gek.pizza.adapters.DishesAdapter;
 import com.example.gek.pizza.adapters.NewsAdapter;
 import com.example.gek.pizza.data.Const;
 import com.example.gek.pizza.data.Dish;
+import com.example.gek.pizza.data.MenuGroup;
 import com.example.gek.pizza.data.News;
 import com.example.gek.pizza.helpers.Utils;
 import com.google.firebase.database.DataSnapshot;
@@ -29,14 +30,15 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
+/** Отображение списка блюд в разделе */
+
 public class DishesActivity extends AppCompatActivity {
 
     private TextView tvEmpty;
     private RecyclerView rv;
     private Context ctx = this;
     private FloatingActionButton fab;
-    private String keyGroup = "";
-    private String nameGroup = "";
+    private MenuGroup menuGroup;
     private DishesAdapter dishesAdapter;
     private ArrayList<Dish> allDishes = new ArrayList<>();
     private ArrayList<Dish> selectedDishes;
@@ -56,12 +58,11 @@ public class DishesActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         if (intent != null) {
-            keyGroup = intent.getStringExtra(Const.DISH_GROUP_KEY);
-            nameGroup = intent.getStringExtra(Const.DISH_GROUP_NAME);
+            menuGroup = intent.getParcelableExtra(Const.EXTRA_MENU_GROUP);
         }
 
         Toolbar myToolbar = (Toolbar) findViewById(R.id.toolBar);
-        myToolbar.setTitle(nameGroup);
+        myToolbar.setTitle(menuGroup.getName());
         setSupportActionBar(myToolbar);
 
         fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -82,7 +83,7 @@ public class DishesActivity extends AppCompatActivity {
                     allDishes.add(currentDish);
                 }
 
-                selectedDishes = Utils.selectGroup(allDishes, keyGroup);
+                selectedDishes = Utils.selectGroup(allDishes, menuGroup.getKey());
                 if (selectedDishes.size() == 0){
                     tvEmpty.setVisibility(View.VISIBLE);
                     rv.setVisibility(View.GONE);
@@ -111,28 +112,25 @@ public class DishesActivity extends AppCompatActivity {
         public void onClick(View view) {
             Intent addDish = new Intent(ctx, DishEditActivity.class);
             addDish.putExtra(Const.MODE, Const.MODE_NEW);
-            addDish.putExtra(Const.DISH_GROUP_KEY, keyGroup);
+            addDish.putExtra(Const.DISH_GROUP_KEY, menuGroup.getKey());
             startActivity(addDish);
         }
     };
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu, menu);
-        return true;
+        menu.add(0, 1, 0, "Edit group");
+        return super.onCreateOptionsMenu(menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
-            case R.id.action_basket:
-                startActivity(new Intent(this, BasketActivity.class));
-                break;
-            case R.id.action_settings:
-                startActivity(new Intent(this, SettingsActivity.class));
-                break;
-            case R.id.action_about:
-                startActivity(new Intent(this, AboutActivity.class));
+            case 1:
+                Intent editIntent = new Intent(this, MenuOrdersEditActivity.class);
+                editIntent.putExtra(Const.MODE, Const.MODE_EDIT);
+                editIntent.putExtra(Const.EXTRA_MENU_GROUP, menuGroup);
+                startActivity(editIntent);
                 break;
         }
         return super.onOptionsItemSelected(item);

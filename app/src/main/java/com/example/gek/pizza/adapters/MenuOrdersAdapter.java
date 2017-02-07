@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -18,19 +19,24 @@ import com.example.gek.pizza.data.Const;
 import com.example.gek.pizza.data.MenuGroup;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 
 /**
- * Адаптер для наполнения главного меню заказов
+ * Адаптер для наполнения главного меню категорий блюд
  */
 
 public class MenuOrdersAdapter extends RecyclerView.Adapter<MenuOrdersAdapter.ViewHolder> {
     private ArrayList<MenuGroup> menuList;
     private Context ctx;
+    private int[] colorsRes;
+    private Random random;
 
     public MenuOrdersAdapter( Context ctx, ArrayList<MenuGroup> menuList) {
         this.menuList = menuList;
         this.ctx = ctx;
+        colorsRes = ctx.getResources().getIntArray(R.array.colors);
+        random = new Random();
     }
 
     // Создаем вью которые заполнят экран и будут обновляться данными при прокрутке
@@ -44,6 +50,7 @@ public class MenuOrdersAdapter extends RecyclerView.Adapter<MenuOrdersAdapter.Vi
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         final MenuGroup menuGroup = menuList.get(position);
+        holder.llContainer.setBackgroundColor(colorsRes[random.nextInt(colorsRes.length-1)]);
         holder.tvName.setText(menuGroup.getName());
         if ((menuGroup.getPhotoUrl() != null) && (menuGroup.getPhotoUrl().length() > 0)){
             Glide.with(ctx)
@@ -62,23 +69,24 @@ public class MenuOrdersAdapter extends RecyclerView.Adapter<MenuOrdersAdapter.Vi
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+        private LinearLayout llContainer;
         private TextView tvName;
         private ImageView ivPhoto;
 
         public ViewHolder(View itemView) {
             super(itemView);
+            llContainer = (LinearLayout) itemView.findViewById(R.id.llContainer);
             tvName = (TextView) itemView.findViewById(R.id.tvName);
             ivPhoto = (ImageView) itemView.findViewById(R.id.ivPhoto);
             itemView.setOnClickListener(this);
         }
 
 
-        // Запускаем активити с блюдами выбранной категории (передаем ключ группы)
+        // Запускаем активити с блюдами выбранной категории (передаем сущность группы)
         @Override
         public void onClick(View view) {
             Intent dishGroupOpen = new Intent(ctx, DishesActivity.class);
-            dishGroupOpen.putExtra(Const.DISH_GROUP_NAME, menuList.get(getAdapterPosition()).getName());
-            dishGroupOpen.putExtra(Const.DISH_GROUP_KEY, menuList.get(getAdapterPosition()).getKey());
+            dishGroupOpen.putExtra(Const.EXTRA_MENU_GROUP, menuList.get(getAdapterPosition()));
             ctx.startActivity(dishGroupOpen);
         }
     }

@@ -25,4 +25,22 @@
 
     <color name="colorPriceBackground">#8BC34A</color>
     <color name="colorPriceFont">#000000</color>
+
+    <!-- COLORS FOR MENU GROUP -->
+    <color name="red_200">#EF9A9A</color>
+    <color name="lime_300">#DCE775</color>
+    <color name="cyan_300">#4DD0E1</color>
+    <color name="orange_300">#FFB74D</color>
+    <color name="green_300">#81C784</color>
+    <color name="blue_300">#64B5F6</color>
+
+    <integer-array name="colors">
+        <item>@color/cyan_300</item>
+        <item>@color/red_200</item>
+        <item>@color/lime_300</item>
+        <item>@color/orange_300</item>
+        <item>@color/green_300</item>
+        <item>@color/blue_300</item>
+    </integer-array>
+
 </resources>
