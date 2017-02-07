@@ -30,13 +30,13 @@ public class MenuOrdersAdapter extends RecyclerView.Adapter<MenuOrdersAdapter.Vi
     private ArrayList<MenuGroup> menuList;
     private Context ctx;
     private int[] colorsRes;
-    private Random random;
+    private int numColor;
 
     public MenuOrdersAdapter( Context ctx, ArrayList<MenuGroup> menuList) {
         this.menuList = menuList;
         this.ctx = ctx;
-        colorsRes = ctx.getResources().getIntArray(R.array.colors);
-        random = new Random();
+        this.colorsRes = ctx.getResources().getIntArray(R.array.colors);
+        this.numColor = 0;
     }
 
     // Создаем вью которые заполнят экран и будут обновляться данными при прокрутке
@@ -50,16 +50,21 @@ public class MenuOrdersAdapter extends RecyclerView.Adapter<MenuOrdersAdapter.Vi
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         final MenuGroup menuGroup = menuList.get(position);
-        holder.llContainer.setBackgroundColor(colorsRes[random.nextInt(colorsRes.length-1)]);
+        holder.llContainer.setBackgroundColor(colorsRes[numColor++]);
+        if (numColor == colorsRes.length){
+            numColor = 0;
+        }
         holder.tvName.setText(menuGroup.getName());
         if ((menuGroup.getPhotoUrl() != null) && (menuGroup.getPhotoUrl().length() > 0)){
             Glide.with(ctx)
                     .load(menuGroup.getPhotoUrl())
                     .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                    .error(R.drawable.dish_empty)
+                    .error(R.drawable.menu_group_empty)
                     .into(holder.ivPhoto);
         } else {
-            holder.ivPhoto.setImageResource(R.drawable.dish_empty);
+            Glide.with(ctx)
+                    .load(R.drawable.menu_group_empty)
+                    .into(holder.ivPhoto);
         }
     }
 
@@ -90,4 +95,5 @@ public class MenuOrdersAdapter extends RecyclerView.Adapter<MenuOrdersAdapter.Vi
             ctx.startActivity(dishGroupOpen);
         }
     }
+
 }

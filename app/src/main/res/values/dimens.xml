@@ -45,6 +45,8 @@
     <!-- MENU_ORDERS -->
     <dimen name="item_menu_orders_width">150dp</dimen>
     <dimen name="item_menu_orders_height">130dp</dimen>
+    <dimen name="item_menu_orders_offset">5dp</dimen>
+
 
 
     <!-- DISH ITEM -->

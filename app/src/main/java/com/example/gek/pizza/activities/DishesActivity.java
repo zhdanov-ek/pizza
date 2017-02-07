@@ -120,6 +120,7 @@ public class DishesActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         menu.add(0, 1, 0, "Edit group");
+        menu.add(0, 2, 0, "Remove group");
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -132,7 +133,26 @@ public class DishesActivity extends AppCompatActivity {
                 editIntent.putExtra(Const.EXTRA_MENU_GROUP, menuGroup);
                 startActivity(editIntent);
                 break;
+            case 2:
+                removeGroupDishes();
+                finish();
+                break;
+
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    // Remove group dishes if she's empty
+    private void removeGroupDishes(){
+        if (Utils.hasInternet(ctx)){
+            if (selectedDishes.isEmpty()){
+                Const.db.child(Const.CHILD_MENU_GROUPS).child(menuGroup.getKey()).setValue(null);
+                Toast.makeText(ctx, "Group " + menuGroup.getName() + " removed", Toast.LENGTH_LONG).show();
+            } else {
+                Toast.makeText(ctx, "Group is not empty!", Toast.LENGTH_LONG).show();
+            }
+        } else {
+            Toast.makeText(ctx, R.string.mes_no_internet, Toast.LENGTH_LONG).show();
+        }
     }
 }

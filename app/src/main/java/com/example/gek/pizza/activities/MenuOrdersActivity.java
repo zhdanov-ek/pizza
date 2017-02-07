@@ -2,6 +2,10 @@ package com.example.gek.pizza.activities;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
+import android.graphics.Rect;
+import android.support.annotation.DimenRes;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -48,9 +52,18 @@ public class MenuOrdersActivity extends AppCompatActivity {
 
         rv = (RecyclerView) findViewById(R.id.rv);
 
-        // задаем лаяют с твумя столбцами
-        GridLayoutManager lLayout = new GridLayoutManager(MenuOrdersActivity.this, 2);
+        // задаем лаяют с твумя или тремя столбцами в зависимости от поворота экрана
+        GridLayoutManager lLayout;
+        if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT){
+            lLayout = new GridLayoutManager(MenuOrdersActivity.this, 2);
+        } else {
+            lLayout = new GridLayoutManager(MenuOrdersActivity.this, 3);
+        }
         rv.setLayoutManager(lLayout);
+
+        // Выравниваем отступы между айтемами
+        ItemOffsetDecoration itemDecoration = new ItemOffsetDecoration(ctx, R.dimen.item_menu_orders_offset);
+        rv.addItemDecoration(itemDecoration);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(fabListener);
@@ -124,4 +137,24 @@ public class MenuOrdersActivity extends AppCompatActivity {
         }
     };
 
+
+    /** С помощью этого класса регулируем отступы между айтемами */
+    public class ItemOffsetDecoration extends RecyclerView.ItemDecoration {
+        private int mItemOffset;
+
+        public ItemOffsetDecoration(int itemOffset) {
+            mItemOffset = itemOffset;
+        }
+
+        public ItemOffsetDecoration(@NonNull Context context, @DimenRes int itemOffsetId) {
+            this(context.getResources().getDimensionPixelSize(itemOffsetId));
+        }
+
+        @Override
+        public void getItemOffsets(Rect outRect, View view, RecyclerView parent,
+                                   RecyclerView.State state) {
+            super.getItemOffsets(outRect, view, parent, state);
+            outRect.set(mItemOffset, mItemOffset, mItemOffset, mItemOffset);
+        }
+    }
 }

@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -29,7 +30,9 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Random;
 
 import static com.example.gek.pizza.data.Const.db;
 
@@ -39,7 +42,9 @@ public class MenuOrdersEditActivity extends AppCompatActivity implements View.On
     private MenuGroup oldMenuGroup;
     private MenuGroup changedMenuGroup;
     private Uri uriPhoto;
+    private int color;
 
+    private LinearLayout llContainer;
     ProgressBar progressBar;
     EditText etName;
     TextView tvName;
@@ -59,8 +64,12 @@ public class MenuOrdersEditActivity extends AppCompatActivity implements View.On
         myToolbar.setTitle("");
         setSupportActionBar(myToolbar);
 
-        progressBar = (ProgressBar) findViewById(R.id.progressBar);
+        // Random color for background of item
+        int[] colors = getResources().getIntArray(R.array.colors);
+        color = colors[new Random().nextInt(colors.length - 1)];
 
+        progressBar = (ProgressBar) findViewById(R.id.progressBar);
+        llContainer = (LinearLayout) findViewById(R.id.llContainer);
         tvName = (TextView) findViewById(R.id.tvName);
 
         etName = (EditText) findViewById(R.id.etName);
@@ -101,16 +110,18 @@ public class MenuOrdersEditActivity extends AppCompatActivity implements View.On
 
 
 
-    /** Получаем URI фото с галереи */
+    /** Получаем URI фото с галереи и показываем его в макете */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK && data != null ) {
             if (requestCode == Const.REQUEST_LOAD_IMG ) {
-                Uri uri = data.getData();
-                ivPhoto.setImageURI(uri);
-                uriPhoto = uri;
-
+                uriPhoto = data.getData();
+                Glide.with(this)
+                        .load(uriPhoto)
+                        .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                        .error(R.drawable.menu_group_empty)
+                        .into(ivPhoto);
                 if ((!isNewMenuGroup) && (oldMenuGroup.getPhotoName().length() > 0)) {
                     isNeedRemovePhoto = true;
                 }
@@ -121,10 +132,13 @@ public class MenuOrdersEditActivity extends AppCompatActivity implements View.On
     }
 
     private void fillValues(MenuGroup menuGroup){
+        llContainer.setBackgroundColor(color);
         if (menuGroup == null) {
             tvName.setText("");
             uriPhoto = null;
-            ivPhoto.setImageResource(R.drawable.dish_empty);
+            Glide.with(this)
+                    .load(R.drawable.menu_group_empty)
+                    .into(ivPhoto);
         } else {
             tvName.setText(menuGroup.getName());
             etName.setText(menuGroup.getName());
@@ -132,10 +146,14 @@ public class MenuOrdersEditActivity extends AppCompatActivity implements View.On
                 Glide.with(this)
                         .load(menuGroup.getPhotoUrl())
                         .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                        .error(R.drawable.dish_empty)
+                        .error(R.drawable.menu_group_empty)
                         .into(ivPhoto);
-            } else
-                ivPhoto.setImageResource(R.drawable.dish_empty);
+            } else {
+                Glide.with(this)
+                        .load(R.drawable.menu_group_empty)
+                        .into(ivPhoto);
+            }
+
         }
     }
 
@@ -229,13 +247,6 @@ public class MenuOrdersEditActivity extends AppCompatActivity implements View.On
         switch (view.getId()){
             case R.id.btnOk:
                 sendToServer();
-                break;
-            case R.id.btnRemovePhoto:
-                if ((oldMenuGroup != null) &&(oldMenuGroup.getPhotoName().length() > 0)){
-                    isNeedRemovePhoto = true;
-                }
-                uriPhoto = null;
-                ivPhoto.setImageResource(R.drawable.dish_empty);
                 break;
             case R.id.ivPhoto:
                 Utils.choosePhoto(this);
