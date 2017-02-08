@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include layout="@layout/toolbar_reserve_table" />
 
 <com.sothree.slidinguppanel.SlidingUpPanelLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:sothree="http://schemas.android.com/apk/res-auto"
@@ -63,14 +69,13 @@
 
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
             <ScrollView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="3">
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
                 <RelativeLayout
                     android:id="@+id/settings_reserve_table"
@@ -104,32 +109,11 @@
                         android:background="@null"
                         android:scaleType="centerInside"
                         android:src="@drawable/table8" />
-
                 </RelativeLayout>
             </ScrollView>
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical">
-
-                <Button
-                    android:id="@+id/btnTableOk"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:text="@string/title_button_save" />
-
-                <Button
-                    android:id="@+id/btnTableDelete"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:text="@string/title_button_remove" />
-            </LinearLayout>
         </LinearLayout>
     </LinearLayout>
 
 
 </com.sothree.slidinguppanel.SlidingUpPanelLayout>
+</LinearLayout>

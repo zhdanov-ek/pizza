@@ -20,6 +20,7 @@ import android.widget.Toast;
 import com.example.gek.pizza.R;
 import com.example.gek.pizza.data.Const;
 import com.example.gek.pizza.services.CheckDeliveryService;
+import com.example.gek.pizza.services.CheckReservedTablesService;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
@@ -159,9 +160,11 @@ public class MainActivity extends AppCompatActivity
             //todo переместить запуск сервиса в настройки куда-нибудь
             case R.id.btnStartService:
                 startService(new Intent(this, CheckDeliveryService.class));
+                startService(new Intent(this, CheckReservedTablesService.class));
                 break;
             case R.id.btnStopService:
                 stopService(new Intent(this, CheckDeliveryService.class));
+                stopService(new Intent(this, CheckReservedTablesService.class));
                 break;
 
         }

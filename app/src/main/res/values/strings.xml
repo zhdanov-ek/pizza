@@ -24,6 +24,8 @@
     <string name="title_settings">Settings</string>
     <string name="title_basket">Basket</string>
     <string name="title_delivery">Shipping clearance</string>
+    <string name="title_reserve_table">Reserve table</string>
+    <string name="title_reserve_table_delete">Delete</string>
 
 
     <string name="order_menu">Menu for order</string>
@@ -83,7 +85,9 @@
 
     <string name="title_button_save">Ok</string>
     <string name="title_button_remove">Remove</string>
+    <string name="title_button_reserve">Reserve table</string>
 
-
+    <string name="notification_reserved_table_title">New reserved tables</string>
+    <string name="notification_reserved_table_content">Total reserved tables</string>
 
 </resources>

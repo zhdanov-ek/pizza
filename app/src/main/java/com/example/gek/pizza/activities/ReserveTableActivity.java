@@ -2,9 +2,12 @@ package com.example.gek.pizza.activities;
 
 import android.content.ClipData;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Display;
@@ -15,12 +18,15 @@ import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.RelativeLayout.LayoutParams;
+import android.widget.TextView;
 
 import com.example.gek.pizza.R;
 import com.example.gek.pizza.data.Const;
+import com.example.gek.pizza.data.OrderTable;
 import com.example.gek.pizza.data.Table;
 import com.example.gek.pizza.helpers.RotationGestureDetector;
 import com.google.firebase.database.DataSnapshot;
@@ -28,7 +34,9 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import static com.example.gek.pizza.data.Const.db;
 
@@ -49,7 +57,12 @@ public class ReserveTableActivity extends AppCompatActivity implements RotationG
     private boolean isPanelExpanded = false, isPanelCollapsedDragAndDrop = false;
     boolean isNewTable;
     private ArrayList<Table> allTables;
+    private ArrayList<OrderTable> allReservedTables;
     Button btnOk, btnRemove;
+    Toolbar myToolbar;
+    ImageButton ibTrash, ibOk, ibReserveTable;
+    TextView tvOk, tvReserveTable;
+    SimpleDateFormat shortenedDateFormat;
 
     private final String IS_PANEL_EXPANDED = "is_panel_expanded";
     private final String IS_PANEL_COLLAPSED_DRAG_AND_DROP = "is_panel_collapsed_drag_and_drop";
@@ -62,7 +75,55 @@ public class ReserveTableActivity extends AppCompatActivity implements RotationG
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reserve_table);
 
+        shortenedDateFormat = new SimpleDateFormat("yyyyMMdd");
+
+        myToolbar = (Toolbar) findViewById(R.id.toolBar_reserve_table);
+        myToolbar.setTitle(R.string.title_reserve_table);
+        setSupportActionBar(myToolbar);
+
+        ibOk = (ImageButton) findViewById(R.id.ibOk);
+        tvOk = (TextView) findViewById(R.id.tvOk);
+        ibTrash = (ImageButton) findViewById(R.id.ibTrash);
+        ibReserveTable = (ImageButton) findViewById(R.id.ibReserveTable);
+        tvReserveTable = (TextView) findViewById(R.id.tvReserveTable);
+
+
+        ibOk.setOnClickListener(onClickListenerBtn);
+        tvOk.setOnClickListener(onClickListenerBtn);
+        ibReserveTable.setOnClickListener(onClickListenerBtn);
+        tvReserveTable.setOnClickListener(onClickListenerBtn);
+
+        ibTrash.setVisibility(View.GONE);
+        ibOk.setVisibility(View.GONE);
+        tvOk.setVisibility(View.GONE);
+        ibReserveTable.setVisibility(View.GONE);
+        tvReserveTable.setVisibility(View.GONE);
+
+
+        myToolbar.setOnDragListener(new View.OnDragListener() {
+            @Override
+            public boolean onDrag(View view, DragEvent dragEvent) {
+                switch (dragEvent.getAction()) {
+                    case DragEvent.ACTION_DROP:
+                        deleteTable();
+                        myToolbar.setTitle(R.string.title_reserve_table);
+                        myToolbar.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorPrimary));
+                        ibOk.setVisibility(View.VISIBLE);
+                        tvOk.setVisibility(View.VISIBLE);
+                        ibReserveTable.setVisibility(View.GONE);
+                        tvReserveTable.setVisibility(View.GONE);
+
+                        ibTrash.setVisibility(View.GONE);
+                        break;
+                    default:
+                        break;
+                }
+                return true;
+            }
+        });
+
         allTables = new ArrayList<>();
+        allReservedTables = new ArrayList<>();
 
         ValueEventListener tablesListener = new ValueEventListener() {
             @Override
@@ -85,6 +146,28 @@ public class ReserveTableActivity extends AppCompatActivity implements RotationG
 
         Const.db.child(Const.CHILD_TABLES).addValueEventListener(tablesListener);
 
+        ValueEventListener tablesReservedListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                long num = dataSnapshot.getChildrenCount();
+                allReservedTables.clear();
+                for (DataSnapshot child : dataSnapshot.getChildren()) {
+                    OrderTable orderedTable = child.getValue(OrderTable.class);
+                    if(shortenedDateFormat.format(child.getValue(OrderTable.class).getDate())
+                            .equals((shortenedDateFormat.format(new Date())))){
+                        allReservedTables.add(orderedTable);
+                    }
+                }
+                updateOrderedTable();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+            }
+        };
+
+        Const.db.child(Const.CHILD_RESERVED_TABLES_NEW).addValueEventListener(tablesReservedListener);
+
         mRotationDetector = new RotationGestureDetector(this);
 
         displayMetrics = new DisplayMetrics();
@@ -96,11 +179,6 @@ public class ReserveTableActivity extends AppCompatActivity implements RotationG
         ivAddTable8 = (ImageView) findViewById(R.id.ivAddTable8);
         rlReserveTable = (RelativeLayout) findViewById(R.id.activity_reserve_table);
         rlSettingsReserveTable = (RelativeLayout) findViewById(R.id.settings_reserve_table);
-        btnOk = (Button) findViewById(R.id.btnTableOk);
-        btnRemove = (Button) findViewById(R.id.btnTableDelete);
-
-        btnOk.setOnClickListener(onClickListenerBtn);
-        btnRemove.setOnClickListener(onClickListenerBtn);
 
         ivAddTable4.setOnTouchListener(onClickListenerNewTable);
         ivAddTable6.setOnTouchListener(onClickListenerNewTable);
@@ -163,14 +241,16 @@ public class ReserveTableActivity extends AppCompatActivity implements RotationG
                     layoutParams = (RelativeLayout.LayoutParams) ivTable.getLayoutParams();
                     Log.d(msg, "Action is DragEvent.ACTION_DRAG_STARTED");
                     break;
-                case DragEvent.ACTION_DRAG_ENTERED:
-
-                    Log.d(msg, "Action is DragEvent.ACTION_DRAG_ENTERED");
-                    break;
-                case DragEvent.ACTION_DRAG_EXITED:
-                    Log.d(msg, "Action is DragEvent.ACTION_DRAG_EXITED");
-                    break;
                 case DragEvent.ACTION_DRAG_LOCATION:
+                    myToolbar.setTitle(R.string.title_reserve_table_delete);
+                    myToolbar.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorAccent));
+
+                    ibOk.setVisibility(View.GONE);
+                    tvOk.setVisibility(View.GONE);
+                    ibReserveTable.setVisibility(View.GONE);
+                    tvReserveTable.setVisibility(View.GONE);
+                    ibTrash.setVisibility(View.VISIBLE);
+
                     if (isPanelExpanded) {
                         slidingUpPanelLayout.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
                         isPanelCollapsedDragAndDrop = true;
@@ -178,11 +258,17 @@ public class ReserveTableActivity extends AppCompatActivity implements RotationG
                     }
                     Log.d(msg, "Action is DragEvent.ACTION_DRAG_LOCATION");
                     break;
-                case DragEvent.ACTION_DRAG_ENDED:
-                    Log.d(msg, "Action is DragEvent.ACTION_DRAG_ENDED");
-                    break;
                 case DragEvent.ACTION_DROP:
                     Log.d(msg, "Action is DragEvent.ACTION_DRAG_DROPPED");
+
+                    myToolbar.setTitle(R.string.title_reserve_table);
+                    myToolbar.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorPrimary));
+
+                    ibOk.setVisibility(View.VISIBLE);
+                    tvOk.setVisibility(View.VISIBLE);
+                    ibReserveTable.setVisibility(View.GONE);
+                    tvReserveTable.setVisibility(View.GONE);
+                    ibTrash.setVisibility(View.GONE);
 
                     xCoordinate = (int) event.getX() - (ivTable.getWidth() / 2);
                     yCootdinate = (int) event.getY() - (ivTable.getHeight() / 2);
@@ -274,6 +360,8 @@ public class ReserveTableActivity extends AppCompatActivity implements RotationG
                     }
                     ivTable = (ImageView) v;
                     ivTable.setBackgroundColor(Color.GREEN);
+                    tvReserveTable.setVisibility(View.VISIBLE);
+                    ibReserveTable.setVisibility(View.VISIBLE);
 
                     return false;
                 }
@@ -284,28 +372,6 @@ public class ReserveTableActivity extends AppCompatActivity implements RotationG
     private View.OnDragListener onDragListenerSettings = new View.OnDragListener() {
         @Override
         public boolean onDrag(View v, DragEvent event) {
-            switch (event.getAction()) {
-                case DragEvent.ACTION_DRAG_STARTED:
-                    Log.d(msg, "Action is DragEvent.ACTION_DRAG_STARTED");
-                    break;
-                case DragEvent.ACTION_DRAG_ENTERED:
-                    Log.d(msg, "Action is DragEvent.ACTION_DRAG_ENTERED");
-                    break;
-                case DragEvent.ACTION_DRAG_EXITED:
-                    Log.d(msg, "Action is DragEvent.ACTION_DRAG_EXITED");
-                    break;
-                case DragEvent.ACTION_DRAG_LOCATION:
-                    Log.d(msg, "Action is DragEvent.ACTION_DRAG_LOCATION");
-                    break;
-                case DragEvent.ACTION_DRAG_ENDED:
-                    Log.d(msg, "Action is DragEvent.ACTION_DRAG_ENDED");
-                    break;
-                case DragEvent.ACTION_DROP:
-                    Log.d(msg, "Action is DragEvent.ACTION_DRAG_DROPPED");
-                    break;
-                default:
-                    break;
-            }
             return true;
         }
     };
@@ -315,15 +381,51 @@ public class ReserveTableActivity extends AppCompatActivity implements RotationG
         @Override
         public void onClick(View view) {
             switch (view.getId()){
-                case R.id.btnTableOk:
+                case R.id.ibOk:
                     sendToServer();
                     break;
-                case R.id.btnTableDelete:
-                    deleteTable();
+                case R.id.tvOk:
+                    sendToServer();
+                    break;
+                case R.id.ibReserveTable:
+                    if(ivTable!=null){
+                        reserveTable();
+                    }
+                    break;
+                case R.id.tvReserveTable:
+                    if(ivTable!=null) {
+                        reserveTable();
+                    }
                     break;
             }
         }
     };
+
+    public void reserveTable(){
+        for (Table table : allTables) {
+            if (table.getTableId() == ivTable.getId()) {
+                Intent intentReserveTable = new Intent(this, ReserveTableCreationActivity.class);
+                intentReserveTable.putExtra(Const.EXTRA_TABLE, table);
+                intentReserveTable.putExtra(Const.EXTRA_TABLE_KEY, table.getKey());
+                startActivityForResult(intentReserveTable, Const.REQUEST_RESERVE_TABLE);
+                break;
+            }
+        }
+
+        tvReserveTable.setVisibility(View.GONE);
+        ibReserveTable.setVisibility(View.GONE);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if ((requestCode == Const.REQUEST_RESERVE_TABLE) && (resultCode == RESULT_OK) && (data != null)) {
+            if (data.hasExtra(Const.EXTRA_TABLE)) {
+                Table table = data.getParcelableExtra(Const.EXTRA_TABLE);
+                ivTable = (ImageView) findViewById(table.getTableId());
+                ivTable.setBackgroundColor(Color.GRAY);
+            }
+        }
+    }
 
     public void deleteTable(){
         if (ivTable!=null){
@@ -342,6 +444,19 @@ public class ReserveTableActivity extends AppCompatActivity implements RotationG
 
     public int findCoordinates(int coordinate, int sizeWidthHeight, int resolution) {
         return (int) (coordinate * sizeWidthHeight) / resolution;
+    }
+
+
+
+    private void updateOrderedTable(){
+        for (OrderTable orderedTable : allReservedTables) {
+            for (Table table : allTables) {
+                if(table.getKey().equals(orderedTable.getTableKey())){
+                    ImageView reservedTable = (ImageView) findViewById(table.getTableId());
+                    reservedTable.setBackgroundColor(Color.GRAY);
+                }
+            }
+        }
     }
 
     private void updateTables() {
@@ -390,6 +505,8 @@ public class ReserveTableActivity extends AppCompatActivity implements RotationG
 
             db.child(Const.CHILD_TABLES).child(newKey).setValue(table);
         }
+        ibOk.setVisibility(View.GONE);
+        tvOk.setVisibility(View.GONE);
 
 //        finish();
     }
@@ -517,6 +634,8 @@ public class ReserveTableActivity extends AppCompatActivity implements RotationG
             float angle = rotationDetector.getAngle();
             ivTable.setRotation(ivTable.getRotation() + (-angle));
             Log.d("RotationGestureDetector", "Rotation: " + Float.toString(angle));
+            ibOk.setVisibility(View.VISIBLE);
+            tvOk.setVisibility(View.VISIBLE);
         }
     }
 }

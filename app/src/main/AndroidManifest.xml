@@ -37,6 +37,7 @@
         <activity android:name=".activities.OrdersActivity" />
         <activity android:name=".activities.SettingsActivity" />
         <activity android:name=".activities.DishShowActivity" />
+        <activity android:name=".activities.ReserveTableCreationActivity" />
 
         <meta-data
             android:name="com.google.android.gms.version"
@@ -49,8 +50,9 @@
         <activity android:name=".activities.DeliveryCreationActivity" />
 
         <service android:name=".services.CheckDeliveryService" />
+        <service android:name=".services.CheckReservedTablesService" />
 
-        <activity android:name=".activities.ReserveTableActivity"></activity>
+        <activity android:name=".activities.ReserveTableActivity"/>
     </application>
 
 </manifest>

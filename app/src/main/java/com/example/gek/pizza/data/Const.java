@@ -15,11 +15,14 @@ public class Const {
     public static final String CHILD_MENU_GROUPS = "menu_groups";
     public static final String CHILD_SETTINGS = "settings";
     public static final String CHILD_TABLES = "tables";
+    public static final String CHILD_RESERVED_TABLES_NEW = "reserved_tables/new";
+    public static final String CHILD_RESERVED_TABLES_ARCHIVE = "reserved_tables/archive";
 
     public static final String CHILD_ORDERS_NEW = "orders/new";
     public static final String CHILD_ORDERS_COOKING = "orders/cooking";
     public static final String CHILD_ORDERS_TRANSPORTATION = "orders/transportation";
     public static final String CHILD_ORDERS_ARCHIVE = "orders/archive";
+
 
 
     // Storage
@@ -38,6 +41,8 @@ public class Const {
     public static final String EXTRA_NEWS = "news_object";
     public static final String EXTRA_DISH = "dish_object";
     public static final String EXTRA_MENU_GROUP = "menu_group_object";
+    public static final String EXTRA_TABLE = "table_object";
+    public static final String EXTRA_TABLE_KEY = "table_object_key";
 
     public static final String DISH_GROUP_KEY = "dish_group_key";
     public static final String DISH_GROUP_NAME = "dish_group_name";
@@ -47,6 +52,7 @@ public class Const {
     public static final int REQUEST_LOAD_IMG = 1;
     public static final int REQUEST_EDIT_NEWS = 10;
     public static final int REQUEST_EDIT_DISH = 11;
+    public static final int REQUEST_RESERVE_TABLE = 12;
 
     //key для настроек
     public static final String SETTINGS_KEY             = "com.example.gek.pizza";
