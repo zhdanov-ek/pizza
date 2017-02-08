@@ -48,13 +48,15 @@
     <string name="title_archive_deliveries">Archive of deliveries</string>
     <string name="title_orders">Hot orders</string>
 
-    <string name="order_menu">Menu for order</string>
-    <string name="news">News</string>
-    <string name="orders">Orders</string>
-
-    <string name="text_order_menu">Choose and order what you want</string>
-    <string name="text_news">News about pizza and others</string>
-    <string name="text_orders">Order processing</string>
+    <!-- MAIN MENU -->
+    <string name="main_title_order_menu">Dishes</string>
+    <string name="main_title_news">News</string>
+    <string name="main_title_orders">Deliveries</string>
+    <string name="main_title_contacts">Contacts</string>
+    <string name="main_text_order_menu">Choose and order what you want</string>
+    <string name="main_text_news">News about pizza and others</string>
+    <string name="main_text_orders">Receiving orders for delivery</string>
+    <string name="main_text_contacts">All our contacts</string>
 
     <!-- GLOBAL MESSAGES -->
     <string name="mes_no_internet">No internet connection</string>

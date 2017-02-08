@@ -19,7 +19,7 @@
             android:id="@+id/ivPhoto"
             android:layout_width="match_parent"
             android:layout_height="@dimen/item_dish_photo_height"
-            tools:background="@drawable/ic_warning" />
+            tools:background="@drawable/dish_empty" />
 
         <RelativeLayout
             android:layout_width="match_parent"

@@ -4,6 +4,10 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
 
+
+    <color name="colorMainMenuTitle">#13497a</color>
+    <color name="colorMainMenuDescription">#296eae</color>
+
     <color name="colorButtonFlatBackground">#FFFFFF</color>
     <color name="colorButtonFlatBackgroundFocus">#eceaea</color>
     <color name="colorButtonFlatBackgroundPress">#c4c2c2</color>

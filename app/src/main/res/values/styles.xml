@@ -43,6 +43,19 @@
         <item name="android:textColor">@color/colorButtonRaisedText</item>
     </style>
 
+    <style name="textMainMenuTitle">
+        <item name="android:textSize">@dimen/text_size_main_menu_title</item>
+        <item name="android:textColor">@color/colorMainMenuTitle</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="textMainMenuDescription">
+        <item name="android:textSize">@dimen/text_size_main_menu_description</item>
+        <item name="android:layout_margin">@dimen/text_margin_main_menu</item>
+        <item name="android:textColor">@color/colorMainMenuDescription</item>
+    </style>
+
+
     <style name="textBig">
         <item name="android:textSize">@dimen/text_size_big</item>
         <item name="android:textColor">@color/colorFont1</item>

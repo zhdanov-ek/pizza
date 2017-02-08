@@ -24,10 +24,10 @@
             android:orientation="vertical">
 
             <TextView
+                style="@style/textMainMenuTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/order_menu"
-                android:textSize="@dimen/main_menu_title_size" />
+                android:text="@string/main_title_order_menu" />
 
             <android.support.v7.widget.CardView
                 android:id="@+id/cvMenuOrder"
@@ -42,23 +42,26 @@
                     <ImageView
                         android:layout_width="@dimen/card_view_main_menu_iv_width"
                         android:layout_height="match_parent"
-                        android:background="@drawable/dishes_main" />
+                        android:background="@drawable/main_dishes" />
 
                     <TextView
-                        android:layout_width="wrap_content"
+                        style="@style/textMainMenuDescription"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@string/text_order_menu"
-                        android:textSize="@dimen/main_menu_text_size" />
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:text="@string/main_text_order_menu"/>
                 </LinearLayout>
 
             </android.support.v7.widget.CardView>
 
 
             <TextView
+                style="@style/textMainMenuTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/news"
-                android:textSize="@dimen/main_menu_title_size" />
+                android:text="@string/main_title_news"
+                />
 
             <android.support.v7.widget.CardView
                 android:id="@+id/cvNews"
@@ -74,22 +77,24 @@
                     <ImageView
                         android:layout_width="@dimen/card_view_main_menu_iv_width"
                         android:layout_height="match_parent"
-                        android:background="@drawable/news_main" />
+                        android:background="@drawable/main_news" />
 
                     <TextView
-                        android:layout_width="wrap_content"
+                        style="@style/textMainMenuDescription"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@string/text_news"
-                        android:textSize="@dimen/main_menu_text_size" />
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:text="@string/main_text_news"/>
                 </LinearLayout>
 
             </android.support.v7.widget.CardView>
 
             <TextView
+                style="@style/textMainMenuTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/orders"
-                android:textSize="@dimen/main_menu_title_size" />
+                android:text="@string/main_title_orders" />
 
             <android.support.v7.widget.CardView
                 android:id="@+id/cvOrders"
@@ -104,17 +109,49 @@
                     <ImageView
                         android:layout_width="@dimen/card_view_main_menu_iv_width"
                         android:layout_height="match_parent"
-                        android:background="@drawable/delivery_main" />
+                        android:background="@drawable/main_delivery" />
 
                     <TextView
-                        android:layout_width="wrap_content"
+                        style="@style/textMainMenuDescription"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@string/text_orders"
-                        android:textSize="@dimen/main_menu_text_size" />
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:text="@string/main_text_orders" />
                 </LinearLayout>
 
             </android.support.v7.widget.CardView>
 
+            <TextView
+                style="@style/textMainMenuTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/main_title_contacts" />
+            <android.support.v7.widget.CardView
+                android:id="@+id/cvContacts"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/card_view_main_menu_height">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="@dimen/card_view_main_menu_iv_width"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/main_contacts" />
+
+                    <TextView
+                        style="@style/textMainMenuDescription"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:text="@string/main_text_contacts" />
+                </LinearLayout>
+
+            </android.support.v7.widget.CardView>
 
 
             <Button
