@@ -6,7 +6,7 @@ import android.os.Parcelable;
 import java.util.Date;
 
 /**
- * Model of news
+ * Model of tables
  */
 
 public class News implements Parcelable {

@@ -1,77 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/activity_about"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context="com.example.gek.pizza.activities.AboutActivity">
+    android:orientation="vertical">
 
     <include layout="@layout/toolbar" />
-
-    <ScrollView
-        android:id="@+id/svAboutUs"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="2">
-
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="@dimen/activity_padding">
-
-            <ImageView
-                android:id="@+id/ivAboutPhoto"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:layout_gravity="center_horizontal"
-                android:src="@drawable/logo"
-                android:visibility="visible" />
-
-            <TextView
-                android:id="@+id/tvAboutPhone"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:textSize="@dimen/text_size_middle"
-                android:visibility="visible" />
-
-            <TextView
-                android:id="@+id/tvAboutEmail"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:textSize="@dimen/text_size_middle"
-                android:visibility="visible" />
-
-            <TextView
-                android:id="@+id/tvAboutAddress"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:textSize="@dimen/text_size_middle"
-                android:visibility="visible" />
-
-            <TextView
-                android:id="@+id/tvAboutLatitude"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:visibility="gone" />
-
-            <TextView
-                android:id="@+id/tvAboutLongitude"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:visibility="gone" />
-
-        </LinearLayout>
-
-    </ScrollView>
-
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -99,7 +33,6 @@
                 android:layout_height="wrap_content"
                 android:text="@string/title_button_walk" />
 
-
         </RadioGroup>
 
         <LinearLayout
@@ -111,28 +44,131 @@
             <TextView
                 android:id="@+id/tvRouteInformationDistance"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                />
+                android:layout_height="wrap_content" />
 
             <TextView
                 android:id="@+id/tvRouteInformationTime"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                />
+                android:layout_height="wrap_content" />
 
         </LinearLayout>
 
-        <ImageView
-            android:id="@+id/ivArrow"
-            style="@style/arrowUpDownStyle" />
-
     </LinearLayout>
 
-    <fragment xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/fMapView"
-        class="com.google.android.gms.maps.MapFragment"
+    <com.sothree.slidinguppanel.SlidingUpPanelLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:sothree="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/slidingUpPanel"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="3" />
+        android:layout_height="match_parent"
+        android:gravity="bottom"
+        sothree:umanoPanelHeight="100dp"
+        sothree:umanoParallaxOffset="70dp"
+        sothree:umanoShadowHeight="4dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/fMapView"
+                class="com.google.android.gms.maps.MapFragment"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </LinearLayout>
+
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:id="@+id/activity_about"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            tools:context="com.example.gek.pizza.activities.AboutActivity">
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:id="@+id/ivArrowLeft"
+                        style="@style/arrowUpDownStyle"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true"
+                        android:layout_centerInParent="true"
+                        android:layout_centerVertical="true" />
+
+                    <ImageView
+                        android:id="@+id/ivAboutPhoto"
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
+                        android:layout_centerHorizontal="true"
+                        android:layout_centerVertical="true"
+                        android:layout_gravity="center_horizontal"
+                        android:src="@drawable/logo"
+                        android:visibility="visible" />
+
+                    <ImageView
+                        android:id="@+id/ivArrowRight"
+                        style="@style/arrowUpDownStyle"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerInParent="true"
+                        android:layout_centerVertical="true" />
+
+                </RelativeLayout>
+
+                <TextView
+                    android:id="@+id/tvAboutPhone"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="1"
+                    android:textSize="@dimen/text_size_middle"
+                    android:visibility="visible" />
+
+                <TextView
+                    android:id="@+id/tvAboutEmail"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="2"
+                    android:textSize="@dimen/text_size_middle"
+                    android:visibility="visible" />
+
+                <TextView
+                    android:id="@+id/tvAboutAddress"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="3"
+                    android:textSize="@dimen/text_size_middle"
+                    android:visibility="visible" />
+
+                <TextView
+                    android:id="@+id/tvAboutLatitude"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:visibility="gone" />
+
+                <TextView
+                    android:id="@+id/tvAboutLongitude"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:visibility="gone" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+
+    </com.sothree.slidinguppanel.SlidingUpPanelLayout>
 
 </LinearLayout>

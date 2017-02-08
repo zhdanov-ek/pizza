@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include layout="@layout/toolbar_reserve_table" />
+
+<com.sothree.slidinguppanel.SlidingUpPanelLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:sothree="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/slidingUpPanel"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="bottom"
+    sothree:umanoPanelHeight="24dp"
+    sothree:umanoParallaxOffset="70dp"
+    sothree:umanoShadowHeight="4dp">
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/activity_reserve_table"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context="com.example.gek.pizza.activities.ReserveTableActivity">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="fitXY"
+            android:src="@drawable/reserve_table_background" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/ivArrowLeft"
+                style="@style/arrowUpDownStyle"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_centerInParent="true"
+                android:layout_centerVertical="true" />
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_gravity="center_horizontal"
+                android:text="Modify hall"
+                android:textSize="@dimen/text_size_middle" />
+
+            <ImageView
+                android:id="@+id/ivArrowRight"
+                style="@style/arrowUpDownStyle"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_centerInParent="true"
+                android:layout_centerVertical="true" />
+
+        </RelativeLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <RelativeLayout
+                    android:id="@+id/settings_reserve_table"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:id="@+id/ivAddTable4"
+                        android:layout_width="100dp"
+                        android:layout_height="75dp"
+                        android:background="@null"
+                        android:scaleType="centerInside"
+                        android:src="@drawable/table4" />
+
+                    <ImageView
+                        android:id="@+id/ivAddTable6"
+                        android:layout_width="75dp"
+                        android:layout_height="75dp"
+                        android:layout_toEndOf="@+id/ivAddTable4"
+                        android:layout_toRightOf="@+id/ivAddTable4"
+                        android:background="@null"
+                        android:scaleType="centerInside"
+                        android:src="@drawable/table6" />
+
+                    <ImageView
+                        android:id="@+id/ivAddTable8"
+                        android:layout_width="100dp"
+                        android:layout_height="75dp"
+                        android:layout_toEndOf="@+id/ivAddTable6"
+                        android:layout_toRightOf="@+id/ivAddTable6"
+                        android:background="@null"
+                        android:scaleType="centerInside"
+                        android:src="@drawable/table8" />
+                </RelativeLayout>
+            </ScrollView>
+        </LinearLayout>
+    </LinearLayout>
+
+
+</com.sothree.slidinguppanel.SlidingUpPanelLayout>
+</LinearLayout>
