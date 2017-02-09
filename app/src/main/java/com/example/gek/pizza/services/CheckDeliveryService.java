@@ -10,26 +10,15 @@ import android.graphics.BitmapFactory;
 import android.os.IBinder;
 import android.support.v7.app.NotificationCompat;
 import android.util.Log;
-import android.view.View;
-import android.widget.Toast;
 
-import com.bumptech.glide.util.Util;
 import com.example.gek.pizza.R;
-import com.example.gek.pizza.activities.AboutActivity;
 import com.example.gek.pizza.activities.DeliveriesActivity;
-import com.example.gek.pizza.activities.MainActivity;
-import com.example.gek.pizza.adapters.DishesAdapter;
 import com.example.gek.pizza.data.Const;
 import com.example.gek.pizza.data.Delivery;
-import com.example.gek.pizza.data.Dish;
-import com.example.gek.pizza.data.Order;
 import com.example.gek.pizza.helpers.Utils;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.ValueEventListener;
-
-import java.util.ArrayList;
 
 // https://developer.android.com/guide/topics/ui/notifiers/notifications.html?hl=ru
 

@@ -32,7 +32,7 @@ import java.util.GregorianCalendar;
 
 public class CheckReservedTablesService extends Service {
 
-    int notifyId = 1;
+    int notifyId = 101;
     private NotificationManager notificationManager;
     private ArrayList<OrderTable>  listOrderedTablesRemove;
     private Context ctx;

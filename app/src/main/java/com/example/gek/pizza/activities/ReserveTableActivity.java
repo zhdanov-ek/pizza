@@ -15,6 +15,7 @@ import android.view.Display;
 import android.view.DragEvent;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -118,43 +119,6 @@ public class ReserveTableActivity extends AppCompatActivity implements RotationG
             }
         });
 
-        allTables = new ArrayList<>();
-        allReservedTables = new ArrayList<>();
-
-        mRotationDetector = new RotationGestureDetector(this);
-
-        displayMetrics = new DisplayMetrics();
-        WindowManager windowManager = (WindowManager) this.getSystemService(Context.WINDOW_SERVICE);
-        windowManager.getDefaultDisplay().getMetrics(displayMetrics);
-
-        ivAddTable4 = (ImageView) findViewById(R.id.ivAddTable4);
-        ivAddTable6 = (ImageView) findViewById(R.id.ivAddTable6);
-        ivAddTable8 = (ImageView) findViewById(R.id.ivAddTable8);
-        rlReserveTable = (RelativeLayout) findViewById(R.id.activity_reserve_table);
-        rlSettingsReserveTable = (RelativeLayout) findViewById(R.id.settings_reserve_table);
-
-        ivAddTable4.setOnTouchListener(onClickListenerNewTable);
-        ivAddTable6.setOnTouchListener(onClickListenerNewTable);
-        ivAddTable8.setOnTouchListener(onClickListenerNewTable);
-
-        slidingUpPanelLayout = (SlidingUpPanelLayout) findViewById(R.id.slidingUpPanel);
-        setSlidingUpPanelLayoutListeners();
-
-        rlSettingsReserveTable.setOnDragListener(onDragListenerSettings);
-        rlReserveTable.setOnDragListener(onDragListenerTable);
-    }
-
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-
-
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
         ValueEventListener tablesListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -198,6 +162,58 @@ public class ReserveTableActivity extends AppCompatActivity implements RotationG
         };
 
         Const.db.child(Const.CHILD_RESERVED_TABLES_NEW).addValueEventListener(tablesReservedListener);
+
+        allTables = new ArrayList<>();
+        allReservedTables = new ArrayList<>();
+
+        mRotationDetector = new RotationGestureDetector(this);
+
+        displayMetrics = new DisplayMetrics();
+        WindowManager windowManager = (WindowManager) this.getSystemService(Context.WINDOW_SERVICE);
+        windowManager.getDefaultDisplay().getMetrics(displayMetrics);
+
+        ivAddTable4 = (ImageView) findViewById(R.id.ivAddTable4);
+        ivAddTable6 = (ImageView) findViewById(R.id.ivAddTable6);
+        ivAddTable8 = (ImageView) findViewById(R.id.ivAddTable8);
+        rlReserveTable = (RelativeLayout) findViewById(R.id.activity_reserve_table);
+        rlSettingsReserveTable = (RelativeLayout) findViewById(R.id.settings_reserve_table);
+
+        ViewTreeObserver greenObserver = rlReserveTable.getViewTreeObserver();
+        greenObserver.addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+
+            @Override
+            public boolean onPreDraw() {
+                rlReserveTable.getViewTreeObserver().removeOnPreDrawListener(this);
+                updateTables();
+                updateOrderedTable();
+                return true;
+            }
+        });
+
+        ivAddTable4.setOnTouchListener(onClickListenerNewTable);
+        ivAddTable6.setOnTouchListener(onClickListenerNewTable);
+        ivAddTable8.setOnTouchListener(onClickListenerNewTable);
+
+        slidingUpPanelLayout = (SlidingUpPanelLayout) findViewById(R.id.slidingUpPanel);
+        setSlidingUpPanelLayoutListeners();
+
+        rlSettingsReserveTable.setOnDragListener(onDragListenerSettings);
+        rlReserveTable.setOnDragListener(onDragListenerTable);
+    }
+
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        updateTables();
+        updateOrderedTable();
     }
 
     private int isPortraitMode() {
