@@ -362,7 +362,7 @@ public class AboutActivity extends AppCompatActivity implements
 
     @Override
     public void onMapReady(GoogleMap map) {
-        if (map != null) {
+        if (map != null && !textLatitude.equals("") && !textLongitude.equals("")) {
             googleMap = map;
 
             // провека разрешений

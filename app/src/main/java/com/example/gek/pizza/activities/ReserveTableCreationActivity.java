@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.gek.pizza.R;
@@ -12,6 +13,9 @@ import com.example.gek.pizza.data.Const;
 import com.example.gek.pizza.data.OrderTable;
 import com.example.gek.pizza.data.Table;
 import com.example.gek.pizza.helpers.Utils;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import static com.example.gek.pizza.R.id.btnCreateDelivery;
 import static com.example.gek.pizza.data.Const.db;
@@ -26,11 +30,15 @@ public class ReserveTableCreationActivity extends AppCompatActivity {
     private String tableKey;
     private Button btnReserveTable;
     private EditText etName, etComment, etPhone;
+    private TextView tvTableReservation;
+    private SimpleDateFormat shortenedDateFormat;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reserve_table_creation);
+
+        shortenedDateFormat = new SimpleDateFormat("dd.MM.yy");
 
         if (getIntent().hasExtra(Const.EXTRA_TABLE)) {
             table = getIntent().getParcelableExtra(Const.EXTRA_TABLE);
@@ -43,6 +51,8 @@ public class ReserveTableCreationActivity extends AppCompatActivity {
         etPhone = (EditText) findViewById(R.id.etPhone);
         etComment = (EditText) findViewById(R.id.etComment);
         btnReserveTable = (Button) findViewById(btnCreateDelivery);
+        tvTableReservation = (TextView) findViewById(R.id.tvTableReservation);
+        tvTableReservation.setText(getResources().getString(R.string.text_reservation_evening)+" "+shortenedDateFormat.format(new Date()));
 
         btnReserveTable.setOnClickListener(reserveTable);
 
@@ -56,6 +66,7 @@ public class ReserveTableCreationActivity extends AppCompatActivity {
                 orderTable.setClientName(etName.getText().toString());
                 orderTable.setPhoneClient(etPhone.getText().toString());
                 orderTable.setCommentClient(etComment.getText().toString());
+                orderTable.setIsNotificated(0);
                 orderTable.setTableKey(tableKey);
 
                 String numberDelivery = Utils.makeDeliveryNumber(etPhone.getText().toString());

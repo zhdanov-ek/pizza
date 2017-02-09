@@ -6,7 +6,7 @@ import java.util.Date;
  * Created by Ivleshch on 08.02.2017.
  */
 
-public class OrderTable {
+public class OrderTable{
     private String clientName;
     private String phoneClient;
     private String commentClient;
@@ -14,9 +14,20 @@ public class OrderTable {
     private Date date;
     private String key;
 
+    public Integer getIsNotificated() {
+        return isNotificated;
+    }
+
+    public void setIsNotificated(Integer isNotificated) {
+        this.isNotificated = isNotificated;
+    }
+
+    private Integer isNotificated;
+
     public OrderTable() {
         this.date = new Date();
     }
+
 
     public String getClientName() {
         return clientName;
@@ -65,4 +76,5 @@ public class OrderTable {
     public void setKey(String key) {
         this.key = key;
     }
+
 }

@@ -1,119 +1,150 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:sothree="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
     <include layout="@layout/toolbar_reserve_table" />
 
-<com.sothree.slidinguppanel.SlidingUpPanelLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:sothree="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/slidingUpPanel"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:gravity="bottom"
-    sothree:umanoPanelHeight="24dp"
-    sothree:umanoParallaxOffset="70dp"
-    sothree:umanoShadowHeight="4dp">
-
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:id="@+id/activity_reserve_table"
+    <com.sothree.slidinguppanel.SlidingUpPanelLayout
+        android:id="@+id/slidingUpPanel"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context="com.example.gek.pizza.activities.ReserveTableActivity">
+        android:gravity="bottom"
+        sothree:umanoPanelHeight="24dp"
+        sothree:umanoParallaxOffset="70dp"
+        sothree:umanoShadowHeight="4dp">
 
-        <ImageView
+        <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:id="@+id/activity_reserve_table"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:scaleType="fitXY"
-            android:src="@drawable/reserve_table_background" />
-    </RelativeLayout>
+            tools:context="com.example.gek.pizza.activities.ReserveTableActivity">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
 
             <ImageView
-                android:id="@+id/ivArrowLeft"
-                style="@style/arrowUpDownStyle"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="fitXY"
+                android:src="@drawable/reserve_table_background"
+                android:id="@+id/imageView2"
+                android:layout_alignParentTop="true"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
-                android:layout_centerInParent="true"
-                android:layout_centerVertical="true" />
+                />
 
-
-            <TextView
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:layout_gravity="center_horizontal"
-                android:text="Modify hall"
-                android:textSize="@dimen/text_size_middle" />
-
-            <ImageView
-                android:id="@+id/ivArrowRight"
-                style="@style/arrowUpDownStyle"
-                android:layout_alignParentEnd="true"
+                android:orientation="vertical"
+                android:layout_alignParentBottom="true"
                 android:layout_alignParentRight="true"
-                android:layout_centerInParent="true"
-                android:layout_centerVertical="true" />
+                android:layout_margin="@dimen/floating_button_layout_margin"
+                >
+
+                <android.support.design.widget.FloatingActionButton
+                    android:id="@+id/fabReserved"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_check" />
+
+                <android.support.design.widget.FloatingActionButton
+                    android:id="@+id/fabOk"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_check"
+                    />
+            </LinearLayout>
 
         </RelativeLayout>
-
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="vertical">
 
-            <ScrollView
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <RelativeLayout
-                    android:id="@+id/settings_reserve_table"
+                <ImageView
+                    android:id="@+id/ivArrowLeft"
+                    style="@style/arrowUpDownStyle"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_centerInParent="true"
+                    android:layout_centerVertical="true" />
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:layout_gravity="center_horizontal"
+                    android:text="@string/title_reserve_table_settings"
+                    android:textSize="@dimen/text_size_middle" />
+
+                <ImageView
+                    android:id="@+id/ivArrowRight"
+                    style="@style/arrowUpDownStyle"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerInParent="true"
+                    android:layout_centerVertical="true" />
+
+            </RelativeLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <ScrollView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
-                    <ImageView
-                        android:id="@+id/ivAddTable4"
-                        android:layout_width="100dp"
-                        android:layout_height="75dp"
-                        android:background="@null"
-                        android:scaleType="centerInside"
-                        android:src="@drawable/table4" />
+                    <RelativeLayout
+                        android:id="@+id/settings_reserve_table"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
 
-                    <ImageView
-                        android:id="@+id/ivAddTable6"
-                        android:layout_width="75dp"
-                        android:layout_height="75dp"
-                        android:layout_toEndOf="@+id/ivAddTable4"
-                        android:layout_toRightOf="@+id/ivAddTable4"
-                        android:background="@null"
-                        android:scaleType="centerInside"
-                        android:src="@drawable/table6" />
+                        <ImageView
+                            android:id="@+id/ivAddTable4"
+                            android:layout_width="100dp"
+                            android:layout_height="75dp"
+                            android:background="@null"
+                            android:scaleType="centerInside"
+                            android:src="@drawable/table4" />
 
-                    <ImageView
-                        android:id="@+id/ivAddTable8"
-                        android:layout_width="100dp"
-                        android:layout_height="75dp"
-                        android:layout_toEndOf="@+id/ivAddTable6"
-                        android:layout_toRightOf="@+id/ivAddTable6"
-                        android:background="@null"
-                        android:scaleType="centerInside"
-                        android:src="@drawable/table8" />
-                </RelativeLayout>
-            </ScrollView>
+                        <ImageView
+                            android:id="@+id/ivAddTable6"
+                            android:layout_width="75dp"
+                            android:layout_height="75dp"
+                            android:layout_toEndOf="@+id/ivAddTable4"
+                            android:layout_toRightOf="@+id/ivAddTable4"
+                            android:background="@null"
+                            android:scaleType="centerInside"
+                            android:src="@drawable/table6" />
+
+                        <ImageView
+                            android:id="@+id/ivAddTable8"
+                            android:layout_width="100dp"
+                            android:layout_height="75dp"
+                            android:layout_toEndOf="@+id/ivAddTable6"
+                            android:layout_toRightOf="@+id/ivAddTable6"
+                            android:background="@null"
+                            android:scaleType="centerInside"
+                            android:src="@drawable/table8" />
+                    </RelativeLayout>
+                </ScrollView>
+            </LinearLayout>
         </LinearLayout>
-    </LinearLayout>
 
 
-</com.sothree.slidinguppanel.SlidingUpPanelLayout>
+    </com.sothree.slidinguppanel.SlidingUpPanelLayout>
+
 </LinearLayout>

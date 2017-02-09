@@ -28,7 +28,7 @@ import com.google.firebase.database.ValueEventListener;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener{
 
-    CardView cvMenuOrder, cvNews, cvOrders, cvContacts;
+    CardView cvMenuOrder, cvNews, cvOrders, cvContacts, cvReservations;
     private static final String TAG = "List of settings ";
 
     @Override
@@ -48,6 +48,8 @@ public class MainActivity extends AppCompatActivity
         cvOrders.setOnClickListener(this);
         cvContacts = (CardView) findViewById(R.id.cvContacts);
         cvContacts.setOnClickListener(this);
+        cvReservations = (CardView) findViewById(R.id.cvReservations);
+        cvReservations.setOnClickListener(this);
 
         //todo move to settings
         findViewById(R.id.btnStartService).setOnClickListener(this);
@@ -164,7 +166,9 @@ public class MainActivity extends AppCompatActivity
             case R.id.cvContacts:
                 startActivity(new Intent(this, AboutActivity.class));
                 break;
-
+            case R.id.cvReservations:
+                startActivity(new Intent(this, ReserveTableActivity.class));
+                break;
             //todo переместить запуск сервиса в настройки куда-нибудь
             case R.id.btnStartService:
                 startService(new Intent(this, CheckDeliveryService.class));

@@ -58,6 +58,8 @@
     <string name="main_text_news">News about pizza and others</string>
     <string name="main_text_orders">Receiving orders for delivery</string>
     <string name="main_text_contacts">All our contacts</string>
+    <string name="main_title_reservation">Reservation</string>
+    <string name="main_text_reservation">Reserve a table</string>
 
     <!-- GLOBAL MESSAGES -->
     <string name="mes_no_internet">No internet connection</string>
@@ -93,7 +95,6 @@
     <string name="notification_delivery_content">Total orders</string>
 
     <string name="notification_reserved_table_title">New reserved tables</string>
-    <string name="notification_reserved_table_content">Total reserved tables</string>
 
     <string name="title_settings_category_contacts">Contacts</string>
     <string name="title_settings_category_address">Address</string>
@@ -148,7 +149,7 @@
     <string name="delivery_state_description_step4_paid">Bon Appetit</string>
     <string name="delivery_state_description_step4_fail">Fail</string>
 
-    
+
     <!-- Строка куда передается значение переменной из кода -->
     <string name="section_format">Вкладка №: %1$d</string>
 
@@ -158,9 +159,13 @@
     <string name="title_button_fullscreen">Fullscreen</string>
 
     <!-- RESERVE TABLE -->
+    <string name="text_reservation_evening">Table reservation on evening </string>
     <string name="title_button_save">Ok</string>
     <string name="title_button_remove">Remove</string>
     <string name="title_button_reserve">Reserve table</string>
+    <string name="title_reserve_table_settings">Tables</string>
+    <string name="mes_save_table_shema">Save tables placement</string>
+    <string name="mes_reserve_table">Reserve a table</string>
 
 
 
