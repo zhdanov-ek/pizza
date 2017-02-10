@@ -18,6 +18,7 @@ public class Table implements Parcelable{
     private String key;
     private Integer pictureId;
     private Integer isPortraitMode;
+    private String pictureName;
 
     public Table() {
     }
@@ -31,7 +32,8 @@ public class Table implements Parcelable{
     }
 
     public Table(Integer tableId, Integer xCoordinate, Integer yCoordinate,
-                 Integer xResolution, Integer yResolution, Integer pictureId, Float rotation, Integer isPortraitMode) {
+                 Integer xResolution, Integer yResolution, Integer pictureId,
+                 Float rotation, Integer isPortraitMode, String pictureName) {
         this.tableId = tableId;
         this.xCoordinate = xCoordinate;
         this.yCoordinate = yCoordinate;
@@ -40,8 +42,17 @@ public class Table implements Parcelable{
         this.pictureId   = pictureId;
         this.rotation    = rotation;
         this.isPortraitMode = isPortraitMode;
+        this.pictureName = pictureName;
 
         this.key = key;
+    }
+
+    public String getPictureName() {
+        return pictureName;
+    }
+
+    public void setPictureName(String pictureName) {
+        this.pictureName = pictureName;
     }
 
     public Float getRotation() {
@@ -124,6 +135,7 @@ public class Table implements Parcelable{
         dest.writeInt(this.pictureId);
         dest.writeFloat(this.rotation);
         dest.writeInt(this.isPortraitMode);
+        dest.writeString(this.pictureName);
     }
 
     protected Table(Parcel in) {
@@ -136,6 +148,7 @@ public class Table implements Parcelable{
         this.key = in.readString();
         this.rotation = in.readFloat();
         this.isPortraitMode= in.readInt();
+        this.pictureName= in.readString();
     }
 
     public static final Creator<Table> CREATOR = new Creator<Table>() {

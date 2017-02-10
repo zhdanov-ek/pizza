@@ -84,8 +84,7 @@
                 android:id="@+id/btnCreateDelivery"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:enabled="true"
-                android:text="@string/title_reserve_table" />
+                android:text="@string/action_reserve_table"/>
 
         </LinearLayout>
     </ScrollView>

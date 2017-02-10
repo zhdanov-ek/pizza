@@ -53,6 +53,7 @@ public class ReserveTableActivity extends AppCompatActivity implements RotationG
     private int xCoordinate, yCootdinate;
     private int windowWidth, windowHeight;
     public int idTable;
+    public String tableName;
     private DisplayMetrics displayMetrics;
     private SlidingUpPanelLayout slidingUpPanelLayout;
     private Animation animationArrowRotation;
@@ -307,6 +308,7 @@ public class ReserveTableActivity extends AppCompatActivity implements RotationG
                     if (isNewTable) {
 
                         final ImageView newTable = new ImageView(getApplicationContext());
+                        idTable = getResources().getIdentifier(tableName, "drawable", getPackageName());
                         newTable.setImageResource(idTable);
                         LayoutParams lp = new LayoutParams(Math.round(120 * displayMetrics.density), Math.round(75 * displayMetrics.density));
                         lp.leftMargin = xCoordinate;
@@ -318,7 +320,7 @@ public class ReserveTableActivity extends AppCompatActivity implements RotationG
                         rlReserveTable.addView(newTable);
 
 
-                        allTables.add(new Table(newId, xCoordinate, yCootdinate, windowWidth, windowHeight, idTable, 0.0f, isPortraitMode()));
+                        allTables.add(new Table(newId, xCoordinate, yCootdinate, windowWidth, windowHeight, idTable, 0.0f, isPortraitMode(),tableName));
 
                         isNewTable = false;
                         newTable.setOnClickListener(onClickListener);
@@ -523,7 +525,10 @@ public class ReserveTableActivity extends AppCompatActivity implements RotationG
             for (Table table : allTables) {
                 if (findViewById(table.getTableId()) == null) {
                     final ImageView newTable = new ImageView(getApplicationContext());
-                    newTable.setImageResource(table.getPictureId());
+
+                    int pictureId = getResources().getIdentifier(table.getPictureName(), "drawable", getPackageName());;
+
+                    newTable.setImageResource(pictureId);
                     LayoutParams lp = new LayoutParams(Math.round(120 * displayMetrics.density), Math.round(75 * displayMetrics.density));
                     if (table.getPortraitMode() == isPortraitMode()) {
                         lp.leftMargin = findCoordinates(table.getxCoordinate(), windowWidth, table.getxResolution());
@@ -576,14 +581,17 @@ public class ReserveTableActivity extends AppCompatActivity implements RotationG
             switch (v.getId()) {
                 case R.id.ivAddTable4:
                     idTable = R.drawable.table4;
+                    tableName = getString(R.string.table_name_4);
                     ivShadow = ivAddTable4;
                     break;
                 case R.id.ivAddTable6:
                     idTable = R.drawable.table6;
+                    tableName = getString(R.string.table_name_6);
                     ivShadow = ivAddTable6;
                     break;
                 case R.id.ivAddTable8:
                     idTable = R.drawable.table8;
+                    tableName = getString(R.string.table_name_8);
                     ivShadow = ivAddTable8;
                     break;
             }
