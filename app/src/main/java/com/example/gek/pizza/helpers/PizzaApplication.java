@@ -2,8 +2,11 @@ package com.example.gek.pizza.helpers;
 
 import android.app.Application;
 
+import com.crashlytics.android.Crashlytics;
 import com.example.gek.pizza.data.AllDishes;
 import com.google.firebase.database.FirebaseDatabase;
+
+import io.fabric.sdk.android.Fabric;
 
 /**
  * Инициализация глобальных настроек
@@ -16,7 +19,7 @@ public class PizzaApplication extends Application {
         super.onCreate();
 
         // Crashlytics  (Uncomment before building APK):
-//        Fabric.with(this, new Crashlytics());
+        Fabric.with(this, new Crashlytics());
 
         // Включаем кеширование данных что позволяет отображать данные офлайн
         // Инициализация этого значения делается до начала работы с FireBase
