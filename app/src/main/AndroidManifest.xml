@@ -45,6 +45,11 @@
             android:name="com.google.android.maps.v2.API_KEY"
             android:value="AIzaSyBGRee53WUzcJ-MQGs3kVO3DsOMIZAfZXI" />
 
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="5b9726f0572cec6597951b3c4e7a4b1404aa2062"
+            />
+
         <activity android:name=".activities.BasketActivity" />
         <activity android:name=".activities.DeliveryCreationActivity" />
 

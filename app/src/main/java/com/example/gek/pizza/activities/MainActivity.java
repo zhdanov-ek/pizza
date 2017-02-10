@@ -17,7 +17,6 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.example.gek.pizza.R;
-import com.example.gek.pizza.data.AllDishes;
 import com.example.gek.pizza.data.Const;
 import com.example.gek.pizza.services.CheckDeliveryService;
 import com.example.gek.pizza.services.CheckReservedTablesService;
@@ -37,8 +36,6 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-
 
         cvMenuOrder = (CardView) findViewById(R.id.cvMenuOrder);
         cvMenuOrder.setOnClickListener(this);
