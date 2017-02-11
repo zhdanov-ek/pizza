@@ -44,6 +44,7 @@
     <string name="title_basket">Basket</string>
     <string name="title_delivery">Shipping clearance</string>
     <string name="title_archive_deliveries">Archive of deliveries</string>
+    <string name="title_archive_dishes">Archive of dishes</string>
     <string name="title_orders">Hot orders</string>
     <string name="title_reserve_table">Reserve table</string>
     <string name="title_reserve_table_delete">Delete</string>

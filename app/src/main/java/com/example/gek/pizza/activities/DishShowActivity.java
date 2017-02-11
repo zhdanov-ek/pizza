@@ -13,7 +13,6 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -22,8 +21,6 @@ import com.example.gek.pizza.data.Basket;
 import com.example.gek.pizza.data.Const;
 import com.example.gek.pizza.data.Dish;
 import com.example.gek.pizza.helpers.Utils;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 
 public class DishShowActivity extends AppCompatActivity implements View.OnClickListener{
     private TextView tvName, tvPrice, tvDescription;
@@ -156,6 +153,10 @@ public class DishShowActivity extends AppCompatActivity implements View.OnClickL
         } else {
             ivPhoto.setImageResource(R.drawable.dish_empty);
         }
+        // Не даем удалить блюдо если оно уже в архиве
+        if (dish.getKeyGroup().contentEquals(Const.DISH_GROUP_VALUE_REMOVED)){
+            btnRemove.setVisibility(View.GONE);
+        }
         tvName.setText(dish.getName());
         tvPrice.setText(Utils.toPrice(dish.getPrice()));
         tvDescription.setText(dish.getDescription());
@@ -171,14 +172,16 @@ public class DishShowActivity extends AppCompatActivity implements View.OnClickL
     }
 
 
-    /** Удаление блюда из базы и фото с хранилища */
-    private void removeDish(Dish dish){
-        final Dish removeItem = dish;
+
+
+
+    /** Перемещение блюда в архив путем присваивания ключа группы REMOVED */
+    private void removeDish(final Dish dish){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(R.string.remove);
         builder.setIcon(R.drawable.ic_warning);
         String message = getResources().getString(R.string.confirm_remove_item);
-        builder.setMessage(message + "\n" + removeItem.getName());
+        builder.setMessage(message + "\n" + dish.getName());
         builder.setCancelable(true);
         builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
             @Override
@@ -188,15 +191,9 @@ public class DishShowActivity extends AppCompatActivity implements View.OnClickL
         builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                // Получаем ссылку на наше хранилище и удаляем фото по названию
-                FirebaseStorage storage = FirebaseStorage.getInstance();
-                StorageReference storageRef = storage.getReferenceFromUrl(Const.STORAGE);
-                if (removeItem.getPhotoUrl().length() > 0){
-                    storageRef.child(Const.DISHES_IMAGES_FOLDER).child(removeItem.getPhotoName()).delete();
-                }
-
-                // Получаем ссылку на базу данных и удаляем новость по ключу
-                Const.db.child(Const.CHILD_DISHES).child(removeItem.getKey()).removeValue();
+                // Заменяем ключ группы, после чего это блюдо не будет возможности выбрать в меню
+                dish.setKeyGroup(Const.DISH_GROUP_VALUE_REMOVED);
+                Const.db.child(Const.CHILD_DISHES).child(dish.getKey()).setValue(dish);
                 finish();
             }
         });

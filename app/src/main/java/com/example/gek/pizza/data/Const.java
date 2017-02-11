@@ -45,7 +45,8 @@ public class Const {
     public static final String EXTRA_TABLE_KEY = "table_object_key";
 
     public static final String DISH_GROUP_KEY = "dish_group_key";
-    public static final String DISH_GROUP_NAME = "dish_group_name";
+    public static final String DISH_GROUP_VALUE_REMOVED = "removed";
+
 
     // id используемые при вызовах активити через интент
     public static final int REQUEST_LOAD_IMG = 1;

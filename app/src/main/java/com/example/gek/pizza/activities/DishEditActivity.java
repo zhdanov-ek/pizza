@@ -1,17 +1,22 @@
 package com.example.gek.pizza.activities;
 
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.Spinner;
+import android.widget.SpinnerAdapter;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
@@ -19,31 +24,45 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.gek.pizza.R;
 import com.example.gek.pizza.data.Const;
 import com.example.gek.pizza.data.Dish;
+import com.example.gek.pizza.data.MenuGroup;
 import com.example.gek.pizza.helpers.Utils;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 
+import static com.example.gek.pizza.R.id.rv;
 import static com.example.gek.pizza.data.Const.db;
 
 public class DishEditActivity extends AppCompatActivity implements View.OnClickListener{
 
+    private Context ctx;
     private boolean isNewDish = true;
     private Dish oldDish;
     private Dish changedDish;
     private Uri uriPhoto;
 
-    ProgressBar progressBar;
-    EditText etName, etDescription, etPrice;
-    ImageView ivPhoto;
-    Button btnRemovePhoto, btnOk;
+    private ProgressBar progressBar;
+    private Spinner spinnerGroup;
+    private EditText etName, etDescription, etPrice;
+    private ImageView ivPhoto;
+    private Button btnRemovePhoto, btnOk;
     private StorageReference folderRef;
     private Boolean isNeedRemovePhoto = false;
     private String keyGroup = "";
+    public static final String TAG = "DishEditActivity ";
+    private ArrayList<MenuGroup> listMenuGroups;
+    private ArrayList<String> listNameGroups;
+    private ArrayAdapter<String> adapter;
+
+
 
 
     @Override
@@ -55,7 +74,9 @@ public class DishEditActivity extends AppCompatActivity implements View.OnClickL
         myToolbar.setTitle("");
         setSupportActionBar(myToolbar);
 
+        ctx = this;
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
+        spinnerGroup = (Spinner) findViewById(R.id.spinnerGroup);
         etName = (EditText) findViewById(R.id.etName);
         etPrice = (EditText) findViewById(R.id.etPrice);
         etDescription = (EditText) findViewById(R.id.etDescription);
@@ -73,7 +94,6 @@ public class DishEditActivity extends AppCompatActivity implements View.OnClickL
         }
 
 
-
         // Определяем это новое блюдо или редактирование старого
         if (getIntent().hasExtra(Const.MODE) &&
                 (getIntent().getIntExtra(Const.MODE, Const.MODE_NEW) == Const.MODE_EDIT)){
@@ -82,6 +102,8 @@ public class DishEditActivity extends AppCompatActivity implements View.OnClickL
             keyGroup = oldDish.getKeyGroup();
             String title = getResources().getString(R.string.edit) + " - " + oldDish.getName();
             myToolbar.setTitle(title);
+            spinnerGroup.setVisibility(View.VISIBLE);
+            loadListGroupsMenu();
             fillValues(oldDish);
         } else {
             fillValues(null);
@@ -92,6 +114,56 @@ public class DishEditActivity extends AppCompatActivity implements View.OnClickL
         // Получаем ссылку на наше хранилище
         FirebaseStorage storage = FirebaseStorage.getInstance();
         folderRef = storage.getReferenceFromUrl(Const.STORAGE).child(Const.DISHES_IMAGES_FOLDER);
+    }
+
+
+    private void loadListGroupsMenu(){
+        // Описываем слушатель, который вернет один раз в программу весь список данных,
+        // которые находятся в child(CHILD_MENU_GROUPS)
+        // Полученные данные грузим в Spinner для того, что бы можно было блюдо восстановить
+        // или переместить в другую группу меню
+        ValueEventListener groupMenuListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                //Добавляем первой заглушку-группу для удаленных блюд
+                MenuGroup removedGroup = new MenuGroup();
+                removedGroup.setName(getResources().getString(R.string.title_archive_dishes));
+                removedGroup.setKey(Const.DISH_GROUP_VALUE_REMOVED);
+                listNameGroups = new ArrayList<>();
+                listNameGroups.add(removedGroup.getName());
+                listMenuGroups = new ArrayList<>();
+                listMenuGroups.add(removedGroup);
+
+                for (DataSnapshot child: dataSnapshot.getChildren()) {
+                    MenuGroup menuGroup = child.getValue(MenuGroup.class);
+                    listMenuGroups.add(menuGroup);
+                    listNameGroups.add(menuGroup.getName());
+                }
+
+                adapter = new ArrayAdapter<>(
+                        ctx,
+                        android.R.layout.simple_spinner_item,
+                        listNameGroups);
+                spinnerGroup.setAdapter(adapter);
+
+                // Показываем в спинере текущую группу
+                for (int i = 0; i < listMenuGroups.size(); i++) {
+                    if (keyGroup.contentEquals(listMenuGroups.get(i).getKey())){
+                        spinnerGroup.setSelection(i);
+                        break;
+                    }
+                }
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.w(TAG, "loadPost:onCancelled", databaseError.toException());
+            }
+        };
+        // Сам заброс данных из базы
+        Const.db.child(Const.CHILD_MENU_GROUPS).addListenerForSingleValueEvent(groupMenuListener);
     }
 
 
@@ -148,6 +220,7 @@ public class DishEditActivity extends AppCompatActivity implements View.OnClickL
         final String description = etDescription.getText().toString();
         //todo сделать проверку корректности ввода значения
         final float price = Float.parseFloat(etPrice.getText().toString());
+        keyGroup = listMenuGroups.get(spinnerGroup.getSelectedItemPosition()).getKey();
 
         progressBar.setVisibility(View.VISIBLE);
 

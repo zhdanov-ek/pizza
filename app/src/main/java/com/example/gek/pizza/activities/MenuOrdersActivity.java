@@ -107,21 +107,15 @@ public class MenuOrdersActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu, menu);
-        return true;
+        menu.add(0, 1, 0, R.string.action_archive);
+        return super.onCreateOptionsMenu(menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
-            case R.id.action_basket:
-                startActivity(new Intent(this, BasketActivity.class));
-                break;
-            case R.id.action_settings:
-                startActivity(new Intent(this, SettingsActivity.class));
-                break;
-            case R.id.action_about:
-                startActivity(new Intent(this, AboutActivity.class));
+            case 1:
+                showRemovedDishes();
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -156,5 +150,15 @@ public class MenuOrdersActivity extends AppCompatActivity {
             super.getItemOffsets(outRect, view, parent, state);
             outRect.set(mItemOffset, mItemOffset, mItemOffset, mItemOffset);
         }
+    }
+
+    /** Открываем активити со списком удаленных блюд */
+    private void showRemovedDishes(){
+        MenuGroup groupRemoved = new MenuGroup();
+        groupRemoved.setName(getResources().getString(R.string.title_archive_dishes));
+        groupRemoved.setKey(Const.DISH_GROUP_VALUE_REMOVED);
+        Intent archiveIntent = new Intent(this, DishesActivity.class);
+        archiveIntent.putExtra(Const.EXTRA_MENU_GROUP, groupRemoved);
+        startActivity(archiveIntent);
     }
 }
