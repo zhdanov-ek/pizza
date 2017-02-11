@@ -220,7 +220,10 @@ public class DishEditActivity extends AppCompatActivity implements View.OnClickL
         final String description = etDescription.getText().toString();
         //todo сделать проверку корректности ввода значения
         final float price = Float.parseFloat(etPrice.getText().toString());
-        keyGroup = listMenuGroups.get(spinnerGroup.getSelectedItemPosition()).getKey();
+        if (listMenuGroups != null) {
+            keyGroup = listMenuGroups.get(spinnerGroup.getSelectedItemPosition()).getKey();
+        }
+
 
         progressBar.setVisibility(View.VISIBLE);
 

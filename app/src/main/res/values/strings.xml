@@ -74,7 +74,7 @@
     <string name="hint_title_news">Title of news</string>
     <string name="hint_description_news">Full text of news</string>
     <string name="hint_name_dish">Name of dish</string>
-    <string name="hint_description_dish">The best pizza include chicken and ananas</string>
+    <string name="hint_description_dish">Description of dish</string>
     <string name="hint_price">119,99 грн</string>
 
     <string name="hint_name_group">Name of group</string>
