@@ -3,12 +3,12 @@ package com.example.gek.pizza.activities;
 import android.content.Context;
 import android.content.Intent;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -25,7 +25,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
-public class NewsActivity extends AppCompatActivity {
+public class NewsActivity extends BaseActivity{
 
     private static final String TAG = "List of news ";
     private ArrayList<News> allNews;
@@ -36,7 +36,11 @@ public class NewsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_news);
+
+        LayoutInflater inflater = (LayoutInflater) this
+                .getSystemService(this.LAYOUT_INFLATER_SERVICE);
+        View contentView = inflater.inflate(R.layout.activity_news, null, false);
+        mDrawer.addView(contentView, 0);
 
         Toolbar myToolbar = (Toolbar) findViewById(R.id.toolBar);
         myToolbar.setTitle(R.string.title_news);

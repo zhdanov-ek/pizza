@@ -13,6 +13,7 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Display;
 import android.view.DragEvent;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewTreeObserver;
@@ -43,7 +44,7 @@ import java.util.Date;
 import static com.example.gek.pizza.data.Const.db;
 
 
-public class ReserveTableActivity extends AppCompatActivity implements RotationGestureDetector.OnRotationGestureListener {
+public class ReserveTableActivity extends BaseActivity implements RotationGestureDetector.OnRotationGestureListener {
 
     private ImageView ivAddTable6, ivAddTable8, ivAddTable4;
     private RelativeLayout rlReserveTable, rlSettingsReserveTable;
@@ -77,7 +78,12 @@ public class ReserveTableActivity extends AppCompatActivity implements RotationG
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_reserve_table);
+
+        LayoutInflater inflater = (LayoutInflater) this
+                .getSystemService(this.LAYOUT_INFLATER_SERVICE);
+        View contentView = inflater.inflate(R.layout.activity_reserve_table, null, false);
+        mDrawer.addView(contentView, 0);
+
 
         shortenedDateFormat = new SimpleDateFormat("yyyyMMdd");
 

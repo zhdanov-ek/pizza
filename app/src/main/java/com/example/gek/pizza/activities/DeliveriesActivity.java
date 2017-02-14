@@ -29,7 +29,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
-public class DeliveriesActivity extends AppCompatActivity {
+public class DeliveriesActivity extends BaseActivity {
 
     private static final String TAG = "DeliveriesActivity";
     /**
@@ -48,7 +48,12 @@ public class DeliveriesActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_deliveries);
+
+        LayoutInflater inflater = (LayoutInflater) this
+                .getSystemService(this.LAYOUT_INFLATER_SERVICE);
+        View contentView = inflater.inflate(R.layout.activity_deliveries, null, false);
+        mDrawer.addView(contentView, 0);
+
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle(R.string.title_orders);

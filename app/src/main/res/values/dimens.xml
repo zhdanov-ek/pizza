@@ -52,7 +52,6 @@
     <dimen name="item_menu_orders_offset">5dp</dimen>
 
 
-
     <!-- DISH ITEM -->
     <dimen name="item_dish_width">150dp</dimen>
     <dimen name="item_dish_height">180dp</dimen>

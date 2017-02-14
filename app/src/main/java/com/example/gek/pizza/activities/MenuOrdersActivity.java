@@ -13,6 +13,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -33,7 +34,7 @@ import java.util.ArrayList;
  * Размер картинки 500х300 пикселей
  * */
 
-public class MenuOrdersActivity extends AppCompatActivity {
+public class MenuOrdersActivity extends BaseActivity {
 
     private static final String TAG = "Menu orders ";
     private RecyclerView rv;
@@ -44,7 +45,11 @@ public class MenuOrdersActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_menu_orders);
+
+        LayoutInflater inflater = (LayoutInflater) this
+                .getSystemService(this.LAYOUT_INFLATER_SERVICE);
+        View contentView = inflater.inflate(R.layout.activity_menu_dishes, null, false);
+        mDrawer.addView(contentView, 0);
 
         Toolbar myToolbar = (Toolbar) findViewById(R.id.toolBar);
         myToolbar.setTitle(R.string.title_menu_order);
