@@ -74,10 +74,7 @@ public class DishesActivity extends AppCompatActivity {
         ValueEventListener contactCardListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                long num = dataSnapshot.getChildrenCount();
                 allDishes.clear();
-
-                Log.d(TAG, "Load all list ContactCards: total Children objects:" + num);
                 for (DataSnapshot child: dataSnapshot.getChildren()) {
                     Dish currentDish = child.getValue(Dish.class);
                     allDishes.add(currentDish);

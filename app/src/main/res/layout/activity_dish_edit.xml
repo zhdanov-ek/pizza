@@ -91,9 +91,16 @@
                         android:inputType="textMultiLine|textCapSentences"
                         android:lines="8"
                         android:maxLines="10"
-                        android:minLines="6"
+                        android:minLines="4"
                         android:scrollbars="vertical" />
                 </android.support.design.widget.TextInputLayout>
+
+                <Spinner
+                    android:id="@+id/spinnerGroup"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"/>
+
 
                 <Button
                     android:id="@+id/btnOk"
