@@ -20,11 +20,4 @@
         app:srcCompat="@drawable/logo" />
 
 
-
-    <Button
-        style="@style/RaisedButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Sign In"/>
-
 </LinearLayout>

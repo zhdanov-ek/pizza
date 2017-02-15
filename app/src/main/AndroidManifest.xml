@@ -23,23 +23,28 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activities.NewsActivity"
-            android:launchMode="singleTask"/>
+        <activity
+            android:name=".activities.NewsActivity"
+            android:launchMode="singleTask" />
         <activity android:name=".activities.NewsEditActivity" />
         <activity android:name=".activities.NewsShowActivity" />
-        <activity android:name=".activities.MenuOrdersActivity"
-            android:launchMode="singleTask"/>
+        <activity
+            android:name=".activities.MenuOrdersActivity"
+            android:launchMode="singleTask" />
         <activity android:name=".activities.MenuOrdersEditActivity" />
-        <activity android:name=".activities.DishesActivity"
-            android:launchMode="singleTask"/>
+        <activity
+            android:name=".activities.DishesActivity"
+            android:launchMode="singleTask" />
         <activity android:name=".activities.DishEditActivity" />
         <activity android:name=".activities.MakePizzaActivity" />
-        <activity android:name=".activities.AboutActivity"
-            android:launchMode="singleTask"/>
+        <activity
+            android:name=".activities.AboutActivity"
+            android:launchMode="singleTask" />
         <activity android:name=".activities.PlaceOrderActivity" />
         <activity android:name=".activities.TrackingOrderActivity" />
-        <activity android:name=".activities.SettingsActivity"
-            android:launchMode="singleTask"/>
+        <activity
+            android:name=".activities.SettingsActivity"
+            android:launchMode="singleTask" />
         <activity android:name=".activities.DishShowActivity" />
         <activity android:name=".activities.ReserveTableCreationActivity" />
 
@@ -61,12 +66,14 @@
 
         <activity
             android:name=".activities.DeliveriesActivity"
-            android:theme="@style/AppTheme"
-            android:launchMode="singleTask"/>
+            android:launchMode="singleTask"
+            android:theme="@style/AppTheme" />
         <activity android:name=".activities.ArchiveDeliveriesActivity" />
         <activity android:name=".activities.DeliveryStatus" />
-        <activity android:name=".activities.ReserveTableActivity"
-            android:launchMode="singleTask"/>
+        <activity
+            android:name=".activities.ReserveTableActivity"
+            android:launchMode="singleTask" />
+        <activity android:name=".activities.AuthenticationActivity"></activity>
     </application>
 
 </manifest>
