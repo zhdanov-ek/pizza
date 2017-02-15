@@ -3,13 +3,12 @@ package com.example.gek.pizza.activities;
 import android.content.Context;
 import android.content.Intent;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -18,11 +17,9 @@ import android.widget.Toast;
 
 import com.example.gek.pizza.R;
 import com.example.gek.pizza.adapters.DishesAdapter;
-import com.example.gek.pizza.adapters.NewsAdapter;
 import com.example.gek.pizza.data.Const;
 import com.example.gek.pizza.data.Dish;
 import com.example.gek.pizza.data.MenuGroup;
-import com.example.gek.pizza.data.News;
 import com.example.gek.pizza.helpers.Utils;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -32,7 +29,7 @@ import java.util.ArrayList;
 
 /** Отображение списка блюд в разделе */
 
-public class DishesActivity extends AppCompatActivity {
+public class DishesActivity extends BaseActivity {
 
     private TextView tvEmpty;
     private RecyclerView rv;
@@ -47,8 +44,11 @@ public class DishesActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_menu_dishes);
 
+        LayoutInflater inflater = (LayoutInflater) this
+                .getSystemService(this.LAYOUT_INFLATER_SERVICE);
+        View contentView = inflater.inflate(R.layout.activity_dishes, null, false);
+        mDrawer.addView(contentView, 0);
 
         tvEmpty = (TextView) findViewById(R.id.tvEmpty);
         rv = (RecyclerView) findViewById(R.id.rv);
