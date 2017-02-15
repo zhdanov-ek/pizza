@@ -20,7 +20,7 @@ import com.google.firebase.auth.GoogleAuthProvider;
 public class Connection {
     private static final String TAG = "Connection singleton";
     private static Connection instance;
-    private FirebaseAuth auth;
+    public FirebaseAuth auth;
     private FirebaseAuth.AuthStateListener authListener;
     private Boolean isAuthenticated;
     public Boolean getAuthenticated() {
@@ -54,27 +54,17 @@ public class Connection {
             }
         };
         auth.addAuthStateListener(authListener);
+
+        if (auth.getCurrentUser() != null) {
+            isAuthenticated = true;
+        }
     }
 
     public void signOut(){
         auth.signOut();
+        isAuthenticated = false;
         Log.d(TAG, "sign out FireBase");
+
     }
-
-
-
-
-    /** Изымаем ID токен и подаем его в файрбейс Auth */
-    public void firebaseAuthWithGoogle(GoogleSignInAccount acct){
-        AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
-        auth.signInWithCredential(credential)
-                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        Log.d(TAG, "signInWithCredentialGoogle:oncomplete: " + task.isSuccessful());
-                    }
-                });
-    }
-
 
 }
