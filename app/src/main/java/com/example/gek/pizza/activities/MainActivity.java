@@ -4,20 +4,20 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.design.widget.NavigationView;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.CardView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import com.example.gek.pizza.R;
+import com.example.gek.pizza.data.Connection;
 import com.example.gek.pizza.data.Const;
 import com.example.gek.pizza.services.CheckDeliveryService;
 import com.example.gek.pizza.services.CheckReservedTablesService;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
@@ -27,6 +27,29 @@ public class MainActivity extends BaseActivity
 
     CardView cvMenuOrder, cvNews, cvOrders, cvContacts, cvReservations;
     private static final String TAG = "List of settings ";
+
+    @Override
+    public void updateUI() {
+        if (Connection.getInstance().getCurrentAuthStatus() == Const.AUTH_USER){
+            String email = FirebaseAuth.getInstance().getCurrentUser().getEmail();
+            Toast.makeText(this, "Firebase auth: current user = " + email, Toast.LENGTH_SHORT).show();
+        }
+
+        switch (Connection.getInstance().getCurrentAuthStatus()){
+            case Const.AUTH_NULL:
+                findViewById(R.id.tvOrdersTitle).setVisibility(View.GONE);
+                findViewById(R.id.cvOrders).setVisibility(View.GONE);
+                break;
+            case Const.AUTH_USER:
+                findViewById(R.id.tvOrdersTitle).setVisibility(View.GONE);
+                findViewById(R.id.cvOrders).setVisibility(View.GONE);
+                break;
+            case Const.AUTH_SHOP:
+                findViewById(R.id.tvOrdersTitle).setVisibility(View.VISIBLE);
+                findViewById(R.id.cvOrders).setVisibility(View.VISIBLE);
+                break;
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

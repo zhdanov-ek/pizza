@@ -7,7 +7,6 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -28,10 +27,12 @@ import android.widget.RelativeLayout.LayoutParams;
 import android.widget.Toast;
 
 import com.example.gek.pizza.R;
+import com.example.gek.pizza.data.Connection;
 import com.example.gek.pizza.data.Const;
 import com.example.gek.pizza.data.OrderTable;
 import com.example.gek.pizza.data.Table;
 import com.example.gek.pizza.helpers.RotationGestureDetector;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
@@ -74,6 +75,15 @@ public class ReserveTableActivity extends BaseActivity implements RotationGestur
     private final String TABLES_MARKERS = "tables_markers";
 
     private RotationGestureDetector mRotationDetector;
+
+
+    @Override
+    public void updateUI() {
+        if (Connection.getInstance().getCurrentAuthStatus() == Const.AUTH_USER){
+            String email = FirebaseAuth.getInstance().getCurrentUser().getEmail();
+            Toast.makeText(this, "Firebase auth: current user = " + email, Toast.LENGTH_SHORT).show();
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

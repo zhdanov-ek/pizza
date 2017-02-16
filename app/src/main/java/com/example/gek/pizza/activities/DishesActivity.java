@@ -17,10 +17,12 @@ import android.widget.Toast;
 
 import com.example.gek.pizza.R;
 import com.example.gek.pizza.adapters.DishesAdapter;
+import com.example.gek.pizza.data.Connection;
 import com.example.gek.pizza.data.Const;
 import com.example.gek.pizza.data.Dish;
 import com.example.gek.pizza.data.MenuGroup;
 import com.example.gek.pizza.helpers.Utils;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
@@ -40,6 +42,14 @@ public class DishesActivity extends BaseActivity {
     private ArrayList<Dish> allDishes = new ArrayList<>();
     private ArrayList<Dish> selectedDishes;
     private final String TAG = "DISHES ACTIVITY";
+
+    @Override
+    public void updateUI() {
+        if (Connection.getInstance().getCurrentAuthStatus() == Const.AUTH_USER){
+            String email = FirebaseAuth.getInstance().getCurrentUser().getEmail();
+            Toast.makeText(this, "Firebase auth: current user = " + email, Toast.LENGTH_SHORT).show();
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

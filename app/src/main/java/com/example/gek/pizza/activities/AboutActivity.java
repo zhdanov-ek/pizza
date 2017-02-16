@@ -12,7 +12,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Display;
@@ -26,8 +25,10 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.gek.pizza.R;
+import com.example.gek.pizza.data.Connection;
 import com.example.gek.pizza.data.Const;
 import com.example.gek.pizza.data.RetrofitMaps;
 import com.example.gek.pizza.data.routes.Example;
@@ -47,6 +48,7 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.firebase.auth.FirebaseAuth;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
 import java.util.ArrayList;
@@ -109,6 +111,14 @@ public class AboutActivity extends BaseActivity implements
     public List<LatLng> listOfMarkers;
     LatLng pizzeriaLocation;
     private Animation animationArrowRotation;
+
+    @Override
+    public void updateUI() {
+        if (Connection.getInstance().getCurrentAuthStatus() == Const.AUTH_USER){
+            String email = FirebaseAuth.getInstance().getCurrentUser().getEmail();
+            Toast.makeText(this, "Firebase auth: current user = " + email, Toast.LENGTH_SHORT).show();
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

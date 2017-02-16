@@ -24,6 +24,11 @@ public class Const {
     public static final String CHILD_DELIVERIES_ARCHIVE = "deliveries/archive";
 
 
+    // Auth mode
+    public static final int AUTH_NULL = 0;
+    public static final int AUTH_USER = 1;
+    public static final int AUTH_SHOP = 5;
+
 
     // Storage
     public static final String STORAGE = "gs://pizza-7ee24.appspot.com";

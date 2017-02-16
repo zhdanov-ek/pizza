@@ -2,7 +2,6 @@ package com.example.gek.pizza.activities;
 
 import android.content.Intent;
 import android.support.design.widget.TabLayout;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -18,11 +17,14 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.example.gek.pizza.R;
 import com.example.gek.pizza.adapters.DeliveriesAdapter;
+import com.example.gek.pizza.data.Connection;
 import com.example.gek.pizza.data.Const;
 import com.example.gek.pizza.data.Delivery;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
@@ -44,6 +46,14 @@ public class DeliveriesActivity extends BaseActivity {
 
     // Хранит все наши вкладки с переключателем
     private ViewPager mViewPager;
+
+    @Override
+    public void updateUI() {
+        if (Connection.getInstance().getCurrentAuthStatus() == Const.AUTH_USER){
+            String email = FirebaseAuth.getInstance().getCurrentUser().getEmail();
+            Toast.makeText(this, "Firebase auth: current user = " + email, Toast.LENGTH_SHORT).show();
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

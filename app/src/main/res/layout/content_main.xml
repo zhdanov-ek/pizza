@@ -91,14 +91,19 @@
 
             <TextView
                 style="@style/textMainMenuTitle"
+                android:id="@+id/tvOrdersTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/main_title_orders" />
+                android:text="@string/main_title_orders"
+                android:visibility="gone"
+                tools:visibility="visible"/>
 
             <android.support.v7.widget.CardView
                 android:id="@+id/cvOrders"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/card_view_main_menu_height">
+                android:layout_height="@dimen/card_view_main_menu_height"
+                android:visibility="gone"
+                tools:visibility="visible">
 
                 <LinearLayout
                     android:layout_width="match_parent"

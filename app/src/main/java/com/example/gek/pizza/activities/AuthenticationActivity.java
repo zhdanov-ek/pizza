@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import com.example.gek.pizza.R;
 import com.example.gek.pizza.data.Connection;
+import com.example.gek.pizza.data.Const;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -37,6 +38,13 @@ public class AuthenticationActivity extends BaseActivity
     private TextView tvStatus;
     private Button btnGoogleSignIn;
 
+    @Override
+    public void updateUI() {
+        if (Connection.getInstance().getCurrentAuthStatus() == Const.AUTH_USER){
+            String email = FirebaseAuth.getInstance().getCurrentUser().getEmail();
+            Toast.makeText(this, "Firebase auth: current user = " + email, Toast.LENGTH_SHORT).show();
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,7 +58,8 @@ public class AuthenticationActivity extends BaseActivity
 
 
         // Формируем параметры GoogleApiClient, которые будут переданы при создании намерения при авторизации
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+        GoogleSignInOptions gso = new GoogleSignInOptions
+                .Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
                 .build();
@@ -59,17 +68,9 @@ public class AuthenticationActivity extends BaseActivity
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .enableAutoManage(this, this)
                 .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
+                .addOnConnectionFailedListener(this)
                 .build();
 
-        if (Connection.getInstance().getAuthenticated()) {
-            Toast.makeText(this,
-                    "Current user " + Connection.getInstance().auth.getCurrentUser().getEmail(),
-                    Toast.LENGTH_LONG).show();
-        } else {
-            Toast.makeText(this,
-                    "No user",
-                    Toast.LENGTH_LONG).show();
-        }
     }
 
     @Override

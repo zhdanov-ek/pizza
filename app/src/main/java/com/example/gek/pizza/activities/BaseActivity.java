@@ -1,29 +1,35 @@
 package com.example.gek.pizza.activities;
 
 import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.gek.pizza.R;
 import com.example.gek.pizza.data.Connection;
+import com.example.gek.pizza.data.Const;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
-import org.w3c.dom.Text;
-
-public class BaseActivity extends AppCompatActivity
+public abstract class BaseActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener{
 
     protected DrawerLayout mDrawer;
     protected TextView tvAuth;
+    protected FirebaseAuth.AuthStateListener authListener;
 
+    // In this method we draw UI: hide or show menu, block activity and other
+    public abstract void updateUI();
+
+    private String TAG = this.getClass().getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,18 +52,51 @@ public class BaseActivity extends AppCompatActivity
         View header = navigationView.getHeaderView(0);
         tvAuth = (TextView) header.findViewById(R.id.tvAuth);
 
+
+        // Callback change state of auth Firebase.
+        // After change state of auth FireBase we update UI in current Activity
+        authListener = new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                FirebaseUser user = firebaseAuth.getCurrentUser();
+                if(user != null) {
+                    // Check user: is shop or other users
+                    tvAuth.setText(user.getEmail());
+                    if (user.getEmail().contentEquals(Connection.getInstance().getShopEmail())){
+                        Connection.getInstance().setCurrentAuthStatus(Const.AUTH_SHOP);
+                        Log.d(TAG, "FireBase authentication success (SHOP) " + user.getEmail());
+                    } else {
+                        Connection.getInstance().setCurrentAuthStatus(Const.AUTH_USER);
+                        Log.d(TAG, "FireBase authentication success (USER) " + user.getEmail());
+                    }
+                } else {
+                    tvAuth.setText(R.string.common_signin_button_text);
+                    Connection.getInstance().setCurrentAuthStatus(Const.AUTH_NULL);
+                    Log.d(TAG, "FireBase authentication failed ");
+                }
+                updateUI();
+            }
+        };
+
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        //todo Это обновление перенести в нормальное место где будет четко обновлятся меню
-        if (Connection.getInstance().auth.getCurrentUser() != null){
-            tvAuth.setText(Connection.getInstance().auth.getCurrentUser().getEmail());
-        } else {
-            tvAuth.setText(R.string.common_signin_button_text);
-        }
+        //set listener FireBase auth
+        Log.d(TAG, "FireBase authentication: setListener");
+        FirebaseAuth.getInstance().addAuthStateListener(authListener);
     }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        //remove listener FireBase auth
+        Log.d(TAG, "FireBase authentication: removeListener");
+        FirebaseAuth.getInstance().removeAuthStateListener(authListener);
+    }
+
+
 
     @Override
     public void onBackPressed() {
