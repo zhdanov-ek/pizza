@@ -42,12 +42,12 @@ public class MenuOrdersActivity extends BaseActivity {
     private Context ctx = this;
     private MenuOrdersAdapter menuOrdersAdapter;
     private ArrayList<MenuGroup> listMenuGroup;
+    private FloatingActionButton fab;
 
     @Override
     public void updateUI() {
-        if (Connection.getInstance().getCurrentAuthStatus() == Const.AUTH_USER){
-            String email = FirebaseAuth.getInstance().getCurrentUser().getEmail();
-            Toast.makeText(this, "Firebase auth: current user = " + email, Toast.LENGTH_SHORT).show();
+        if (Connection.getInstance().getCurrentAuthStatus() != Const.AUTH_SHOP){
+            fab.setVisibility(View.GONE);
         }
     }
 
@@ -60,9 +60,9 @@ public class MenuOrdersActivity extends BaseActivity {
         View contentView = inflater.inflate(R.layout.activity_menu_dishes, null, false);
         mDrawer.addView(contentView, 0);
 
-        Toolbar myToolbar = (Toolbar) findViewById(R.id.toolBar);
-        myToolbar.setTitle(R.string.title_menu_order);
-        setSupportActionBar(myToolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolBar);
+        toolbar.setTitle(R.string.title_menu_order);
+        setSupportActionBar(toolbar);
 
         rv = (RecyclerView) findViewById(R.id.rv);
 
@@ -79,7 +79,7 @@ public class MenuOrdersActivity extends BaseActivity {
         ItemOffsetDecoration itemDecoration = new ItemOffsetDecoration(ctx, R.dimen.item_menu_orders_offset);
         rv.addItemDecoration(itemDecoration);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(fabListener);
 
         listMenuGroup = new ArrayList<>();

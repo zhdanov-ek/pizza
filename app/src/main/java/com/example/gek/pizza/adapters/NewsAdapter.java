@@ -21,6 +21,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.gek.pizza.R;
 import com.example.gek.pizza.activities.NewsEditActivity;
 import com.example.gek.pizza.activities.NewsShowActivity;
+import com.example.gek.pizza.data.Connection;
 import com.example.gek.pizza.data.Const;
 import com.example.gek.pizza.data.News;
 import com.google.firebase.storage.FirebaseStorage;
@@ -96,6 +97,12 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder>{
             btnRemove.setOnClickListener(this);
             btnEdit.setOnClickListener(this);
             ivLess.setOnClickListener(this);
+
+            int state = Connection.getInstance().getCurrentAuthStatus();
+            if ( state != Const.AUTH_SHOP){
+                btnRemove.setVisibility(View.GONE);
+                btnEdit.setVisibility(View.GONE);
+            }
         }
 
         @Override
@@ -116,11 +123,6 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder>{
                     break;
                 default:
                     llDescription.setVisibility(View.VISIBLE);
-                    //todo если админ то показываем и кнопки редактирования и удаления карточки
-                    if (true){
-                        btnEdit.setVisibility(View.VISIBLE);
-                        btnRemove.setVisibility(View.VISIBLE);
-                    }
             }
         }
     }

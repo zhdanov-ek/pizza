@@ -18,11 +18,12 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.gek.pizza.R;
 import com.example.gek.pizza.data.Basket;
+import com.example.gek.pizza.data.Connection;
 import com.example.gek.pizza.data.Const;
 import com.example.gek.pizza.data.Dish;
 import com.example.gek.pizza.helpers.Utils;
 
-public class DishShowActivity extends AppCompatActivity implements View.OnClickListener{
+public class DishShowActivity extends BaseActivity implements View.OnClickListener{
     private TextView tvName, tvPrice, tvDescription;
     private ImageView ivPhoto;
     private Button btnAdd;
@@ -32,6 +33,15 @@ public class DishShowActivity extends AppCompatActivity implements View.OnClickL
     private TextView tvCounter;
     private ImageView ivMinus, ivPlus;
     private Dish dishOpen;
+
+    @Override
+    public void updateUI() {
+        if (Connection.getInstance().getCurrentAuthStatus() != Const.AUTH_SHOP){
+            btnEdit.setVisibility(View.GONE);
+            btnRemove.setVisibility(View.GONE);
+        }
+    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -202,23 +212,11 @@ public class DishShowActivity extends AppCompatActivity implements View.OnClickL
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
-            case R.id.action_basket:
-                startActivity(new Intent(this, BasketActivity.class));
-                break;
-            case R.id.action_settings:
-                startActivity(new Intent(this, SettingsActivity.class));
-                break;
-            case R.id.action_about:
-                startActivity(new Intent(this, AboutActivity.class));
-                break;
-        }
         return super.onOptionsItemSelected(item);
     }
 }

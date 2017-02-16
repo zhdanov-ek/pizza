@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.gek.pizza.R;
@@ -24,6 +25,7 @@ public abstract class BaseActivity extends AppCompatActivity
 
     protected DrawerLayout mDrawer;
     protected TextView tvAuth;
+    protected ImageView ivSignOut;
     protected FirebaseAuth.AuthStateListener authListener;
 
     // In this method we draw UI: hide or show menu, block activity and other
@@ -51,6 +53,21 @@ public abstract class BaseActivity extends AppCompatActivity
         // Give header and find TextView
         View header = navigationView.getHeaderView(0);
         tvAuth = (TextView) header.findViewById(R.id.tvAuth);
+        tvAuth.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (Connection.getInstance().getCurrentAuthStatus() == Const.AUTH_NULL){
+                    startActivity(new Intent(getBaseContext(), AuthenticationActivity.class));
+                }
+            }
+        });
+        ivSignOut = (ImageView) header.findViewById(R.id.ivSignOut);
+        ivSignOut.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Connection.getInstance().signOut();
+            }
+        });
 
 
         // Callback change state of auth Firebase.
@@ -62,6 +79,7 @@ public abstract class BaseActivity extends AppCompatActivity
                 if(user != null) {
                     // Check user: is shop or other users
                     tvAuth.setText(user.getEmail());
+                    ivSignOut.setVisibility(View.VISIBLE);
                     if (user.getEmail().contentEquals(Connection.getInstance().getShopEmail())){
                         Connection.getInstance().setCurrentAuthStatus(Const.AUTH_SHOP);
                         Log.d(TAG, "FireBase authentication success (SHOP) " + user.getEmail());
@@ -71,6 +89,7 @@ public abstract class BaseActivity extends AppCompatActivity
                     }
                 } else {
                     tvAuth.setText(R.string.common_signin_button_text);
+                    ivSignOut.setVisibility(View.INVISIBLE);
                     Connection.getInstance().setCurrentAuthStatus(Const.AUTH_NULL);
                     Log.d(TAG, "FireBase authentication failed ");
                 }
@@ -125,10 +144,6 @@ public abstract class BaseActivity extends AppCompatActivity
             startActivity(new Intent(this, SettingsActivity.class));
         } else if (id == R.id.nav_about) {
             startActivity(new Intent(this, AboutActivity.class));
-        } else if (id == R.id.nav_signin) {
-            startActivity(new Intent(this, AuthenticationActivity.class));
-        } else if (id == R.id.nav_signout) {
-            Connection.getInstance().signOut();
         }
 
 

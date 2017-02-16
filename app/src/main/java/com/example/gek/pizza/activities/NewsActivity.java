@@ -34,12 +34,15 @@ public class NewsActivity extends BaseActivity{
     private RecyclerView rv;
     private NewsAdapter newsAdapter;
     private Context ctx = this;
+    private FloatingActionButton fab;
 
     @Override
     public void updateUI() {
-        if (Connection.getInstance().getCurrentAuthStatus() == Const.AUTH_USER){
-            String email = FirebaseAuth.getInstance().getCurrentUser().getEmail();
-            Toast.makeText(this, "Firebase auth: current user = " + email, Toast.LENGTH_SHORT).show();
+        if (Connection.getInstance().getCurrentAuthStatus() != Const.AUTH_SHOP){
+            fab.setVisibility(View.GONE);
+        } else {
+            fab.setVisibility(View.VISIBLE);
+          //  rv.notifyAll();
         }
     }
 
@@ -60,7 +63,7 @@ public class NewsActivity extends BaseActivity{
         rv = (RecyclerView) findViewById(R.id.rv);
         rv.setLayoutManager(new LinearLayoutManager(this));
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(fabListener);
 
         allNews = new ArrayList<>();
@@ -103,23 +106,11 @@ public class NewsActivity extends BaseActivity{
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
-            case R.id.action_basket:
-                startActivity(new Intent(this, BasketActivity.class));
-                break;
-            case R.id.action_settings:
-                startActivity(new Intent(this, SettingsActivity.class));
-                break;
-            case R.id.action_about:
-                startActivity(new Intent(this, AboutActivity.class));
-                break;
-        }
         return super.onOptionsItemSelected(item);
     }
 }

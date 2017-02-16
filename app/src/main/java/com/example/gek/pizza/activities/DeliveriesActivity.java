@@ -47,11 +47,11 @@ public class DeliveriesActivity extends BaseActivity {
     // Хранит все наши вкладки с переключателем
     private ViewPager mViewPager;
 
+
     @Override
     public void updateUI() {
-        if (Connection.getInstance().getCurrentAuthStatus() == Const.AUTH_USER){
-            String email = FirebaseAuth.getInstance().getCurrentUser().getEmail();
-            Toast.makeText(this, "Firebase auth: current user = " + email, Toast.LENGTH_SHORT).show();
+        if (Connection.getInstance().getCurrentAuthStatus() != Const.AUTH_SHOP){
+            finish();
         }
     }
 
