@@ -205,22 +205,17 @@ public class DeliveriesActivity extends BaseActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu, menu);
-        return true;
+        if (Connection.getInstance().getCurrentAuthStatus() == Const.AUTH_SHOP) {
+            menu.add(0, Const.ACTION_ARCHIVE, 0, R.string.action_archive);
+        }
+        return super.onCreateOptionsMenu(menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
-            case R.id.action_archive:
+            case Const.ACTION_ARCHIVE:
                 startActivity(new Intent(this, ArchiveDeliveriesActivity.class));
-                break;
-            case R.id.action_settings:
-                startActivity(new Intent(this, SettingsActivity.class));
-                break;
-            case R.id.action_about:
-                Intent aboutIntent = new Intent(this, AboutActivity.class);
-                startActivity(aboutIntent);
                 break;
         }
         return super.onOptionsItemSelected(item);

@@ -125,21 +125,23 @@ public class DishesActivity extends BaseActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        menu.add(0, 1, 0, "Edit group");
-        menu.add(0, 2, 0, "Remove group");
+        if (Connection.getInstance().getCurrentAuthStatus() == Const.AUTH_SHOP) {
+            menu.add(0, Const.ACTION_EDIT, 0, R.string.action_edit_group);
+            menu.add(0, Const.ACTION_REMOVE, 0, R.string.action_remove_group);
+        }
         return super.onCreateOptionsMenu(menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
-            case 1:
+            case Const.ACTION_EDIT:
                 Intent editIntent = new Intent(this, MenuOrdersEditActivity.class);
                 editIntent.putExtra(Const.MODE, Const.MODE_EDIT);
                 editIntent.putExtra(Const.EXTRA_MENU_GROUP, menuGroup);
                 startActivity(editIntent);
                 break;
-            case 2:
+            case Const.ACTION_REMOVE:
                 removeGroupDishes();
                 finish();
                 break;

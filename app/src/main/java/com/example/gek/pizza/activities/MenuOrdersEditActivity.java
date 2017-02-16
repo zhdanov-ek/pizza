@@ -3,7 +3,6 @@ package com.example.gek.pizza.activities;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
@@ -21,6 +20,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.gek.pizza.R;
+import com.example.gek.pizza.data.Connection;
 import com.example.gek.pizza.data.Const;
 import com.example.gek.pizza.data.MenuGroup;
 import com.example.gek.pizza.helpers.Utils;
@@ -30,13 +30,15 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
-import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Random;
 
 import static com.example.gek.pizza.data.Const.db;
 
-public class MenuOrdersEditActivity extends AppCompatActivity implements View.OnClickListener{
+/**
+ * Edit group of dishes
+ * */
+
+public class MenuOrdersEditActivity extends BaseActivity implements View.OnClickListener{
 
     private boolean isNewMenuGroup = true;
     private MenuGroup oldMenuGroup;
@@ -53,6 +55,13 @@ public class MenuOrdersEditActivity extends AppCompatActivity implements View.On
     private StorageReference folderRef;
     private Boolean isNeedRemovePhoto = false;
 
+
+    @Override
+    public void updateUI() {
+        if (Connection.getInstance().getCurrentAuthStatus() != Const.AUTH_SHOP) {
+            finish();
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -264,12 +273,6 @@ public class MenuOrdersEditActivity extends AppCompatActivity implements View.On
         if (namePhoto.length() > 0){
             storageRef.child(Const.MENU_GROUP_IMAGES_FOLDER).child(namePhoto).delete();
         }
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu, menu);
-        return true;
     }
 
 

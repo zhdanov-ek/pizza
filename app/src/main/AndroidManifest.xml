@@ -27,7 +27,6 @@
             android:name=".activities.NewsActivity"
             android:launchMode="singleTask" />
         <activity android:name=".activities.NewsEditActivity" />
-        <activity android:name=".activities.NewsShowActivity" />
         <activity
             android:name=".activities.MenuOrdersActivity"
             android:launchMode="singleTask" />
@@ -41,7 +40,6 @@
             android:name=".activities.AboutActivity"
             android:launchMode="singleTask" />
         <activity android:name=".activities.PlaceOrderActivity" />
-        <activity android:name=".activities.TrackingOrderActivity" />
         <activity
             android:name=".activities.SettingsActivity"
             android:launchMode="singleTask" />

@@ -5,24 +5,22 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Toast;
 
 import com.example.gek.pizza.R;
 import com.example.gek.pizza.data.Connection;
 import com.example.gek.pizza.data.Const;
-import com.google.firebase.auth.FirebaseAuth;
 
 /**
- * Created by Ivleshch on 26.01.2017.
+ * Settings for SHOP user. Configure of global settings
  */
 
 public class SettingsActivity extends BaseActivity {
 
+    // If user is not have the SHOP status - close Activity
     @Override
     public void updateUI() {
-        if (Connection.getInstance().getCurrentAuthStatus() == Const.AUTH_USER){
-            String email = FirebaseAuth.getInstance().getCurrentUser().getEmail();
-            Toast.makeText(this, "Firebase auth: current user = " + email, Toast.LENGTH_SHORT).show();
+        if (Connection.getInstance().getCurrentAuthStatus() != Const.AUTH_SHOP) {
+            finish();
         }
     }
 
@@ -34,7 +32,6 @@ public class SettingsActivity extends BaseActivity {
                 .getSystemService(this.LAYOUT_INFLATER_SERVICE);
         View contentView = inflater.inflate(R.layout.activity_settings, null, false);
         mDrawer.addView(contentView, 0);
-
 
         Toolbar myToolbar = (Toolbar) findViewById(R.id.toolBar);
         myToolbar.setTitle(R.string.title_settings);

@@ -18,6 +18,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.gek.pizza.R;
+import com.example.gek.pizza.data.Connection;
 import com.example.gek.pizza.data.Const;
 import com.example.gek.pizza.data.News;
 import com.example.gek.pizza.helpers.Utils;
@@ -30,7 +31,7 @@ import com.google.firebase.storage.UploadTask;
 
 import static com.example.gek.pizza.data.Const.db;
 
-public class NewsEditActivity extends AppCompatActivity implements View.OnClickListener{
+public class NewsEditActivity extends BaseActivity implements View.OnClickListener{
 
     private boolean isNewNews = true;
     private News oldNews;
@@ -44,6 +45,13 @@ public class NewsEditActivity extends AppCompatActivity implements View.OnClickL
     private StorageReference folderRef;
     private Boolean isNeedRemovePhoto = false;
 
+
+    @Override
+    public void updateUI() {
+        if (Connection.getInstance().getCurrentAuthStatus() != Const.AUTH_SHOP) {
+            finish();
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -246,11 +254,6 @@ public class NewsEditActivity extends AppCompatActivity implements View.OnClickL
         }
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu, menu);
-        return true;
-    }
 
 
 }

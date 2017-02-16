@@ -22,6 +22,9 @@ import java.util.Random;
 
 import static com.example.gek.pizza.data.Const.db;
 
+
+/** Monitoring state of delivery */
+
 public class DeliveryStatus extends AppCompatActivity {
 
     LinearLayout llContainer;

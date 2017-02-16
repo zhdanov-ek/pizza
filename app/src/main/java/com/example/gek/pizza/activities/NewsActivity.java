@@ -38,11 +38,10 @@ public class NewsActivity extends BaseActivity{
 
     @Override
     public void updateUI() {
-        if (Connection.getInstance().getCurrentAuthStatus() != Const.AUTH_SHOP){
+        if (Connection.getInstance().getCurrentAuthStatus() != Const.AUTH_SHOP) {
             fab.setVisibility(View.GONE);
         } else {
             fab.setVisibility(View.VISIBLE);
-          //  rv.notifyAll();
         }
     }
 
@@ -104,13 +103,5 @@ public class NewsActivity extends BaseActivity{
         }
     };
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        return true;
-    }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        return super.onOptionsItemSelected(item);
-    }
 }

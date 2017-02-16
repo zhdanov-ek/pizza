@@ -52,6 +52,11 @@ public class Const {
     public static final String DISH_GROUP_KEY = "dish_group_key";
     public static final String DISH_GROUP_VALUE_REMOVED = "removed";
 
+    // Константы для обозначения пунктов в меню екшнбара
+    public static final int ACTION_EDIT = 1;
+    public static final int ACTION_REMOVE = 2;
+    public static final int ACTION_ARCHIVE = 3;
+    public static final int ACTION_BASKET = 4;
 
     // id используемые при вызовах активити через интент
     public static final int REQUEST_LOAD_IMG = 1;

@@ -11,16 +11,12 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
-import android.widget.RemoteViews;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.gek.pizza.R;
 import com.example.gek.pizza.activities.NewsEditActivity;
-import com.example.gek.pizza.activities.NewsShowActivity;
 import com.example.gek.pizza.data.Connection;
 import com.example.gek.pizza.data.Const;
 import com.example.gek.pizza.data.News;
@@ -99,9 +95,9 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder>{
             ivLess.setOnClickListener(this);
 
             int state = Connection.getInstance().getCurrentAuthStatus();
-            if ( state != Const.AUTH_SHOP){
-                btnRemove.setVisibility(View.GONE);
-                btnEdit.setVisibility(View.GONE);
+            if (state == Const.AUTH_SHOP){
+                btnRemove.setVisibility(View.VISIBLE);
+                btnEdit.setVisibility(View.VISIBLE);
             }
         }
 

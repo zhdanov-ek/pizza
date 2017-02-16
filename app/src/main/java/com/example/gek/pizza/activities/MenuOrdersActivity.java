@@ -121,14 +121,16 @@ public class MenuOrdersActivity extends BaseActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        menu.add(0, 1, 0, R.string.action_archive);
+        if (Connection.getInstance().getCurrentAuthStatus() == Const.AUTH_SHOP) {
+            menu.add(0, Const.ACTION_ARCHIVE, 0, R.string.action_archive);
+        }
         return super.onCreateOptionsMenu(menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
-            case 1:
+            case Const.ACTION_ARCHIVE:
                 showRemovedDishes();
                 break;
         }

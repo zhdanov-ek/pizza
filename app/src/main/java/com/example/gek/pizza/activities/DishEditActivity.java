@@ -5,10 +5,8 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.Menu;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -16,12 +14,12 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
-import android.widget.SpinnerAdapter;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.gek.pizza.R;
+import com.example.gek.pizza.data.Connection;
 import com.example.gek.pizza.data.Const;
 import com.example.gek.pizza.data.Dish;
 import com.example.gek.pizza.data.MenuGroup;
@@ -36,12 +34,10 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 
-import static com.example.gek.pizza.R.id.rv;
 import static com.example.gek.pizza.data.Const.db;
 
-public class DishEditActivity extends AppCompatActivity implements View.OnClickListener{
+public class DishEditActivity extends BaseActivity implements View.OnClickListener{
 
     private Context ctx;
     private boolean isNewDish = true;
@@ -63,7 +59,12 @@ public class DishEditActivity extends AppCompatActivity implements View.OnClickL
     private ArrayAdapter<String> adapter;
 
 
-
+    @Override
+    public void updateUI() {
+        if (Connection.getInstance().getCurrentAuthStatus() != Const.AUTH_SHOP) {
+            finish();
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -332,11 +333,6 @@ public class DishEditActivity extends AppCompatActivity implements View.OnClickL
         }
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu, menu);
-        return true;
-    }
 
 
 }

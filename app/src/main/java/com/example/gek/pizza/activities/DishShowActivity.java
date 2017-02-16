@@ -39,6 +39,8 @@ public class DishShowActivity extends BaseActivity implements View.OnClickListen
         if (Connection.getInstance().getCurrentAuthStatus() != Const.AUTH_SHOP){
             btnEdit.setVisibility(View.GONE);
             btnRemove.setVisibility(View.GONE);
+        } else {
+            btnAdd.setEnabled(false);
         }
     }
 
@@ -208,15 +210,5 @@ public class DishShowActivity extends BaseActivity implements View.OnClickListen
             }
         });
         builder.show();
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        return super.onOptionsItemSelected(item);
     }
 }
