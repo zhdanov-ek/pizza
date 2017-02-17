@@ -29,7 +29,7 @@ public abstract class BaseActivity extends AppCompatActivity
     protected ImageView ivSignOut;
     protected FirebaseAuth.AuthStateListener authListener;
 
-    // In this method we draw UI: hide or show menu, block activity and other
+    // In this method we will draw UI: hide or show menu, block activity and other
     public abstract void updateUI();
 
     private String TAG = this.getClass().getSimpleName();
@@ -39,13 +39,7 @@ public abstract class BaseActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_base);
 
-        // Находим наше меню и привязываем его к тулбару
-        // todo нужно тулбар вынести с активити сюда
         mDrawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, mDrawer, null, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        mDrawer.addDrawerListener(toggle);
-        toggle.syncState();
 
         final NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);

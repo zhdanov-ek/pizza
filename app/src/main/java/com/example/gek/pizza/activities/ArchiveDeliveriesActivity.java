@@ -1,6 +1,7 @@
 package com.example.gek.pizza.activities;
 
 import android.content.Context;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -20,11 +21,16 @@ import java.util.ArrayList;
 
 import static com.example.gek.pizza.data.Const.db;
 
-public class ArchiveDeliveriesActivity extends AppCompatActivity {
+public class ArchiveDeliveriesActivity extends BaseActivity {
     private static final String TAG = "ArchiveDeliveries";
     private RecyclerView rv;
     private ArrayList<Delivery> list;
     private Context ctx;
+
+    @Override
+    public void updateUI() {
+
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,9 +38,15 @@ public class ArchiveDeliveriesActivity extends AppCompatActivity {
         setContentView(R.layout.activity_archive_deliveries);
         ctx = this;
 
-        Toolbar myToolbar = (Toolbar) findViewById(R.id.toolBar);
-        myToolbar.setTitle(R.string.title_archive_deliveries);
-        setSupportActionBar(myToolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolBar);
+        toolbar.setTitle(R.string.title_archive_deliveries);
+        setSupportActionBar(toolbar);
+
+        //add button for open DrawerLayout
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, mDrawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        mDrawer.addDrawerListener(toggle);
+        toggle.syncState();
 
         rv = (RecyclerView) findViewById(R.id.rv);
         rv.setLayoutManager(new LinearLayoutManager(this));

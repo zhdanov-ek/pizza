@@ -2,6 +2,7 @@ package com.example.gek.pizza.activities;
 
 import android.content.Intent;
 import android.support.design.widget.TabLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -68,6 +69,12 @@ public class DeliveriesActivity extends BaseActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolBar);
         toolbar.setTitle(R.string.title_orders);
         setSupportActionBar(toolbar);
+
+        //add button for open DrawerLayout
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, mDrawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        mDrawer.addDrawerListener(toggle);
+        toggle.syncState();
 
         // Создаем адаптер, который будет возвращать фрагменты для каждой из трех секций активити
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());

@@ -4,6 +4,7 @@ package com.example.gek.pizza.activities;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.annotation.NonNull;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -58,9 +59,15 @@ public class NewsEditActivity extends BaseActivity implements View.OnClickListen
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_news_edit);
 
-        Toolbar myToolbar = (Toolbar) findViewById(R.id.toolBar);
-        myToolbar.setTitle("");
-        setSupportActionBar(myToolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolBar);
+        toolbar.setTitle("");
+        setSupportActionBar(toolbar);
+
+        //add button for open DrawerLayout
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, mDrawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        mDrawer.addDrawerListener(toggle);
+        toggle.syncState();
 
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
         etTitle = (EditText) findViewById(R.id.etTitle);
@@ -84,11 +91,11 @@ public class NewsEditActivity extends BaseActivity implements View.OnClickListen
             isNewNews = false;
             oldNews = getIntent().getParcelableExtra(Const.EXTRA_NEWS);
             String title = getResources().getString(R.string.edit) + " - " + oldNews.getTitle();
-            myToolbar.setTitle(title);
+            toolbar.setTitle(title);
             fillValues(oldNews);
         } else {
             fillValues(null);
-            myToolbar.setTitle(R.string.create_new);
+            toolbar.setTitle(R.string.create_new);
         }
 
         // Получаем ссылку на наше хранилище

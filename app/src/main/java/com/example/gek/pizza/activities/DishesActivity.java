@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.design.widget.FloatingActionButton;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -59,6 +60,16 @@ public class DishesActivity extends BaseActivity {
         View contentView = inflater.inflate(R.layout.activity_dishes, null, false);
         mDrawer.addView(contentView, 0);
 
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolBar);
+        toolbar.setTitle("");
+        setSupportActionBar(toolbar);
+
+        //add button for open DrawerLayout
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, mDrawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        mDrawer.addDrawerListener(toggle);
+        toggle.syncState();
+
         tvEmpty = (TextView) findViewById(R.id.tvEmpty);
         rv = (RecyclerView) findViewById(R.id.rv);
         // задаем лаяют с твумя столбцами
@@ -68,12 +79,9 @@ public class DishesActivity extends BaseActivity {
         Intent intent = getIntent();
         if (intent != null) {
             menuGroup = intent.getParcelableExtra(Const.EXTRA_MENU_GROUP);
+            toolbar.setTitle(menuGroup.getName());
         }
 
-
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolBar);
-        toolbar.setTitle(menuGroup.getName());
-        setSupportActionBar(toolbar);
 
         fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(fabListener);

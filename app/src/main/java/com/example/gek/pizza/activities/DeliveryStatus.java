@@ -1,9 +1,11 @@
 package com.example.gek.pizza.activities;
 
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -26,7 +28,7 @@ import static com.example.gek.pizza.data.Const.db;
 
 /** Monitoring state of delivery */
 
-public class DeliveryStatus extends AppCompatActivity {
+public class DeliveryStatus extends BaseActivity {
 
     LinearLayout llContainer;
     TextView tvStep1Num, tvStep2Num, tvStep3Num, tvStep4Num;
@@ -35,13 +37,29 @@ public class DeliveryStatus extends AppCompatActivity {
     ImageView ivStep1, ivStep2, ivStep3, ivStep4;
 
     @Override
+    public void updateUI() {
+
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_delivery_status);
+
+        // Content inflate in VIEW and put in DrawerLayout
+        LayoutInflater inflater = (LayoutInflater) this
+                .getSystemService(this.LAYOUT_INFLATER_SERVICE);
+        View contentView = inflater.inflate(R.layout.activity_delivery_status, null, false);
+        mDrawer.addView(contentView, 0);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolBar);
         toolbar.setTitle(R.string.title_delivery);
         setSupportActionBar(toolbar);
+
+        //add button for open DrawerLayout
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, mDrawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        mDrawer.addDrawerListener(toggle);
+        toggle.syncState();
 
         findAllView();
 

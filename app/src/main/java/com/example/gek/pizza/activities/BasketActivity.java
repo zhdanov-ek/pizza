@@ -1,12 +1,14 @@
 package com.example.gek.pizza.activities;
 
 import android.content.Intent;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.RelativeLayout;
@@ -21,7 +23,7 @@ import com.example.gek.pizza.helpers.Utils;
 
 /**  Отображает корзину заказов и отправляет заказ */
 
-public class BasketActivity extends AppCompatActivity implements OrderAdapter.RefreshTotalCallback{
+public class BasketActivity extends BaseActivity implements OrderAdapter.RefreshTotalCallback{
 
     private RecyclerView rv;
     private TextView tvEmpty;
@@ -30,13 +32,28 @@ public class BasketActivity extends AppCompatActivity implements OrderAdapter.Re
     private Button btnOrderNow;
 
     @Override
+    public void updateUI() {
+
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_basket);
+
+        LayoutInflater inflater = (LayoutInflater) this
+                .getSystemService(this.LAYOUT_INFLATER_SERVICE);
+        View contentView = inflater.inflate(R.layout.activity_basket, null, false);
+        mDrawer.addView(contentView, 0);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolBar);
         toolbar.setTitle(R.string.title_basket);
         setSupportActionBar(toolbar);
+
+        //add button for open DrawerLayout
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, mDrawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        mDrawer.addDrawerListener(toggle);
+        toggle.syncState();
 
         tvTotal = (TextView) findViewById(R.id.tvTotal);
         btnOrderNow = (Button) findViewById(R.id.btnOrderNow);

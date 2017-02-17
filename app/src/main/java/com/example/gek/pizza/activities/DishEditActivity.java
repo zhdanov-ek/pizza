@@ -5,8 +5,10 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -69,11 +71,22 @@ public class DishEditActivity extends BaseActivity implements View.OnClickListen
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_dish_edit);
 
-        Toolbar myToolbar = (Toolbar) findViewById(R.id.toolBar);
-        myToolbar.setTitle("");
-        setSupportActionBar(myToolbar);
+        // Content inflate in VIEW and put in DrawerLayout
+        LayoutInflater inflater = (LayoutInflater) this
+                .getSystemService(this.LAYOUT_INFLATER_SERVICE);
+        View contentView = inflater.inflate(R.layout.activity_dish_edit, null, false);
+        mDrawer.addView(contentView, 0);
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolBar);
+        toolbar.setTitle("");
+        setSupportActionBar(toolbar);
+
+        //add button for open DrawerLayout
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, mDrawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        mDrawer.addDrawerListener(toggle);
+        toggle.syncState();
 
         ctx = this;
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
@@ -102,14 +115,14 @@ public class DishEditActivity extends BaseActivity implements View.OnClickListen
             oldDish = getIntent().getParcelableExtra(Const.EXTRA_DISH);
             keyGroup = oldDish.getKeyGroup();
             String title = getResources().getString(R.string.edit) + " - " + oldDish.getName();
-            myToolbar.setTitle(title);
+            toolbar.setTitle(title);
             spinnerGroup.setVisibility(View.VISIBLE);
             loadListGroupsMenu();
             fillValues(oldDish);
         } else {
             fillValues(null);
             keyGroup = getIntent().getStringExtra(Const.DISH_GROUP_KEY);
-            myToolbar.setTitle(R.string.create_new);
+            toolbar.setTitle(R.string.create_new);
         }
 
         // Получаем ссылку на наше хранилище

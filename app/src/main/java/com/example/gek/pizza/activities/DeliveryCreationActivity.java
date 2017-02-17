@@ -16,6 +16,7 @@ import com.example.gek.pizza.helpers.Utils;
 
 import static com.example.gek.pizza.data.Const.db;
 
+// Эта активити наследуется не от шаблонной, что бы нельзя было сделать изменения в корзине
 public class DeliveryCreationActivity extends AppCompatActivity {
 
     EditText etName, etPhone, etAddress, etComment;

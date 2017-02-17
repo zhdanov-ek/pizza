@@ -2,10 +2,12 @@ package com.example.gek.pizza.activities;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -48,7 +50,20 @@ public class DishShowActivity extends BaseActivity implements View.OnClickListen
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_dish_show);
+        LayoutInflater inflater = (LayoutInflater) this
+                .getSystemService(this.LAYOUT_INFLATER_SERVICE);
+        View contentView = inflater.inflate(R.layout.activity_dish_show, null, false);
+        mDrawer.addView(contentView, 0);
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolBar);
+        toolbar.setTitle("");
+        setSupportActionBar(toolbar);
+
+        //add button for open DrawerLayout
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, mDrawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        mDrawer.addDrawerListener(toggle);
+        toggle.syncState();
 
         tvName = (TextView) findViewById(R.id.tvName);
         tvPrice = (TextView) findViewById(R.id.tvPrice);
@@ -71,10 +86,7 @@ public class DishShowActivity extends BaseActivity implements View.OnClickListen
         if (getIntent().hasExtra(Const.EXTRA_DISH)){
             dishOpen = getIntent().getParcelableExtra(Const.EXTRA_DISH);
             fillValues(dishOpen);
-
-            Toolbar myToolbar = (Toolbar) findViewById(R.id.toolBar);
-            myToolbar.setTitle(dishOpen.getName());
-            setSupportActionBar(myToolbar);
+            toolbar.setTitle(dishOpen.getName());
         }
     }
 

@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -69,9 +70,15 @@ public class MenuOrdersEditActivity extends BaseActivity implements View.OnClick
         setContentView(R.layout.activity_menu_orders_edit);
 
 
-        Toolbar myToolbar = (Toolbar) findViewById(R.id.toolBar);
-        myToolbar.setTitle("");
-        setSupportActionBar(myToolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolBar);
+        toolbar.setTitle("");
+        setSupportActionBar(toolbar);
+
+        //add button for open DrawerLayout
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, mDrawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        mDrawer.addDrawerListener(toggle);
+        toggle.syncState();
 
         // Random color for background of item
         int[] colors = getResources().getIntArray(R.array.colors);
@@ -105,11 +112,11 @@ public class MenuOrdersEditActivity extends BaseActivity implements View.OnClick
             isNewMenuGroup = false;
             oldMenuGroup = getIntent().getParcelableExtra(Const.EXTRA_MENU_GROUP);
             String title = getResources().getString(R.string.edit) + " - " + oldMenuGroup.getName();
-            myToolbar.setTitle(title);
+            toolbar.setTitle(title);
             fillValues(oldMenuGroup);
         } else {
             fillValues(null);
-            myToolbar.setTitle(R.string.create_new);
+            toolbar.setTitle(R.string.create_new);
         }
 
         // Получаем ссылку на наше хранилище
