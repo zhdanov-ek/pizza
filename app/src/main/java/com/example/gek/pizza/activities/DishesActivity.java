@@ -124,11 +124,17 @@ public class DishesActivity extends BaseActivity {
         }
     };
 
+
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         if (Connection.getInstance().getCurrentAuthStatus() == Const.AUTH_SHOP) {
             menu.add(0, Const.ACTION_EDIT, 0, R.string.action_edit_group);
             menu.add(0, Const.ACTION_REMOVE, 0, R.string.action_remove_group);
+        } else {
+            menu.add(0, Const.ACTION_BASKET, 0, R.string.action_basket)
+                    .setIcon(R.drawable.ic_basket)
+                    .setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
         }
         return super.onCreateOptionsMenu(menu);
     }
@@ -145,6 +151,9 @@ public class DishesActivity extends BaseActivity {
             case Const.ACTION_REMOVE:
                 removeGroupDishes();
                 finish();
+                break;
+            case Const.ACTION_BASKET:
+                startActivity(new Intent(this, BasketActivity.class));
                 break;
 
         }

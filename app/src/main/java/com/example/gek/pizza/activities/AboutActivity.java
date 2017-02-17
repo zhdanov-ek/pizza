@@ -16,6 +16,8 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.animation.Animation;
@@ -588,6 +590,26 @@ public class AboutActivity extends BaseActivity implements
         }
 
         return poly;
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        if (Connection.getInstance().getCurrentAuthStatus() != Const.AUTH_SHOP){
+            menu.add(0, Const.ACTION_BASKET, 0, R.string.action_basket)
+                    .setIcon(R.drawable.ic_basket)
+                    .setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+        }
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case Const.ACTION_BASKET:
+                startActivity(new Intent(this, BasketActivity.class));
+                break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
 

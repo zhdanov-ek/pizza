@@ -102,11 +102,21 @@ public class MainActivity extends BaseActivity
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        if (Connection.getInstance().getCurrentAuthStatus() != Const.AUTH_SHOP){
+            menu.add(0, Const.ACTION_BASKET, 0, R.string.action_basket)
+                    .setIcon(R.drawable.ic_basket)
+                    .setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+        }
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case Const.ACTION_BASKET:
+                startActivity(new Intent(this, BasketActivity.class));
+                break;
+        }
         return super.onOptionsItemSelected(item);
     }
 
