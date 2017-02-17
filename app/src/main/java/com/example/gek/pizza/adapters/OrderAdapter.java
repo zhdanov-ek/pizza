@@ -64,7 +64,6 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder>{
         }
 
         holder.tvName.setText(order.getNameDish());
-        holder.tvPrice.setText(Utils.toPrice(order.getPriceDish()));
         holder.tvCounter.setText(String.valueOf(order.getCount()));
         holder.tvSum.setText(Utils.toPrice(order.getSum()));
     }
@@ -77,7 +76,6 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder>{
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         private TextView tvName;
         private ImageView ivPhoto;
-        private TextView tvPrice;
         private LinearLayout llCounter;
         private TextView tvCounter;
         private ImageView ivMinus;
@@ -88,7 +86,6 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder>{
         public ViewHolder(View itemView) {
             super(itemView);
             tvName = (TextView) itemView.findViewById(R.id.tvName);
-            tvPrice = (TextView) itemView.findViewById(R.id.tvPrice);
             ivPhoto = (ImageView) itemView.findViewById(R.id.ivPhoto);
             llCounter = (LinearLayout) itemView.findViewById(R.id.llCounter);
             llCounter.setVisibility(View.VISIBLE);
@@ -122,7 +119,6 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder>{
         private void removeDish(int position){
             Basket.getInstance().orders.remove(position);
             if (Basket.getInstance().orders.size() == 0) {
-                //todo Скрыть ТВ и кнопки для заказа, т.е. покзаать что корзина пустая
                 refreshTotalCallback.refreshTotal();
             } else {
                 notifyItemRemoved(position);

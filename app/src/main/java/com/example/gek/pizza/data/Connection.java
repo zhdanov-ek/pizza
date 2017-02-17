@@ -13,11 +13,10 @@ import com.google.firebase.auth.FirebaseAuth;
 public class Connection {
     private static final String TAG = "CONNECTION singleton";
     private static Connection instance;
-    private FirebaseAuth.AuthStateListener authListener;
     private int currentAuthStatus;
 
     // Еmail of shop for auth as administration of pizzeria
-    private String shopEmail = "zhdanov.ek@gmail.com2";
+    private String shopEmail = "zhdanov.ek@gmail.com";
 
     public static synchronized Connection getInstance(){
         if (instance == null) {
@@ -28,7 +27,6 @@ public class Connection {
 
     // Constructor
     private Connection(){
-        // todo Write method for retrieving this value from SERVER.
     }
 
 

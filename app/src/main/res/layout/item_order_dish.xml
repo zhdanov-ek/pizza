@@ -16,14 +16,6 @@
             android:layout_height="@dimen/item_dish_photo_height"
             tools:background="@drawable/dish_empty" />
 
-        <TextView
-            android:id="@+id/tvPrice"
-            style="@style/textSmall"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            tools:text="@string/hint_price"
-            />
     </LinearLayout>
 
 
