@@ -2,36 +2,40 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <group android:checkableBehavior="single">
-        <item
-            android:id="@+id/nav_dishes"
-            android:icon="@drawable/ic_menu_camera"
-            android:title="Dishes" />
-        <item
-            android:id="@+id/nav_news"
-            android:icon="@drawable/ic_menu_gallery"
-            android:title="News" />
+
+    <item android:title="@string/shop"
+        android:id="@+id/nav_shop_group"
+        android:visible="false">
+        <menu>
         <item
             android:id="@+id/nav_deliveries"
             android:icon="@drawable/ic_menu_slideshow"
-            android:title="Deliveries" />
-        <item
-            android:id="@+id/nav_reservation"
-            android:icon="@drawable/ic_menu_manage"
-            android:title="Reservation" />
-    </group>
+            android:title="@string/main_title_orders" />
 
-    <item android:title="Additional">
-        <menu>
             <item
                 android:id="@+id/nav_settings"
-                android:icon="@drawable/ic_menu_share"
-                android:title="Settings" />
-            <item
-                android:id="@+id/nav_about"
-                android:icon="@drawable/ic_menu_send"
-                android:title="About" />
+                android:icon="@drawable/ic_menu_manage"
+                android:title="@string/title_settings" />
         </menu>
     </item>
 
+        <item
+            android:id="@+id/nav_dishes"
+            android:icon="@drawable/ic_menu_camera"
+            android:title="@string/title_menu_order" />
+        <item
+            android:id="@+id/nav_news"
+            android:icon="@drawable/ic_menu_gallery"
+            android:title="@string/title_news" />
+
+        <item
+            android:id="@+id/nav_reservation"
+            android:icon="@drawable/ic_menu_share"
+            android:title="@string/title_reserve_table" />
+        <item
+            android:id="@+id/nav_about"
+            android:icon="@drawable/ic_menu_send"
+            android:title="@string/title_about" />
+    </group>
 
 </menu>

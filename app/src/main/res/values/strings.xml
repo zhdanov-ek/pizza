@@ -16,6 +16,7 @@
     -->
 
     <string name="app_name">Pizza</string>
+    <string name="shop">Shop</string>
 
     <string name="ok">OK</string>
     <string name="cancel">Cancel</string>

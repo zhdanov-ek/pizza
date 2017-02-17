@@ -47,8 +47,9 @@ public abstract class BaseActivity extends AppCompatActivity
         toggle.syncState();
 
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        final NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
 
         // Give header and find TextView
         View header = navigationView.getHeaderView(0);
@@ -68,6 +69,8 @@ public abstract class BaseActivity extends AppCompatActivity
                 Connection.getInstance().signOut();
             }
         });
+
+
 
 
         // Callback change state of auth Firebase.
@@ -92,6 +95,13 @@ public abstract class BaseActivity extends AppCompatActivity
                     ivSignOut.setVisibility(View.INVISIBLE);
                     Connection.getInstance().setCurrentAuthStatus(Const.AUTH_NULL);
                     Log.d(TAG, "FireBase authentication failed ");
+                }
+
+                // show or hide SHOP group of menu
+                if (Connection.getInstance().getCurrentAuthStatus() ==  Const.AUTH_SHOP){
+                    navigationView.getMenu().findItem(R.id.nav_shop_group).setVisible(true);
+                } else {
+                    navigationView.getMenu().findItem(R.id.nav_shop_group).setVisible(false);
                 }
                 updateUI();
             }
