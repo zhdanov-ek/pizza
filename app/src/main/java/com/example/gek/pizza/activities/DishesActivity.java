@@ -70,9 +70,10 @@ public class DishesActivity extends BaseActivity {
             menuGroup = intent.getParcelableExtra(Const.EXTRA_MENU_GROUP);
         }
 
-        Toolbar myToolbar = (Toolbar) findViewById(R.id.toolBar);
-        myToolbar.setTitle(menuGroup.getName());
-        setSupportActionBar(myToolbar);
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolBar);
+        toolbar.setTitle(menuGroup.getName());
+        setSupportActionBar(toolbar);
 
         fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(fabListener);

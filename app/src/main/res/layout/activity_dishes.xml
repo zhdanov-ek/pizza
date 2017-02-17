@@ -6,8 +6,7 @@
     android:orientation="vertical"
     tools:context="com.example.gek.pizza.activities.DishesActivity">
 
-    <include layout="@layout/toolbar" />
-
+    <include layout="@layout/toolbar"/>
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">

@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.widget.CardView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -30,11 +31,6 @@ public class MainActivity extends BaseActivity
 
     @Override
     public void updateUI() {
-        if (Connection.getInstance().getCurrentAuthStatus() == Const.AUTH_USER){
-            String email = FirebaseAuth.getInstance().getCurrentUser().getEmail();
-            Toast.makeText(this, "Firebase auth: current user = " + email, Toast.LENGTH_SHORT).show();
-        }
-
         switch (Connection.getInstance().getCurrentAuthStatus()){
             case Const.AUTH_NULL:
                 findViewById(R.id.tvOrdersTitle).setVisibility(View.GONE);
@@ -58,6 +54,10 @@ public class MainActivity extends BaseActivity
                 .getSystemService(this.LAYOUT_INFLATER_SERVICE);
         View contentView = inflater.inflate(R.layout.content_main, null, false);
         mDrawer.addView(contentView, 0);
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolBar);
+        toolbar.setTitle(R.string.app_name);
+        setSupportActionBar(toolbar);
 
         cvMenuOrder = (CardView) findViewById(R.id.cvMenuOrder);
         cvMenuOrder.setOnClickListener(this);
@@ -102,28 +102,11 @@ public class MainActivity extends BaseActivity
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
-            case R.id.action_basket:
-                startActivity(new Intent(this, BasketActivity.class));
-                break;
-            case R.id.action_settings:
-                startActivity(new Intent(this, SettingsActivity.class));
-                break;
-            case R.id.action_about:
-                Intent aboutIntent = new Intent(this, AboutActivity.class);
-                startActivity(aboutIntent);
-                break;
-            case R.id.action_reserve_table:
-                startActivity(new Intent(this, ReserveTableActivity.class));
-                break;
-        }
         return super.onOptionsItemSelected(item);
     }
 
@@ -166,9 +149,9 @@ public class MainActivity extends BaseActivity
 
     }
 
-    @SuppressWarnings("StatementWithEmptyBody")
-    @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
-        return super.onNavigationItemSelected(item);
-    }
+//    @SuppressWarnings("StatementWithEmptyBody")
+//    @Override
+//    public boolean onNavigationItemSelected(MenuItem item) {
+//        return super.onNavigationItemSelected(item);
+//    }
 }

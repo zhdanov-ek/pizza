@@ -2,6 +2,7 @@ package com.example.gek.pizza.activities;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -37,6 +38,11 @@ public class DeliveryStatus extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_delivery_status);
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolBar);
+        toolbar.setTitle(R.string.title_delivery);
+        setSupportActionBar(toolbar);
+
         findAllView();
 
         // На время отладки мы получаем случайный заказ с БД из любого раздела и выводим инфу о нем

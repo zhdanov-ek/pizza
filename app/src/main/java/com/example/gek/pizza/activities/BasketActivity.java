@@ -34,9 +34,9 @@ public class BasketActivity extends AppCompatActivity implements OrderAdapter.Re
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_basket);
 
-        Toolbar myToolbar = (Toolbar) findViewById(R.id.toolBar);
-        myToolbar.setTitle(R.string.title_basket);
-        setSupportActionBar(myToolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolBar);
+        toolbar.setTitle(R.string.title_basket);
+        setSupportActionBar(toolbar);
 
         tvTotal = (TextView) findViewById(R.id.tvTotal);
         btnOrderNow = (Button) findViewById(R.id.btnOrderNow);

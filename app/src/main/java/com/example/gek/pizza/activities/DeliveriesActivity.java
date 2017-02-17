@@ -65,7 +65,7 @@ public class DeliveriesActivity extends BaseActivity {
         mDrawer.addView(contentView, 0);
 
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolBar);
         toolbar.setTitle(R.string.title_orders);
         setSupportActionBar(toolbar);
 
