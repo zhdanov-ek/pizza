@@ -9,32 +9,32 @@
         <menu>
         <item
             android:id="@+id/nav_deliveries"
-            android:icon="@drawable/ic_menu_slideshow"
+            android:icon="@drawable/ic_menu_delivery"
             android:title="@string/main_title_orders" />
 
             <item
                 android:id="@+id/nav_settings"
-                android:icon="@drawable/ic_menu_manage"
+                android:icon="@drawable/ic_menu_settings"
                 android:title="@string/title_settings" />
         </menu>
     </item>
 
         <item
             android:id="@+id/nav_dishes"
-            android:icon="@drawable/ic_menu_camera"
+            android:icon="@drawable/ic_menu_dishes"
             android:title="@string/title_menu_order" />
         <item
             android:id="@+id/nav_news"
-            android:icon="@drawable/ic_menu_gallery"
+            android:icon="@drawable/ic_menu_news"
             android:title="@string/title_news" />
 
         <item
             android:id="@+id/nav_reservation"
-            android:icon="@drawable/ic_menu_share"
+            android:icon="@drawable/ic_menu_reservation"
             android:title="@string/title_reserve_table" />
         <item
             android:id="@+id/nav_about"
-            android:icon="@drawable/ic_menu_send"
+            android:icon="@drawable/ic_menu_info"
             android:title="@string/title_about" />
     </group>
 
