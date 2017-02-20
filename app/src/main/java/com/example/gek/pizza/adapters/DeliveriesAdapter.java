@@ -31,6 +31,8 @@ import static com.example.gek.pizza.data.Const.db;
  * Адаптер отображающий заказы на доставку (новые, готовка, доставка и архив)
  */
 
+// todo при перемещении доставки с одной папки в другую меняем состояние заказа в персональной папке юзера
+
 public class DeliveriesAdapter extends RecyclerView.Adapter<DeliveriesAdapter.ViewHolder>{
 
     private ArrayList<Delivery> listDeliveries;

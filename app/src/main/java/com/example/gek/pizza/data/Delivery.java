@@ -22,6 +22,9 @@ public class Delivery {
     private Date dateTransport;
     private Date dateArchive;
     private Boolean isPaid;
+    private String userId;                      // владелец заказа - FireBaseAuth user ID
+    private String longitude;                   // где создавался заказ
+    private String latitude;
 
 
     public Delivery() {
@@ -138,5 +141,29 @@ public class Delivery {
 
     public void setPaid(Boolean paid) {
         isPaid = paid;
+    }
+
+    public String getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(String longitude) {
+        this.longitude = longitude;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    public String getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(String latitude) {
+        this.latitude = latitude;
     }
 }

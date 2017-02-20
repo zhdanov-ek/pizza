@@ -77,6 +77,7 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
         }
     }
 
+    //todo Тут надо нормально назвать переменную ведь сюда разные значения приходят, а не только телефон
     public void updateSummary(Preference pref){
         EditTextPreference etTextPhone = (EditTextPreference) pref;
         String textPhone = etTextPhone.getText();

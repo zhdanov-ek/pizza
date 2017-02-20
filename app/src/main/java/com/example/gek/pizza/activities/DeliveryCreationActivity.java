@@ -1,5 +1,6 @@
 package com.example.gek.pizza.activities;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -10,9 +11,13 @@ import android.widget.Toast;
 
 import com.example.gek.pizza.R;
 import com.example.gek.pizza.data.Basket;
+import com.example.gek.pizza.data.Connection;
 import com.example.gek.pizza.data.Const;
 import com.example.gek.pizza.data.Delivery;
 import com.example.gek.pizza.helpers.Utils;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
 
 import static com.example.gek.pizza.data.Const.db;
 
@@ -40,30 +45,48 @@ public class DeliveryCreationActivity extends AppCompatActivity {
 
     }
 
-    // send order to FireBase
+    // send order to FireBase only if user not SHOP or GUEST
     View.OnClickListener createDelivery = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
             if (checkData()) {
-                Delivery delivery = new Delivery();
-                delivery.setNameClient(etName.getText().toString());
-                delivery.setPhoneClient(etPhone.getText().toString());
-                delivery.setAddressClient(etAddress.getText().toString());
-                delivery.setCommentClient(etComment.getText().toString());
-                delivery.setTotalSum(Basket.getInstance().getTotalSum());
-                delivery.setNumbersDishes(Basket.getInstance().getNumberDishes());
-                delivery.setKeysDishes(Basket.getInstance().getKeysDishes());
+                switch (Connection.getInstance().getCurrentAuthStatus()){
+                    case Const.AUTH_SHOP:
+                        Connection.getInstance().signOut();
+                        finish();
+                        break;
+                    case Const.AUTH_NULL:
+                        startActivity(new Intent(getBaseContext(), AuthenticationActivity.class));
+                        break;
+                    default:
+                        String id = FirebaseAuth.getInstance().getCurrentUser().getUid();
+                        Delivery delivery = new Delivery();
+                        delivery.setNameClient(etName.getText().toString());
+                        delivery.setPhoneClient(etPhone.getText().toString());
+                        delivery.setAddressClient(etAddress.getText().toString());
+                        delivery.setCommentClient(etComment.getText().toString());
+                        delivery.setTotalSum(Basket.getInstance().getTotalSum());
+                        delivery.setNumbersDishes(Basket.getInstance().getNumberDishes());
+                        delivery.setKeysDishes(Basket.getInstance().getKeysDishes());
 
-                // Create name for key of delivery and send data to server
-                String numberDelivery = Utils.makeDeliveryNumber(etPhone.getText().toString());
+                        // Create name for key of delivery and send data to server
+                        String numberDelivery = Utils.makeDeliveryNumber(etPhone.getText().toString());
 
-                // Save key in object and write data to DB
-                delivery.setKey(numberDelivery);
-                db.child(Const.CHILD_DELIVERIES_NEW).child(numberDelivery).setValue(delivery);
+                        // Save key in object and write data to DB
+                        delivery.setKey(numberDelivery);
+                        delivery.setUserId(id);
 
-                // очищаем корзину и сохраняем текущий номер заказа
-                Basket.getInstance().makeDelivery(numberDelivery);
-                finish();
+                        //todo get location of user and save to delivery
+                        delivery.setLongitude("xxxx longitude");
+                        delivery.setLatitude("xxxx latitude");
+                        db.child(Const.CHILD_DELIVERIES_NEW).child(numberDelivery).setValue(delivery);
+                        db.child(Const.CHILD_USERS).child(id).child(Const.CHILD_USER_DELIVERY_ID).setValue(numberDelivery);
+                        db.child(Const.CHILD_USERS).child(id).child(Const.CHILD_USER_DELIVERY_STATE).setValue(Const.DELIVERY_STATE_NEW);
+
+                        // очищаем корзину и сохраняем текущий номер заказа
+                        Basket.getInstance().makeDelivery(numberDelivery);
+                        finish();
+                }
             }
         }
     };
