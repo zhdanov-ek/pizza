@@ -144,7 +144,7 @@
                     <ImageView
                         android:layout_width="@dimen/card_view_main_menu_iv_width"
                         android:layout_height="match_parent"
-                        android:background="@drawable/main_reservations" />
+                        android:background="@drawable/main_reservation" />
 
                     <TextView
                         style="@style/textMainMenuDescription"
