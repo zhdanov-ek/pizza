@@ -67,6 +67,7 @@ public class ReserveTableCreationActivity extends AppCompatActivity {
                 orderTable.setPhoneClient(etPhone.getText().toString());
                 orderTable.setCommentClient(etComment.getText().toString());
                 orderTable.setIsNotificated(0);
+                orderTable.setIsCheckedByAdmin(0);
                 orderTable.setTableKey(tableKey);
 
                 String numberDelivery = Utils.makeDeliveryNumber(etPhone.getText().toString());

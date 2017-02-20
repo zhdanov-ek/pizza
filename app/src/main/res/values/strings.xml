@@ -99,10 +99,13 @@
     <string name="button_facebook">Facebook</string>
 
     <!-- NOTIFICATION -->
-    <string name="notification_delivery_title">New order</string>
-    <string name="notification_delivery_content">Total orders</string>
+    <!--<string name="notification_delivery_title">New order</string>-->
+    <!--<string name="notification_delivery_content">Total orders</string>-->
+    <string name="notification_delivery_title">New orders</string>
+    <string name="notification_delivery_content">Confirm or cancel deliveries</string>
 
-    <string name="notification_reserved_table_title">New reserved tables</string>
+    <string name="notification_reserved_table_title">New table reservations</string>
+    <string name="notification_reserved_table_content">Confirm or cancel reservation</string>
 
     <string name="title_settings_category_contacts">Contacts</string>
     <string name="title_settings_category_address">Address</string>
@@ -174,6 +177,8 @@
     <string name="title_reserve_table_settings">Tables</string>
     <string name="mes_save_table_shema">Save tables placement</string>
     <string name="mes_reserve_table">Reserve a table</string>
+    <string name="mes_confirm_reservetion">Confirm table reservation</string>
+    <string name="mes_cancel_reservation">Cancel table reservation</string>
 
     <string name="table_name_4">table4</string>
     <string name="table_name_6">table6</string>

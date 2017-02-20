@@ -39,25 +39,42 @@
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
+                android:orientation="horizontal"
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentRight="true"
                 android:layout_margin="@dimen/floating_button_layout_margin"
                 >
 
-
                 <android.support.design.widget.FloatingActionButton
-                    android:id="@+id/fabReserved"
+                    android:id="@+id/fabSaveSchema"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_check" />
+                    android:src="@drawable/ic_save"
+                    android:layout_marginRight="2dp"
+                    />
+                <android.support.design.widget.FloatingActionButton
+                    android:id="@+id/fabReserveTable"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/silverware_variant"
+                    android:layout_marginRight="2dp"
+                    />
 
                 <android.support.design.widget.FloatingActionButton
-                    android:id="@+id/fabOk"
+                    android:id="@+id/fabCancel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_cancel"
+                    android:layout_marginRight="2dp"
+                    />
+
+                <android.support.design.widget.FloatingActionButton
+                    android:id="@+id/fabConfirm"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@drawable/ic_check"
                     />
+
             </LinearLayout>
 
         </RelativeLayout>
@@ -119,14 +136,15 @@
                             android:layout_height="75dp"
                             android:background="@null"
                             android:scaleType="centerInside"
+                            android:layout_toStartOf="@+id/ivAddTable6"
+                            android:layout_toLeftOf="@+id/ivAddTable6"
                             android:src="@drawable/table4" />
 
                         <ImageView
                             android:id="@+id/ivAddTable6"
                             android:layout_width="75dp"
                             android:layout_height="75dp"
-                            android:layout_toEndOf="@+id/ivAddTable4"
-                            android:layout_toRightOf="@+id/ivAddTable4"
+                            android:layout_centerHorizontal="true"
                             android:background="@null"
                             android:scaleType="centerInside"
                             android:src="@drawable/table6" />
