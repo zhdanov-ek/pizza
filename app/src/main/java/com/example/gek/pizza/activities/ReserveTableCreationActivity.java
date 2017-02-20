@@ -1,7 +1,9 @@
 package com.example.gek.pizza.activities;
 
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -24,7 +26,7 @@ import static com.example.gek.pizza.data.Const.db;
  * Created by Ivleshch on 08.02.2017.
  */
 
-public class ReserveTableCreationActivity extends AppCompatActivity {
+public class ReserveTableCreationActivity extends BaseActivity {
 
     private Table table;
     private String tableKey;
@@ -34,9 +36,27 @@ public class ReserveTableCreationActivity extends AppCompatActivity {
     private SimpleDateFormat shortenedDateFormat;
 
     @Override
+    public void updateUI() {
+
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_reserve_table_creation);
+        LayoutInflater inflater = (LayoutInflater) this
+                .getSystemService(this.LAYOUT_INFLATER_SERVICE);
+        View contentView = inflater.inflate(R.layout.activity_reserve_table_creation, null, false);
+        mDrawer.addView(contentView, 0);
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolBar);
+        toolbar.setTitle(R.string.title_reserve_table);
+        setSupportActionBar(toolbar);
+
+        //add button for open DrawerLayout
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, mDrawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        mDrawer.addDrawerListener(toggle);
+        toggle.syncState();
 
         shortenedDateFormat = new SimpleDateFormat("dd.MM.yy");
 

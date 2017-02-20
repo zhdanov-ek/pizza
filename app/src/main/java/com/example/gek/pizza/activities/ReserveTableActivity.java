@@ -3,18 +3,23 @@ package com.example.gek.pizza.activities;
 import android.content.ClipData;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Display;
 import android.view.DragEvent;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewTreeObserver;
@@ -24,8 +29,10 @@ import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.RelativeLayout.LayoutParams;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.gek.pizza.R;
@@ -34,7 +41,6 @@ import com.example.gek.pizza.data.Const;
 import com.example.gek.pizza.data.OrderTable;
 import com.example.gek.pizza.data.Table;
 import com.example.gek.pizza.helpers.RotationGestureDetector;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
@@ -51,7 +57,10 @@ import static com.example.gek.pizza.data.Const.db;
 public class ReserveTableActivity extends BaseActivity implements RotationGestureDetector.OnRotationGestureListener {
 
     private ImageView ivAddTable6, ivAddTable8, ivAddTable4;
+    private String textPhone, textEmail, textAddress;
+    private TextView tvPhone, tvEmail, tvAddress, tvTitleSettings;
     private RelativeLayout rlReserveTable, rlSettingsReserveTable;
+    private LinearLayout llAboutUs;
     private ImageView ivTable, ivOldTable;
     private android.widget.RelativeLayout.LayoutParams layoutParams;
     private String msg = "DRAGDROP";
@@ -86,14 +95,6 @@ public class ReserveTableActivity extends BaseActivity implements RotationGestur
 
 
     @Override
-    public void updateUI() {
-        if (Connection.getInstance().getCurrentAuthStatus() == Const.AUTH_USER){
-            String email = FirebaseAuth.getInstance().getCurrentUser().getEmail();
-            Toast.makeText(this, "Firebase auth: current user = " + email, Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
@@ -122,12 +123,32 @@ public class ReserveTableActivity extends BaseActivity implements RotationGestur
         fabCancel = (FloatingActionButton) findViewById(R.id.fabCancel);
         fabCancel.setOnClickListener(onClickListenerBtn);
 
-        myToolbar = (Toolbar) findViewById(R.id.toolBar_reserve_table);
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+
+        textAddress = sharedPreferences.getString(Const.SETTINGS_ADDRESS_KEY, "");
+        textEmail = sharedPreferences.getString(Const.SETTINGS_EMAIL_KEY, "");
+        textPhone = sharedPreferences.getString(Const.SETTINGS_PHONE_KEY, "");
+
+        tvPhone = (TextView) findViewById(R.id.tvAboutPhone);
+        tvEmail = (TextView) findViewById(R.id.tvAboutEmail);
+        tvAddress = (TextView) findViewById(R.id.tvAboutAddress);
+        tvTitleSettings = (TextView) findViewById(R.id.tvTitleSettings);
+
+        setSettingsToView(tvPhone, textPhone);
+        setSettingsToView(tvEmail, textEmail);
+        setSettingsToView(tvAddress, textAddress);
+
+        myToolbar = (Toolbar) findViewById(R.id.toolBar);
         myToolbar.setTitle(R.string.title_reserve_table);
         setSupportActionBar(myToolbar);
 
-        ibTrash = (ImageButton) findViewById(R.id.ibTrash);
+        //add button for open DrawerLayout
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, mDrawer, myToolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        mDrawer.addDrawerListener(toggle);
+        toggle.syncState();
 
+        ibTrash = (ImageButton) findViewById(R.id.ibTrash);
 
         ibTrash.setVisibility(View.GONE);
         fabSaveSchema.setVisibility(View.GONE);
@@ -135,7 +156,7 @@ public class ReserveTableActivity extends BaseActivity implements RotationGestur
         fabCancel.setVisibility(View.GONE);
         fabConfirm.setVisibility(View.GONE);
 
-
+        // устанавливае слушатель на тулбар, для удаления столов
         myToolbar.setOnDragListener(new View.OnDragListener() {
             @Override
             public boolean onDrag(View view, DragEvent dragEvent) {
@@ -144,7 +165,9 @@ public class ReserveTableActivity extends BaseActivity implements RotationGestur
                         deleteTable();
                         myToolbar.setTitle(R.string.title_reserve_table);
                         myToolbar.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorPrimary));
-                        fabSaveSchema.setVisibility(View.VISIBLE);
+                        if (Connection.getInstance().getCurrentAuthStatus() == Const.AUTH_SHOP){
+                            fabSaveSchema.setVisibility(View.VISIBLE);
+                        }
                         fabReserveTable.setVisibility(View.GONE);
                         fabCancel.setVisibility(View.GONE);
                         fabConfirm.setVisibility(View.GONE);
@@ -158,6 +181,7 @@ public class ReserveTableActivity extends BaseActivity implements RotationGestur
             }
         });
 
+        // устанавливаем слушатель на добавления новых столов
         ValueEventListener tablesListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -179,6 +203,7 @@ public class ReserveTableActivity extends BaseActivity implements RotationGestur
 
         Const.db.child(Const.CHILD_TABLES).addValueEventListener(tablesListener);
 
+        // устанавливаем слушатель на добавления новых заказов
         ValueEventListener tablesReservedListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -216,7 +241,9 @@ public class ReserveTableActivity extends BaseActivity implements RotationGestur
         ivAddTable8 = (ImageView) findViewById(R.id.ivAddTable8);
         rlReserveTable = (RelativeLayout) findViewById(R.id.activity_reserve_table);
         rlSettingsReserveTable = (RelativeLayout) findViewById(R.id.settings_reserve_table);
+        llAboutUs = (LinearLayout) findViewById(R.id.llAboutUs);
 
+        // отрисовываем столы, только после того как можем определить размеры экрана
         ViewTreeObserver greenObserver = rlReserveTable.getViewTreeObserver();
         greenObserver.addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
 
@@ -240,12 +267,35 @@ public class ReserveTableActivity extends BaseActivity implements RotationGestur
         rlReserveTable.setOnDragListener(onDragListenerTable);
     }
 
+    public void setSettingsToView(TextView view, String setting) {
+        if (setting.isEmpty()) {
+            view.setVisibility(View.GONE);
+        } else {
+            view.setText(setting);
+        }
+    }
+
+    @Override
+    public void updateUI() {
+        if (Connection.getInstance().getCurrentAuthStatus() != Const.AUTH_SHOP) {
+            rlSettingsReserveTable.setVisibility(View.GONE);
+            llAboutUs.setVisibility(View.VISIBLE);
+            tvTitleSettings.setText(R.string.title_reserve_table_settings_user);
+        } else {
+            rlSettingsReserveTable.setVisibility(View.VISIBLE);
+            llAboutUs.setVisibility(View.GONE);
+            tvTitleSettings.setText(R.string.title_reserve_table_settings);
+        }
+        fabSaveSchema.setVisibility(View.GONE);
+        fabConfirm.setVisibility(View.GONE);
+        fabCancel.setVisibility(View.GONE);
+        fabReserveTable.setVisibility(View.GONE);
+    }
+
 
     @Override
     protected void onStart() {
         super.onStart();
-
-
     }
 
     @Override
@@ -286,6 +336,7 @@ public class ReserveTableActivity extends BaseActivity implements RotationGestur
         }
     }
 
+    // получение нового id
     public int getNewId() {
         int counter;
         counter = 1;
@@ -297,6 +348,7 @@ public class ReserveTableActivity extends BaseActivity implements RotationGestur
         return newId;
     }
 
+    // слушатель перетаскивания столов по залу
     private View.OnDragListener onDragListenerTable = new View.OnDragListener() {
         @Override
         public boolean onDrag(View v, DragEvent event) {
@@ -313,8 +365,9 @@ public class ReserveTableActivity extends BaseActivity implements RotationGestur
                     fabReserveTable.setVisibility(View.GONE);
                     fabCancel.setVisibility(View.GONE);
                     fabConfirm.setVisibility(View.GONE);
-
-                    ibTrash.setVisibility(View.VISIBLE);
+                    if (Connection.getInstance().getCurrentAuthStatus() == Const.AUTH_SHOP){
+                        ibTrash.setVisibility(View.VISIBLE);
+                    }
 
                     if (isPanelExpanded) {
                         slidingUpPanelLayout.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
@@ -329,7 +382,9 @@ public class ReserveTableActivity extends BaseActivity implements RotationGestur
                     myToolbar.setTitle(R.string.title_reserve_table);
                     myToolbar.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorPrimary));
 
-                    fabSaveSchema.setVisibility(View.VISIBLE);
+                    if (Connection.getInstance().getCurrentAuthStatus() == Const.AUTH_SHOP){
+                        fabSaveSchema.setVisibility(View.VISIBLE);
+                    }
                     fabReserveTable.setVisibility(View.GONE);
                     fabCancel.setVisibility(View.GONE);
                     fabConfirm.setVisibility(View.GONE);
@@ -390,6 +445,7 @@ public class ReserveTableActivity extends BaseActivity implements RotationGestur
         }
     };
 
+    // изменение параметров стола
     public void modifyTable(int id, int xCoordinate, int yCootdinate) {
         for (Table table : allTables) {
             if (table.getTableId() == id) {
@@ -402,6 +458,7 @@ public class ReserveTableActivity extends BaseActivity implements RotationGestur
         }
     }
 
+    // обработка нажатия и долгого нажатия по столу. При долгом нажатии апускаем перетаскивание
     private View.OnClickListener onClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
@@ -410,10 +467,12 @@ public class ReserveTableActivity extends BaseActivity implements RotationGestur
                 @Override
                 public boolean onLongClick(View v) {
                     ivTable = (ImageView) v;
-                    ClipData data = ClipData.newPlainText("", "");
-                    View.DragShadowBuilder shadowBuilder = new View.DragShadowBuilder(ivTable);
-                    ivTable.startDrag(data, shadowBuilder, ivTable, 0);
-                    ivTable.setVisibility(View.INVISIBLE);
+                    if (Connection.getInstance().getCurrentAuthStatus() == Const.AUTH_SHOP){
+                        ClipData data = ClipData.newPlainText("", "");
+                        View.DragShadowBuilder shadowBuilder = new View.DragShadowBuilder(ivTable);
+                        ivTable.startDrag(data, shadowBuilder, ivTable, 0);
+                        ivTable.setVisibility(View.INVISIBLE);
+                    }
                     return true;
                 }
             });
@@ -434,14 +493,18 @@ public class ReserveTableActivity extends BaseActivity implements RotationGestur
                     if (hmReservedConfirmed.get(TABLE_RESERVED)) {
                         fabReserveTable.setVisibility(View.GONE);
                         if (!hmReservedConfirmed.get(TABLE_RESERVATION_CONFIRMED)) {
-                            fabConfirm.setVisibility(View.VISIBLE);
-                            fabCancel.setVisibility(View.VISIBLE);
+                            if (Connection.getInstance().getCurrentAuthStatus() == Const.AUTH_SHOP){
+                                fabConfirm.setVisibility(View.VISIBLE);
+                                fabCancel.setVisibility(View.VISIBLE);
+                            }
                         } else {
                             fabConfirm.setVisibility(View.GONE);
                             fabCancel.setVisibility(View.GONE);
                         }
                     } else {
-                        fabReserveTable.setVisibility(View.VISIBLE);
+                        if (Connection.getInstance().getCurrentAuthStatus() != Const.AUTH_SHOP){
+                            fabReserveTable.setVisibility(View.VISIBLE);
+                        }
                         fabConfirm.setVisibility(View.GONE);
                         fabCancel.setVisibility(View.GONE);
                     }
@@ -452,7 +515,7 @@ public class ReserveTableActivity extends BaseActivity implements RotationGestur
         }
     };
 
-
+    // проверка заказ столик или нет, если заказн то заказ подтвержден или нет
     private HashMap<String, Boolean> isReserved(int id, boolean showInfo) {
         HashMap<String, Boolean> hmTableReserverConfirmed;
         hmTableReserverConfirmed = new HashMap<>();
@@ -475,19 +538,22 @@ public class ReserveTableActivity extends BaseActivity implements RotationGestur
                 break;
             }
         }
-        if (isReserved && !mesReserved.equals("") && showInfo) {
-            if (toastReserved != null) {
-                toastReserved.cancel();
-            }
-            toastReserved = Toast.makeText(getApplicationContext(), mesReserved, Toast.LENGTH_SHORT);
-            toastReserved.show();
+        if (Connection.getInstance().getCurrentAuthStatus() == Const.AUTH_SHOP){
+            if (isReserved && !mesReserved.equals("") && showInfo) {
+                if (toastReserved != null) {
+                    toastReserved.cancel();
+                }
+                toastReserved = Toast.makeText(getApplicationContext(), mesReserved, Toast.LENGTH_SHORT);
+                toastReserved.show();
 
+            }
         }
         hmTableReserverConfirmed.put(TABLE_RESERVED, isReserved);
         hmTableReserverConfirmed.put(TABLE_RESERVATION_CONFIRMED, isConfirmed);
         return hmTableReserverConfirmed;
     }
 
+    // перетаскивание в панели столов
     private View.OnDragListener onDragListenerSettings = new View.OnDragListener() {
         @Override
         public boolean onDrag(View v, DragEvent event) {
@@ -599,7 +665,7 @@ public class ReserveTableActivity extends BaseActivity implements RotationGestur
         return (int) (coordinate * sizeWidthHeight) / resolution;
     }
 
-
+    //отрисока уже заказанных столов по двум состояниям заказан, подтвержден
     private void updateOrderedTable() {
         getRelativeLayoutInfo();
         if (windowWidth != 0 && windowHeight != 0) {
@@ -638,7 +704,7 @@ public class ReserveTableActivity extends BaseActivity implements RotationGestur
         }
     }
 
-
+    // отрисовка столов
     private void updateTables() {
         getRelativeLayoutInfo();
         if (windowWidth != 0 && windowHeight != 0) {
@@ -646,6 +712,7 @@ public class ReserveTableActivity extends BaseActivity implements RotationGestur
                 if (findViewById(table.getTableId()) == null) {
                     final ImageView newTable = new ImageView(getApplicationContext());
 
+//                    получения индекса картинки, при ребилде проэекта индексы могут изменяться
                     int pictureId = getResources().getIdentifier(table.getPictureName(), "drawable", getPackageName());
                     ;
 
@@ -694,6 +761,8 @@ public class ReserveTableActivity extends BaseActivity implements RotationGestur
 //        finish();
     }
 
+
+    // добавления нового стола из нижней панели
     private View.OnTouchListener onClickListenerNewTable = new View.OnTouchListener() {
         ImageView ivShadow;
 
@@ -819,11 +888,35 @@ public class ReserveTableActivity extends BaseActivity implements RotationGestur
     @Override
     public void OnRotation(RotationGestureDetector rotationDetector) {
         if (ivTable != null) {
-            float angle = rotationDetector.getAngle();
-            ivTable.setRotation(ivTable.getRotation() + (-angle));
-            Log.d("RotationGestureDetector", "Rotation: " + Float.toString(angle));
-            fabSaveSchema.setVisibility(View.VISIBLE);
+            if (Connection.getInstance().getCurrentAuthStatus() == Const.AUTH_SHOP){
+                float angle = rotationDetector.getAngle();
+                ivTable.setRotation(ivTable.getRotation() + (-angle));
+                Log.d("RotationGestureDetector", "Rotation: " + Float.toString(angle));
+                if (Connection.getInstance().getCurrentAuthStatus() == Const.AUTH_SHOP){
+                    fabSaveSchema.setVisibility(View.VISIBLE);
+                }
+            }
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        if (Connection.getInstance().getCurrentAuthStatus() != Const.AUTH_SHOP){
+            menu.add(0, Const.ACTION_BASKET, 0, R.string.action_basket)
+                    .setIcon(R.drawable.ic_basket)
+                    .setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+        }
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case Const.ACTION_BASKET:
+                startActivity(new Intent(this, BasketActivity.class));
+                break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }
 

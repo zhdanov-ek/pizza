@@ -70,9 +70,11 @@ public class CheckDeliveryService extends Service {
         // храним заказы столов которые нужно переместить в архив
         listOrderedTablesRemove = new ArrayList<>();
 
+        // список заказнных и не обработанных столов
         hmOrderTable = new HashMap<>();
         hmOrderTable.clear();
 
+        // список не обработанных доставок
         hmDeliveries = new HashMap<>();
         hmDeliveries.clear();
 
@@ -102,8 +104,10 @@ public class CheckDeliveryService extends Service {
                 OrderTable orderedTable = dataSnapshot.getValue(OrderTable.class);
                 orderedTable.setKey(dataSnapshot.getKey());
 
+                // если дата заказа стола сегодня, и он не обработан администратором то выводим уведомление
                 if (shortenedDateFormat.format(orderedTable.getDate()).equals((shortenedDateFormat.format(new Date())))) {
                     if (orderedTable.getIsCheckedByAdmin() == 0) {
+                        // Добавляем в список не обработанных заказов
                         if (hmOrderTable.get(orderedTable)==null) {
                             hmOrderTable.put(orderedTable.getKey(),orderedTable.getDate());
                         }
@@ -111,6 +115,7 @@ public class CheckDeliveryService extends Service {
 
                         Const.db.child(Const.CHILD_RESERVED_TABLES_NEW).child(orderedTable.getKey()).setValue(orderedTable);
 
+                        // проверяем запущено ли фоновое задание, для уведомление
                         checkIsTimerStarted();
                     }
 
@@ -124,7 +129,8 @@ public class CheckDeliveryService extends Service {
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
                 OrderTable orderedTable = dataSnapshot.getValue(OrderTable.class);
                 orderedTable.setKey(dataSnapshot.getKey());
-
+                // при мзменении состояния заказа удаляем его из списка не обработанных
+                // и при необходимости запускаем, останавливаем фоновое задание уведомлений
                 if (shortenedDateFormat.format(orderedTable.getDate()).equals((shortenedDateFormat.format(new Date())))) {
                     if (orderedTable.getIsCheckedByAdmin() == Const.STATUS_CHECKED_BY_ADMIN) {
                         if (hmOrderTable.get(orderedTable.getKey())!=null) {
@@ -138,6 +144,9 @@ public class CheckDeliveryService extends Service {
 
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
+                // при мзменении состояния заказа удаляем его из списка не обработанных
+                // и при необходимости запускаем, останавливаем фоновое задание уведомлений
+
                 OrderTable orderedTable = dataSnapshot.getValue(OrderTable.class);
                 orderedTable.setKey(dataSnapshot.getKey());
                 if (hmOrderTable.get(orderedTable.getKey()) != null) {
@@ -149,6 +158,9 @@ public class CheckDeliveryService extends Service {
 
             @Override
             public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+                // при мзменении состояния заказа удаляем его из списка не обработанных
+                // и при необходимости запускаем, останавливаем фоновое задание уведомлений
+
                 OrderTable orderedTable = dataSnapshot.getValue(OrderTable.class);
                 orderedTable.setKey(dataSnapshot.getKey());
                 if (hmOrderTable.get(orderedTable.getKey())!=null) {
@@ -209,7 +221,9 @@ public class CheckDeliveryService extends Service {
 
     }
 
+    // фоновое задание для повторения не обработанных уведомлений
     public void notificationRepeat(){
+
         isTimerStarted = true;
         timer.scheduleAtFixedRate(new TimerTask() {
             @Override
@@ -234,11 +248,12 @@ public class CheckDeliveryService extends Service {
         },Const.TIME_INTERVAL_NOTIFICATION_START,Const.TIME_INTERVAL_NOTIFICATION_REPEAT);
     }
 
+    // запуск, остановка фонового уведомления в зависимости от наличия необработанных заказов столов или доставок
     private void checkIsTimerStarted(){
         if((hmOrderTable.size()>0 || hmDeliveries.size()>0) && !isTimerStarted){
             timer = new Timer();
             notificationRepeat();
-        } else{
+        } else if((hmOrderTable.size()==0 && hmDeliveries.size()==0) && isTimerStarted){
             isTimerStarted = false;
             timer.cancel();
             timer = null;
@@ -278,6 +293,7 @@ public class CheckDeliveryService extends Service {
 
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                // Добавление в список не обработанных доставок
                 if (hmDeliveries.get(dataSnapshot.getValue(Delivery.class))==null) {
                     hmDeliveries.put(dataSnapshot.getValue(Delivery.class).getKey(),dataSnapshot.getValue(Delivery.class).getDateNew());
                 }
@@ -294,6 +310,8 @@ public class CheckDeliveryService extends Service {
 
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
+                // при мзменении состояния заказа удаляем его из списка не обработанных
+                // и при необходимости запускаем, останавливаем фоновое задание уведомлений
                 Delivery delivery = dataSnapshot.getValue(Delivery.class);
                 if (hmDeliveries.get(delivery.getKey()) != null) {
                     hmDeliveries.remove(delivery.getKey());
@@ -382,7 +400,9 @@ public class CheckDeliveryService extends Service {
         Const.db.child(Const.CHILD_RESERVED_TABLES_NEW).removeEventListener(archiveOrderedTableListener);
 
         // отключаем фоновое задание
-        timer.cancel();
+        if(isTimerStarted && timer!=null){
+            timer.cancel();
+        }
 
         super.onDestroy();
     }

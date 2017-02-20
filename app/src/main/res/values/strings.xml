@@ -175,6 +175,7 @@
     <string name="title_button_remove">Remove</string>
     <string name="title_button_reserve">Reserve table</string>
     <string name="title_reserve_table_settings">Tables</string>
+    <string name="title_reserve_table_settings_user">Contacts</string>
     <string name="mes_save_table_shema">Save tables placement</string>
     <string name="mes_reserve_table">Reserve a table</string>
     <string name="mes_confirm_reservetion">Confirm table reservation</string>
