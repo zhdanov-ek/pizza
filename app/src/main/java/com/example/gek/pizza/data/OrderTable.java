@@ -13,6 +13,16 @@ public class OrderTable{
     private String tableKey;
     private Date date;
     private String key;
+    private Integer isNotificated;
+    private Integer isCheckedByAdmin;
+
+    public Integer getIsCheckedByAdmin() {
+        return isCheckedByAdmin;
+    }
+
+    public void setIsCheckedByAdmin(Integer isCheckedByAdmin) {
+        this.isCheckedByAdmin = isCheckedByAdmin;
+    }
 
     public Integer getIsNotificated() {
         return isNotificated;
@@ -22,7 +32,7 @@ public class OrderTable{
         this.isNotificated = isNotificated;
     }
 
-    private Integer isNotificated;
+
 
     public OrderTable() {
         this.date = new Date();

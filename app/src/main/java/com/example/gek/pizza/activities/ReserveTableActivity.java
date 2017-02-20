@@ -4,10 +4,11 @@ import android.content.ClipData;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.LayerDrawable;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -40,6 +41,7 @@ import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 
 import static com.example.gek.pizza.data.Const.db;
 
@@ -66,12 +68,17 @@ public class ReserveTableActivity extends BaseActivity implements RotationGestur
     private Toolbar myToolbar;
     private ImageButton ibTrash;
     private SimpleDateFormat shortenedDateFormat;
-    private FloatingActionButton fabOk, fabReserve;
+    private FloatingActionButton fabSaveSchema, fabReserveTable, fabConfirm, fabCancel;
     private Toast toastReserved;
+//    private String tableKeyNotification;
+    private HashMap<String, Boolean> hmReservedConfirmed;
 
     private final String IS_PANEL_EXPANDED = "is_panel_expanded";
     private final String IS_PANEL_COLLAPSED_DRAG_AND_DROP = "is_panel_collapsed_drag_and_drop";
     private final String TABLES_MARKERS = "tables_markers";
+    private final String TABLE_RESERVED = "table_reserved";
+    private final String TABLE_RESERVATION_CONFIRMED = "table_reservation_confirmed";
+
 
     private RotationGestureDetector mRotationDetector;
 
@@ -84,14 +91,25 @@ public class ReserveTableActivity extends BaseActivity implements RotationGestur
         View contentView = inflater.inflate(R.layout.activity_reserve_table, null, false);
         mDrawer.addView(contentView, 0);
 
+//        tableKeyNotification = "";
+//        if (getIntent().hasExtra(Const.OPEN_FROM_NOTIFICATION)) {
+//            tableKeyNotification = getIntent().getStringExtra(Const.OPEN_FROM_NOTIFICATION);
+//        }
+
 
         shortenedDateFormat = new SimpleDateFormat("yyyyMMdd");
 
-        fabOk = (FloatingActionButton) findViewById(R.id.fabOk);
-        fabOk.setOnClickListener(onClickListenerBtn);
+        fabSaveSchema = (FloatingActionButton) findViewById(R.id.fabSaveSchema);
+        fabSaveSchema.setOnClickListener(onClickListenerBtn);
 
-        fabReserve = (FloatingActionButton) findViewById(R.id.fabReserved);
-        fabReserve.setOnClickListener(onClickListenerBtn);
+        fabReserveTable = (FloatingActionButton) findViewById(R.id.fabReserveTable);
+        fabReserveTable.setOnClickListener(onClickListenerBtn);
+
+        fabConfirm = (FloatingActionButton) findViewById(R.id.fabConfirm);
+        fabConfirm.setOnClickListener(onClickListenerBtn);
+
+        fabCancel = (FloatingActionButton) findViewById(R.id.fabCancel);
+        fabCancel.setOnClickListener(onClickListenerBtn);
 
         myToolbar = (Toolbar) findViewById(R.id.toolBar_reserve_table);
         myToolbar.setTitle(R.string.title_reserve_table);
@@ -99,12 +117,13 @@ public class ReserveTableActivity extends BaseActivity implements RotationGestur
 
         ibTrash = (ImageButton) findViewById(R.id.ibTrash);
 
-        fabOk.setOnClickListener(onClickListenerBtn);
-        fabReserve.setOnClickListener(onClickListenerBtn);
 
         ibTrash.setVisibility(View.GONE);
-        fabOk.setVisibility(View.GONE);
-        fabReserve.setVisibility(View.GONE);
+        fabSaveSchema.setVisibility(View.GONE);
+        fabReserveTable.setVisibility(View.GONE);
+        fabCancel.setVisibility(View.GONE);
+        fabConfirm.setVisibility(View.GONE);
+
 
         myToolbar.setOnDragListener(new View.OnDragListener() {
             @Override
@@ -114,8 +133,10 @@ public class ReserveTableActivity extends BaseActivity implements RotationGestur
                         deleteTable();
                         myToolbar.setTitle(R.string.title_reserve_table);
                         myToolbar.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorPrimary));
-                        fabOk.setVisibility(View.VISIBLE);
-                        fabReserve.setVisibility(View.GONE);
+                        fabSaveSchema.setVisibility(View.VISIBLE);
+                        fabReserveTable.setVisibility(View.GONE);
+                        fabCancel.setVisibility(View.GONE);
+                        fabConfirm.setVisibility(View.GONE);
 
                         ibTrash.setVisibility(View.GONE);
                         break;
@@ -277,9 +298,11 @@ public class ReserveTableActivity extends BaseActivity implements RotationGestur
                     myToolbar.setTitle(R.string.title_reserve_table_delete);
                     myToolbar.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorAccent));
 
-                    fabOk.setVisibility(View.GONE);
+                    fabSaveSchema.setVisibility(View.GONE);
+                    fabReserveTable.setVisibility(View.GONE);
+                    fabCancel.setVisibility(View.GONE);
+                    fabConfirm.setVisibility(View.GONE);
 
-                    fabReserve.setVisibility(View.GONE);
                     ibTrash.setVisibility(View.VISIBLE);
 
                     if (isPanelExpanded) {
@@ -295,9 +318,10 @@ public class ReserveTableActivity extends BaseActivity implements RotationGestur
                     myToolbar.setTitle(R.string.title_reserve_table);
                     myToolbar.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorPrimary));
 
-                    fabOk.setVisibility(View.VISIBLE);
-
-                    fabReserve.setVisibility(View.GONE);
+                    fabSaveSchema.setVisibility(View.VISIBLE);
+                    fabReserveTable.setVisibility(View.GONE);
+                    fabCancel.setVisibility(View.GONE);
+                    fabConfirm.setVisibility(View.GONE);
                     ibTrash.setVisibility(View.GONE);
 
                     xCoordinate = (int) event.getX() - (ivTable.getWidth() / 2);
@@ -326,7 +350,7 @@ public class ReserveTableActivity extends BaseActivity implements RotationGestur
                         rlReserveTable.addView(newTable);
 
 
-                        allTables.add(new Table(newId, xCoordinate, yCootdinate, windowWidth, windowHeight, idTable, 0.0f, isPortraitMode(),tableName));
+                        allTables.add(new Table(newId, xCoordinate, yCootdinate, windowWidth, windowHeight, idTable, 0.0f, isPortraitMode(), tableName));
 
                         isNewTable = false;
                         newTable.setOnClickListener(onClickListener);
@@ -387,19 +411,29 @@ public class ReserveTableActivity extends BaseActivity implements RotationGestur
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {
                     if (ivTable != null) {
-                        if (!isReserved(ivTable.getId(),false)) {
-                            ivTable.setBackgroundColor(Color.TRANSPARENT);
-                        }
+//                        if (!isReserved(ivTable.getId(), false)) {
+                        ivTable.setBackgroundColor(Color.TRANSPARENT);
+//                        }
                     }
                     ivTable = (ImageView) v;
-                    if (!isReserved(ivTable.getId(),true)) {
-                        ivTable.setBackgroundColor(Color.GREEN);
-                        fabReserve.setVisibility(View.VISIBLE);
-                    } else {
-                        ivTable.setBackgroundColor(Color.GRAY);
-                        fabReserve.setVisibility(View.GONE);
-                    }
 
+                    hmReservedConfirmed = isReserved(ivTable.getId(), true);
+
+                    ivTable.setBackgroundColor(Color.GREEN);
+                    if (hmReservedConfirmed.get(TABLE_RESERVED)) {
+                        fabReserveTable.setVisibility(View.GONE);
+                        if (!hmReservedConfirmed.get(TABLE_RESERVATION_CONFIRMED)) {
+                            fabConfirm.setVisibility(View.VISIBLE);
+                            fabCancel.setVisibility(View.VISIBLE);
+                        } else {
+                            fabConfirm.setVisibility(View.GONE);
+                            fabCancel.setVisibility(View.GONE);
+                        }
+                    } else {
+                        fabReserveTable.setVisibility(View.VISIBLE);
+                        fabConfirm.setVisibility(View.GONE);
+                        fabCancel.setVisibility(View.GONE);
+                    }
 
                     return false;
                 }
@@ -408,16 +442,22 @@ public class ReserveTableActivity extends BaseActivity implements RotationGestur
     };
 
 
-    private boolean isReserved(int id, boolean showInfo) {
-        Boolean isReserved;
+    private HashMap<String, Boolean> isReserved(int id, boolean showInfo) {
+        HashMap<String, Boolean> hmTableReserverConfirmed;
+        hmTableReserverConfirmed = new HashMap<>();
+        Boolean isReserved, isConfirmed;
         String mesReserved = "";
         isReserved = false;
+        isConfirmed = false;
         for (Table table : allTables) {
             if (table.getTableId() == id) {
                 for (OrderTable orderedTable : allReservedTables) {
                     if (table.getKey().equals(orderedTable.getTableKey())) {
                         isReserved = true;
-                        mesReserved = orderedTable.getClientName() + " (" + orderedTable.getPhoneClient() + ")";;
+                        if (orderedTable.getIsCheckedByAdmin() == 1) {
+                            isConfirmed = true;
+                        }
+                        mesReserved = orderedTable.getClientName() + " (" + orderedTable.getPhoneClient() + ")";
                         break;
                     }
                 }
@@ -425,14 +465,16 @@ public class ReserveTableActivity extends BaseActivity implements RotationGestur
             }
         }
         if (isReserved && !mesReserved.equals("") && showInfo) {
-            if (toastReserved!=null){
+            if (toastReserved != null) {
                 toastReserved.cancel();
             }
             toastReserved = Toast.makeText(getApplicationContext(), mesReserved, Toast.LENGTH_SHORT);
             toastReserved.show();
 
         }
-        return isReserved;
+        hmTableReserverConfirmed.put(TABLE_RESERVED, isReserved);
+        hmTableReserverConfirmed.put(TABLE_RESERVATION_CONFIRMED, isConfirmed);
+        return hmTableReserverConfirmed;
     }
 
     private View.OnDragListener onDragListenerSettings = new View.OnDragListener() {
@@ -446,22 +488,61 @@ public class ReserveTableActivity extends BaseActivity implements RotationGestur
     private View.OnClickListener onClickListenerBtn = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
+            Toast btnToast;
             switch (view.getId()) {
-                case R.id.fabOk:
-                    Toast toastOk = Toast.makeText(getApplicationContext(), R.string.mes_save_table_shema, Toast.LENGTH_SHORT);
-                    toastOk.show();
+                case R.id.fabSaveSchema:
+                    btnToast = Toast.makeText(getApplicationContext(), R.string.mes_save_table_shema, Toast.LENGTH_SHORT);
+                    btnToast.show();
                     sendToServer();
                     break;
-                case R.id.fabReserved:
-                    Toast toastReserve = Toast.makeText(getApplicationContext(), R.string.mes_reserve_table, Toast.LENGTH_SHORT);
-                    toastReserve.show();
+                case R.id.fabReserveTable:
+                    btnToast = Toast.makeText(getApplicationContext(), R.string.mes_reserve_table, Toast.LENGTH_SHORT);
+                    btnToast.show();
                     if (ivTable != null) {
                         reserveTable();
+                    }
+                    break;
+                case R.id.fabConfirm:
+                    btnToast = Toast.makeText(getApplicationContext(), R.string.mes_confirm_reservetion, Toast.LENGTH_SHORT);
+                    btnToast.show();
+                    if (ivTable != null) {
+                        confirmCancelReservation(true);
+                    }
+                    break;
+                case R.id.fabCancel:
+                    btnToast = Toast.makeText(getApplicationContext(), R.string.mes_cancel_reservation, Toast.LENGTH_SHORT);
+                    btnToast.show();
+                    if (ivTable != null) {
+                        confirmCancelReservation(false);
                     }
                     break;
             }
         }
     };
+
+
+    public void confirmCancelReservation(boolean confirmReservation) {
+        for (Table table : allTables) {
+            if (table.getTableId() == ivTable.getId()) {
+                for (OrderTable orderedTable : allReservedTables) {
+                    if (table.getKey().equals(orderedTable.getTableKey())) {
+                        if (confirmReservation) {
+                            orderedTable.setIsCheckedByAdmin(1);
+                            db.child(Const.CHILD_RESERVED_TABLES_NEW).child(orderedTable.getKey()).setValue(orderedTable);
+                        } else {
+                            Const.db.child(Const.CHILD_RESERVED_TABLES_NEW).child(orderedTable.getKey()).removeValue();
+                            int pictureId = getResources().getIdentifier(table.getPictureName(), "drawable", getPackageName());
+                            ivTable.setImageResource(pictureId);
+                        }
+                        break;
+                    }
+                }
+            }
+        }
+
+        fabConfirm.setVisibility(View.GONE);
+        fabCancel.setVisibility(View.GONE);
+    }
 
     public void reserveTable() {
         for (Table table : allTables) {
@@ -474,7 +555,7 @@ public class ReserveTableActivity extends BaseActivity implements RotationGestur
             }
         }
 
-        fabReserve.setVisibility(View.GONE);
+        fabReserveTable.setVisibility(View.GONE);
     }
 
     @Override
@@ -483,7 +564,7 @@ public class ReserveTableActivity extends BaseActivity implements RotationGestur
             if (data.hasExtra(Const.EXTRA_TABLE)) {
                 Table table = data.getParcelableExtra(Const.EXTRA_TABLE);
                 ivTable = (ImageView) findViewById(table.getTableId());
-                ivTable.setBackgroundColor(Color.GRAY);
+//                ivTable.setBackgroundColor(Color.GRAY);
             }
         }
     }
@@ -512,11 +593,33 @@ public class ReserveTableActivity extends BaseActivity implements RotationGestur
         getRelativeLayoutInfo();
         if (windowWidth != 0 && windowHeight != 0) {
             for (OrderTable orderedTable : allReservedTables) {
+//                if (orderedTable.getIsNotificated() == 0 && tableKeyNotification != "") {
+//                    if (orderedTable.getTableKey().equals(tableKeyNotification)) {
+//                        orderedTable.setIsNotificated(1);
+//                        Const.db.child(Const.CHILD_RESERVED_TABLES_NEW).child(orderedTable.getKey()).setValue(orderedTable);
+//                    }
+//                }
+
                 for (Table table : allTables) {
                     if (table.getKey().equals(orderedTable.getTableKey())) {
                         ImageView reservedTable = (ImageView) findViewById(table.getTableId());
                         if (reservedTable != null) {
-                            reservedTable.setBackgroundColor(Color.GRAY);
+//                            reservedTable.setBackgroundColor(Color.GRAY);
+
+                            Drawable[] layers = new Drawable[2];
+                            layers[0] = ContextCompat.getDrawable(getApplicationContext(), getResources().getIdentifier(table.getPictureName(), "drawable", getPackageName()));
+
+                            hmReservedConfirmed = isReserved(reservedTable.getId(), false);
+                            if (hmReservedConfirmed.get(TABLE_RESERVATION_CONFIRMED)) {
+                                layers[1] = ContextCompat.getDrawable(getApplicationContext(), R.drawable.table_confirmation);
+                            } else {
+                                layers[1] = ContextCompat.getDrawable(getApplicationContext(), R.drawable.table_reserved);
+//                                layers[1] = ContextCompat.getDrawable(getApplicationContext(), R.drawable.shield_half_full);
+                            }
+                            LayerDrawable layerDrawable = new LayerDrawable(layers);
+
+
+                            reservedTable.setImageDrawable(layerDrawable);
                         }
                     }
                 }
@@ -532,7 +635,8 @@ public class ReserveTableActivity extends BaseActivity implements RotationGestur
                 if (findViewById(table.getTableId()) == null) {
                     final ImageView newTable = new ImageView(getApplicationContext());
 
-                    int pictureId = getResources().getIdentifier(table.getPictureName(), "drawable", getPackageName());;
+                    int pictureId = getResources().getIdentifier(table.getPictureName(), "drawable", getPackageName());
+                    ;
 
                     newTable.setImageResource(pictureId);
                     LayoutParams lp = new LayoutParams(Math.round(120 * displayMetrics.density), Math.round(75 * displayMetrics.density));
@@ -574,7 +678,7 @@ public class ReserveTableActivity extends BaseActivity implements RotationGestur
 
             db.child(Const.CHILD_TABLES).child(newKey).setValue(table);
         }
-        fabOk.setVisibility(View.GONE);
+        fabSaveSchema.setVisibility(View.GONE);
 
 //        finish();
     }
@@ -603,9 +707,9 @@ public class ReserveTableActivity extends BaseActivity implements RotationGestur
             }
 
             if (ivTable != null) {
-                if (!isReserved(ivTable.getId(),false)) {
-                    ivTable.setBackgroundColor(Color.TRANSPARENT);
-                }
+//                if (!isReserved(ivTable.getId(), false)) {
+                ivTable.setBackgroundColor(Color.TRANSPARENT);
+//                }
             }
             ivTable = new ImageView(getApplicationContext());
             ivTable.setImageResource(idTable);
@@ -707,7 +811,7 @@ public class ReserveTableActivity extends BaseActivity implements RotationGestur
             float angle = rotationDetector.getAngle();
             ivTable.setRotation(ivTable.getRotation() + (-angle));
             Log.d("RotationGestureDetector", "Rotation: " + Float.toString(angle));
-            fabOk.setVisibility(View.VISIBLE);
+            fabSaveSchema.setVisibility(View.VISIBLE);
         }
     }
 }

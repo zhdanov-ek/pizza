@@ -71,5 +71,16 @@ public class Const {
     public static final Integer LOCATION_DISTANCE_UPDATE = 30;
     public static final Integer OFFSET_FROM_EDGES_OF_THE_MAP= 150;
 
+    public static final String OPEN_FROM_NOTIFICATION = "open_from_notification";
+
+    public static final Integer COUNT_OF_NOTIFICATION_REPEAT_ALARM = 2;
+    public static final Integer TIME_INTERVAL_NOTIFICATION_START = 10000;  //10 sec
+    public static final Integer TIME_INTERVAL_NOTIFICATION_REPEAT = 10000; //10 sec
+
+    public static final Integer RESERVED_TABLE_NOTIFY_ID = 101;
+    public static final Integer ODRED_NOTIFY_ID = 1;
+    public static final Integer STATUS_CHECKED_BY_ADMIN = 1;
+
+
 
 }
