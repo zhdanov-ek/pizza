@@ -16,6 +16,7 @@ import com.example.gek.pizza.data.Const;
 import com.example.gek.pizza.data.Delivery;
 import com.example.gek.pizza.data.StateLastDelivery;
 import com.example.gek.pizza.helpers.Utils;
+import com.example.gek.pizza.services.MonitoringYourDeliveryService;
 import com.google.firebase.auth.FirebaseAuth;
 
 
@@ -81,7 +82,7 @@ public class DeliveryCreationActivity extends AppCompatActivity {
                         }
 
                         //todo get location of user and save to delivery
-                        //delivery.setLongitude("xxxx longitude");
+                        delivery.setLongitude("xxxx longitude");
                         delivery.setLatitude("xxxx latitude");
                         db.child(Const.CHILD_DELIVERIES_NEW).child(numberDelivery).setValue(delivery);
 
@@ -96,6 +97,9 @@ public class DeliveryCreationActivity extends AppCompatActivity {
 
                         // очищаем корзину и сохраняем текущий номер заказа
                         Basket.getInstance().makeDelivery(numberDelivery);
+
+                        // запускаем сервис для отслеживание доставки
+                        startService(new Intent(getBaseContext(), MonitoringYourDeliveryService.class));
                         finish();
                 }
             }

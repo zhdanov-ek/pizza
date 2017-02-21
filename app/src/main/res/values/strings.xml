@@ -107,6 +107,8 @@
     <string name="notification_reserved_table_title">New table reservations</string>
     <string name="notification_reserved_table_content">Confirm or cancel reservation</string>
 
+    <string name="notification_monitoring_delivery_title">Your order</string>
+
     <string name="title_settings_category_contacts">Contacts</string>
     <string name="title_settings_category_address">Address</string>
 
