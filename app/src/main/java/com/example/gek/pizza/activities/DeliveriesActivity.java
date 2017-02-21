@@ -1,31 +1,28 @@
 package com.example.gek.pizza.activities;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.design.widget.TabLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
-
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.os.Bundle;
+import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.example.gek.pizza.R;
 import com.example.gek.pizza.adapters.DeliveriesAdapter;
 import com.example.gek.pizza.data.Connection;
 import com.example.gek.pizza.data.Const;
 import com.example.gek.pizza.data.Delivery;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
@@ -48,6 +45,8 @@ public class DeliveriesActivity extends BaseActivity {
     // Хранит все наши вкладки с переключателем
     private ViewPager mViewPager;
 
+    public static boolean activeDeliveriesActivity;
+
 
     @Override
     public void updateUI() {
@@ -59,6 +58,8 @@ public class DeliveriesActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        activeDeliveriesActivity = false;
 
         LayoutInflater inflater = (LayoutInflater) this
                 .getSystemService(this.LAYOUT_INFLATER_SERVICE);
@@ -226,5 +227,17 @@ public class DeliveriesActivity extends BaseActivity {
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onStart() {
+        activeDeliveriesActivity = true;
+        super.onStart();
+    }
+
+    @Override
+    protected void onStop() {
+        activeDeliveriesActivity = false;
+        super.onStop();
     }
 }

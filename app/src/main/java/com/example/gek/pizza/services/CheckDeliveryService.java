@@ -49,8 +49,8 @@ public class CheckDeliveryService extends Service {
     private ValueEventListener archiveOrderedTableListener;
 
     private SimpleDateFormat shortenedDateFormat;
-    private HashMap<String,Date> hmOrderTable;
-    private HashMap<String,Date> hmDeliveries;
+    private HashMap<String, Date> hmOrderTable;
+    private HashMap<String, Date> hmDeliveries;
     private Timer timer;
     private int countOfNotificationRepeat;
     private boolean isTimerStarted;
@@ -108,8 +108,8 @@ public class CheckDeliveryService extends Service {
                 if (shortenedDateFormat.format(orderedTable.getDate()).equals((shortenedDateFormat.format(new Date())))) {
                     if (orderedTable.getIsCheckedByAdmin() == 0) {
                         // Добавляем в список не обработанных заказов
-                        if (hmOrderTable.get(orderedTable)==null) {
-                            hmOrderTable.put(orderedTable.getKey(),orderedTable.getDate());
+                        if (hmOrderTable.get(orderedTable) == null) {
+                            hmOrderTable.put(orderedTable.getKey(), orderedTable.getDate());
                         }
                         isShowTableNotification = true;
 
@@ -119,7 +119,7 @@ public class CheckDeliveryService extends Service {
                         checkIsTimerStarted();
                     }
 
-                    if (isShowTableNotification){
+                    if (isShowTableNotification) {
                         showNotificationTables(false);
                     }
                 }
@@ -133,7 +133,7 @@ public class CheckDeliveryService extends Service {
                 // и при необходимости запускаем, останавливаем фоновое задание уведомлений
                 if (shortenedDateFormat.format(orderedTable.getDate()).equals((shortenedDateFormat.format(new Date())))) {
                     if (orderedTable.getIsCheckedByAdmin() == Const.STATUS_CHECKED_BY_ADMIN) {
-                        if (hmOrderTable.get(orderedTable.getKey())!=null) {
+                        if (hmOrderTable.get(orderedTable.getKey()) != null) {
                             hmOrderTable.remove(orderedTable.getKey());
 
                             checkIsTimerStarted();
@@ -150,7 +150,7 @@ public class CheckDeliveryService extends Service {
                 OrderTable orderedTable = dataSnapshot.getValue(OrderTable.class);
                 orderedTable.setKey(dataSnapshot.getKey());
                 if (hmOrderTable.get(orderedTable.getKey()) != null) {
-                       hmOrderTable.remove(orderedTable.getKey());
+                    hmOrderTable.remove(orderedTable.getKey());
                 }
 
                 checkIsTimerStarted();
@@ -163,7 +163,7 @@ public class CheckDeliveryService extends Service {
 
                 OrderTable orderedTable = dataSnapshot.getValue(OrderTable.class);
                 orderedTable.setKey(dataSnapshot.getKey());
-                if (hmOrderTable.get(orderedTable.getKey())!=null) {
+                if (hmOrderTable.get(orderedTable.getKey()) != null) {
                     hmOrderTable.remove(orderedTable.getKey());
                 }
                 checkIsTimerStarted();
@@ -204,7 +204,7 @@ public class CheckDeliveryService extends Service {
 
                 if (listOrderedTablesRemove.size() != 0) {
                     for (OrderTable orderedTable : listOrderedTablesRemove) {
-                        if (hmOrderTable.get(orderedTable.getKey())!=null) {
+                        if (hmOrderTable.get(orderedTable.getKey()) != null) {
                             hmOrderTable.remove(orderedTable.getKey());
                         }
 
@@ -222,42 +222,44 @@ public class CheckDeliveryService extends Service {
     }
 
     // фоновое задание для повторения не обработанных уведомлений
-    public void notificationRepeat(){
+    public void notificationRepeat() {
 
         isTimerStarted = true;
         timer.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
-                if(countOfNotificationRepeat > Const.COUNT_OF_NOTIFICATION_REPEAT_ALARM){
-                    if(hmOrderTable.size()>0){
-                        showNotificationTables(true);
-                    }
-                    if(hmDeliveries.size()>0){
-                        showNotification(true);
-                    }
-                } else{
-                    if(hmOrderTable.size()>0){
-                        showNotificationTables(false);
-                    }
-                    if(hmDeliveries.size()>0){
-                        showNotification(false);
+                if (!ReserveTableActivity.activeReserveTableActivity && !DeliveriesActivity.activeDeliveriesActivity){
+                    if (countOfNotificationRepeat > Const.COUNT_OF_NOTIFICATION_REPEAT_ALARM) {
+                        if (hmOrderTable.size() > 0) {
+                            showNotificationTables(true);
+                        }
+                        if (hmDeliveries.size() > 0) {
+                            showNotification(true);
+                        }
+                    } else {
+                        if (hmOrderTable.size() > 0) {
+                            showNotificationTables(false);
+                        }
+                        if (hmDeliveries.size() > 0) {
+                            showNotification(false);
+                        }
                     }
                 }
                 countOfNotificationRepeat++;
             }
-        },Const.TIME_INTERVAL_NOTIFICATION_START,Const.TIME_INTERVAL_NOTIFICATION_REPEAT);
+        }, Const.TIME_INTERVAL_NOTIFICATION_START, Const.TIME_INTERVAL_NOTIFICATION_REPEAT);
     }
 
     // запуск, остановка фонового уведомления в зависимости от наличия необработанных заказов столов или доставок
-    private void checkIsTimerStarted(){
-        if((hmOrderTable.size()>0 || hmDeliveries.size()>0) && !isTimerStarted){
+    private void checkIsTimerStarted() {
+        if ((hmOrderTable.size() > 0 || hmDeliveries.size() > 0) && !isTimerStarted) {
             timer = new Timer();
             notificationRepeat();
-        } else if((hmOrderTable.size()==0 && hmDeliveries.size()==0) && isTimerStarted){
+        } else if ((hmOrderTable.size() == 0 && hmDeliveries.size() == 0) && isTimerStarted) {
             isTimerStarted = false;
             timer.cancel();
             timer = null;
-            countOfNotificationRepeat =1;
+            countOfNotificationRepeat = 1;
         }
     }
 
@@ -266,11 +268,13 @@ public class CheckDeliveryService extends Service {
         String content = getResources().getString(R.string.notification_reserved_table_content);
 
         NotificationCompat.Builder ntfBuilder = new NotificationCompat.Builder(ctx);
-        ntfBuilder.setSmallIcon(R.drawable.table4);
+        ntfBuilder.setSmallIcon(R.drawable.verified);
         ntfBuilder.setContentTitle(title);
         ntfBuilder.setContentText(content);
 
         ntfBuilder.setAutoCancel(true);
+        // заперт удаления уведомления
+        ntfBuilder.setOngoing(true);
         ntfBuilder.setLargeIcon(BitmapFactory.decodeResource(ctx.getResources(), R.drawable.ic_notification));
         ntfBuilder.setDefaults(Notification.DEFAULT_SOUND | Notification.DEFAULT_VIBRATE);
 
@@ -279,23 +283,23 @@ public class CheckDeliveryService extends Service {
         ntfBuilder.setContentIntent(pendingIntent);
         Notification notification = ntfBuilder.build();
         // если на оповещение никто нериагирует, запускаем более навящевый сигнал
-        if (alert){
+        if (alert) {
             notification.flags = notification.flags | Notification.FLAG_INSISTENT;
         }
 
         notificationManager.notify(tableNotifyId, notification);
     }
 
-    private void setListenerNewDeliveries(){
+    private void setListenerNewDeliveries() {
         // Описываем слушатель, который мониторит новые заказы на доставку,
         // которые находятся в child(CHILD_DELIVERIES_NEW)
-        newDeliveriesListener = new ChildEventListener(){
+        newDeliveriesListener = new ChildEventListener() {
 
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 // Добавление в список не обработанных доставок
-                if (hmDeliveries.get(dataSnapshot.getValue(Delivery.class))==null) {
-                    hmDeliveries.put(dataSnapshot.getValue(Delivery.class).getKey(),dataSnapshot.getValue(Delivery.class).getDateNew());
+                if (hmDeliveries.get(dataSnapshot.getValue(Delivery.class)) == null) {
+                    hmDeliveries.put(dataSnapshot.getValue(Delivery.class).getKey(), dataSnapshot.getValue(Delivery.class).getDateNew());
                 }
 
 //                showNotification(dataSnapshot.getValue(Delivery.class),false);
@@ -334,7 +338,7 @@ public class CheckDeliveryService extends Service {
         Const.db.child(Const.CHILD_DELIVERIES_NEW).addChildEventListener(newDeliveriesListener);
     }
 
-    private void showNotification(boolean alert){
+    private void showNotification(boolean alert) {
 //        float totalPrice = delivery.getTotalSum();
 //        String time = Utils.formatDate(delivery.getDateNew());
 //        String title = getResources().getString(R.string.notification_delivery_title) + " (" + time + ")";
@@ -347,7 +351,7 @@ public class CheckDeliveryService extends Service {
         NotificationCompat.Builder ntfBuilder = new NotificationCompat.Builder(ctx);
         // Формируем его наполняя информацией
         // Следующие три параметра являются ОБЯЗАТЕЛЬНЫМИ
-        ntfBuilder.setSmallIcon(R.drawable.ic_money);
+        ntfBuilder.setSmallIcon(R.drawable.currency_usd);
         ntfBuilder.setContentTitle(title);
         ntfBuilder.setContentText(content);
 
@@ -357,6 +361,8 @@ public class CheckDeliveryService extends Service {
         // ставим флаг, чтобы уведомление пропало после нажатия. Потом надо убрать его и снимать
         // нотификейшн после того реально обработается заказ и переместится с папки NEW
         ntfBuilder.setAutoCancel(true);
+        // заперт удаления уведомления
+        ntfBuilder.setOngoing(true);
         // Устанавливаем большую картинку в само уведомление
         ntfBuilder.setLargeIcon(BitmapFactory.decodeResource(ctx.getResources(), R.drawable.ic_notification));
         // В екшен баре появляется на секунду строка вместе со значком
@@ -374,7 +380,7 @@ public class CheckDeliveryService extends Service {
 
         Notification notification = ntfBuilder.build();
         // если на оповещение никто нериагирует, запускаем более навящевый сигнал
-        if (alert){
+        if (alert) {
             notification.flags = notification.flags | Notification.FLAG_INSISTENT;
         }
 
@@ -400,7 +406,7 @@ public class CheckDeliveryService extends Service {
         Const.db.child(Const.CHILD_RESERVED_TABLES_NEW).removeEventListener(archiveOrderedTableListener);
 
         // отключаем фоновое задание
-        if(isTimerStarted && timer!=null){
+        if (isTimerStarted && timer != null) {
             timer.cancel();
         }
 

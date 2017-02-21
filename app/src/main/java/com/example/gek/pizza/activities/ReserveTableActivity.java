@@ -89,14 +89,16 @@ public class ReserveTableActivity extends BaseActivity implements RotationGestur
     private final String TABLES_MARKERS = "tables_markers";
     private final String TABLE_RESERVED = "table_reserved";
     private final String TABLE_RESERVATION_CONFIRMED = "table_reservation_confirmed";
-
-
     private RotationGestureDetector mRotationDetector;
+
+    public static boolean activeReserveTableActivity;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        activeReserveTableActivity = false;
 
         LayoutInflater inflater = (LayoutInflater) this
                 .getSystemService(this.LAYOUT_INFLATER_SERVICE);
@@ -295,7 +297,14 @@ public class ReserveTableActivity extends BaseActivity implements RotationGestur
 
     @Override
     protected void onStart() {
+        activeReserveTableActivity = true;
         super.onStart();
+    }
+
+    @Override
+    protected void onStop() {
+        activeReserveTableActivity = false;
+        super.onStop();
     }
 
     @Override
