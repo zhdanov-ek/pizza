@@ -14,9 +14,9 @@ import com.example.gek.pizza.data.Basket;
 import com.example.gek.pizza.data.Connection;
 import com.example.gek.pizza.data.Const;
 import com.example.gek.pizza.data.Delivery;
+import com.example.gek.pizza.data.StateLastDelivery;
 import com.example.gek.pizza.helpers.Utils;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 
 
 import static com.example.gek.pizza.data.Const.db;
@@ -60,6 +60,7 @@ public class DeliveryCreationActivity extends AppCompatActivity {
                         break;
                     default:
                         String id = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
                         Delivery delivery = new Delivery();
                         delivery.setNameClient(etName.getText().toString());
                         delivery.setPhoneClient(etPhone.getText().toString());
@@ -75,13 +76,23 @@ public class DeliveryCreationActivity extends AppCompatActivity {
                         // Save key in object and write data to DB
                         delivery.setKey(numberDelivery);
                         delivery.setUserId(id);
+                        if (FirebaseAuth.getInstance().getCurrentUser().getEmail() != null) {
+                            delivery.setUserEmail(FirebaseAuth.getInstance().getCurrentUser().getEmail());
+                        }
 
                         //todo get location of user and save to delivery
-                        delivery.setLongitude("xxxx longitude");
+                        //delivery.setLongitude("xxxx longitude");
                         delivery.setLatitude("xxxx latitude");
                         db.child(Const.CHILD_DELIVERIES_NEW).child(numberDelivery).setValue(delivery);
-                        db.child(Const.CHILD_USERS).child(id).child(Const.CHILD_USER_DELIVERY_ID).setValue(numberDelivery);
-                        db.child(Const.CHILD_USERS).child(id).child(Const.CHILD_USER_DELIVERY_STATE).setValue(Const.DELIVERY_STATE_NEW);
+
+                        // Info to user folder for monitoring
+                        StateLastDelivery stateLastDelivery = new StateLastDelivery();
+                        stateLastDelivery.setDeliveryId(numberDelivery);
+                        stateLastDelivery.setDeliveryState(Const.DELIVERY_STATE_NEW);
+                        db.child(Const.CHILD_USERS)
+                                .child(id)
+                                .child(Const.CHILD_USER_DELIVERY_STATE)
+                                .setValue(stateLastDelivery);
 
                         // очищаем корзину и сохраняем текущий номер заказа
                         Basket.getInstance().makeDelivery(numberDelivery);

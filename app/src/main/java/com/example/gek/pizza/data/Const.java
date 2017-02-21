@@ -19,8 +19,8 @@ public class Const {
     public static final String CHILD_RESERVED_TABLES_ARCHIVE = "reserved_tables/archive";
 
     public static final String CHILD_USERS = "users";
-    public static final String CHILD_USER_DELIVERY_ID = "delivery_id";
     public static final String CHILD_USER_DELIVERY_STATE = "delivery_state";
+    public static final String CHILD_USER_RESERVATION_STATE = "reservation_state";
 
     // Отображают текущее состояние заказа в юзерской папке
     public static final int DELIVERY_STATE_NEW = 0;

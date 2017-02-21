@@ -1,7 +1,6 @@
 package com.example.gek.pizza.activities;
 
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -13,32 +12,41 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.gek.pizza.R;
+import com.example.gek.pizza.data.Connection;
 import com.example.gek.pizza.data.Const;
 import com.example.gek.pizza.data.Delivery;
+import com.example.gek.pizza.data.StateLastDelivery;
 import com.example.gek.pizza.helpers.Utils;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
-import java.util.ArrayList;
-import java.util.Random;
 
 import static com.example.gek.pizza.data.Const.db;
 
 
-/** Monitoring state of delivery */
+/**
+ * Monitoring state of delivery
+ */
 
 public class DeliveryStatus extends BaseActivity {
 
-    LinearLayout llContainer;
-    TextView tvStep1Num, tvStep2Num, tvStep3Num, tvStep4Num;
-    TextView tvStep1Title, tvStep2Title, tvStep3Title, tvStep4Title;
-    TextView tvStep1Description, tvStep2Description, tvStep3Description, tvStep4Description;
-    ImageView ivStep1, ivStep2, ivStep3, ivStep4;
+    private LinearLayout llContainer;
+    private TextView tvStep1Num, tvStep2Num, tvStep3Num, tvStep4Num;
+    private TextView tvStep1Title, tvStep2Title, tvStep3Title, tvStep4Title;
+    private TextView tvStep1Description, tvStep2Description, tvStep3Description, tvStep4Description;
+    private ImageView ivStep1, ivStep2, ivStep3, ivStep4;
+    private ValueEventListener mStateListener;
+    private Boolean mIsSetListener = false;
+
 
     @Override
     public void updateUI() {
-
+        if (Connection.getInstance().getCurrentAuthStatus() != Const.AUTH_USER){
+            finish();
+        }
     }
 
     @Override
@@ -55,37 +63,79 @@ public class DeliveryStatus extends BaseActivity {
         toolbar.setTitle(R.string.title_delivery);
         setSupportActionBar(toolbar);
 
-        //add button for open DrawerLayout
+        // add button for open DrawerLayout
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, mDrawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         mDrawer.addDrawerListener(toggle);
         toggle.syncState();
 
         findAllView();
+    }
 
-        // На время отладки мы получаем случайный заказ с БД из любого раздела и выводим инфу о нем
-        final ArrayList<Delivery> list = new ArrayList<>();
-        final ValueEventListener listener = new ValueEventListener() {
+
+    /**
+     * Fetch delivery from DB and update UI
+     */
+    private void loadDeliveryInfo(String childFolder, String idDelivery) {
+        Query query = db.child(childFolder).orderByKey().limitToFirst(1).equalTo(idDelivery);
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                list.clear();
-                for (DataSnapshot child : dataSnapshot.getChildren()) {
-                    list.add(child.getValue(Delivery.class));
-                }
-
-                if (! list.isEmpty()){
-                    int num = new Random().nextInt(list.size());
-                    if (list.get(num).getDateArchive() != null){
-                        showStateDeliveryClosed(list.get(num));
+                for (DataSnapshot ds: dataSnapshot.getChildren()) {
+                    Delivery monitorDelivery = ds.getValue(Delivery.class);
+                    if (monitorDelivery != null) {
+                        if (monitorDelivery.getDateArchive() != null) {
+                            showStateDeliveryClosed(monitorDelivery);
+                        } else {
+                            showStateDelivery(monitorDelivery);
+                        }
                     } else {
-                        showStateDelivery(list.get(num));
+                        llContainer.setVisibility(View.GONE);
+                        Toast.makeText(getBaseContext(), "You don't have deliveries", Toast.LENGTH_SHORT).show();
                     }
-
-                } else {
-                    llContainer.setVisibility(View.GONE);
-                    Toast.makeText(getBaseContext(), "In folder no Deliveries", Toast.LENGTH_SHORT).show();
                 }
 
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+
+    /**
+     * List state of last delivery and initialize fetching delivery from DB
+     */
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mStateListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                StateLastDelivery stateLastDelivery = dataSnapshot.getValue(StateLastDelivery.class);
+
+                if (stateLastDelivery == null) {
+                    llContainer.setVisibility(View.GONE);
+                    Toast.makeText(getBaseContext(), "You don't have deliveries", Toast.LENGTH_SHORT).show();
+                } else {
+                    String childFolder = "";
+                    switch (stateLastDelivery.getDeliveryState()) {
+                        case Const.DELIVERY_STATE_NEW:
+                            childFolder = Const.CHILD_DELIVERIES_NEW;
+                            break;
+                        case Const.DELIVERY_STATE_COOKING:
+                            childFolder = Const.CHILD_DELIVERIES_COOKING;
+                            break;
+                        case Const.DELIVERY_STATE_TRANSPORT:
+                            childFolder = Const.CHILD_DELIVERIES_TRANSPORT;
+                            break;
+                        default:
+                            childFolder = Const.CHILD_DELIVERIES_ARCHIVE;
+                    }
+                    loadDeliveryInfo(childFolder, stateLastDelivery.getDeliveryId());
+                }
             }
 
             @Override
@@ -93,8 +143,13 @@ public class DeliveryStatus extends BaseActivity {
             }
         };
 
-        db.child(getDeliveryPath()).addListenerForSingleValueEvent(listener);
-
+        if (Connection.getInstance().getCurrentAuthStatus() == Const.AUTH_USER){
+            db.child(Const.CHILD_USERS)
+                    .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                    .child(Const.CHILD_USER_DELIVERY_STATE)
+                    .addValueEventListener(mStateListener);
+            mIsSetListener = true;
+        }
 
     }
 
@@ -230,7 +285,7 @@ public class DeliveryStatus extends BaseActivity {
         }
     }
 
-    private void findAllView(){
+    private void findAllView() {
         llContainer = (LinearLayout) findViewById(R.id.llContainer);
 
         tvStep1Num = (TextView) findViewById(R.id.tvStep1Num);
@@ -254,27 +309,16 @@ public class DeliveryStatus extends BaseActivity {
         ivStep4 = (ImageView) findViewById(R.id.ivStep4);
     }
 
-
-    // Возвращает путь в случайный раздел где хранятся доставки todo ВРЕМЕННОЕ РЕШЕНИЕ ДЛЯ ОТЛАДКИ
-    private String getDeliveryPath(){
-        String path = "";
-        int num = new Random().nextInt(3);
-        //num = 1;
-        switch (num){
-            case 0:
-                path = Const.CHILD_DELIVERIES_NEW;
-                break;
-            case 1:
-                path = Const.CHILD_DELIVERIES_COOKING;
-                break;
-            case 2:
-                path = Const.CHILD_DELIVERIES_TRANSPORT;
-                break;
-            case 3:
-                path = Const.CHILD_DELIVERIES_ARCHIVE;
-                break;
+    @Override
+    protected void onStop() {
+        // if listener not set we will retrieve error
+        if (mIsSetListener) {
+            db.child(Const.CHILD_USERS)
+                    .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                    .child(Const.CHILD_USER_DELIVERY_STATE)
+                    .removeEventListener(mStateListener);
         }
-        return path;
+        super.onStop();
     }
 
 }
