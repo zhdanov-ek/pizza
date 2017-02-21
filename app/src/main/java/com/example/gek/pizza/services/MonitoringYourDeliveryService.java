@@ -74,8 +74,9 @@ public class MonitoringYourDeliveryService extends Service {
                         case Const.DELIVERY_STATE_TRANSPORT:
                             state = getResources().getString(R.string.mes_pass_courier);
                             break;
-                        default:
+                        case Const.DELIVERY_STATE_ARCHIVE:
                             state = getResources().getString(R.string.mes_pass_archive);
+                            break;
                     }
                     if (state.length() > 0 ) {
                         showNotification(state);
