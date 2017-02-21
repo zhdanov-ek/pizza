@@ -20,6 +20,7 @@ import com.example.gek.pizza.data.AllDishes;
 import com.example.gek.pizza.data.Const;
 import com.example.gek.pizza.data.Delivery;
 import com.example.gek.pizza.data.Dish;
+import com.example.gek.pizza.data.StateLastDelivery;
 import com.example.gek.pizza.helpers.Utils;
 
 import java.util.ArrayList;
@@ -30,6 +31,8 @@ import static com.example.gek.pizza.data.Const.db;
 /**
  * Адаптер отображающий заказы на доставку (новые, готовка, доставка и архив)
  */
+
+// todo при перемещении доставки с одной папки в другую меняем состояние заказа в персональной папке юзера
 
 public class DeliveriesAdapter extends RecyclerView.Adapter<DeliveriesAdapter.ViewHolder>{
 
@@ -70,6 +73,7 @@ public class DeliveriesAdapter extends RecyclerView.Adapter<DeliveriesAdapter.Vi
             holder.tvCommentShop.setText(delivery.getCommentShop());
         }
         holder.tvTime.setText(Utils.getTimeHistoryDelivery(delivery, ctx));
+        holder.tvEmail.setText(delivery.getUserEmail());
 
         // По ключу блюда находим его в списке и получаем полную инфу. Берем кол-во и формируем строку
         String details = "";
@@ -120,6 +124,7 @@ public class DeliveriesAdapter extends RecyclerView.Adapter<DeliveriesAdapter.Vi
         private TextView tvCommentClient;
         private TextView tvTotalSum;
         private TextView tvDetails;
+        private TextView tvEmail;
         private TextView tvCommentShop;
         private TextView tvTime;
         private LinearLayout llDetails;
@@ -136,6 +141,7 @@ public class DeliveriesAdapter extends RecyclerView.Adapter<DeliveriesAdapter.Vi
             tvCommentClient = (TextView) itemView.findViewById(R.id.tvCommentClient);
             tvTotalSum = (TextView) itemView.findViewById(R.id.tvTotalSum);
             tvDetails = (TextView) itemView.findViewById(R.id.tvDishes);
+            tvEmail = (TextView) itemView.findViewById(R.id.tvUserEmail);
             tvCommentShop = (TextView) itemView.findViewById(R.id.tvCommentShop);
             tvTime = (TextView) itemView.findViewById(R.id.tvTime);
             llDetails = (LinearLayout) itemView.findViewById(R.id.llDetails);
@@ -219,7 +225,7 @@ public class DeliveriesAdapter extends RecyclerView.Adapter<DeliveriesAdapter.Vi
         }
 
         /** Отклонение доставки: запись переносится в архив и перед этим вносится комментарий.
-         * В архиве эта кнопка удаляет запись */
+         * В архиве эта кнопка удаляет запись. Меняем состояние заказа в юзерской папке  */
         private void pressNegative(){
             final Delivery delivery = listDeliveries.get(getAdapterPosition());
             AlertDialog.Builder builder = new AlertDialog.Builder(ctx);
@@ -238,6 +244,12 @@ public class DeliveriesAdapter extends RecyclerView.Adapter<DeliveriesAdapter.Vi
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         db.child(statusDeliveries).child(delivery.getKey()).removeValue();
+
+                        // change state in user folder
+                        db.child(Const.CHILD_USERS)
+                                .child(listDeliveries.get(getAdapterPosition()).getUserId())
+                                .child(Const.CHILD_USER_DELIVERY_STATE)
+                                .setValue(null);
                         Toast.makeText(ctx, R.string.mes_removed, Toast.LENGTH_LONG).show();
                     }
                 });
@@ -259,6 +271,15 @@ public class DeliveriesAdapter extends RecyclerView.Adapter<DeliveriesAdapter.Vi
                         delivery.setPaid(false);
                         db.child(Const.CHILD_DELIVERIES_ARCHIVE).child(delivery.getKey()).setValue(delivery);
                         db.child(statusDeliveries).child(delivery.getKey()).removeValue();
+
+                        // change state in user folder
+                        StateLastDelivery stateLastDelivery = new StateLastDelivery();
+                        stateLastDelivery.setDeliveryId(delivery.getKey());
+                        stateLastDelivery.setDeliveryState(Const.DELIVERY_STATE_ARCHIVE);
+                        db.child(Const.CHILD_USERS)
+                                .child(listDeliveries.get(getAdapterPosition()).getUserId())
+                                .child(Const.CHILD_USER_DELIVERY_STATE)
+                                .setValue(stateLastDelivery);
                         Toast.makeText(ctx, R.string.mes_pass_archive, Toast.LENGTH_LONG).show();
                     }
                 });
@@ -269,10 +290,12 @@ public class DeliveriesAdapter extends RecyclerView.Adapter<DeliveriesAdapter.Vi
 
         /** При нажатии на позитивную кнопку перемещаем доставу в следующую группу
          *  или восстанавливаем из архива. Для этого удаляем запись в текущей месте и
-         *  создаем ее же уже в новом */
+         *  создаем ее же уже в новом. Меняем состояние заказа в юзерской папке */
         private void pressPositive(){
-            // Используя ключ доставки переносим ее в другую категорию
+            // Используя ключ доставки переносим ее в другую категорию и меняем состояния заказа в юзерской папке
             String keyDelivery = listDeliveries.get(getAdapterPosition()).getKey();
+            StateLastDelivery stateLastDelivery = new StateLastDelivery();
+            stateLastDelivery.setDeliveryId(keyDelivery);
             switch (statusDeliveries){
                 case Const.CHILD_DELIVERIES_NEW:
                     listDeliveries.get(getAdapterPosition()).setDateCooking(new Date());
@@ -283,6 +306,12 @@ public class DeliveriesAdapter extends RecyclerView.Adapter<DeliveriesAdapter.Vi
                             .child(keyDelivery)
                             .setValue(listDeliveries.get(getAdapterPosition()));
                     Toast.makeText(ctx, R.string.mes_pass_kitchen, Toast.LENGTH_SHORT).show();
+                    // change state in user folder
+                    stateLastDelivery.setDeliveryState(Const.DELIVERY_STATE_COOKING);
+                    db.child(Const.CHILD_USERS)
+                            .child(listDeliveries.get(getAdapterPosition()).getUserId())
+                            .child(Const.CHILD_USER_DELIVERY_STATE)
+                            .setValue(stateLastDelivery);
                     break;
 
                 case Const.CHILD_DELIVERIES_COOKING:
@@ -294,6 +323,12 @@ public class DeliveriesAdapter extends RecyclerView.Adapter<DeliveriesAdapter.Vi
                             .child(keyDelivery)
                             .setValue(listDeliveries.get(getAdapterPosition()));
                     Toast.makeText(ctx, R.string.mes_pass_courier, Toast.LENGTH_SHORT).show();
+                    // change state in user folder
+                    stateLastDelivery.setDeliveryState(Const.DELIVERY_STATE_TRANSPORT);
+                    db.child(Const.CHILD_USERS)
+                            .child(listDeliveries.get(getAdapterPosition()).getUserId())
+                            .child(Const.CHILD_USER_DELIVERY_STATE)
+                            .setValue(stateLastDelivery);
                     break;
 
                 case Const.CHILD_DELIVERIES_TRANSPORT:
@@ -306,6 +341,12 @@ public class DeliveriesAdapter extends RecyclerView.Adapter<DeliveriesAdapter.Vi
                             .child(keyDelivery)
                             .setValue(listDeliveries.get(getAdapterPosition()));
                     Toast.makeText(ctx, R.string.mes_pass_archive, Toast.LENGTH_LONG).show();
+                    // change state in user folder
+                    stateLastDelivery.setDeliveryState(Const.DELIVERY_STATE_ARCHIVE);
+                    db.child(Const.CHILD_USERS)
+                            .child(listDeliveries.get(getAdapterPosition()).getUserId())
+                            .child(Const.CHILD_USER_DELIVERY_STATE)
+                            .setValue(stateLastDelivery);
                     break;
 
                 case Const.CHILD_DELIVERIES_ARCHIVE:
@@ -321,6 +362,12 @@ public class DeliveriesAdapter extends RecyclerView.Adapter<DeliveriesAdapter.Vi
                             .child(keyDelivery)
                             .setValue(listDeliveries.get(getAdapterPosition()));
                     Toast.makeText(ctx, R.string.mes_restored, Toast.LENGTH_LONG).show();
+                    // change state in user folder
+                    stateLastDelivery.setDeliveryState(Const.DELIVERY_STATE_NEW);
+                    db.child(Const.CHILD_USERS)
+                            .child(listDeliveries.get(getAdapterPosition()).getUserId())
+                            .child(Const.CHILD_USER_DELIVERY_STATE)
+                            .setValue(stateLastDelivery);
             }
         }
 

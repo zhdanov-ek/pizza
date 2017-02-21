@@ -104,6 +104,13 @@
 
             <TextView
                 style="@style/textSmall"
+                android:id="@+id/tvUserEmail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                tools:text="username@gmail.com" />
+
+            <TextView
+                style="@style/textSmall"
                 android:id="@+id/tvDishes"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

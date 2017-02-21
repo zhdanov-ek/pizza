@@ -60,7 +60,7 @@
         <activity android:name=".activities.DeliveryCreationActivity" />
 
         <service android:name=".services.CheckDeliveryService" />
-        <service android:name=".services.CheckReservedTablesService" />
+        <service android:name=".services.MonitoringYourDeliveryService" />
 
         <activity
             android:name=".activities.DeliveriesActivity"
@@ -71,7 +71,7 @@
         <activity
             android:name=".activities.ReserveTableActivity"
             android:launchMode="singleTask" />
-        <activity android:name=".activities.AuthenticationActivity"></activity>
+        <activity android:name=".activities.AuthenticationActivity"/>
     </application>
 
 </manifest>

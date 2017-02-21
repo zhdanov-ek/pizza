@@ -18,6 +18,17 @@ public class Const {
     public static final String CHILD_RESERVED_TABLES_NEW = "reserved_tables/new";
     public static final String CHILD_RESERVED_TABLES_ARCHIVE = "reserved_tables/archive";
 
+    public static final String CHILD_USERS = "users";
+    public static final String CHILD_USER_DELIVERY_STATE = "delivery_state";
+    public static final String CHILD_USER_RESERVATION_STATE = "reservation_state";
+
+    // Отображают текущее состояние заказа в юзерской папке
+    public static final int DELIVERY_STATE_NEW = 0;
+    public static final int DELIVERY_STATE_COOKING = 1;
+    public static final int DELIVERY_STATE_TRANSPORT = 2;
+    public static final int DELIVERY_STATE_ARCHIVE = 9;
+
+    // Пути где хранятся заказы в зависимости от текущего состояния
     public static final String CHILD_DELIVERIES_NEW = "deliveries/new";
     public static final String CHILD_DELIVERIES_COOKING = "deliveries/cooking";
     public static final String CHILD_DELIVERIES_TRANSPORT = "deliveries/transport";
@@ -60,7 +71,6 @@ public class Const {
 
     // id используемые при вызовах активити через интент
     public static final int REQUEST_LOAD_IMG = 1;
-    public static final int REQUEST_EDIT_NEWS = 10;
     public static final int REQUEST_EDIT_DISH = 11;
     public static final int REQUEST_RESERVE_TABLE = 12;
 
