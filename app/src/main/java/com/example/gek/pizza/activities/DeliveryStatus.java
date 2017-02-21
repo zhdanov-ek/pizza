@@ -8,6 +8,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -33,13 +35,14 @@ import static com.example.gek.pizza.data.Const.db;
 
 public class DeliveryStatus extends BaseActivity {
 
-    private LinearLayout llContainer;
+    private ScrollView scrollView;
     private TextView tvStep1Num, tvStep2Num, tvStep3Num, tvStep4Num;
     private TextView tvStep1Title, tvStep2Title, tvStep3Title, tvStep4Title;
     private TextView tvStep1Description, tvStep2Description, tvStep3Description, tvStep4Description;
     private ImageView ivStep1, ivStep2, ivStep3, ivStep4;
     private ValueEventListener mStateListener;
     private Boolean mIsSetListener = false;
+    private ProgressBar progressBar;
 
 
     @Override
@@ -90,7 +93,7 @@ public class DeliveryStatus extends BaseActivity {
                             showStateDelivery(monitorDelivery);
                         }
                     } else {
-                        llContainer.setVisibility(View.GONE);
+                        progressBar.setVisibility(View.GONE);
                         Toast.makeText(getBaseContext(), "You don't have deliveries", Toast.LENGTH_SHORT).show();
                     }
                 }
@@ -117,7 +120,8 @@ public class DeliveryStatus extends BaseActivity {
                 StateLastDelivery stateLastDelivery = dataSnapshot.getValue(StateLastDelivery.class);
 
                 if (stateLastDelivery == null) {
-                    llContainer.setVisibility(View.GONE);
+                    progressBar.setVisibility(View.GONE);
+                    scrollView.setVisibility(View.GONE);
                     Toast.makeText(getBaseContext(), "You don't have deliveries", Toast.LENGTH_SHORT).show();
                 } else {
                     String childFolder = "";
@@ -160,16 +164,17 @@ public class DeliveryStatus extends BaseActivity {
         String mes = "";
         // State 3 (Transport)
         if (d.getDateTransport() != null) {
-            ivStep3.setImageResource(R.drawable.step_circle_current);
             if (d.getDateArchive() != null) {
                 tvStep3Num.setText("+");
                 mes = getResources().getString(R.string.delivery_state_description_step3_finish)
                         + " " + Utils.formatDate(d.getDateArchive());
+                ivStep3.setImageResource(R.drawable.step_circle_disable);
                 tvStep3Description.setText(mes);
             } else {
                 tvStep3Num.setText("3");
                 mes = getResources().getString(R.string.delivery_state_description_step3_start)
                         + " " + Utils.formatDate(d.getDateTransport());
+                ivStep3.setImageResource(R.drawable.step_circle_current);
                 tvStep3Description.setText(mes);
             }
         }
@@ -183,6 +188,7 @@ public class DeliveryStatus extends BaseActivity {
                         getResources().getString(R.string.delivery_state_description_step2_finish) +
                         " (" + Utils.formatDate(d.getDateTransport()) + ")\n";
                 tvStep2Description.setText(mes);
+                ivStep2.setImageResource(R.drawable.step_circle_disable);
             } else {
                 ivStep2.setImageResource(R.drawable.step_circle_current);
                 tvStep2Num.setText("2");
@@ -194,6 +200,7 @@ public class DeliveryStatus extends BaseActivity {
 
         // State 1 (Receive)
         if ((d.getDateNew() != null) && (d.getDateArchive() == null)) {
+
             if (d.getDateCooking() != null) {
                 tvStep1Num.setText("+");
                 mes = getResources().getString(R.string.delivery_state_description_step1_finish) +
@@ -208,10 +215,12 @@ public class DeliveryStatus extends BaseActivity {
                 tvStep1Description.setText(R.string.delivery_state_description_step1_wait);
                 tvStep1Num.setText("1");
             }
-
+            scrollView.setVisibility(View.VISIBLE);
+            progressBar.setVisibility(View.GONE);
         } else {
             if (d.getDateArchive() == null) {
-                llContainer.setVisibility(View.GONE);
+                scrollView.setVisibility(View.GONE);
+                progressBar.setVisibility(View.GONE);
             }
         }
     }
@@ -234,6 +243,7 @@ public class DeliveryStatus extends BaseActivity {
                     " (" + Utils.formatDate(d.getDateTransport()) + ")\n";
             tvStep2Description.setText(mes);
             tvStep3Num.setText("+");
+            ivStep3.setImageResource(R.drawable.step_circle_disable);
             mes = getResources().getString(R.string.delivery_state_description_step3_start) +
                     " (" + Utils.formatDate(d.getDateTransport()) + ")\n" +
                     getResources().getString(R.string.delivery_state_description_step3_finish) +
@@ -283,10 +293,13 @@ public class DeliveryStatus extends BaseActivity {
                 tvStep1Num.setText("-");
             }
         }
+        scrollView.setVisibility(View.VISIBLE);
+        progressBar.setVisibility(View.GONE);
     }
 
     private void findAllView() {
-        llContainer = (LinearLayout) findViewById(R.id.llContainer);
+        progressBar = (ProgressBar) findViewById(R.id.progressBar);
+        scrollView = (ScrollView) findViewById(R.id.scrollView);
 
         tvStep1Num = (TextView) findViewById(R.id.tvStep1Num);
         tvStep2Num = (TextView) findViewById(R.id.tvStep2Num);

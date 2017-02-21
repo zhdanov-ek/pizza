@@ -29,6 +29,8 @@ import static com.example.gek.pizza.data.Const.db;
  * Stop after delivery change state to ARCHIVE
  */
 
+//todo Сервис работает паралельно программе. При выключении проги он вырубается тоже. Оставлять или делать независимо?
+
 public class MonitoringYourDeliveryService extends Service {
     private Boolean mIsSetListener;
     private int mLastState;
@@ -110,8 +112,8 @@ public class MonitoringYourDeliveryService extends Service {
         ntfBuilder.setContentText(state);
         ntfBuilder.setAutoCancel(true);
         ntfBuilder.setLargeIcon(BitmapFactory.decodeResource(ctx.getResources(), R.drawable.ic_notification));
+
         // В екшен баре появляется на секунду строка вместе со значком
-        // ntfBuilder.setTicker(title + " (" + contentInfo + ")");
         ntfBuilder.setTicker(title + ": " + state);
 
         // Устанавливаем параметры для уведомления (звук, вибро, подсветка и т.д.)
