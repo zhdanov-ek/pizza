@@ -54,7 +54,8 @@
                 android:id="@+id/btnOk"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/ok" />
+                android:text="@string/ok"
+                android:enabled="false"/>
 
             <Button
                 android:id="@+id/btnCancel"

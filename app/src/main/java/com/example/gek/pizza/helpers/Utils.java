@@ -6,6 +6,8 @@ import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.support.v7.app.AppCompatActivity;
+import android.text.InputFilter;
+import android.text.Spanned;
 import android.widget.Toast;
 
 import com.example.gek.pizza.R;
@@ -24,8 +26,6 @@ import java.util.Date;
  */
 
 public class Utils {
-
-    // todo Написать метод для получения текущего времени и приведения его в нормальный вид
 
     /** Проверяет есть ли инет */
     public static boolean hasInternet(Context context) {
@@ -85,6 +85,22 @@ public class Utils {
         s = s.replace("/", "");
         return s;
     }
+
+
+    /** Remove symbol for write FireBase. Use in EditText */
+    public static InputFilter getInputFilterSymbol(){
+        final String blockCharacterSet = "$[]#/.";
+        return new InputFilter() {
+            @Override
+            public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) {
+                if (source != null && blockCharacterSet.contains(("" + source))) {
+                    return "";
+                }
+                return null;
+            }
+        };
+    }
+
 
 
     /** возвращает значение настроек */
