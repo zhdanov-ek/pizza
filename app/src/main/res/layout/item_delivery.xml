@@ -48,13 +48,13 @@
                     tools:text="Cherkassy, Shevchenko str, 32" />
 
                 <TextView
-                    android:id="@+id/tvCommentClient"
                     style="@style/textSmall"
+                    android:id="@+id/tvUserEmail"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="left"
-                    android:textStyle="normal|italic"
-                    tools:text="Comment from client" />
+                    tools:text="username@gmail.com" />
+
+
             </LinearLayout>
 
             <RelativeLayout
@@ -99,22 +99,26 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:visibility="gone"
+            android:visibility="visible"
             android:padding="@dimen/ll_padding">
 
             <TextView
+                android:id="@+id/tvCommentClient"
                 style="@style/textSmall"
-                android:id="@+id/tvUserEmail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                tools:text="username@gmail.com" />
+                android:gravity="left"
+                android:textStyle="normal|italic"
+                tools:text="Comment from client"
+                android:textColor="@color/colorDeliveryComment"/>
 
             <TextView
                 style="@style/textSmall"
                 android:id="@+id/tvDishes"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                tools:text="info about dishes" />
+                tools:text="info about dishes"
+                android:textColor="@color/colorDeliveryDishes"/>
 
             <TextView
                 android:id="@+id/tvCommentShop"
@@ -123,7 +127,8 @@
                 android:layout_height="wrap_content"
                 android:gravity="right"
                 android:textStyle="normal|italic"
-                tools:text="Comments from shop" />
+                tools:text="Comments from shop"
+                android:textColor="@color/colorDeliveryComment"/>
             <TextView
                 style="@style/textSmall"
                 android:id="@+id/tvTime"

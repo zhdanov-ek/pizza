@@ -14,27 +14,17 @@
         android:layout_alignParentTop="true"
         android:id="@+id/imageView"
         android:layout_width="wrap_content"
-        android:layout_height="100dp"
-        android:paddingTop="@dimen/nav_header_vertical_spacing"
+        android:layout_height="80dp"
         app:srcCompat="@drawable/logo" />
+
 
     <TextView
         android:id="@+id/tvAuth"
-        style="@style/textSmall"
-        android:textColor="@color/colorWhite"
+        style="@style/textDrawerLayoutName"
         android:layout_alignParentLeft="true"
         android:layout_alignParentBottom="true"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Sign in"/>
-
-    <ImageView
-        android:id="@+id/ivSignOut"
-        android:layout_width="25dp"
-        android:layout_height="25dp"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true"
-        android:src="@drawable/signout"/>
-
 
 </RelativeLayout>
