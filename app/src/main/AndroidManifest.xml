@@ -39,7 +39,6 @@
         <activity
             android:name=".activities.AboutActivity"
             android:launchMode="singleTask" />
-        <activity android:name=".activities.PlaceOrderActivity" />
         <activity
             android:name=".activities.SettingsActivity"
             android:launchMode="singleTask" />

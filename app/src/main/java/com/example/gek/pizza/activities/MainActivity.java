@@ -160,9 +160,4 @@ public class MainActivity extends BaseActivity
 
     }
 
-//    @SuppressWarnings("StatementWithEmptyBody")
-//    @Override
-//    public boolean onNavigationItemSelected(MenuItem item) {
-//        return super.onNavigationItemSelected(item);
-//    }
 }

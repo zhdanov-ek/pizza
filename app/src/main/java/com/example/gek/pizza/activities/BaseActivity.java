@@ -80,12 +80,22 @@ public abstract class BaseActivity extends AppCompatActivity
                     Log.d(TAG, "FireBase authentication failed ");
                 }
 
-                // show or hide SHOP group of menu
-                if (Connection.getInstance().getCurrentAuthStatus() ==  Const.AUTH_SHOP){
-                    navigationView.getMenu().findItem(R.id.nav_shop_group).setVisible(true);
-                } else {
-                    navigationView.getMenu().findItem(R.id.nav_shop_group).setVisible(false);
+                // SHOW or HIDE items of menu
+                switch (Connection.getInstance().getCurrentAuthStatus()){
+                    case Const.AUTH_SHOP:
+                        navigationView.getMenu().findItem(R.id.nav_shop_group).setVisible(true);
+                        navigationView.getMenu().findItem(R.id.nav_delivery_status).setVisible(false);
+                        break;
+                    case Const.AUTH_USER:
+                        navigationView.getMenu().findItem(R.id.nav_shop_group).setVisible(false);
+                        navigationView.getMenu().findItem(R.id.nav_delivery_status).setVisible(true);
+                        break;
+                    case Const.AUTH_NULL:
+                        navigationView.getMenu().findItem(R.id.nav_shop_group).setVisible(false);
+                        navigationView.getMenu().findItem(R.id.nav_delivery_status).setVisible(false);
+                        break;
                 }
+
                 updateUI();
             }
         };
@@ -135,6 +145,8 @@ public abstract class BaseActivity extends AppCompatActivity
             startActivity(new Intent(this, ReserveTableActivity.class));
         } else if (id == R.id.nav_settings) {
             startActivity(new Intent(this, SettingsActivity.class));
+        } else if (id == R.id.nav_delivery_status) {
+            startActivity(new Intent(this, DeliveryStatus.class));
         } else if (id == R.id.nav_about) {
             startActivity(new Intent(this, AboutActivity.class));
         }

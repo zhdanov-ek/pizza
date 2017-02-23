@@ -77,38 +77,6 @@ public class DeliveryStatus extends BaseActivity {
 
 
     /**
-     * Fetch delivery from DB and update UI
-     */
-    private void loadDeliveryInfo(String childFolder, String idDelivery) {
-        Query query = db.child(childFolder).orderByKey().limitToFirst(1).equalTo(idDelivery);
-        query.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                for (DataSnapshot ds: dataSnapshot.getChildren()) {
-                    Delivery monitorDelivery = ds.getValue(Delivery.class);
-                    if (monitorDelivery != null) {
-                        if (monitorDelivery.getDateArchive() != null) {
-                            showStateDeliveryClosed(monitorDelivery);
-                        } else {
-                            showStateDelivery(monitorDelivery);
-                        }
-                    } else {
-                        progressBar.setVisibility(View.GONE);
-                        Toast.makeText(getBaseContext(), "You don't have deliveries", Toast.LENGTH_SHORT).show();
-                    }
-                }
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-    }
-
-
-    /**
      * List state of last delivery and initialize fetching delivery from DB
      */
     @Override
@@ -146,7 +114,6 @@ public class DeliveryStatus extends BaseActivity {
             public void onCancelled(DatabaseError databaseError) {
             }
         };
-
         if (Connection.getInstance().getCurrentAuthStatus() == Const.AUTH_USER){
             db.child(Const.CHILD_USERS)
                     .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
@@ -154,8 +121,38 @@ public class DeliveryStatus extends BaseActivity {
                     .addValueEventListener(mStateListener);
             mIsSetListener = true;
         }
-
     }
+
+
+    /**
+     * Fetch delivery from DB and update UI
+     */
+    private void loadDeliveryInfo(String childFolder, String idDelivery) {
+        Query query = db.child(childFolder).orderByKey().limitToFirst(1).equalTo(idDelivery);
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot ds: dataSnapshot.getChildren()) {
+                    Delivery monitorDelivery = ds.getValue(Delivery.class);
+                    if (monitorDelivery != null) {
+                        if (monitorDelivery.getDateArchive() != null) {
+                            showStateDeliveryClosed(monitorDelivery);
+                        } else {
+                            showStateDelivery(monitorDelivery);
+                        }
+                    } else {
+                        progressBar.setVisibility(View.GONE);
+                        Toast.makeText(getBaseContext(), "You don't have deliveries", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+            }
+        });
+    }
+
 
     /**
      * Show state of current not closed delivery

@@ -18,8 +18,14 @@ import android.widget.Toast;
 import com.example.gek.pizza.R;
 import com.example.gek.pizza.adapters.OrderAdapter;
 import com.example.gek.pizza.data.Basket;
+import com.example.gek.pizza.data.Connection;
+import com.example.gek.pizza.data.Const;
 import com.example.gek.pizza.data.Order;
+import com.example.gek.pizza.data.StateLastDelivery;
 import com.example.gek.pizza.helpers.Utils;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
 
 /**  Отображает корзину заказов и отправляет заказ */
 
@@ -30,9 +36,14 @@ public class BasketActivity extends BaseActivity implements OrderAdapter.Refresh
     private TextView tvTotal;
     private RelativeLayout rlOrderPanel;
     private Button btnOrderNow;
+    private ValueEventListener mStateListener;
 
     @Override
     public void updateUI() {
+        if ((Connection.getInstance().getCurrentAuthStatus() == Const.AUTH_SHOP) ||
+                (Connection.getInstance().getCurrentAuthStatus() == Const.AUTH_COURIER)) {
+            finish();
+        }
 
     }
 
@@ -69,28 +80,77 @@ public class BasketActivity extends BaseActivity implements OrderAdapter.Refresh
     @Override
     protected void onResume() {
         super.onResume();
-        // если в корзине есть, что-то то показываем
-        if (Basket.getInstance().orders.size() > 0) {
-            rv.setLayoutManager(new LinearLayoutManager(this));
-            // определяем разделители для айтемов
-            DividerItemDecoration dividerItemDecoration =
-                    new DividerItemDecoration(this,DividerItemDecoration.VERTICAL );
-            rv.addItemDecoration(dividerItemDecoration);
-            OrderAdapter orderAdapter = new OrderAdapter(this);
-            rv.setAdapter(orderAdapter);
 
-        } else {
-            // Если корзина пуста то проверяем нет ли действующей доставки
-            rv.setVisibility(View.GONE);
-            rlOrderPanel.setVisibility(View.GONE);
-            if (Basket.getInstance().getNumberDelivery().length() > 0) {
-                String mes = getResources().getString(R.string.mes_your_order_performed) + "\n" +
-                        Basket.getInstance().getNumberDelivery();
-                tvEmpty.setText(mes);
-            }
-            tvEmpty.setVisibility(View.VISIBLE);
+        // определяем разделители для айтемов
+        DividerItemDecoration dividerItemDecoration =
+                new DividerItemDecoration(this,DividerItemDecoration.VERTICAL );
+        rv.setLayoutManager(new LinearLayoutManager(this));
+        rv.addItemDecoration(dividerItemDecoration);
+
+        switch (Connection.getInstance().getCurrentAuthStatus()){
+            case Const.AUTH_USER:
+                // если в корзине есть, что-то то показываем
+                if (Basket.getInstance().orders.size() > 0) {
+                    OrderAdapter orderAdapter = new OrderAdapter(this);
+                    rv.setAdapter(orderAdapter);
+                } else {
+                    // Если корзина пуста то информируем об этом
+                    rv.setVisibility(View.GONE);
+                    rlOrderPanel.setVisibility(View.GONE);
+                    tvEmpty.setVisibility(View.VISIBLE);
+                }
+                break;
+            default:
+                //AUTH_NULL
+                // если в корзине есть, что-то то показываем
+                if (Basket.getInstance().orders.size() > 0) {
+                    OrderAdapter orderAdapter = new OrderAdapter(this);
+                    rv.setAdapter(orderAdapter);
+                } else {
+                    // Если корзина пуста то информируем об этом
+                    rlOrderPanel.setVisibility(View.GONE);
+                    rv.setVisibility(View.GONE);
+                    tvEmpty.setVisibility(View.VISIBLE);
+                }
+                break;
         }
+
     }
+
+
+    mStateListener = new ValueEventListener() {
+        @Override
+        public void onDataChange(DataSnapshot dataSnapshot) {
+            StateLastDelivery stateLastDelivery = dataSnapshot.getValue(StateLastDelivery.class);
+
+            if (stateLastDelivery == null) {
+                progressBar.setVisibility(View.GONE);
+                scrollView.setVisibility(View.GONE);
+                Toast.makeText(getBaseContext(), "You don't have deliveries", Toast.LENGTH_SHORT).show();
+            } else {
+                String childFolder = "";
+                switch (stateLastDelivery.getDeliveryState()) {
+                    case Const.DELIVERY_STATE_NEW:
+                        childFolder = Const.CHILD_DELIVERIES_NEW;
+                        break;
+                    case Const.DELIVERY_STATE_COOKING:
+                        childFolder = Const.CHILD_DELIVERIES_COOKING;
+                        break;
+                    case Const.DELIVERY_STATE_TRANSPORT:
+                        childFolder = Const.CHILD_DELIVERIES_TRANSPORT;
+                        break;
+                    default:
+                        childFolder = Const.CHILD_DELIVERIES_ARCHIVE;
+                }
+                loadDeliveryInfo(childFolder, stateLastDelivery.getDeliveryId());
+            }
+        }
+
+        @Override
+        public void onCancelled(DatabaseError databaseError) {
+        }
+    };
+
 
     /** Реализация интерфейса адаптера в которой мы обновляем итоговую сумму или скрываем РВ */
     @Override
