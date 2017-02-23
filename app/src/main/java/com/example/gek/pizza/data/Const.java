@@ -38,6 +38,7 @@ public class Const {
     // Auth mode
     public static final int AUTH_NULL = 0;
     public static final int AUTH_USER = 1;
+    public static final int AUTH_COURIER = 2;
     public static final int AUTH_SHOP = 5;
 
 

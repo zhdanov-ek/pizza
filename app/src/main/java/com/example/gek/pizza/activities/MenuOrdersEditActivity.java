@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
+import android.text.InputFilter;
 import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.View;
@@ -41,6 +42,10 @@ import static com.example.gek.pizza.data.Const.db;
 
 public class MenuOrdersEditActivity extends BaseActivity implements View.OnClickListener{
 
+    private static final String STATE_BUTTON_OK = "button_ok";
+    private static final String STATE_URI_PHOTO = "uri_photo";
+    private static final String STATE_URI_HAVE = "uri_have";
+
     private boolean isNewMenuGroup = true;
     private MenuGroup oldMenuGroup;
     private MenuGroup changedMenuGroup;
@@ -55,6 +60,7 @@ public class MenuOrdersEditActivity extends BaseActivity implements View.OnClick
     Button btnOk, btnCancel;
     private StorageReference folderRef;
     private Boolean isNeedRemovePhoto = false;
+    private Boolean isSelectPhoto = false;
 
 
     @Override
@@ -69,12 +75,11 @@ public class MenuOrdersEditActivity extends BaseActivity implements View.OnClick
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu_orders_edit);
 
-
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolBar);
         toolbar.setTitle("");
         setSupportActionBar(toolbar);
 
-        //add button for open DrawerLayout
+        // Add button for open DrawerLayout
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, mDrawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         mDrawer.addDrawerListener(toggle);
@@ -90,6 +95,7 @@ public class MenuOrdersEditActivity extends BaseActivity implements View.OnClick
 
         etName = (EditText) findViewById(R.id.etName);
         etName.addTextChangedListener(textWatcher);
+        etName.setFilters(new InputFilter[] {Utils.getInputFilterSymbol()});
 
         ivPhoto = (ImageView) findViewById(R.id.ivPhoto);
         ivPhoto.setOnClickListener(this);
@@ -110,6 +116,8 @@ public class MenuOrdersEditActivity extends BaseActivity implements View.OnClick
         if (getIntent().hasExtra(Const.MODE) &&
                 (getIntent().getIntExtra(Const.MODE, Const.MODE_NEW) == Const.MODE_EDIT)){
             isNewMenuGroup = false;
+            btnOk.setEnabled(true);
+            isSelectPhoto = true;
             oldMenuGroup = getIntent().getParcelableExtra(Const.EXTRA_MENU_GROUP);
             String title = getResources().getString(R.string.edit) + " - " + oldMenuGroup.getName();
             toolbar.setTitle(title);
@@ -122,6 +130,25 @@ public class MenuOrdersEditActivity extends BaseActivity implements View.OnClick
         // Получаем ссылку на наше хранилище
         FirebaseStorage storage = FirebaseStorage.getInstance();
         folderRef = storage.getReferenceFromUrl(Const.STORAGE).child(Const.MENU_GROUP_IMAGES_FOLDER);
+
+        // анализируем переданные данные в активити если таковые были (при повороте, скрытии и т.д.)
+        if (savedInstanceState != null){
+            // Данные есть, т.е программа уже работала и что-то сохранила. Смотрим что и восстанавливаем окно
+            if (savedInstanceState.getBoolean(STATE_BUTTON_OK)){
+                btnOk.setEnabled(true);
+            } else {
+                btnOk.setEnabled(false);
+            }
+            if (savedInstanceState.getBoolean(STATE_URI_HAVE)){
+                isSelectPhoto = true;
+                uriPhoto = Uri.parse(savedInstanceState.getString(STATE_URI_PHOTO));
+                Glide.with(this)
+                        .load(uriPhoto)
+                        .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                        .error(R.drawable.menu_group_empty)
+                        .into(ivPhoto);
+            }
+        }
     }
 
 
@@ -133,6 +160,10 @@ public class MenuOrdersEditActivity extends BaseActivity implements View.OnClick
         if (resultCode == RESULT_OK && data != null ) {
             if (requestCode == Const.REQUEST_LOAD_IMG ) {
                 uriPhoto = data.getData();
+                isSelectPhoto = true;
+                if (etName.length() > 0) {
+                    btnOk.setEnabled(true);
+                }
                 Glide.with(this)
                         .load(uriPhoto)
                         .diskCacheStrategy(DiskCacheStrategy.SOURCE)
@@ -172,7 +203,6 @@ public class MenuOrdersEditActivity extends BaseActivity implements View.OnClick
 
         }
     }
-
 
 
     /** Запись на сервер данных */
@@ -220,8 +250,8 @@ public class MenuOrdersEditActivity extends BaseActivity implements View.OnClick
                         Intent resultIntent = new Intent();
                         resultIntent.putExtra(Const.EXTRA_MENU_GROUP, changedMenuGroup);
                         setResult(RESULT_OK, resultIntent);
-                        finish();
                     }
+                    finish();
                 }
             });
 
@@ -257,7 +287,6 @@ public class MenuOrdersEditActivity extends BaseActivity implements View.OnClick
         }
     }
 
-
     @Override
     public void onClick(View view) {
         switch (view.getId()){
@@ -270,7 +299,6 @@ public class MenuOrdersEditActivity extends BaseActivity implements View.OnClick
             case R.id.btnCancel:
                 finish();
                 break;
-
         }
     }
 
@@ -287,19 +315,35 @@ public class MenuOrdersEditActivity extends BaseActivity implements View.OnClick
     TextWatcher textWatcher = new TextWatcher() {
         @Override
         public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
         }
 
         @Override
         public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            //todo Проверяем ввод не допустимых символов
             tvName.setText(charSequence);
+            if ((charSequence.length() > 0 ) && (isSelectPhoto)){
+                btnOk.setEnabled(true);
+            } else {
+                btnOk.setEnabled(false);
+            }
         }
 
         @Override
         public void afterTextChanged(Editable editable) {
-
         }
     };
+
+
+    /** Сохраняем данные на случай переворота дисплея или сворачивания окна */
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        super.onSaveInstanceState(savedInstanceState);
+        savedInstanceState.putBoolean(STATE_BUTTON_OK, btnOk.isEnabled());
+        if (uriPhoto != null) {
+            savedInstanceState.putBoolean(STATE_URI_HAVE, true);
+            savedInstanceState.putString(STATE_URI_PHOTO, uriPhoto.toString());
+        } else {
+            savedInstanceState.putBoolean(STATE_URI_HAVE, false);
+        }
+    }
 
 }

@@ -32,6 +32,13 @@
             android:id="@+id/nav_reservation"
             android:icon="@drawable/ic_menu_reservation"
             android:title="@string/title_reserve_table" />
+
+        <item
+            android:id="@+id/nav_delivery_status"
+            android:icon="@drawable/ic_menu_delivery_status"
+            android:title="@string/title_delivery"
+            android:visible="false"/>
+
         <item
             android:id="@+id/nav_about"
             android:icon="@drawable/ic_menu_info"

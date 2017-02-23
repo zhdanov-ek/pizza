@@ -8,13 +8,11 @@ import java.util.ArrayList;
 
 public class Basket {
     public ArrayList<Order> orders;
-    private String numberDelivery;
     private static Basket instance;
 
 
     private Basket() {
         orders = new ArrayList<>();
-        numberDelivery = "";
     }
 
     // Получаем инстанс через метод, а не конструктор, который скрыт
@@ -71,22 +69,6 @@ public class Basket {
         return list;
     }
 
-    // после отправки заявки на доставку в этот метод подаем номер заявки и очищаем корзину
-    public void makeDelivery(String numberDelivery){
-        // todo Это поле вероятно нужно убирать. С него толку никакого после того как последний номер читается с сервера
-        // по этому номер потом будем отслеживать состояние выполнения заявки
-        this.numberDelivery = numberDelivery;
-        orders.clear();
-    }
 
-
-
-    public String getNumberDelivery() {
-        return numberDelivery;
-    }
-
-    public void setNumberDelivery(String numberDelivery) {
-        this.numberDelivery = numberDelivery;
-    }
 
 }

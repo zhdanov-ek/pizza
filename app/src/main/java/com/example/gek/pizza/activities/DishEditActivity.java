@@ -7,6 +7,8 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -41,12 +43,13 @@ import static com.example.gek.pizza.data.Const.db;
 
 public class DishEditActivity extends BaseActivity implements View.OnClickListener{
 
+    private static final String STATE_URI_PHOTO = "uri_photo";
+    private static final String STATE_URI_HAVE = "uri_have";
     private Context ctx;
     private boolean isNewDish = true;
     private Dish oldDish;
     private Dish changedDish;
     private Uri uriPhoto;
-
     private ProgressBar progressBar;
     private Spinner spinnerGroup;
     private EditText etName, etDescription, etPrice;
@@ -100,7 +103,10 @@ public class DishEditActivity extends BaseActivity implements View.OnClickListen
         btnRemovePhoto.setOnClickListener(this);
         btnOk = (Button) findViewById(R.id.btnOk);
         btnOk.setOnClickListener(this);
+        findViewById(R.id.btnCancel).setOnClickListener(this);
 
+        etName.addTextChangedListener(textWatcher);
+        etPrice.addTextChangedListener(textWatcher);
 
         if (!Utils.hasInternet(this)) {
             Toast.makeText(this, R.string.mes_no_internet, Toast.LENGTH_SHORT).show();
@@ -128,6 +134,19 @@ public class DishEditActivity extends BaseActivity implements View.OnClickListen
         // Получаем ссылку на наше хранилище
         FirebaseStorage storage = FirebaseStorage.getInstance();
         folderRef = storage.getReferenceFromUrl(Const.STORAGE).child(Const.DISHES_IMAGES_FOLDER);
+
+        // анализируем переданные данные в активити если таковые были (при повороте, скрытии и т.д.)
+        if (savedInstanceState != null){
+            if (savedInstanceState.getBoolean(STATE_URI_HAVE)){
+                btnRemovePhoto.setVisibility(View.VISIBLE);
+                uriPhoto = Uri.parse(savedInstanceState.getString(STATE_URI_PHOTO));
+                Glide.with(this)
+                        .load(uriPhoto)
+                        .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                        .error(R.drawable.dish_empty)
+                        .into(ivPhoto);
+            }
+        }
     }
 
 
@@ -168,7 +187,6 @@ public class DishEditActivity extends BaseActivity implements View.OnClickListen
                         break;
                     }
                 }
-
             }
 
             @Override
@@ -179,7 +197,6 @@ public class DishEditActivity extends BaseActivity implements View.OnClickListen
         // Сам заброс данных из базы
         Const.db.child(Const.CHILD_MENU_GROUPS).addListenerForSingleValueEvent(groupMenuListener);
     }
-
 
 
     /** Получаем URI фото с галереи */
@@ -210,6 +227,7 @@ public class DishEditActivity extends BaseActivity implements View.OnClickListen
             uriPhoto = null;
             ivPhoto.setImageResource(R.drawable.dish_empty);
             btnRemovePhoto.setVisibility(View.INVISIBLE);
+            btnOk.setEnabled(false);
         } else {
             etName.setText(dish.getName());
             etDescription.setText(dish.getDescription());
@@ -221,8 +239,10 @@ public class DishEditActivity extends BaseActivity implements View.OnClickListen
                         .error(R.drawable.dish_empty)
                         .into(ivPhoto);
                 btnRemovePhoto.setVisibility(View.VISIBLE);
-            } else
+            } else {
                 ivPhoto.setImageResource(R.drawable.dish_empty);
+                btnRemovePhoto.setVisibility(View.INVISIBLE);
+            }
         }
     }
 
@@ -237,7 +257,6 @@ public class DishEditActivity extends BaseActivity implements View.OnClickListen
         if (listMenuGroups != null) {
             keyGroup = listMenuGroups.get(spinnerGroup.getSelectedItemPosition()).getKey();
         }
-
 
         progressBar.setVisibility(View.VISIBLE);
 
@@ -321,6 +340,9 @@ public class DishEditActivity extends BaseActivity implements View.OnClickListen
     @Override
     public void onClick(View view) {
         switch (view.getId()){
+            case R.id.btnCancel:
+                finish();
+                break;
             case R.id.btnOk:
                 sendToServer();
                 break;
@@ -346,6 +368,38 @@ public class DishEditActivity extends BaseActivity implements View.OnClickListen
         }
     }
 
+
+    /** Сохраняем данные на случай переворота дисплея или сворачивания окна */
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        super.onSaveInstanceState(savedInstanceState);
+        if (uriPhoto != null) {
+            savedInstanceState.putBoolean(STATE_URI_HAVE, true);
+            savedInstanceState.putString(STATE_URI_PHOTO, uriPhoto.toString());
+        } else {
+            savedInstanceState.putBoolean(STATE_URI_HAVE, false);
+        }
+    }
+
+    /** Отслеживаем изменения в полях Name и Price */
+    TextWatcher textWatcher = new TextWatcher() {
+        @Override
+        public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+        }
+
+        @Override
+        public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            if ((etPrice.length() > 0 ) && (etName.length() > 0)){
+                btnOk.setEnabled(true);
+            } else {
+                btnOk.setEnabled(false);
+            }
+        }
+
+        @Override
+        public void afterTextChanged(Editable editable) {
+        }
+    };
 
 
 }
