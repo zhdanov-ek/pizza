@@ -31,15 +31,12 @@ public class MainActivity extends BaseActivity
     public void updateUI() {
         switch (Connection.getInstance().getCurrentAuthStatus()){
             case Const.AUTH_NULL:
-                findViewById(R.id.tvOrdersTitle).setVisibility(View.GONE);
                 findViewById(R.id.cvOrders).setVisibility(View.GONE);
                 break;
             case Const.AUTH_USER:
-                findViewById(R.id.tvOrdersTitle).setVisibility(View.GONE);
                 findViewById(R.id.cvOrders).setVisibility(View.GONE);
                 break;
             case Const.AUTH_SHOP:
-                findViewById(R.id.tvOrdersTitle).setVisibility(View.VISIBLE);
                 findViewById(R.id.cvOrders).setVisibility(View.VISIBLE);
                 break;
         }

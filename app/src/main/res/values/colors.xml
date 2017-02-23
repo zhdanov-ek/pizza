@@ -4,6 +4,7 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
 
+    <color name="colorTransparent">#00000000</color>
 
     <color name="colorMainMenuTitle">#13497a</color>
     <color name="colorMainMenuDescription">#296eae</color>
@@ -29,6 +30,11 @@
 
     <color name="colorPriceBackground">#8BC34A</color>
     <color name="colorPriceFont">#000000</color>
+
+    <!-- Deliveries color -->
+    <color name="colorDeliveryDishes">#000000</color>
+    <color name="colorDeliveryComment">#303F9F</color>
+
 
     <!-- COLORS FOR MENU GROUP -->
     <color name="red_200">#EF9A9A</color>
