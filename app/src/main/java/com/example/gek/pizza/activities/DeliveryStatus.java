@@ -320,7 +320,7 @@ public class DeliveryStatus extends BaseActivity {
     }
 
     @Override
-    protected void onStop() {
+    protected void onPause() {
         // if listener not set we will retrieve error
         if (mIsSetListener) {
             db.child(Const.CHILD_USERS)
@@ -328,7 +328,7 @@ public class DeliveryStatus extends BaseActivity {
                     .child(Const.CHILD_USER_DELIVERY_STATE)
                     .removeEventListener(mStateListener);
         }
-        super.onStop();
+        super.onPause();
     }
 
 }

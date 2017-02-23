@@ -76,9 +76,6 @@ public class MainActivity extends BaseActivity
         //todo move to settings
         findViewById(R.id.btnStartService).setOnClickListener(this);
         findViewById(R.id.btnStopService).setOnClickListener(this);
-        findViewById(R.id.btnShowStatusOrder).setOnClickListener(this);
-
-
 
 
         //Получение настроек приложения
@@ -151,9 +148,6 @@ public class MainActivity extends BaseActivity
                 break;
             case R.id.btnStopService:
                 stopService(new Intent(this, CheckDeliveryService.class));
-                break;
-            case R.id.btnShowStatusOrder:
-                startActivity(new Intent(this, DeliveryStatus.class));
                 break;
 
         }

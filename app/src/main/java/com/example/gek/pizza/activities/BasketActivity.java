@@ -1,6 +1,7 @@
 package com.example.gek.pizza.activities;
 
 import android.content.Intent;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -23,9 +24,12 @@ import com.example.gek.pizza.data.Const;
 import com.example.gek.pizza.data.Order;
 import com.example.gek.pizza.data.StateLastDelivery;
 import com.example.gek.pizza.helpers.Utils;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
+
+import static com.example.gek.pizza.data.Const.db;
 
 /**  Отображает корзину заказов и отправляет заказ */
 
@@ -37,6 +41,7 @@ public class BasketActivity extends BaseActivity implements OrderAdapter.Refresh
     private RelativeLayout rlOrderPanel;
     private Button btnOrderNow;
     private ValueEventListener mStateListener;
+    private Boolean mIsSetListener = false;
 
     @Override
     public void updateUI() {
@@ -74,6 +79,27 @@ public class BasketActivity extends BaseActivity implements OrderAdapter.Refresh
         rv = (RecyclerView) findViewById(R.id.rv);
         tvEmpty = (TextView) findViewById(R.id.tvEmpty);
 
+        // Check active delivery
+        mStateListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                StateLastDelivery stateLastDelivery = dataSnapshot.getValue(StateLastDelivery.class);
+                if ((stateLastDelivery != null) &&
+                        (stateLastDelivery.getDeliveryState() != Const.DELIVERY_STATE_ARCHIVE)){
+                    rlOrderPanel.setVisibility(View.GONE);
+                    Snackbar.make(rv, "You have active delivery now", Snackbar.LENGTH_INDEFINITE)
+                            .setAction("Show", new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    startActivity(new Intent(getBaseContext(), DeliveryStatus.class));
+                                }
+                            }).show();
+                }
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+            }
+        };
     }
 
 
@@ -89,7 +115,13 @@ public class BasketActivity extends BaseActivity implements OrderAdapter.Refresh
 
         switch (Connection.getInstance().getCurrentAuthStatus()){
             case Const.AUTH_USER:
-                // если в корзине есть, что-то то показываем
+                // смотрим состояние последней доставки и если она не закрыта то показываем сообщение
+                db.child(Const.CHILD_USERS)
+                        .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                        .child(Const.CHILD_USER_DELIVERY_STATE)
+                        .addValueEventListener(mStateListener);
+                mIsSetListener = true;
+                // если в корзине есть, что-то то показываем список блюд
                 if (Basket.getInstance().orders.size() > 0) {
                     OrderAdapter orderAdapter = new OrderAdapter(this);
                     rv.setAdapter(orderAdapter);
@@ -118,40 +150,6 @@ public class BasketActivity extends BaseActivity implements OrderAdapter.Refresh
     }
 
 
-    mStateListener = new ValueEventListener() {
-        @Override
-        public void onDataChange(DataSnapshot dataSnapshot) {
-            StateLastDelivery stateLastDelivery = dataSnapshot.getValue(StateLastDelivery.class);
-
-            if (stateLastDelivery == null) {
-                progressBar.setVisibility(View.GONE);
-                scrollView.setVisibility(View.GONE);
-                Toast.makeText(getBaseContext(), "You don't have deliveries", Toast.LENGTH_SHORT).show();
-            } else {
-                String childFolder = "";
-                switch (stateLastDelivery.getDeliveryState()) {
-                    case Const.DELIVERY_STATE_NEW:
-                        childFolder = Const.CHILD_DELIVERIES_NEW;
-                        break;
-                    case Const.DELIVERY_STATE_COOKING:
-                        childFolder = Const.CHILD_DELIVERIES_COOKING;
-                        break;
-                    case Const.DELIVERY_STATE_TRANSPORT:
-                        childFolder = Const.CHILD_DELIVERIES_TRANSPORT;
-                        break;
-                    default:
-                        childFolder = Const.CHILD_DELIVERIES_ARCHIVE;
-                }
-                loadDeliveryInfo(childFolder, stateLastDelivery.getDeliveryId());
-            }
-        }
-
-        @Override
-        public void onCancelled(DatabaseError databaseError) {
-        }
-    };
-
-
     /** Реализация интерфейса адаптера в которой мы обновляем итоговую сумму или скрываем РВ */
     @Override
     public void refreshTotal() {
@@ -172,4 +170,17 @@ public class BasketActivity extends BaseActivity implements OrderAdapter.Refresh
             startActivity(intentDelivery);
         }
     };
+
+
+    @Override
+    protected void onPause() {
+        // if listener not set we will retrieve error
+        if (mIsSetListener) {
+            db.child(Const.CHILD_USERS)
+                    .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                    .child(Const.CHILD_USER_DELIVERY_STATE)
+                    .removeEventListener(mStateListener);
+        }
+        super.onPause();
+    }
 }
