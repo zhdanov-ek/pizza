@@ -276,7 +276,7 @@ public class CheckDeliveryService extends Service {
         String content = getResources().getString(R.string.notification_reserved_table_content);
 
         NotificationCompat.Builder ntfBuilder = new NotificationCompat.Builder(ctx);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
             ntfBuilder.setSmallIcon(R.drawable.verified);
         } else {
             ntfBuilder.setSmallIcon(R.drawable.table4);
@@ -365,7 +365,7 @@ public class CheckDeliveryService extends Service {
         NotificationCompat.Builder ntfBuilder = new NotificationCompat.Builder(ctx);
         // Формируем его наполняя информацией
         // Следующие три параметра являются ОБЯЗАТЕЛЬНЫМИ
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
             ntfBuilder.setSmallIcon(R.drawable.currency_usd);
         } else {
             ntfBuilder.setSmallIcon(R.drawable.ic_money);

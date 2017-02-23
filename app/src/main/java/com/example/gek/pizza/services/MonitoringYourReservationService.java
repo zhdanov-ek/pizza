@@ -108,7 +108,7 @@ public class MonitoringYourReservationService extends Service {
         String title = getResources().getString(R.string.notification_monitoring_table_reservation);
 
         NotificationCompat.Builder ntfBuilder = new NotificationCompat.Builder(ctx);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
             ntfBuilder.setSmallIcon(R.drawable.verified);
         } else{
             ntfBuilder.setSmallIcon(R.drawable.table4);

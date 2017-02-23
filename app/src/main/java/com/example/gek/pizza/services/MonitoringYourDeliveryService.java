@@ -109,7 +109,7 @@ public class MonitoringYourDeliveryService extends Service {
         String title = getResources().getString(R.string.notification_monitoring_delivery_title);
 
         NotificationCompat.Builder ntfBuilder = new NotificationCompat.Builder(ctx);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
             ntfBuilder.setSmallIcon(R.drawable.currency_usd);
         } else{
             ntfBuilder.setSmallIcon(R.drawable.ic_money);
