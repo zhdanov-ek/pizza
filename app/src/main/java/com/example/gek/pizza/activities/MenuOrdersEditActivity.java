@@ -46,7 +46,6 @@ public class MenuOrdersEditActivity extends BaseActivity implements View.OnClick
     private static final String STATE_URI_PHOTO = "uri_photo";
     private static final String STATE_URI_HAVE = "uri_have";
 
-
     private boolean isNewMenuGroup = true;
     private MenuGroup oldMenuGroup;
     private MenuGroup changedMenuGroup;
@@ -140,7 +139,6 @@ public class MenuOrdersEditActivity extends BaseActivity implements View.OnClick
             } else {
                 btnOk.setEnabled(false);
             }
-
             if (savedInstanceState.getBoolean(STATE_URI_HAVE)){
                 isSelectPhoto = true;
                 uriPhoto = Uri.parse(savedInstanceState.getString(STATE_URI_PHOTO));
@@ -150,7 +148,6 @@ public class MenuOrdersEditActivity extends BaseActivity implements View.OnClick
                         .error(R.drawable.menu_group_empty)
                         .into(ivPhoto);
             }
-
         }
     }
 
@@ -290,7 +287,6 @@ public class MenuOrdersEditActivity extends BaseActivity implements View.OnClick
         }
     }
 
-
     @Override
     public void onClick(View view) {
         switch (view.getId()){
@@ -303,7 +299,6 @@ public class MenuOrdersEditActivity extends BaseActivity implements View.OnClick
             case R.id.btnCancel:
                 finish();
                 break;
-
         }
     }
 
