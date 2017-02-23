@@ -61,6 +61,7 @@
 
         <service android:name=".services.CheckDeliveryService" />
         <service android:name=".services.MonitoringYourDeliveryService" />
+        <service android:name=".services.MonitoringYourReservationService" />
 
         <activity
             android:name=".activities.DeliveriesActivity"

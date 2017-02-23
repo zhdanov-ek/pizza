@@ -7,6 +7,7 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
+import android.os.Build;
 import android.os.IBinder;
 import android.support.v7.app.NotificationCompat;
 import android.util.Log;
@@ -14,6 +15,7 @@ import android.util.Log;
 import com.example.gek.pizza.R;
 import com.example.gek.pizza.activities.DeliveriesActivity;
 import com.example.gek.pizza.activities.ReserveTableActivity;
+import com.example.gek.pizza.data.Connection;
 import com.example.gek.pizza.data.Const;
 import com.example.gek.pizza.data.Delivery;
 import com.example.gek.pizza.data.OrderTable;
@@ -36,6 +38,7 @@ import java.util.TimerTask;
 
 public class CheckDeliveryService extends Service {
     private static String TAG = "CheckDeliveryService";
+    private Boolean mIsSetListener;
     // По этому ID мы сможем обращаться к нашему уведомлению, что бы изменить его например
     // Для изменения уведомления достаточно повторно создать его с тем же номером ID
     int orderNotifId = Const.ODRED_NOTIFY_ID;
@@ -174,8 +177,10 @@ public class CheckDeliveryService extends Service {
 
             }
         };
-
-        Const.db.child(Const.CHILD_RESERVED_TABLES_NEW).addChildEventListener(newOrderedTableListener);
+        if (Connection.getInstance().getCurrentAuthStatus() == Const.AUTH_SHOP) {
+            Const.db.child(Const.CHILD_RESERVED_TABLES_NEW).addChildEventListener(newOrderedTableListener);
+            mIsSetListener = true;
+        }
     }
 
     private void setListenerArchiveOrderedTableListener() {
@@ -217,7 +222,10 @@ public class CheckDeliveryService extends Service {
             public void onCancelled(DatabaseError databaseError) {
             }
         };
-        Const.db.child(Const.CHILD_RESERVED_TABLES_NEW).addValueEventListener(archiveOrderedTableListener);
+        if (Connection.getInstance().getCurrentAuthStatus() == Const.AUTH_SHOP) {
+            Const.db.child(Const.CHILD_RESERVED_TABLES_NEW).addValueEventListener(archiveOrderedTableListener);
+            mIsSetListener = true;
+        }
 
     }
 
@@ -268,7 +276,11 @@ public class CheckDeliveryService extends Service {
         String content = getResources().getString(R.string.notification_reserved_table_content);
 
         NotificationCompat.Builder ntfBuilder = new NotificationCompat.Builder(ctx);
-        ntfBuilder.setSmallIcon(R.drawable.verified);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+            ntfBuilder.setSmallIcon(R.drawable.verified);
+        } else {
+            ntfBuilder.setSmallIcon(R.drawable.table4);
+        }
         ntfBuilder.setContentTitle(title);
         ntfBuilder.setContentText(content);
 
@@ -334,8 +346,10 @@ public class CheckDeliveryService extends Service {
                 Log.w(TAG, "load data from FireBase: onCancelled", databaseError.toException());
             }
         };
-
-        Const.db.child(Const.CHILD_DELIVERIES_NEW).addChildEventListener(newDeliveriesListener);
+        if (Connection.getInstance().getCurrentAuthStatus() == Const.AUTH_SHOP) {
+            Const.db.child(Const.CHILD_DELIVERIES_NEW).addChildEventListener(newDeliveriesListener);
+            mIsSetListener = true;
+        }
     }
 
     private void showNotification(boolean alert) {
@@ -351,7 +365,11 @@ public class CheckDeliveryService extends Service {
         NotificationCompat.Builder ntfBuilder = new NotificationCompat.Builder(ctx);
         // Формируем его наполняя информацией
         // Следующие три параметра являются ОБЯЗАТЕЛЬНЫМИ
-        ntfBuilder.setSmallIcon(R.drawable.currency_usd);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+            ntfBuilder.setSmallIcon(R.drawable.currency_usd);
+        } else {
+            ntfBuilder.setSmallIcon(R.drawable.ic_money);
+        }
         ntfBuilder.setContentTitle(title);
         ntfBuilder.setContentText(content);
 
@@ -401,9 +419,11 @@ public class CheckDeliveryService extends Service {
     public void onDestroy() {
         Log.d(TAG, "onDestroy: ");
         // перед уничтожением сервиса убираем наш лисенер. Иначе он будет отрабатывать и без службы
-        Const.db.child(Const.CHILD_DELIVERIES_NEW).removeEventListener(newDeliveriesListener);
-        Const.db.child(Const.CHILD_RESERVED_TABLES_NEW).removeEventListener(newOrderedTableListener);
-        Const.db.child(Const.CHILD_RESERVED_TABLES_NEW).removeEventListener(archiveOrderedTableListener);
+        if (mIsSetListener) {
+            Const.db.child(Const.CHILD_DELIVERIES_NEW).removeEventListener(newDeliveriesListener);
+            Const.db.child(Const.CHILD_RESERVED_TABLES_NEW).removeEventListener(newOrderedTableListener);
+            Const.db.child(Const.CHILD_RESERVED_TABLES_NEW).removeEventListener(archiveOrderedTableListener);
+        }
 
         // отключаем фоновое задание
         if (isTimerStarted && timer != null) {

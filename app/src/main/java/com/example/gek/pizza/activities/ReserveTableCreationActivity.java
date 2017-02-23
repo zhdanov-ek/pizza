@@ -1,9 +1,10 @@
 package com.example.gek.pizza.activities;
 
+import android.app.ActivityManager;
+import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -11,10 +12,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.gek.pizza.R;
+import com.example.gek.pizza.data.Connection;
 import com.example.gek.pizza.data.Const;
 import com.example.gek.pizza.data.OrderTable;
+import com.example.gek.pizza.data.StateTableReservation;
 import com.example.gek.pizza.data.Table;
 import com.example.gek.pizza.helpers.Utils;
+import com.example.gek.pizza.services.MonitoringYourReservationService;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -26,7 +31,7 @@ import static com.example.gek.pizza.data.Const.db;
  * Created by Ivleshch on 08.02.2017.
  */
 
-public class ReserveTableCreationActivity extends BaseActivity {
+public class ReserveTableCreationActivity extends AppCompatActivity {
 
     private Table table;
     private String tableKey;
@@ -35,28 +40,15 @@ public class ReserveTableCreationActivity extends BaseActivity {
     private TextView tvTableReservation;
     private SimpleDateFormat shortenedDateFormat;
 
-    @Override
-    public void updateUI() {
-
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        LayoutInflater inflater = (LayoutInflater) this
-                .getSystemService(this.LAYOUT_INFLATER_SERVICE);
-        View contentView = inflater.inflate(R.layout.activity_reserve_table_creation, null, false);
-        mDrawer.addView(contentView, 0);
+        setContentView(R.layout.activity_reserve_table_creation);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolBar);
         toolbar.setTitle(R.string.title_reserve_table);
         setSupportActionBar(toolbar);
-
-        //add button for open DrawerLayout
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, mDrawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        mDrawer.addDrawerListener(toggle);
-        toggle.syncState();
 
         shortenedDateFormat = new SimpleDateFormat("dd.MM.yy");
 
@@ -72,7 +64,7 @@ public class ReserveTableCreationActivity extends BaseActivity {
         etComment = (EditText) findViewById(R.id.etComment);
         btnReserveTable = (Button) findViewById(btnCreateDelivery);
         tvTableReservation = (TextView) findViewById(R.id.tvTableReservation);
-        tvTableReservation.setText(getResources().getString(R.string.text_reservation_evening)+" "+shortenedDateFormat.format(new Date()));
+        tvTableReservation.setText(getResources().getString(R.string.text_reservation_evening) + " " + shortenedDateFormat.format(new Date()));
 
         btnReserveTable.setOnClickListener(reserveTable);
 
@@ -82,25 +74,61 @@ public class ReserveTableCreationActivity extends BaseActivity {
         @Override
         public void onClick(View view) {
             if (checkData()) {
-                OrderTable orderTable = new OrderTable();
-                orderTable.setClientName(etName.getText().toString());
-                orderTable.setPhoneClient(etPhone.getText().toString());
-                orderTable.setCommentClient(etComment.getText().toString());
-                orderTable.setIsNotificated(0);
-                orderTable.setIsCheckedByAdmin(0);
-                orderTable.setTableKey(tableKey);
+                switch (Connection.getInstance().getCurrentAuthStatus()) {
+                    case Const.AUTH_NULL:
+                        startActivity(new Intent(getBaseContext(), AuthenticationActivity.class));
+                        break;
+                    default:
+                        String id = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
-                String numberDelivery = Utils.makeDeliveryNumber(etPhone.getText().toString());
+                        OrderTable orderTable = new OrderTable();
+                        orderTable.setClientName(etName.getText().toString());
+                        orderTable.setPhoneClient(etPhone.getText().toString());
+                        orderTable.setCommentClient(etComment.getText().toString());
+                        orderTable.setIsNotificated(0);
+                        orderTable.setIsCheckedByAdmin(0);
+                        orderTable.setUserId(id);
+                        orderTable.setTableKey(tableKey);
 
-                db.child(Const.CHILD_RESERVED_TABLES_NEW).child(numberDelivery).setValue(orderTable);
-                getIntent().putExtra(Const.EXTRA_TABLE, table);
-                setResult(RESULT_OK, getIntent());
-                finish();
+                        String numberDelivery = Utils.makeDeliveryNumber(etPhone.getText().toString());
+                        db.child(Const.CHILD_RESERVED_TABLES_NEW).child(numberDelivery).setValue(orderTable);
+
+                        StateTableReservation stateTableReservation = new StateTableReservation();
+                        stateTableReservation.setReservationKey(numberDelivery);
+                        stateTableReservation.setReservationState(0);
+                        db.child(Const.CHILD_USERS)
+                                .child(id)
+                                .child(Const.CHILD_USER_RESERVATION_STATE)
+                                .child(numberDelivery)
+                                .setValue(stateTableReservation);
+
+
+                        getIntent().putExtra(Const.EXTRA_TABLE, table);
+                        setResult(RESULT_OK, getIntent());
+
+//                        stopService(new Intent(getBaseContext(), MonitoringYourReservationService.class));
+                        if (!isServiceRunning()){
+                            startService(new Intent(getBaseContext(), MonitoringYourReservationService.class));
+                        }
+                        finish();
+                }
             }
         }
     };
 
-    private Boolean checkData(){
+    private boolean isServiceRunning() {
+        boolean isServiceRun;
+        isServiceRun = false;
+        ActivityManager manager = (ActivityManager)getSystemService(ACTIVITY_SERVICE);
+        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+            if (MonitoringYourReservationService.class.getName().equals(service.service.getClassName())) {
+                isServiceRun = true;
+            }
+        }
+        return isServiceRun;
+    }
+
+    private Boolean checkData() {
         Boolean isCorrect = true;
         if (etName.getText().toString().length() < 2) {
             showMessage(getResources().getString(R.string.name_delivery));
@@ -117,7 +145,7 @@ public class ReserveTableCreationActivity extends BaseActivity {
         return isCorrect;
     }
 
-    private void showMessage(String s){
+    private void showMessage(String s) {
         String mes = getResources().getString(R.string.mes_check_data) + "\n";
         Toast.makeText(this, mes + s, Toast.LENGTH_SHORT).show();
     }

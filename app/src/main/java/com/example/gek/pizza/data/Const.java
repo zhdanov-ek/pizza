@@ -100,7 +100,9 @@ public class Const {
     public static final Integer RESERVED_TABLE_NOTIFY_ID = 101;
     public static final Integer ODRED_NOTIFY_ID = 1;
     public static final Integer STATUS_CHECKED_BY_ADMIN = 1;
+    public static final Integer RESERVED_TABLE_USER_NOTIFY_ID = 201;
 
-
+    public static final int RESERVATION_TABLE_STATE_CONFIRMED = 1;
+    public static final int RESERVATION_TABLE_STATE_CANCEL = 2;
 
 }

@@ -15,6 +15,15 @@ public class OrderTable{
     private String key;
     private Integer isNotificated;
     private Integer isCheckedByAdmin;
+    private String userId;
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
 
     public Integer getIsCheckedByAdmin() {
         return isCheckedByAdmin;

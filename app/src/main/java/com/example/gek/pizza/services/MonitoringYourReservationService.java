@@ -11,12 +11,13 @@ import android.os.Build;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.support.v7.app.NotificationCompat;
+import android.util.Log;
 
 import com.example.gek.pizza.R;
-import com.example.gek.pizza.activities.DeliveryStatus;
+import com.example.gek.pizza.activities.ReserveTableActivity;
 import com.example.gek.pizza.data.Connection;
 import com.example.gek.pizza.data.Const;
-import com.example.gek.pizza.data.StateLastDelivery;
+import com.example.gek.pizza.data.StateTableReservation;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -25,67 +26,67 @@ import com.google.firebase.database.ValueEventListener;
 import static com.example.gek.pizza.data.Const.db;
 
 /**
- * Monitoring client delivery
- * Run automatic after creation new delivery
- * Stop after delivery change state to ARCHIVE
+ * Created by Ivleshch on 22.02.2017.
  */
 
-//todo Сервис работает паралельно программе. При выключении проги он вырубается тоже. Оставлять или делать независимо?
-
-public class MonitoringYourDeliveryService extends Service {
+public class MonitoringYourReservationService extends Service {
+    private int notifyId;
     private Boolean mIsSetListener;
-    private int mLastState;
     private ValueEventListener mStateListener;
     private Context ctx;
     private NotificationManager mNotificationManager;
-    private final static int mNotifyId = 777;
 
     @Override
     public void onCreate() {
+        notifyId = Const.RESERVED_TABLE_USER_NOTIFY_ID;
         super.onCreate();
         mIsSetListener = false;
-        mLastState = Const.DELIVERY_STATE_NEW;
         ctx = getBaseContext();
-        // Получаем системный менеджер уведомлений
         mNotificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        Log.d("serviceStart","123");
+        Log.d("serviceStart","-"+Const.AUTH_USER);
         setListener();
         return super.onStartCommand(intent, flags, startId);
     }
 
-
-    /** Смотрим состояние выполнения заказа и выводим уведомления о каждой смене состояния */
     private void setListener(){
         mStateListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                StateLastDelivery stateLastDelivery = dataSnapshot.getValue(StateLastDelivery.class);
-                if (stateLastDelivery != null) {
-                    String state = "";
-                    switch (stateLastDelivery.getDeliveryState()) {
-                        case Const.DELIVERY_STATE_NEW:
-                            state = "";
-                            break;
-                        case Const.DELIVERY_STATE_COOKING:
-                            state = getResources().getString(R.string.mes_pass_kitchen);
-                            break;
-                        case Const.DELIVERY_STATE_TRANSPORT:
-                            state = getResources().getString(R.string.mes_pass_courier);
-                            break;
-                        case Const.DELIVERY_STATE_ARCHIVE:
-                            state = getResources().getString(R.string.mes_pass_archive);
-                            break;
-                    }
-                    if (state.length() > 0 ) {
-                        showNotification(state);
-                        // stop service after delivery moved to archive
-                        if (stateLastDelivery.getDeliveryState() == Const.DELIVERY_STATE_ARCHIVE) {
-                            stopSelf();
+                int count = 0;
+                boolean isDataNotNull = false;
+                for (DataSnapshot child : dataSnapshot.getChildren()) {
+                    isDataNotNull = true;
+                    StateTableReservation stateTableReservation = child.getValue(StateTableReservation.class);
+                    count++;
+                    if (stateTableReservation != null) {
+                        String state = "";
+                        switch (stateTableReservation.getReservationState()) {
+                            case Const.RESERVATION_TABLE_STATE_CANCEL:
+                                state = getResources().getString(R.string.mes_cancel_reservetion_user);
+                                break;
+                            case Const.RESERVATION_TABLE_STATE_CONFIRMED:
+                                state = getResources().getString(R.string.mes_confirm_reservetion_user);
+                                break;
+                        }
+                        if (state.length() > 0 ) {
+                            count--;
+                            showNotification(state);
+                            db.child(Const.CHILD_USERS)
+                                    .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                                    .child(Const.CHILD_USER_RESERVATION_STATE)
+                                    .child(child.getKey())
+                                    .removeValue();
                         }
                     }
+                }
+                if (count==0 && isDataNotNull){
+                    Log.d("stopServer","ServiceStopped");
+                    stopSelf();
                 }
             }
 
@@ -97,24 +98,21 @@ public class MonitoringYourDeliveryService extends Service {
         if (Connection.getInstance().getCurrentAuthStatus() == Const.AUTH_USER){
             db.child(Const.CHILD_USERS)
                     .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
-                    .child(Const.CHILD_USER_DELIVERY_STATE)
+                    .child(Const.CHILD_USER_RESERVATION_STATE)
                     .addValueEventListener(mStateListener);
             mIsSetListener = true;
         }
     }
 
-
-    /** Show notification */
     private void showNotification(String state){
-        String title = getResources().getString(R.string.notification_monitoring_delivery_title);
+        String title = getResources().getString(R.string.notification_monitoring_table_reservation);
 
         NotificationCompat.Builder ntfBuilder = new NotificationCompat.Builder(ctx);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
-            ntfBuilder.setSmallIcon(R.drawable.currency_usd);
+            ntfBuilder.setSmallIcon(R.drawable.verified);
         } else{
-            ntfBuilder.setSmallIcon(R.drawable.ic_money);
+            ntfBuilder.setSmallIcon(R.drawable.table4);
         }
-
         ntfBuilder.setContentTitle(title);
         ntfBuilder.setContentText(state);
         ntfBuilder.setAutoCancel(true);
@@ -127,14 +125,13 @@ public class MonitoringYourDeliveryService extends Service {
         ntfBuilder.setDefaults(Notification.DEFAULT_SOUND | Notification.DEFAULT_VIBRATE);
 
         // Указываем явный интент для запуска окна по нажатию на уведомление
-        Intent intent = new Intent(ctx, DeliveryStatus.class);
+        Intent intent = new Intent(ctx, ReserveTableActivity.class);
         // Формируем ОЖИДАЮЩИЙ интент на основе обычного и задаем его в билдере
         PendingIntent pendingIntent = PendingIntent.getActivity(ctx, 0, intent, 0);
         ntfBuilder.setContentIntent(pendingIntent);
         Notification notification = ntfBuilder.build();
-        mNotificationManager.notify(mNotifyId, notification);
+        mNotificationManager.notify(notifyId++, notification);
     }
-
 
     @Nullable
     @Override
@@ -142,16 +139,14 @@ public class MonitoringYourDeliveryService extends Service {
         return null;
     }
 
-
     @Override
     public void onDestroy() {
         if (mIsSetListener) {
             db.child(Const.CHILD_USERS)
                     .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
-                    .child(Const.CHILD_USER_DELIVERY_STATE)
+                    .child(Const.CHILD_USER_RESERVATION_STATE)
                     .removeEventListener(mStateListener);
         }
         super.onDestroy();
     }
-
 }

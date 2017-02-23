@@ -108,6 +108,7 @@
     <string name="notification_reserved_table_content">Confirm or cancel reservation</string>
 
     <string name="notification_monitoring_delivery_title">Your order</string>
+    <string name="notification_monitoring_table_reservation">Your table reservation</string>
 
     <string name="title_settings_category_contacts">Contacts</string>
     <string name="title_settings_category_address">Address</string>
@@ -182,6 +183,8 @@
     <string name="mes_reserve_table">Reserve a table</string>
     <string name="mes_confirm_reservetion">Confirm table reservation</string>
     <string name="mes_cancel_reservation">Cancel table reservation</string>
+    <string name="mes_confirm_reservetion_user">Confirmed.</string>
+    <string name="mes_cancel_reservetion_user">Canceled.</string>
 
     <string name="table_name_4">table4</string>
     <string name="table_name_6">table6</string>

@@ -39,6 +39,7 @@ import com.example.gek.pizza.R;
 import com.example.gek.pizza.data.Connection;
 import com.example.gek.pizza.data.Const;
 import com.example.gek.pizza.data.OrderTable;
+import com.example.gek.pizza.data.StateTableReservation;
 import com.example.gek.pizza.data.Table;
 import com.example.gek.pizza.helpers.RotationGestureDetector;
 import com.google.firebase.database.DataSnapshot;
@@ -620,6 +621,20 @@ public class ReserveTableActivity extends BaseActivity implements RotationGestur
                             int pictureId = getResources().getIdentifier(table.getPictureName(), "drawable", getPackageName());
                             ivTable.setImageResource(pictureId);
                         }
+
+                        StateTableReservation stateTableReservation = new StateTableReservation();
+                        stateTableReservation.setReservationKey(orderedTable.getKey());
+                        if(confirmReservation){
+                            stateTableReservation.setReservationState(Const.RESERVATION_TABLE_STATE_CONFIRMED);
+                        } else{
+                            stateTableReservation.setReservationState(Const.RESERVATION_TABLE_STATE_CANCEL);
+                        }
+                        db.child(Const.CHILD_USERS)
+                                .child(orderedTable.getUserId())
+                                .child(Const.CHILD_USER_RESERVATION_STATE)
+                                .child(orderedTable.getKey())
+                                .setValue(stateTableReservation);
+
                         break;
                     }
                 }
