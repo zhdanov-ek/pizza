@@ -94,6 +94,12 @@ public class BasketActivity extends BaseActivity implements OrderAdapter.Refresh
                                     startActivity(new Intent(getBaseContext(), DeliveryStatus.class));
                                 }
                             }).show();
+                } else {
+                    if (tvEmpty.getVisibility() == View.VISIBLE) {
+                        rlOrderPanel.setVisibility(View.GONE);
+                    } else {
+                        rlOrderPanel.setVisibility(View.VISIBLE);
+                    }
                 }
             }
             @Override
@@ -174,7 +180,6 @@ public class BasketActivity extends BaseActivity implements OrderAdapter.Refresh
 
     @Override
     protected void onPause() {
-        // if listener not set we will retrieve error
         if (mIsSetListener) {
             db.child(Const.CHILD_USERS)
                     .child(FirebaseAuth.getInstance().getCurrentUser().getUid())

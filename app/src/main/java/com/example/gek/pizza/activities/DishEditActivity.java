@@ -43,7 +43,6 @@ import static com.example.gek.pizza.data.Const.db;
 
 public class DishEditActivity extends BaseActivity implements View.OnClickListener{
 
-    private static final String STATE_BUTTON_REMOVE = "button_remove";
     private static final String STATE_URI_PHOTO = "uri_photo";
     private static final String STATE_URI_HAVE = "uri_have";
     private Context ctx;
@@ -188,7 +187,6 @@ public class DishEditActivity extends BaseActivity implements View.OnClickListen
                         break;
                     }
                 }
-
             }
 
             @Override
@@ -199,7 +197,6 @@ public class DishEditActivity extends BaseActivity implements View.OnClickListen
         // Сам заброс данных из базы
         Const.db.child(Const.CHILD_MENU_GROUPS).addListenerForSingleValueEvent(groupMenuListener);
     }
-
 
 
     /** Получаем URI фото с галереи */
@@ -376,7 +373,6 @@ public class DishEditActivity extends BaseActivity implements View.OnClickListen
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
         super.onSaveInstanceState(savedInstanceState);
-        //savedInstanceState.putBoolean(STATE_BUTTON_REMOVE, btnRemovePhoto.isEnabled());
         if (uriPhoto != null) {
             savedInstanceState.putBoolean(STATE_URI_HAVE, true);
             savedInstanceState.putString(STATE_URI_PHOTO, uriPhoto.toString());

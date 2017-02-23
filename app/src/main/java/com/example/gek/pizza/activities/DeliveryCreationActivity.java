@@ -22,7 +22,7 @@ import com.google.firebase.auth.FirebaseAuth;
 
 import static com.example.gek.pizza.data.Const.db;
 
-// Эта активити наследуется не от шаблонной, что бы нельзя было сделать изменения в корзине
+/** Оформление доставки на дом */
 public class DeliveryCreationActivity extends AppCompatActivity {
 
     EditText etName, etPhone, etAddress, etComment;
@@ -95,8 +95,8 @@ public class DeliveryCreationActivity extends AppCompatActivity {
                                 .child(Const.CHILD_USER_DELIVERY_STATE)
                                 .setValue(stateLastDelivery);
 
-                        // очищаем корзину и сохраняем текущий номер заказа
-                        Basket.getInstance().makeDelivery(numberDelivery);
+                        // очищаем корзину
+                        Basket.getInstance().orders.clear();
 
                         // запускаем сервис для отслеживание доставки
                         startService(new Intent(getBaseContext(), MonitoringYourDeliveryService.class));
