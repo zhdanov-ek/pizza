@@ -42,6 +42,7 @@ import com.example.gek.pizza.data.OrderTable;
 import com.example.gek.pizza.data.StateTableReservation;
 import com.example.gek.pizza.data.Table;
 import com.example.gek.pizza.helpers.RotationGestureDetector;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
@@ -293,6 +294,8 @@ public class ReserveTableActivity extends BaseActivity implements RotationGestur
         fabConfirm.setVisibility(View.GONE);
         fabCancel.setVisibility(View.GONE);
         fabReserveTable.setVisibility(View.GONE);
+
+        updateOrderedTable();
     }
 
 
@@ -693,14 +696,14 @@ public class ReserveTableActivity extends BaseActivity implements RotationGestur
     private void updateOrderedTable() {
         getRelativeLayoutInfo();
         if (windowWidth != 0 && windowHeight != 0) {
-            for (OrderTable orderedTable : allReservedTables) {
-//                if (orderedTable.getIsNotificated() == 0 && tableKeyNotification != "") {
-//                    if (orderedTable.getTableKey().equals(tableKeyNotification)) {
-//                        orderedTable.setIsNotificated(1);
-//                        Const.db.child(Const.CHILD_RESERVED_TABLES_NEW).child(orderedTable.getKey()).setValue(orderedTable);
-//                    }
-//                }
+            String userId;
+            if(Connection.getInstance().getCurrentAuthStatus() == Const.AUTH_NULL){
+                userId = "";
+            } else{
+                userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+            }
 
+            for (OrderTable orderedTable : allReservedTables) {
                 for (Table table : allTables) {
                     if (table.getKey().equals(orderedTable.getTableKey())) {
                         ImageView reservedTable = (ImageView) findViewById(table.getTableId());
@@ -712,10 +715,17 @@ public class ReserveTableActivity extends BaseActivity implements RotationGestur
 
                             hmReservedConfirmed = isReserved(reservedTable.getId(), false);
                             if (hmReservedConfirmed.get(TABLE_RESERVATION_CONFIRMED)) {
-                                layers[1] = ContextCompat.getDrawable(getApplicationContext(), R.drawable.table_confirmation);
+                                if(userId.equals(orderedTable.getUserId())){
+                                    layers[1] = ContextCompat.getDrawable(getApplicationContext(), R.drawable.my_table_confirmation);
+                                } else{
+                                    layers[1] = ContextCompat.getDrawable(getApplicationContext(), R.drawable.table_confirmation);
+                                }
                             } else {
-                                layers[1] = ContextCompat.getDrawable(getApplicationContext(), R.drawable.table_reserved);
-//                                layers[1] = ContextCompat.getDrawable(getApplicationContext(), R.drawable.shield_half_full);
+                                if(userId.equals(orderedTable.getUserId())){
+                                    layers[1] = ContextCompat.getDrawable(getApplicationContext(), R.drawable.my_table_reserved);
+                                } else{
+                                    layers[1] = ContextCompat.getDrawable(getApplicationContext(), R.drawable.table_reserved);
+                                }
                             }
                             LayerDrawable layerDrawable = new LayerDrawable(layers);
 
