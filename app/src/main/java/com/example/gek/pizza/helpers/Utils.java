@@ -20,6 +20,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Random;
 
 /**
  * Вспомогательные методы
@@ -172,5 +173,8 @@ public class Utils {
         return str;
     }
 
+//    public static long getTimeCreated(){
+//        return new Date().getTime()/1000;
+//    }
 
 }

@@ -11,12 +11,15 @@ import android.os.Build;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.support.v7.app.NotificationCompat;
+import android.util.Log;
 
 import com.example.gek.pizza.R;
 import com.example.gek.pizza.activities.DeliveryStatus;
+import com.example.gek.pizza.activities.MainActivity;
 import com.example.gek.pizza.data.Connection;
 import com.example.gek.pizza.data.Const;
 import com.example.gek.pizza.data.StateLastDelivery;
+import com.example.gek.pizza.helpers.Utils;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -30,11 +33,10 @@ import static com.example.gek.pizza.data.Const.db;
  * Stop after delivery change state to ARCHIVE
  */
 
-//todo Сервис работает паралельно программе. При выключении проги он вырубается тоже. Оставлять или делать независимо?
 
 public class MonitoringYourDeliveryService extends Service {
+    public static final String TAG = "DELIVERY";
     private Boolean mIsSetListener;
-    private int mLastState;
     private ValueEventListener mStateListener;
     private Context ctx;
     private NotificationManager mNotificationManager;
@@ -42,23 +44,28 @@ public class MonitoringYourDeliveryService extends Service {
 
     @Override
     public void onCreate() {
-        super.onCreate();
+        Log.d(TAG, "onCreate: ");
         mIsSetListener = false;
-        mLastState = Const.DELIVERY_STATE_NEW;
         ctx = getBaseContext();
         // Получаем системный менеджер уведомлений
         mNotificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        super.onCreate();
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        setListener();
-        return super.onStartCommand(intent, flags, startId);
+        String idDelivery = intent.getStringExtra(Const.EXTRA_DELIVERY_ID);
+        setListener(idDelivery);
+        Log.d(TAG, "onStartCommand: ");
+
+        // режим при котором интент, который был подан на startService будет передаваться
+        // в onStartCommand повторно после уничтожения во время повторного запуска сервиса
+        return START_REDELIVER_INTENT;
     }
 
 
     /** Смотрим состояние выполнения заказа и выводим уведомления о каждой смене состояния */
-    private void setListener(){
+    private void setListener(final String idDelivery){
         mStateListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -67,7 +74,7 @@ public class MonitoringYourDeliveryService extends Service {
                     String state = "";
                     switch (stateLastDelivery.getDeliveryState()) {
                         case Const.DELIVERY_STATE_NEW:
-                            state = "";
+                            state = getResources().getString(R.string.mes_pass_new);
                             break;
                         case Const.DELIVERY_STATE_COOKING:
                             state = getResources().getString(R.string.mes_pass_kitchen);
@@ -79,10 +86,14 @@ public class MonitoringYourDeliveryService extends Service {
                             state = getResources().getString(R.string.mes_pass_archive);
                             break;
                     }
-                    if (state.length() > 0 ) {
+
+                    if (stateLastDelivery.getDeliveryState() != Const.DELIVERY_STATE_ARCHIVE){
                         showNotification(state);
-                        // stop service after delivery moved to archive
-                        if (stateLastDelivery.getDeliveryState() == Const.DELIVERY_STATE_ARCHIVE) {
+                    } else {
+                        // Сверяем номе доставки и если доставка наша то останавливаем сервис
+                        // Доставку можно спутать с закешированной предыдущей
+                        if  (stateLastDelivery.getDeliveryId().contentEquals(idDelivery)) {
+                            showNotification(state);
                             stopSelf();
                         }
                     }
@@ -91,16 +102,14 @@ public class MonitoringYourDeliveryService extends Service {
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
+                Log.d(TAG, "onCancelled: ");
             }
         };
-
-        if (Connection.getInstance().getCurrentAuthStatus() == Const.AUTH_USER){
-            db.child(Const.CHILD_USERS)
-                    .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
-                    .child(Const.CHILD_USER_DELIVERY_STATE)
-                    .addValueEventListener(mStateListener);
-            mIsSetListener = true;
-        }
+        db.child(Const.CHILD_USERS)
+                .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                .child(Const.CHILD_USER_DELIVERY_STATE)
+                .addValueEventListener(mStateListener);
+        mIsSetListener = true;
     }
 
 
@@ -127,12 +136,15 @@ public class MonitoringYourDeliveryService extends Service {
         ntfBuilder.setDefaults(Notification.DEFAULT_SOUND | Notification.DEFAULT_VIBRATE);
 
         // Указываем явный интент для запуска окна по нажатию на уведомление
-        Intent intent = new Intent(ctx, DeliveryStatus.class);
+        // Запускаем меню, а не активити с отслеживанием потому, что в случае уничтожении
+        // приложения не успевает подгрузиться авторизация и окно не отображает инфу
+        Intent intent = new Intent(ctx, MainActivity.class);
         // Формируем ОЖИДАЮЩИЙ интент на основе обычного и задаем его в билдере
         PendingIntent pendingIntent = PendingIntent.getActivity(ctx, 0, intent, 0);
         ntfBuilder.setContentIntent(pendingIntent);
         Notification notification = ntfBuilder.build();
         mNotificationManager.notify(mNotifyId, notification);
+        Log.d(TAG, "showNotification: " + state);
     }
 
 
@@ -142,6 +154,18 @@ public class MonitoringYourDeliveryService extends Service {
         return null;
     }
 
+    @Override
+    public void onTaskRemoved(Intent rootIntent) {
+        Log.d(TAG, "onTaskRemoved: ");
+        if (mIsSetListener) {
+            db.child(Const.CHILD_USERS)
+                    .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                    .child(Const.CHILD_USER_DELIVERY_STATE)
+                    .removeEventListener(mStateListener);
+        }
+        mIsSetListener = false;
+        super.onTaskRemoved(rootIntent);
+    }
 
     @Override
     public void onDestroy() {

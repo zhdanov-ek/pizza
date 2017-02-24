@@ -4,7 +4,6 @@ import android.util.Log;
 
 import com.google.firebase.auth.FirebaseAuth;
 
-
 /**
  * Singleton
  * Current auth: have status of auth: user, shop or anonymous
@@ -16,7 +15,7 @@ public class Connection {
     private int currentAuthStatus;
 
     // Еmail of shop for auth as administration of pizzeria
-    private String shopEmail = "uf.ua.bph@gmail.com";
+    private String shopEmail = "zhdanov.ke2007@gmail.com";
 
     public static synchronized Connection getInstance(){
         if (instance == null) {

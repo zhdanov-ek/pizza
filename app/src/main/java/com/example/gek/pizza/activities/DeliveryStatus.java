@@ -35,6 +35,7 @@ import static com.example.gek.pizza.data.Const.db;
 
 public class DeliveryStatus extends BaseActivity {
 
+    public static final String TAG = "STATUS_DELIVERY";
     private ScrollView scrollView;
     private TextView tvStep1Num, tvStep2Num, tvStep3Num, tvStep4Num;
     private TextView tvStep1Title, tvStep2Title, tvStep3Title, tvStep4Title;
@@ -86,7 +87,6 @@ public class DeliveryStatus extends BaseActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 StateLastDelivery stateLastDelivery = dataSnapshot.getValue(StateLastDelivery.class);
-
                 if (stateLastDelivery == null) {
                     progressBar.setVisibility(View.GONE);
                     scrollView.setVisibility(View.GONE);
@@ -114,6 +114,8 @@ public class DeliveryStatus extends BaseActivity {
             public void onCancelled(DatabaseError databaseError) {
             }
         };
+        // На данном моменте авторизации может не быть если окно открывается с сервиса а приложение было уничтожено
+        // Log.d(TAG, "onResume: USER "+ Connection.getInstance().getCurrentAuthStatus());
         if (Connection.getInstance().getCurrentAuthStatus() == Const.AUTH_USER){
             db.child(Const.CHILD_USERS)
                     .child(FirebaseAuth.getInstance().getCurrentUser().getUid())

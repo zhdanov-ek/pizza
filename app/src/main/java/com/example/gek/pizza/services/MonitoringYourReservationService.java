@@ -50,7 +50,7 @@ public class MonitoringYourReservationService extends Service {
         Log.d("serviceStart","123");
         Log.d("serviceStart","-"+Const.AUTH_USER);
         setListener();
-        return super.onStartCommand(intent, flags, startId);
+        return START_STICKY;
     }
 
     private void setListener(){

@@ -11,6 +11,7 @@ public class StateLastDelivery {
     public StateLastDelivery() {
     }
 
+
     public int getDeliveryState() {
         return deliveryState;
     }

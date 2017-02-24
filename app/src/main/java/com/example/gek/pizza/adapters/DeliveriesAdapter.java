@@ -30,9 +30,9 @@ import static com.example.gek.pizza.data.Const.db;
 
 /**
  * Адаптер отображающий заказы на доставку (новые, готовка, доставка и архив)
+ * При перемещении доставки с одной папки в другую меняем состояние заказа в персональной папке юзера
  */
 
-// todo при перемещении доставки с одной папки в другую меняем состояние заказа в персональной папке юзера
 
 public class DeliveriesAdapter extends RecyclerView.Adapter<DeliveriesAdapter.ViewHolder>{
 
@@ -267,7 +267,6 @@ public class DeliveriesAdapter extends RecyclerView.Adapter<DeliveriesAdapter.Vi
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         delivery.setCommentShop(etInput.getText().toString());
-                        delivery.setDateArchive(new Date());
                         delivery.setPaid(false);
                         db.child(Const.CHILD_DELIVERIES_ARCHIVE).child(delivery.getKey()).setValue(delivery);
                         db.child(statusDeliveries).child(delivery.getKey()).removeValue();

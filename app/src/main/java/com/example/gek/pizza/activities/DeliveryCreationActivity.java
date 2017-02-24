@@ -98,8 +98,12 @@ public class DeliveryCreationActivity extends AppCompatActivity {
                         // очищаем корзину
                         Basket.getInstance().orders.clear();
 
-                        // запускаем сервис для отслеживание доставки
-                        startService(new Intent(getBaseContext(), MonitoringYourDeliveryService.class));
+                        // запускаем сервис для отслеживание доставки, передаем ему ИД доставки
+                        // ИД нужен для корректного выключения сервиса, что бы не спутать с закешированным
+                        // старым заказом
+                        Intent monitoringDelivery = new Intent(getBaseContext(), MonitoringYourDeliveryService.class);
+                        monitoringDelivery.putExtra(Const.EXTRA_DELIVERY_ID, numberDelivery);
+                        startService(monitoringDelivery);
                         finish();
                 }
             }

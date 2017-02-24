@@ -131,9 +131,10 @@
     <string name="dialog_title_delivery_remove">Removing of delivery</string>
     <string name="mes_rejecting_delivery">Enter the reason for delivery rejection</string>
     <string name="mes_pass_courier">Transferred to the courier</string>
-    <string name="mes_pass_archive">Moved to archive</string>
+    <string name="mes_pass_archive">Order closed</string>
     <string name="mes_restored">Restored and put in new</string>
     <string name="mes_pass_kitchen">Transferred to the kitchen</string>
+    <string name="mes_pass_new">Your order has been sent</string>
     <string name="mes_removed">Removed from program</string>
     <string name="btn_cook">Cook</string>
     <string name="btn_cancel">Cancel</string>
