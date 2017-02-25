@@ -47,7 +47,6 @@ public class MonitoringYourDeliveryService extends Service {
         Log.d(TAG, "onCreate: ");
         mIsSetListener = false;
         ctx = getBaseContext();
-        // Получаем системный менеджер уведомлений
         mNotificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         super.onCreate();
     }

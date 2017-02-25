@@ -25,11 +25,15 @@ import com.google.firebase.database.ValueEventListener;
 
 import static com.example.gek.pizza.data.Const.db;
 
+
 /**
- * Created by Ivleshch on 22.02.2017.
+ * Monitoring reservation table
+ * Run automatic after creation new request on reservation tha table
+ * Stop after SHOP change status of our requests (accept/reject)
  */
 
 public class MonitoringYourReservationService extends Service {
+    public static final String TAG = "RESERVED";
     private int notifyId;
     private Boolean mIsSetListener;
     private ValueEventListener mStateListener;
@@ -38,6 +42,7 @@ public class MonitoringYourReservationService extends Service {
 
     @Override
     public void onCreate() {
+        Log.d(TAG, "onCreate: ");
         notifyId = Const.RESERVED_TABLE_USER_NOTIFY_ID;
         super.onCreate();
         mIsSetListener = false;
@@ -47,12 +52,17 @@ public class MonitoringYourReservationService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Log.d("serviceStart","123");
-        Log.d("serviceStart","-"+Const.AUTH_USER);
+        Log.d(TAG, "onStartCommand: ");
         setListener();
+
+        // Режим при котором остановленный системой сервис будет повторно запускаться автоматом
+        // пока не будет остановлен корректно из самой программы
         return START_STICKY;
     }
 
+
+    /** Лисенер проверяет все резервы столика и бросает уведомление если меняется состояние резерва.
+     * Останавливаем сервис когда все заказы в юзерской папке будут обработаны. */
     private void setListener(){
         mStateListener = new ValueEventListener() {
             @Override
@@ -85,7 +95,7 @@ public class MonitoringYourReservationService extends Service {
                     }
                 }
                 if (count==0 && isDataNotNull){
-                    Log.d("stopServer","ServiceStopped");
+                    Log.d(TAG, "ServiceStopped");
                     stopSelf();
                 }
             }
@@ -95,13 +105,13 @@ public class MonitoringYourReservationService extends Service {
             }
         };
 
-        if (Connection.getInstance().getCurrentAuthStatus() == Const.AUTH_USER){
-            db.child(Const.CHILD_USERS)
-                    .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
-                    .child(Const.CHILD_USER_RESERVATION_STATE)
-                    .addValueEventListener(mStateListener);
-            mIsSetListener = true;
-        }
+        Log.d(TAG, "setListener: ");
+        db.child(Const.CHILD_USERS)
+                .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                .child(Const.CHILD_USER_RESERVATION_STATE)
+                .addValueEventListener(mStateListener);
+        mIsSetListener = true;
+    
     }
 
     private void showNotification(String state){
@@ -137,6 +147,12 @@ public class MonitoringYourReservationService extends Service {
     @Override
     public IBinder onBind(Intent intent) {
         return null;
+    }
+
+    @Override
+    public void onTaskRemoved(Intent rootIntent) {
+        Log.d(TAG, "onTaskRemoved: ");
+        super.onTaskRemoved(rootIntent);
     }
 
     @Override
