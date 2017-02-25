@@ -239,13 +239,15 @@
                 android:id="@+id/btnStartService"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="startService delivery" />
+                android:text="startService delivery"
+                android:visibility="gone"/>
 
             <Button
                 android:id="@+id/btnStopService"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="stopService delivery" />
+                android:text="stopService delivery"
+                android:visibility="gone"/>
 
         </LinearLayout>
     </ScrollView>

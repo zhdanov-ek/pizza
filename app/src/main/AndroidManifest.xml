@@ -58,7 +58,7 @@
         <activity android:name=".activities.BasketActivity" />
         <activity android:name=".activities.DeliveryCreationActivity" />
 
-        <service android:name=".services.CheckDeliveryService" />
+        <service android:name=".services.ShopService" />
         <service android:name=".services.MonitoringYourDeliveryService" />
         <service android:name=".services.MonitoringYourReservationService" />
 

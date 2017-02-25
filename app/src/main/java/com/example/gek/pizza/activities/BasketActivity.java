@@ -38,8 +38,8 @@ public class BasketActivity extends BaseActivity implements OrderAdapter.Refresh
     private RecyclerView rv;
     private TextView tvEmpty;
     private TextView tvTotal;
-    private RelativeLayout rlOrderPanel;
-    private Button btnOrderNow;
+    private RelativeLayout rlOrderPanel, rlDeliveryPanel;
+    private Button btnOrderNow, btnShowStatusDelivery;
     private ValueEventListener mStateListener;
     private Boolean mIsSetListener = false;
 
@@ -75,6 +75,14 @@ public class BasketActivity extends BaseActivity implements OrderAdapter.Refresh
         btnOrderNow = (Button) findViewById(R.id.btnOrderNow);
         btnOrderNow.setOnClickListener(orderNowListener);
         rlOrderPanel = (RelativeLayout) findViewById(R.id.rlOrderPanel);
+        rlDeliveryPanel = (RelativeLayout) findViewById(R.id.rlDeliveryPanel);
+        btnShowStatusDelivery = (Button) findViewById(R.id.btnShowStatusDelivery);
+        btnShowStatusDelivery.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getBaseContext(), DeliveryStatus.class));
+            }
+        });
 
         rv = (RecyclerView) findViewById(R.id.rv);
         tvEmpty = (TextView) findViewById(R.id.tvEmpty);
@@ -87,14 +95,9 @@ public class BasketActivity extends BaseActivity implements OrderAdapter.Refresh
                 if ((stateLastDelivery != null) &&
                         (stateLastDelivery.getDeliveryState() != Const.DELIVERY_STATE_ARCHIVE)){
                     rlOrderPanel.setVisibility(View.GONE);
-                    Snackbar.make(rv, "You have active delivery now", Snackbar.LENGTH_INDEFINITE)
-                            .setAction("Show", new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    startActivity(new Intent(getBaseContext(), DeliveryStatus.class));
-                                }
-                            }).show();
+                    rlDeliveryPanel.setVisibility(View.VISIBLE);
                 } else {
+                    rlDeliveryPanel.setVisibility(View.GONE);
                     if (tvEmpty.getVisibility() == View.VISIBLE) {
                         rlOrderPanel.setVisibility(View.GONE);
                     } else {

@@ -36,8 +36,8 @@ import java.util.TimerTask;
 // https://developer.android.com/guide/topics/ui/notifiers/notifications.html?hl=ru
 
 
-public class CheckDeliveryService extends Service {
-    private static String TAG = "CheckDeliveryService";
+public class ShopService extends Service {
+    private static String TAG = "SHOP_SERVICE";
     private Boolean mIsSetListener;
     // По этому ID мы сможем обращаться к нашему уведомлению, что бы изменить его например
     // Для изменения уведомления достаточно повторно создать его с тем же номером ID
@@ -59,12 +59,13 @@ public class CheckDeliveryService extends Service {
     private boolean isTimerStarted;
 
 
-    public CheckDeliveryService() {
+    public ShopService() {
     }
 
     @Override
     public void onCreate() {
         super.onCreate();
+        Log.d(TAG, "onCreate: ");
         ctx = getBaseContext();
 
         // определяем формат даты
@@ -90,11 +91,12 @@ public class CheckDeliveryService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        Log.d(TAG, "onStartCommand: setListeners");
         setListenerNewDeliveries();
         setListenerArchiveOrderedTableListener();
         setListenerNewOrderedTableListener();
 
-        return super.onStartCommand(intent, flags, startId);
+        return START_STICKY;
     }
 
     private void setListenerNewOrderedTableListener() {
@@ -177,10 +179,10 @@ public class CheckDeliveryService extends Service {
 
             }
         };
-        if (Connection.getInstance().getCurrentAuthStatus() == Const.AUTH_SHOP) {
-            Const.db.child(Const.CHILD_RESERVED_TABLES_NEW).addChildEventListener(newOrderedTableListener);
-            mIsSetListener = true;
-        }
+
+        Const.db.child(Const.CHILD_RESERVED_TABLES_NEW).addChildEventListener(newOrderedTableListener);
+        mIsSetListener = true;
+
     }
 
     private void setListenerArchiveOrderedTableListener() {
@@ -222,16 +224,12 @@ public class CheckDeliveryService extends Service {
             public void onCancelled(DatabaseError databaseError) {
             }
         };
-        if (Connection.getInstance().getCurrentAuthStatus() == Const.AUTH_SHOP) {
-            Const.db.child(Const.CHILD_RESERVED_TABLES_NEW).addValueEventListener(archiveOrderedTableListener);
-            mIsSetListener = true;
-        }
-
+        Const.db.child(Const.CHILD_RESERVED_TABLES_NEW).addValueEventListener(archiveOrderedTableListener);
+        mIsSetListener = true;
     }
 
-    // фоновое задание для повторения не обработанных уведомлений
+    /** фоновое задание для повторения не обработанных уведомлений */
     public void notificationRepeat() {
-
         isTimerStarted = true;
         timer.scheduleAtFixedRate(new TimerTask() {
             @Override
@@ -332,13 +330,11 @@ public class CheckDeliveryService extends Service {
                 if (hmDeliveries.get(delivery.getKey()) != null) {
                     hmDeliveries.remove(delivery.getKey());
                 }
-
                 checkIsTimerStarted();
             }
 
             @Override
             public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
             }
 
             @Override
@@ -346,10 +342,11 @@ public class CheckDeliveryService extends Service {
                 Log.w(TAG, "load data from FireBase: onCancelled", databaseError.toException());
             }
         };
-        if (Connection.getInstance().getCurrentAuthStatus() == Const.AUTH_SHOP) {
-            Const.db.child(Const.CHILD_DELIVERIES_NEW).addChildEventListener(newDeliveriesListener);
-            mIsSetListener = true;
-        }
+
+        Log.d(TAG, "setListenerNewDeliveries: SET LISTENER FOR CONTROL DELIVERIES");
+        Const.db.child(Const.CHILD_DELIVERIES_NEW).addChildEventListener(newDeliveriesListener);
+        mIsSetListener = true;
+
     }
 
     private void showNotification(boolean alert) {
@@ -374,10 +371,6 @@ public class CheckDeliveryService extends Service {
         ntfBuilder.setContentText(content);
 
 
-        // ************   Не обязательные параметры (для Notification) *************
-        // ntfBuilder.setContentInfo(contentInfo);
-        // ставим флаг, чтобы уведомление пропало после нажатия. Потом надо убрать его и снимать
-        // нотификейшн после того реально обработается заказ и переместится с папки NEW
         ntfBuilder.setAutoCancel(true);
         // заперт удаления уведомления
         ntfBuilder.setOngoing(true);
@@ -401,10 +394,6 @@ public class CheckDeliveryService extends Service {
         if (alert) {
             notification.flags = notification.flags | Notification.FLAG_INSISTENT;
         }
-
-        // Даем ему команду отобразить наше уведомление
-        // айди инкрементируем, что бы были на каждый заказ свой нотификейшн
-        // notificationManager.notify(orderNotifId++, ntfBuilder.build());
         notificationManager.notify(orderNotifId, notification);
     }
 
@@ -413,6 +402,12 @@ public class CheckDeliveryService extends Service {
     public IBinder onBind(Intent intent) {
         // TODO: Return the communication channel to the service.
         throw new UnsupportedOperationException("Not yet implemented");
+    }
+
+    @Override
+    public void onTaskRemoved(Intent rootIntent) {
+        Log.d(TAG, "onTaskRemoved: ");
+        super.onTaskRemoved(rootIntent);
     }
 
     @Override
@@ -429,7 +424,6 @@ public class CheckDeliveryService extends Service {
         if (isTimerStarted && timer != null) {
             timer.cancel();
         }
-
         super.onDestroy();
     }
 

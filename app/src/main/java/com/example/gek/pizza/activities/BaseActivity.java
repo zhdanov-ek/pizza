@@ -50,7 +50,7 @@ public abstract class BaseActivity extends AppCompatActivity
                 if (Connection.getInstance().getCurrentAuthStatus() == Const.AUTH_NULL){
                     startActivity(new Intent(getBaseContext(), AuthenticationActivity.class));
                 } else {
-                    Connection.getInstance().signOut();
+                    Connection.getInstance().signOut(getBaseContext());
                 }
             }
         });

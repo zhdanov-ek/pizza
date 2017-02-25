@@ -12,11 +12,12 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 
 import com.example.gek.pizza.R;
 import com.example.gek.pizza.data.Connection;
 import com.example.gek.pizza.data.Const;
-import com.example.gek.pizza.services.CheckDeliveryService;
+import com.example.gek.pizza.services.ShopService;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
@@ -24,20 +25,29 @@ import com.google.firebase.database.ValueEventListener;
 public class MainActivity extends BaseActivity
         implements View.OnClickListener {
 
-    CardView cvMenuOrder, cvNews, cvOrders, cvContacts, cvReservations;
+    private CardView cvMenuOrder, cvNews, cvOrders, cvContacts, cvReservations;
+    private Button btnStartService, btnStopService;
     private static final String TAG = "List of settings ";
 
+    // todo убрать кнопки запуска сервиса, а сервис запускать после аутентификации ЗАВЕДЕНИЯ. Выключать
+    // при логауте
     @Override
     public void updateUI() {
         switch (Connection.getInstance().getCurrentAuthStatus()){
             case Const.AUTH_NULL:
-                findViewById(R.id.cvOrders).setVisibility(View.GONE);
+                cvOrders.setVisibility(View.GONE);
+                btnStartService.setVisibility(View.GONE);
+                btnStopService.setVisibility(View.GONE);
                 break;
             case Const.AUTH_USER:
-                findViewById(R.id.cvOrders).setVisibility(View.GONE);
+                cvOrders.setVisibility(View.GONE);
+                btnStartService.setVisibility(View.GONE);
+                btnStopService.setVisibility(View.GONE);
                 break;
             case Const.AUTH_SHOP:
-                findViewById(R.id.cvOrders).setVisibility(View.VISIBLE);
+                cvOrders.setVisibility(View.VISIBLE);
+                btnStartService.setVisibility(View.VISIBLE);
+                btnStopService.setVisibility(View.VISIBLE);
                 break;
         }
     }
@@ -74,8 +84,8 @@ public class MainActivity extends BaseActivity
         cvReservations.setOnClickListener(this);
 
         //todo move to settings
-        findViewById(R.id.btnStartService).setOnClickListener(this);
-        findViewById(R.id.btnStopService).setOnClickListener(this);
+        btnStartService = (Button) findViewById(R.id.btnStartService);
+        btnStopService = (Button) findViewById(R.id.btnStopService);
 
 
         //Получение настроек приложения
@@ -142,12 +152,13 @@ public class MainActivity extends BaseActivity
             case R.id.cvReservations:
                 startActivity(new Intent(this, ReserveTableActivity.class));
                 break;
-            //todo переместить запуск сервиса в настройки куда-нибудь
+
+
             case R.id.btnStartService:
-                startService(new Intent(this, CheckDeliveryService.class));
+                startService(new Intent(this, ShopService.class));
                 break;
             case R.id.btnStopService:
-                stopService(new Intent(this, CheckDeliveryService.class));
+                stopService(new Intent(this, ShopService.class));
                 break;
 
         }

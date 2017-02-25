@@ -255,7 +255,7 @@ public class DeliveriesAdapter extends RecyclerView.Adapter<DeliveriesAdapter.Vi
                 });
             } else {
                 builder.setTitle(R.string.dialog_title_delivery_reject);
-
+                delivery.setDateArchive(new Date());
                 // подгружаем вью в базовый диалог и наполняем его данными
                 View customPart = ((AppCompatActivity) ctx).getLayoutInflater().inflate(R.layout.dialog_reason, null);
                 builder.setView(customPart);

@@ -1,7 +1,10 @@
 package com.example.gek.pizza.data;
 
+import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 
+import com.example.gek.pizza.services.ShopService;
 import com.google.firebase.auth.FirebaseAuth;
 
 /**
@@ -29,7 +32,11 @@ public class Connection {
     }
 
 
-    public void signOut(){
+    public void signOut(Context ctx){
+        //todo включить после основных работ отладочных и удаления кнопок в главном меню (запуск сервиса)
+//        if (currentAuthStatus == Const.AUTH_SHOP) {
+//            ctx.stopService(new Intent(ctx, ShopService.class));
+//        }
         FirebaseAuth.getInstance().signOut();
         currentAuthStatus = Const.AUTH_NULL;
         Log.d(TAG, "sign out FireBase");

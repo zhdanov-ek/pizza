@@ -25,6 +25,7 @@
     <string name="create_new">Create new</string>
     <string name="add">Add</string>
     <string name="to_order">Order now</string>
+    <string name="show">Show</string>
     <string name="total">Total</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
@@ -70,6 +71,7 @@
     <string name="mes_no_internet">No internet connection</string>
     <string name="mes_no_records">No data in the program</string>
     <string name="mes_check_data">Please check data</string>
+    <string name="mes_have_delivery">You have active delivery now</string>
     <string name="mes_no_orders">Here is empty. First, you need to add one or more dish.</string>
     <string name="mes_your_order_performed">Your order performed now</string>
 

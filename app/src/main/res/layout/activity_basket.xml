@@ -28,6 +28,8 @@
             android:visibility="gone"
             android:text="@string/mes_no_orders"/>
 
+
+
         <RelativeLayout
             android:id="@+id/rlOrderPanel"
             android:layout_width="match_parent"
@@ -53,6 +55,34 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/to_order"/>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/rlDeliveryPanel"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/order_now_panel_height"
+            android:background="@color/colorButtonRaisedLightGreen"
+            android:layout_alignParentBottom="true"
+            android:visibility="gone">
+
+            <TextView
+                android:id="@+id/tvMessage"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:paddingLeft="@dimen/ll_padding"
+                style="@style/textSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/mes_have_delivery"/>
+
+            <Button
+                android:id="@+id/btnShowStatusDelivery"
+                android:paddingRight="@dimen/ll_padding"
+                android:layout_centerVertical="true"
+                android:layout_alignParentRight="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/show"/>
         </RelativeLayout>
     </RelativeLayout>
 

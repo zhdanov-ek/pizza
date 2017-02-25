@@ -53,7 +53,7 @@ public class DeliveryCreationActivity extends AppCompatActivity {
             if (checkData()) {
                 switch (Connection.getInstance().getCurrentAuthStatus()){
                     case Const.AUTH_SHOP:
-                        Connection.getInstance().signOut();
+                        Connection.getInstance().signOut(getBaseContext());
                         finish();
                         break;
                     case Const.AUTH_NULL:
