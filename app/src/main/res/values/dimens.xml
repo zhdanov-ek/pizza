@@ -32,9 +32,9 @@
 
     <dimen name="main_menu_title_size">24sp</dimen>
     <dimen name="main_menu_text_size">16sp</dimen>
-    <dimen name="card_view_main_menu_height">100dp</dimen>
-    <dimen name="card_view_main_menu_padding">1dp</dimen>
-    <dimen name="card_view_main_menu_iv_width">150dp</dimen>
+    <dimen name="main_menu_item_height">100dp</dimen>
+    <dimen name="main_menu_item_padding">5dp</dimen>
+    <dimen name="main_menu_item_iv_width">150dp</dimen>
     <dimen name="text_size_main_menu_title">24sp</dimen>
     <dimen name="text_size_main_menu_description">14sp</dimen>
     <dimen name="text_margin_main_menu">10dp</dimen>

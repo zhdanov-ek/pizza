@@ -13,6 +13,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 
 import com.example.gek.pizza.R;
 import com.example.gek.pizza.data.Connection;
@@ -25,8 +26,8 @@ import com.google.firebase.database.ValueEventListener;
 public class MainActivity extends BaseActivity
         implements View.OnClickListener {
 
-    private CardView cvMenuOrder, cvNews, cvOrders, cvContacts, cvReservations;
-    private View lineOrders;
+    private LinearLayout llMenuOrder, llNews, llOrders, llContacts, llReservations;
+    private LinearLayout llOrdersDevider;
     private Button btnStartService, btnStopService;
     private static final String TAG = "List of settings ";
 
@@ -36,20 +37,20 @@ public class MainActivity extends BaseActivity
     public void updateUI() {
         switch (Connection.getInstance().getCurrentAuthStatus()){
             case Const.AUTH_NULL:
-                cvOrders.setVisibility(View.GONE);
-                lineOrders.setVisibility(View.GONE);
+                llOrdersDevider.setVisibility(View.GONE);
+                llOrders.setVisibility(View.GONE);
                 btnStartService.setVisibility(View.GONE);
                 btnStopService.setVisibility(View.GONE);
                 break;
             case Const.AUTH_USER:
-                cvOrders.setVisibility(View.GONE);
-                lineOrders.setVisibility(View.GONE);
+                llOrdersDevider.setVisibility(View.GONE);
+                llOrders.setVisibility(View.GONE);
                 btnStartService.setVisibility(View.GONE);
                 btnStopService.setVisibility(View.GONE);
                 break;
             case Const.AUTH_SHOP:
-                cvOrders.setVisibility(View.VISIBLE);
-                lineOrders.setVisibility(View.VISIBLE);
+                llOrdersDevider.setVisibility(View.VISIBLE);
+                llOrders.setVisibility(View.VISIBLE);
                 btnStartService.setVisibility(View.VISIBLE);
                 btnStopService.setVisibility(View.VISIBLE);
                 break;
@@ -76,17 +77,17 @@ public class MainActivity extends BaseActivity
         mDrawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        cvMenuOrder = (CardView) findViewById(R.id.cvMenuOrder);
-        cvMenuOrder.setOnClickListener(this);
-        cvNews = (CardView) findViewById(R.id.cvNews);
-        cvNews.setOnClickListener(this);
-        cvOrders = (CardView) findViewById(R.id.cvOrders);
-        cvOrders.setOnClickListener(this);
-        lineOrders = (View) findViewById(R.id.lineOrders);
-        cvContacts = (CardView) findViewById(R.id.cvContacts);
-        cvContacts.setOnClickListener(this);
-        cvReservations = (CardView) findViewById(R.id.cvReservations);
-        cvReservations.setOnClickListener(this);
+        llMenuOrder = (LinearLayout) findViewById(R.id.llMenuOrder);
+        llMenuOrder.setOnClickListener(this);
+        llNews = (LinearLayout) findViewById(R.id.llNews);
+        llNews.setOnClickListener(this);
+        llOrdersDevider = (LinearLayout) findViewById(R.id.llOrdersDevider);
+        llOrders = (LinearLayout) findViewById(R.id.llOrders);
+        llOrders.setOnClickListener(this);
+        llContacts = (LinearLayout) findViewById(R.id.llContacts);
+        llContacts.setOnClickListener(this);
+        llReservations = (LinearLayout) findViewById(R.id.llReservations);
+        llReservations.setOnClickListener(this);
 
         //todo move to settings
         btnStartService = (Button) findViewById(R.id.btnStartService);
@@ -142,21 +143,21 @@ public class MainActivity extends BaseActivity
     @Override
     public void onClick(View view) {
         switch (view.getId()){
-            case R.id.cvMenuOrder:
+            case R.id.llMenuOrder:
                 Intent menuIntent = new Intent(this, MenuOrdersActivity.class);
                 startActivity(menuIntent);
                 break;
-            case R.id.cvNews:
+            case R.id.llNews:
                 Intent newsIntent = new Intent(this, NewsActivity.class);
                 startActivity(newsIntent);
                 break;
-            case R.id.cvOrders:
+            case R.id.llOrders:
                 startActivity(new Intent(this, DeliveriesActivity.class));
                 break;
-            case R.id.cvContacts:
+            case R.id.llContacts:
                 startActivity(new Intent(this, AboutActivity.class));
                 break;
-            case R.id.cvReservations:
+            case R.id.llReservations:
                 startActivity(new Intent(this, ReserveTableActivity.class));
                 break;
 
