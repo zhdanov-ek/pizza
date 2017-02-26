@@ -61,7 +61,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="bottom"
-        sothree:umanoPanelHeight="100dp"
+        sothree:umanoPanelHeight="50dp"
         sothree:umanoParallaxOffset="70dp"
         sothree:umanoShadowHeight="4dp">
 
@@ -93,7 +93,8 @@
 
                 <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:background="@color/orange_300">
 
                     <ImageView
                         android:id="@+id/ivArrowLeft"
@@ -105,8 +106,8 @@
 
                     <ImageView
                         android:id="@+id/ivAboutPhoto"
-                        android:layout_width="100dp"
-                        android:layout_height="100dp"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
                         android:layout_centerHorizontal="true"
                         android:layout_centerVertical="true"
                         android:layout_gravity="center_horizontal"

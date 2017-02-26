@@ -26,6 +26,7 @@ public class MainActivity extends BaseActivity
         implements View.OnClickListener {
 
     private CardView cvMenuOrder, cvNews, cvOrders, cvContacts, cvReservations;
+    private View lineOrders;
     private Button btnStartService, btnStopService;
     private static final String TAG = "List of settings ";
 
@@ -36,16 +37,19 @@ public class MainActivity extends BaseActivity
         switch (Connection.getInstance().getCurrentAuthStatus()){
             case Const.AUTH_NULL:
                 cvOrders.setVisibility(View.GONE);
+                lineOrders.setVisibility(View.GONE);
                 btnStartService.setVisibility(View.GONE);
                 btnStopService.setVisibility(View.GONE);
                 break;
             case Const.AUTH_USER:
                 cvOrders.setVisibility(View.GONE);
+                lineOrders.setVisibility(View.GONE);
                 btnStartService.setVisibility(View.GONE);
                 btnStopService.setVisibility(View.GONE);
                 break;
             case Const.AUTH_SHOP:
                 cvOrders.setVisibility(View.VISIBLE);
+                lineOrders.setVisibility(View.VISIBLE);
                 btnStartService.setVisibility(View.VISIBLE);
                 btnStopService.setVisibility(View.VISIBLE);
                 break;
@@ -78,6 +82,7 @@ public class MainActivity extends BaseActivity
         cvNews.setOnClickListener(this);
         cvOrders = (CardView) findViewById(R.id.cvOrders);
         cvOrders.setOnClickListener(this);
+        lineOrders = (View) findViewById(R.id.lineOrders);
         cvContacts = (CardView) findViewById(R.id.cvContacts);
         cvContacts.setOnClickListener(this);
         cvReservations = (CardView) findViewById(R.id.cvReservations);
@@ -86,6 +91,8 @@ public class MainActivity extends BaseActivity
         //todo move to settings
         btnStartService = (Button) findViewById(R.id.btnStartService);
         btnStopService = (Button) findViewById(R.id.btnStopService);
+        btnStartService.setOnClickListener(this);
+        btnStopService.setOnClickListener(this);
 
 
         //Получение настроек приложения

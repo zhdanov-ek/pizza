@@ -88,7 +88,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:enabled="true"
-                android:text="@string/create_delivery" />
+                android:text="@string/create_delivery"
+                />
 
         </LinearLayout>
     </ScrollView>

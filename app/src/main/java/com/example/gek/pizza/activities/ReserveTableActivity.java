@@ -372,7 +372,7 @@ public class ReserveTableActivity extends BaseActivity implements RotationGestur
                     break;
                 case DragEvent.ACTION_DRAG_LOCATION:
                     myToolbar.setTitle(R.string.title_reserve_table_delete);
-                    myToolbar.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorAccent));
+                    myToolbar.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.delete_toolbar_pink_200));
 
                     fabSaveSchema.setVisibility(View.GONE);
                     fabReserveTable.setVisibility(View.GONE);
@@ -536,16 +536,19 @@ public class ReserveTableActivity extends BaseActivity implements RotationGestur
         String mesReserved = "";
         isReserved = false;
         isConfirmed = false;
+
         for (Table table : allTables) {
             if (table.getTableId() == id) {
-                for (OrderTable orderedTable : allReservedTables) {
-                    if (table.getKey().equals(orderedTable.getTableKey())) {
-                        isReserved = true;
-                        if (orderedTable.getIsCheckedByAdmin() == 1) {
-                            isConfirmed = true;
+                if(table.getKey()!=null) {
+                    for (OrderTable orderedTable : allReservedTables) {
+                        if (table.getKey().equals(orderedTable.getTableKey())) {
+                            isReserved = true;
+                            if (orderedTable.getIsCheckedByAdmin() == 1) {
+                                isConfirmed = true;
+                            }
+                            mesReserved = orderedTable.getClientName() + " (" + orderedTable.getPhoneClient() + ")";
+                            break;
                         }
-                        mesReserved = orderedTable.getClientName() + " (" + orderedTable.getPhoneClient() + ")";
-                        break;
                     }
                 }
                 break;

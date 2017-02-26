@@ -65,6 +65,10 @@
 
             </android.support.v7.widget.CardView>
 
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#BDBDBD"/>
 
             <android.support.v7.widget.CardView
                 android:id="@+id/cvNews"
@@ -106,6 +110,10 @@
 
             </android.support.v7.widget.CardView>
 
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#BDBDBD"/>
 
             <android.support.v7.widget.CardView
                 android:id="@+id/cvOrders"
@@ -150,6 +158,11 @@
 
             </android.support.v7.widget.CardView>
 
+            <View
+                android:id="@+id/lineOrders"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#BDBDBD"/>
 
             <android.support.v7.widget.CardView
                 android:id="@+id/cvReservations"
@@ -192,6 +205,10 @@
 
             </android.support.v7.widget.CardView>
 
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#BDBDBD"/>
 
             <android.support.v7.widget.CardView
                 android:id="@+id/cvContacts"
@@ -234,6 +251,10 @@
 
             </android.support.v7.widget.CardView>
 
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#BDBDBD"/>
 
             <Button
                 android:id="@+id/btnStartService"

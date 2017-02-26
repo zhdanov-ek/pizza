@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
+    <color name="colorPrimary">#FF9800</color>
+    <color name="colorPrimaryDark">#F57C00</color>
+    <color name="colorAccent">#8BC34A</color>
 
     <color name="colorTransparent">#00000000</color>
 
-    <color name="colorMainMenuTitle">#13497a</color>
-    <color name="colorMainMenuDescription">#296eae</color>
+    <color name="colorMainMenuTitle">#212121</color>
+    <color name="colorMainMenuDescription">#757575</color>
 
     <color name="colorButtonFlatBackground">#FFFFFF</color>
     <color name="colorButtonFlatBackgroundFocus">#eceaea</color>
@@ -56,5 +56,7 @@
         <item>@color/yellow_300</item>
         <item>@color/blue_grey_300</item>
     </integer-array>
+
+    <color name="delete_toolbar_pink_200">#FF4081</color>
 
 </resources>

@@ -1,10 +1,8 @@
 package com.example.gek.pizza.data;
 
 import android.content.Context;
-import android.content.Intent;
 import android.util.Log;
 
-import com.example.gek.pizza.services.ShopService;
 import com.google.firebase.auth.FirebaseAuth;
 
 /**
@@ -18,7 +16,7 @@ public class Connection {
     private int currentAuthStatus;
 
     // Еmail of shop for auth as administration of pizzeria
-    private String shopEmail = "zhdanov.ke2007@gmail.com";
+    private String shopEmail = "ivleshch@gmail.com";
 
     public static synchronized Connection getInstance(){
         if (instance == null) {

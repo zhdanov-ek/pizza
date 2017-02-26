@@ -102,7 +102,7 @@
         <item name="android:layout_width">@dimen/arrow_up_down_width</item>
         <item name="android:layout_height">@dimen/arrow_up_down_height</item>
         <item name="android:scaleX">1.5</item>
-        <item name="android:src">@drawable/ic_expand_less</item>
+        <item name="android:src">@drawable/ic_arrow_up_down</item>
     </style>
 
 </resources>

@@ -79,119 +79,122 @@
 
         </RelativeLayout>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/orange_300">
+
+            <ImageView
+                android:id="@+id/ivArrowLeft"
+                style="@style/arrowUpDownStyle"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_centerInParent="true"
+                android:layout_centerVertical="true"
+                />
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_gravity="center_horizontal"
+                android:text="@string/title_reserve_table_settings"
+                android:textSize="@dimen/text_size_middle"
+                android:id="@+id/tvTitleSettings"
+                android:textColor="@color/colorWhite"/>
+
+            <ImageView
+                android:id="@+id/ivArrowRight"
+                style="@style/arrowUpDownStyle"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_centerInParent="true"
+                android:layout_centerVertical="true" />
+
+        </RelativeLayout>
+
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <ImageView
-                    android:id="@+id/ivArrowLeft"
-                    style="@style/arrowUpDownStyle"
-                    android:layout_alignParentLeft="true"
-                    android:layout_alignParentStart="true"
-                    android:layout_centerInParent="true"
-                    android:layout_centerVertical="true" />
+            android:orientation="horizontal">
 
 
-                <TextView
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_centerInParent="true"
-                    android:layout_gravity="center_horizontal"
-                    android:text="@string/title_reserve_table_settings"
-                    android:textSize="@dimen/text_size_middle"
-                    android:id="@+id/tvTitleSettings"/>
-
-                <ImageView
-                    android:id="@+id/ivArrowRight"
-                    style="@style/arrowUpDownStyle"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerInParent="true"
-                    android:layout_centerVertical="true" />
-
-            </RelativeLayout>
-
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-
-                    <LinearLayout
+                    android:orientation="vertical"
+                    android:id="@+id/llAboutUs">
+                    <TextView
+                        android:id="@+id/tvAboutPhone"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:id="@+id/llAboutUs">
-                        <TextView
-                            android:id="@+id/tvAboutPhone"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:gravity="center"
-                            android:textSize="@dimen/text_size_middle"
-                            android:visibility="visible" />
+                        android:gravity="center"
+                        android:textSize="@dimen/text_size_middle"
+                        android:visibility="visible" />
 
-                        <TextView
-                            android:id="@+id/tvAboutEmail"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:gravity="center"
-                            android:textSize="@dimen/text_size_middle"
-                            android:visibility="visible" />
-
-                        <TextView
-                            android:id="@+id/tvAboutAddress"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:gravity="center"
-                            android:textSize="@dimen/text_size_middle"
-                            android:visibility="visible" />
-                    </LinearLayout>
-
-
-                    <RelativeLayout
-                        android:id="@+id/settings_reserve_table"
+                    <TextView
+                        android:id="@+id/tvAboutEmail"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:textSize="@dimen/text_size_middle"
+                        android:visibility="visible" />
 
-                        <ImageView
-                            android:id="@+id/ivAddTable4"
-                            android:layout_width="100dp"
-                            android:layout_height="75dp"
-                            android:background="@null"
-                            android:scaleType="centerInside"
-                            android:layout_toStartOf="@+id/ivAddTable6"
-                            android:layout_toLeftOf="@+id/ivAddTable6"
-                            android:src="@drawable/table4" />
-
-                        <ImageView
-                            android:id="@+id/ivAddTable6"
-                            android:layout_width="75dp"
-                            android:layout_height="75dp"
-                            android:layout_centerHorizontal="true"
-                            android:background="@null"
-                            android:scaleType="centerInside"
-                            android:src="@drawable/table6" />
-
-                        <ImageView
-                            android:id="@+id/ivAddTable8"
-                            android:layout_width="100dp"
-                            android:layout_height="75dp"
-                            android:layout_toEndOf="@+id/ivAddTable6"
-                            android:layout_toRightOf="@+id/ivAddTable6"
-                            android:background="@null"
-                            android:scaleType="centerInside"
-                            android:src="@drawable/table8" />
-                    </RelativeLayout>
+                    <TextView
+                        android:id="@+id/tvAboutAddress"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:textSize="@dimen/text_size_middle"
+                        android:visibility="visible" />
+                </LinearLayout>
 
 
-            </LinearLayout>
+                <RelativeLayout
+                    android:id="@+id/settings_reserve_table"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:id="@+id/ivAddTable4"
+                        android:layout_width="100dp"
+                        android:layout_height="75dp"
+                        android:background="@null"
+                        android:scaleType="centerInside"
+                        android:layout_toStartOf="@+id/ivAddTable6"
+                        android:layout_toLeftOf="@+id/ivAddTable6"
+                        android:src="@drawable/table4" />
+
+                    <ImageView
+                        android:id="@+id/ivAddTable6"
+                        android:layout_width="75dp"
+                        android:layout_height="75dp"
+                        android:layout_centerHorizontal="true"
+                        android:background="@null"
+                        android:scaleType="centerInside"
+                        android:src="@drawable/table6" />
+
+                    <ImageView
+                        android:id="@+id/ivAddTable8"
+                        android:layout_width="100dp"
+                        android:layout_height="75dp"
+                        android:layout_toEndOf="@+id/ivAddTable6"
+                        android:layout_toRightOf="@+id/ivAddTable6"
+                        android:background="@null"
+                        android:scaleType="centerInside"
+                        android:src="@drawable/table8" />
+                </RelativeLayout>
+
+
         </LinearLayout>
+    </LinearLayout>
 
 
     </com.sothree.slidinguppanel.SlidingUpPanelLayout>
