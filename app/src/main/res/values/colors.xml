@@ -12,8 +12,8 @@
     <color name="colorMainMenuDevider">#BDBDBD</color>
 
     <color name="colorButtonFlatBackground">#FFFFFF</color>
-    <color name="colorButtonFlatBackgroundFocus">#eceaea</color>
-    <color name="colorButtonFlatBackgroundPress">#c4c2c2</color>
+    <color name="colorButtonFlatBackgroundFocus">#cfe6b5</color>
+    <color name="colorButtonFlatBackgroundPress">#f7f5f5</color>
     <color name="colorButtonFlatTextPositive">#43a047</color>
     <color name="colorButtonFlatTextNegative">#e53935</color>
 
@@ -21,6 +21,9 @@
     <color name="colorButtonRaisedDarkGreen">#1b5e20</color>
     <color name="colorButtonRaisedLightGreen">#81c784</color>
     <color name="colorButtonRaisedText">#ECEFF1</color>
+
+    <color name="colorButtonRemoveNormal">#f66663</color>
+    <color name="colorButtonRemovePressed">#e3423e</color>
 
     <color name="colorFont1">#607D8B</color>
 

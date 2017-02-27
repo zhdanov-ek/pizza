@@ -5,14 +5,13 @@ import android.content.Intent;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
@@ -40,10 +39,11 @@ public class NewsEditActivity extends BaseActivity implements View.OnClickListen
     private News changedNews;
     private Uri uriPhoto;
 
-    ProgressBar progressBar;
-    EditText etTitle, etDescription;
-    ImageView ivPhoto;
-    Button btnRemovePhoto, btnOk;
+    private ProgressBar progressBar;
+    private EditText etTitle, etDescription;
+    private ImageView ivPhoto;
+    private Button btnOk;
+    private ImageButton ibRemovePhoto;
     private StorageReference folderRef;
     private Boolean isNeedRemovePhoto = false;
 
@@ -78,8 +78,8 @@ public class NewsEditActivity extends BaseActivity implements View.OnClickListen
         etDescription = (EditText) findViewById(R.id.etDescription);
         ivPhoto = (ImageView) findViewById(R.id.ivPhoto);
         ivPhoto.setOnClickListener(this);
-        btnRemovePhoto = (Button) findViewById(R.id.btnRemovePhoto);
-        btnRemovePhoto.setOnClickListener(this);
+        ibRemovePhoto = (ImageButton) findViewById(R.id.ibRemovePhoto);
+        ibRemovePhoto.setOnClickListener(this);
         btnOk = (Button) findViewById(R.id.btnOk);
         btnOk.setOnClickListener(this);
 
@@ -122,7 +122,7 @@ public class NewsEditActivity extends BaseActivity implements View.OnClickListen
                 if ((!isNewNews) && (oldNews.getPhotoName().length() > 0)) {
                     isNeedRemovePhoto = true;
                 }
-                btnRemovePhoto.setVisibility(View.VISIBLE);
+                ibRemovePhoto.setVisibility(View.VISIBLE);
             }
         } else {
             uriPhoto = null;
@@ -135,7 +135,7 @@ public class NewsEditActivity extends BaseActivity implements View.OnClickListen
             etDescription.setText("");
             uriPhoto = null;
             ivPhoto.setImageResource(R.drawable.news_empty);
-            btnRemovePhoto.setVisibility(View.INVISIBLE);
+            ibRemovePhoto.setVisibility(View.INVISIBLE);
         } else {
             etTitle.setText(news.getTitle());
             etDescription.setText(news.getDescription());
@@ -145,7 +145,7 @@ public class NewsEditActivity extends BaseActivity implements View.OnClickListen
                         .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                         .error(R.drawable.news_empty)
                         .into(ivPhoto);
-                btnRemovePhoto.setVisibility(View.VISIBLE);
+                ibRemovePhoto.setVisibility(View.VISIBLE);
             } else
                 ivPhoto.setImageResource(R.drawable.news_empty);
         }
@@ -243,13 +243,13 @@ public class NewsEditActivity extends BaseActivity implements View.OnClickListen
             case R.id.btnOk:
                 sendToServer();
                 break;
-            case R.id.btnRemovePhoto:
+            case R.id.ibRemovePhoto:
                 if ((oldNews != null) &&(oldNews.getPhotoName().length() > 0)){
                     isNeedRemovePhoto = true;
                 }
                 uriPhoto = null;
                 ivPhoto.setImageResource(R.drawable.news_empty);
-                btnRemovePhoto.setVisibility(View.INVISIBLE);
+                ibRemovePhoto.setVisibility(View.INVISIBLE);
                 break;
             case R.id.ivPhoto:
                 Utils.choosePhoto(this);
