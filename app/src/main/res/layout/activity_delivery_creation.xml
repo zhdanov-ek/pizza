@@ -85,10 +85,10 @@
 
             <Button
                 android:id="@+id/btnCreateDelivery"
-
                 android:enabled="true"
                 android:text="@string/create_delivery"
                 style="@style/RaisedButton"
+                android:layout_width="150dp"
                 />
 
 

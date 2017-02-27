@@ -34,7 +34,7 @@
             android:id="@+id/rlOrderPanel"
             android:layout_width="match_parent"
             android:layout_height="@dimen/order_now_panel_height"
-            android:background="@color/colorButtonRaisedLightGreen"
+            android:background="@color/orange_300"
             android:layout_alignParentBottom="true">
 
             <TextView
@@ -49,19 +49,19 @@
 
             <Button
                 android:id="@+id/btnOrderNow"
-                android:paddingRight="@dimen/ll_padding"
+                style="@style/RaisedButton"
+                android:layout_marginRight="@dimen/ll_padding"
                 android:layout_centerVertical="true"
                 android:layout_alignParentRight="true"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/to_order"/>
+                android:text="@string/to_order"
+                />
         </RelativeLayout>
 
         <RelativeLayout
             android:id="@+id/rlDeliveryPanel"
             android:layout_width="match_parent"
             android:layout_height="@dimen/order_now_panel_height"
-            android:background="@color/colorButtonRaisedLightGreen"
+            android:background="@color/orange_300"
             android:layout_alignParentBottom="true"
             android:visibility="gone">
 
@@ -77,11 +77,10 @@
 
             <Button
                 android:id="@+id/btnShowStatusDelivery"
-                android:paddingRight="@dimen/ll_padding"
+                style="@style/RaisedButton"
                 android:layout_centerVertical="true"
                 android:layout_alignParentRight="true"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/ll_padding"
                 android:text="@string/show"/>
         </RelativeLayout>
     </RelativeLayout>

@@ -51,6 +51,14 @@
         <item name="android:textColor">@color/colorButtonRaisedText</item>
     </style>
 
+    <style name="RaisedButtonCancel" parent="@android:style/Widget.Button.Small">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">@dimen/button_raised_height</item>
+        <item name="android:textSize">@dimen/button_raised_font_size</item>
+        <item name="android:background">@drawable/bg_raised_button_cancel</item>
+        <item name="android:textColor">@color/colorButtonRaisedLightGreen</item>
+    </style>
+
     <style name="textMainMenuTitle">
         <item name="android:textSize">@dimen/text_size_main_menu_title</item>
         <item name="android:textColor">@color/colorMainMenuTitle</item>

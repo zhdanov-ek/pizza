@@ -29,8 +29,8 @@
             android:visibility="invisible"/>
         <Button
             android:id="@+id/btnGoogleSignIn"
+            style="@style/RaisedButton"
             android:layout_width="150dp"
-            android:layout_height="wrap_content"
             android:text="@string/button_google"/>
 
     </LinearLayout>

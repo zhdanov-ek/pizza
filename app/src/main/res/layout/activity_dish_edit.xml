@@ -46,8 +46,7 @@
 
                     <Button
                         android:id="@+id/btnRemovePhoto"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        style="@style/RaisedButtonCancel"
                         android:text="Clear"
                         android:visibility="visible" />
                 </LinearLayout>
@@ -108,15 +107,14 @@
                     android:gravity="center">
                     <Button
                         android:id="@+id/btnCancel"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        style="@style/RaisedButtonCancel"
                         android:enabled="true"
-                        android:text="@string/cancel" />
+                        android:text="@string/cancel"
+                        android:layout_marginRight="5dp"/>
 
                     <Button
                         android:id="@+id/btnOk"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        style="@style/RaisedButton"
                         android:enabled="true"
                         android:text="@string/ok" />
 
