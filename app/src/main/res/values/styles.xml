@@ -43,20 +43,20 @@
     </style>
 
 
-    <style name="RaisedButton" parent="@android:style/Widget.Button.Small">
-        <item name="android:layout_width">wrap_content</item>
+    <style name="RaisedButtonPositive" parent="@android:style/Widget.Button.Small">
+        <item name="android:layout_width">@dimen/button_raised_width</item>
         <item name="android:layout_height">@dimen/button_raised_height</item>
         <item name="android:textSize">@dimen/button_raised_font_size</item>
-        <item name="android:background">@drawable/bg_raised_button_add</item>
+        <item name="android:background">@drawable/bg_raised_button_positive</item>
         <item name="android:textColor">@color/colorButtonRaisedText</item>
     </style>
 
-    <style name="RaisedButtonCancel" parent="@android:style/Widget.Button.Small">
-        <item name="android:layout_width">wrap_content</item>
+    <style name="RaisedButtonNegative" parent="@android:style/Widget.Button.Small">
+        <item name="android:layout_width">@dimen/button_raised_width</item>
         <item name="android:layout_height">@dimen/button_raised_height</item>
         <item name="android:textSize">@dimen/button_raised_font_size</item>
-        <item name="android:background">@drawable/bg_raised_button_cancel</item>
-        <item name="android:textColor">@color/colorButtonRaisedLightGreen</item>
+        <item name="android:background">@drawable/bg_raised_button_negative</item>
+        <item name="android:textColor">@color/colorButtonRaisedBackgroundPress</item>
     </style>
 
     <style name="RemoveButton" parent="@android:style/Widget.Button.Small">
@@ -113,7 +113,7 @@
 
     <style name="textCounter">
         <item name="android:textSize">@dimen/text_size_big</item>
-        <item name="android:textColor">@color/colorButtonRaisedDarkGreen</item>
+        <item name="android:textColor">@color/colorButtonRaisedBackgroundPress</item>
         <item name="android:layout_marginLeft">@dimen/counter_margin</item>
         <item name="android:layout_marginRight">@dimen/counter_margin</item>
         <item name="android:gravity">center</item>

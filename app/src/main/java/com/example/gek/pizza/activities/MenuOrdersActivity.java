@@ -47,7 +47,9 @@ public class MenuOrdersActivity extends BaseActivity {
 
     @Override
     public void updateUI() {
-        if (Connection.getInstance().getCurrentAuthStatus() != Const.AUTH_SHOP){
+        if (Connection.getInstance().getCurrentAuthStatus() == Const.AUTH_SHOP){
+            fab.setVisibility(View.VISIBLE);
+        } else {
             fab.setVisibility(View.GONE);
         }
     }

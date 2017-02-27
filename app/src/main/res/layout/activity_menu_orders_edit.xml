@@ -53,7 +53,7 @@
             
             <Button
                 android:id="@+id/btnCancel"
-                style="@style/RaisedButtonCancel"
+                style="@style/RaisedButtonNegative"
                 android:text="@string/cancel"
                 android:layout_marginRight="5dp"/>
 
@@ -61,7 +61,7 @@
                 android:id="@+id/btnOk"
                 android:text="@string/ok"
                 android:enabled="false"
-                style="@style/RaisedButton"/>
+                style="@style/RaisedButtonPositive"/>
         </LinearLayout>
 
 

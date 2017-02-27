@@ -3,24 +3,24 @@
     <item  android:state_pressed="true">
         <shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle" >
             <corners
-                android:radius="@dimen/button_raised_radius"
+                android:radius="@dimen/button_radius"
                 />
             <size
                 android:width="@dimen/button_raised_width"
                 android:height="@dimen/button_raised_height"
                 />
-            <solid android:color="@android:color/transparent" />
+            <solid android:color="@color/colorButtonRaisedBackgroundPressNegative" />
 
             <stroke
-                android:width="@dimen/button_flat_radius"
-                android:color="@color/colorButtonRaisedDarkGreen" />
+                android:width="@dimen/button_radius"
+                android:color="@color/colorButtonRaisedBackgroundPress" />
         </shape>
     </item>
 
     <item android:state_enabled="false">
         <shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle" >
             <corners
-                android:radius="@dimen/button_raised_radius"
+                android:radius="@dimen/button_radius"
                 />
             <size
                 android:width="@dimen/button_raised_width"
@@ -29,15 +29,15 @@
             <solid android:color="@android:color/transparent" />
 
             <stroke
-                android:width="@dimen/button_flat_radius"
-                android:color="@color/colorButtonRaisedLightGreen" />
+                android:width="@dimen/button_radius"
+                android:color="@color/colorButtonRaisedBackgroundFocus" />
         </shape>
     </item>
 
     <item >
         <shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle" >
             <corners
-                android:radius="@dimen/button_raised_radius"
+                android:radius="@dimen/button_radius"
                 />
             <size
                 android:width="@dimen/button_raised_width"
@@ -45,8 +45,8 @@
                 />
             <solid android:color="@android:color/transparent" />
             <stroke
-                android:width="@dimen/button_flat_radius"
-                android:color="@color/colorButtonRaisedGreen" />
+                android:width="@dimen/button_radius"
+                android:color="@color/colorButtonRaisedBackground" />
         </shape>
     </item>
 </selector>

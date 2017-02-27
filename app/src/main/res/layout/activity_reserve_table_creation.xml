@@ -82,7 +82,7 @@
 
             <Button
                 android:id="@+id/btnCreateDelivery"
-                style="@style/RaisedButton"
+                style="@style/RaisedButtonPositive"
                 android:layout_width="150dp"
                 android:text="@string/action_reserve_table"/>
 

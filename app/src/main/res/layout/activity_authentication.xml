@@ -29,7 +29,7 @@
             android:visibility="invisible"/>
         <Button
             android:id="@+id/btnGoogleSignIn"
-            style="@style/RaisedButton"
+            style="@style/RaisedButtonPositive"
             android:layout_width="150dp"
             android:text="@string/button_google"/>
 

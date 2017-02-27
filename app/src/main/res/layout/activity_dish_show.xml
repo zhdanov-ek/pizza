@@ -94,7 +94,7 @@
 
                 <Button
                     android:id="@+id/btnAdd"
-                    style="@style/RaisedButton"
+                    style="@style/RaisedButtonPositive"
                     android:layout_gravity="center"
                     android:text="@string/add" />
 

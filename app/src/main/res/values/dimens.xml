@@ -9,15 +9,15 @@
 
     <!-- GLOBAL -->
     <dimen name="item_list_corner_radius">2dp</dimen>
+    <dimen name="button_radius">2dp</dimen>
 
-    <dimen name="button_flat_radius">2dp</dimen>
+    <!-- BUTTONS -->
     <dimen name="button_flat_height">36dp</dimen>
     <dimen name="button_flat_width">88dp</dimen>
     <dimen name="button_flat_font_size">20sp</dimen>
 
-    <dimen name="button_raised_radius">2dp</dimen>
     <dimen name="button_raised_height">36dp</dimen>
-    <dimen name="button_raised_width">100dp</dimen>
+    <dimen name="button_raised_width">120dp</dimen>
     <dimen name="button_raised_font_size">20sp</dimen>
 
     <dimen name="button_small_size">50dp</dimen>

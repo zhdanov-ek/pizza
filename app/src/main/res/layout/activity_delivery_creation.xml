@@ -87,13 +87,9 @@
                 android:id="@+id/btnCreateDelivery"
                 android:enabled="true"
                 android:text="@string/create_delivery"
-                style="@style/RaisedButton"
+                style="@style/RaisedButtonPositive"
                 android:layout_width="150dp"
                 />
-
-
-
-
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

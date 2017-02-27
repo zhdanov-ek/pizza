@@ -4,12 +4,10 @@
     <color name="colorPrimaryDark">#F57C00</color>
     <color name="colorAccent">#8BC34A</color>
 
-    <color name="colorTransparent">#00000000</color>
-
     <color name="colorMainMenuTitle">#212121</color>
     <color name="colorMainMenuItemBackground">#FFFFFF</color>
     <color name="colorMainMenuDescription">#757575</color>
-    <color name="colorMainMenuDevider">#BDBDBD</color>
+    <color name="colorMainMenuDivider">#BDBDBD</color>
 
     <color name="colorButtonFlatBackground">#FFFFFF</color>
     <color name="colorButtonFlatBackgroundFocus">#cfe6b5</color>
@@ -17,13 +15,14 @@
     <color name="colorButtonFlatTextPositive">#43a047</color>
     <color name="colorButtonFlatTextNegative">#e53935</color>
 
-    <color name="colorButtonRaisedGreen">#7CB342</color>
-    <color name="colorButtonRaisedDarkGreen">#558B2F</color>
-    <color name="colorButtonRaisedLightGreen">#AED581</color>
-    <color name="colorButtonRaisedText">#ECEFF1</color>
+    <color name="colorButtonRaisedBackground">#7CB342</color>
+    <color name="colorButtonRaisedBackgroundPress">#558B2F</color>
+    <color name="colorButtonRaisedBackgroundFocus">#AED581</color>
+    <color name="colorButtonRaisedBackgroundPressNegative">#bfd1a9</color>
+    <color name="colorButtonRaisedText">#FFFFFF</color>
 
-    <color name="colorButtonRemoveNormal">#f66663</color>
-    <color name="colorButtonRemovePressed">#e3423e</color>
+    <color name="colorButtonRemoveNormal">#f47b79</color>
+    <color name="colorButtonRemovePressed">#df4e4a</color>
 
     <color name="colorFont1">#607D8B</color>
 

@@ -108,14 +108,14 @@
                     android:gravity="center">
                     <Button
                         android:id="@+id/btnCancel"
-                        style="@style/RaisedButtonCancel"
+                        style="@style/RaisedButtonNegative"
                         android:enabled="true"
                         android:text="@string/cancel"
                         android:layout_marginRight="5dp"/>
 
                     <Button
                         android:id="@+id/btnOk"
-                        style="@style/RaisedButton"
+                        style="@style/RaisedButtonPositive"
                         android:enabled="true"
                         android:text="@string/ok" />
 

@@ -86,7 +86,7 @@
 
                 <Button
                     android:id="@+id/btnOk"
-                    style="@style/RaisedButton"
+                    style="@style/RaisedButtonPositive"
                     android:enabled="true"
                     android:text="@string/ok" />
 
