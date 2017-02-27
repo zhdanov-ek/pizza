@@ -9,6 +9,7 @@ import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.TextWatcher;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
@@ -73,7 +74,12 @@ public class MenuOrdersEditActivity extends BaseActivity implements View.OnClick
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_menu_orders_edit);
+
+        // Content inflate in VIEW and put in DrawerLayout
+        LayoutInflater inflater = (LayoutInflater) this
+                .getSystemService(this.LAYOUT_INFLATER_SERVICE);
+        View contentView = inflater.inflate(R.layout.activity_menu_orders_edit, null, false);
+        mDrawer.addView(contentView, 0);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolBar);
         toolbar.setTitle("");

@@ -5,6 +5,7 @@
     android:id="@+id/content_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorMainMenuItemBackground"
     android:orientation="vertical"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.example.gek.pizza.activities.MainActivity"
@@ -23,252 +24,196 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <android.support.v7.widget.CardView
-                android:id="@+id/cvMenuOrder"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/card_view_main_menu_height"
-                android:padding="@dimen/ll_padding">
+            <LinearLayout
+                android:id="@+id/llMenuOrder"
+                style="@style/itemMainMenu"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="@dimen/main_menu_item_iv_width"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/main_dishes" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:orientation="horizontal"
-                    android:background="@drawable/bg_item_rv"
-                    android:padding="@dimen/card_view_main_menu_padding">
+                    android:gravity="center"
+                    android:orientation="vertical">
 
-                    <ImageView
-                        android:layout_width="@dimen/card_view_main_menu_iv_width"
-                        android:layout_height="match_parent"
-                        android:background="@drawable/main_dishes" />
-
-                    <LinearLayout
+                    <TextView
+                        style="@style/textMainMenuTitle"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:gravity="center"
-                        android:orientation="vertical">
+                        android:layout_height="wrap_content"
+                        android:gravity="center_horizontal"
+                        android:text="@string/main_title_order_menu" />
 
-                        <TextView
-                            style="@style/textMainMenuTitle"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:gravity="center_horizontal"
-                            android:text="@string/main_title_order_menu" />
-
-                        <TextView
-                            style="@style/textMainMenuDescription"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:gravity="center"
-                            android:text="@string/main_text_order_menu" />
-                    </LinearLayout>
-                </LinearLayout>
-
-            </android.support.v7.widget.CardView>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="#BDBDBD"/>
-
-            <android.support.v7.widget.CardView
-                android:id="@+id/cvNews"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/card_view_main_menu_height">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="horizontal"
-                    android:background="@drawable/bg_item_rv"
-                    android:padding="@dimen/card_view_main_menu_padding">
-
-                    <ImageView
-                        android:layout_width="@dimen/card_view_main_menu_iv_width"
-                        android:layout_height="match_parent"
-                        android:background="@drawable/main_news" />
-
-                    <LinearLayout
+                    <TextView
+                        style="@style/textMainMenuDescription"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center"
-                        android:orientation="vertical">
-
-                        <TextView
-                            style="@style/textMainMenuTitle"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/main_title_news" />
-
-                        <TextView
-                            style="@style/textMainMenuDescription"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:gravity="center"
-                            android:text="@string/main_text_news" />
-                    </LinearLayout>
+                        android:text="@string/main_text_order_menu" />
                 </LinearLayout>
+            </LinearLayout>
 
-            </android.support.v7.widget.CardView>
+            <include layout="@layout/devider_main_menu" />
 
-            <View
+            <LinearLayout
+                android:id="@+id/llNews"
+                style="@style/itemMainMenu"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="@dimen/main_menu_item_iv_width"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/main_news" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <TextView
+                        style="@style/textMainMenuTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/main_title_news" />
+
+                    <TextView
+                        style="@style/textMainMenuDescription"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="@string/main_text_news" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/llOrdersDevider"
+                android:visibility="gone"
+                tools:visibility="visible"
                 android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="#BDBDBD"/>
+                android:layout_height="wrap_content">
+                <include layout="@layout/devider_main_menu" />
+            </LinearLayout>
 
-            <android.support.v7.widget.CardView
-                android:id="@+id/cvOrders"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/card_view_main_menu_height"
+
+            <LinearLayout
+                android:id="@+id/llOrders"
+                style="@style/itemMainMenu"
+                android:orientation="horizontal"
                 android:visibility="gone"
                 tools:visibility="visible">
 
-                <LinearLayout
-                    android:layout_width="match_parent"
+                <ImageView
+                    android:layout_width="@dimen/main_menu_item_iv_width"
                     android:layout_height="match_parent"
-                    android:orientation="horizontal"
-                    android:background="@drawable/bg_item_rv"
-                    android:padding="@dimen/card_view_main_menu_padding">
-
-                    <ImageView
-                        android:layout_width="@dimen/card_view_main_menu_iv_width"
-                        android:layout_height="match_parent"
-                        android:background="@drawable/main_delivery" />
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:gravity="center"
-                        android:orientation="vertical">
-
-                        <TextView
-                            style="@style/textMainMenuTitle"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/main_title_orders" />
-
-                        <TextView
-                            style="@style/textMainMenuDescription"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:gravity="center"
-                            android:text="@string/main_text_orders" />
-
-                    </LinearLayout>
-                </LinearLayout>
-
-            </android.support.v7.widget.CardView>
-
-            <View
-                android:id="@+id/lineOrders"
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="#BDBDBD"/>
-
-            <android.support.v7.widget.CardView
-                android:id="@+id/cvReservations"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/card_view_main_menu_height">
+                    android:background="@drawable/main_delivery" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:orientation="horizontal"
-                    android:background="@drawable/bg_item_rv"
-                    android:padding="@dimen/card_view_main_menu_padding">
+                    android:gravity="center"
+                    android:orientation="vertical">
 
-                    <ImageView
-                        android:layout_width="@dimen/card_view_main_menu_iv_width"
-                        android:layout_height="match_parent"
-                        android:background="@drawable/main_reservation" />
+                    <TextView
+                        style="@style/textMainMenuTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/main_title_orders" />
 
-                    <LinearLayout
+                    <TextView
+                        style="@style/textMainMenuDescription"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
                         android:gravity="center"
-                        android:orientation="vertical">
-
-                        <TextView
-                            style="@style/textMainMenuTitle"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/main_title_reservation" />
-
-                        <TextView
-                            style="@style/textMainMenuDescription"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:gravity="center"
-                            android:text="@string/main_text_reservation" />
-                    </LinearLayout>
+                        android:text="@string/main_text_orders" />
 
                 </LinearLayout>
+            </LinearLayout>
 
-            </android.support.v7.widget.CardView>
+            <include layout="@layout/devider_main_menu" />
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="#BDBDBD"/>
+            <LinearLayout
+                android:id="@+id/llReservations"
+                style="@style/itemMainMenu"
+                android:orientation="horizontal">
 
-            <android.support.v7.widget.CardView
-                android:id="@+id/cvContacts"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/card_view_main_menu_height">
+                <ImageView
+                    android:layout_width="@dimen/main_menu_item_iv_width"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/main_reservation" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:orientation="horizontal"
-                    android:background="@drawable/bg_item_rv"
-                    android:padding="@dimen/card_view_main_menu_padding">
+                    android:gravity="center"
+                    android:orientation="vertical">
 
-                    <ImageView
-                        android:layout_width="@dimen/card_view_main_menu_iv_width"
-                        android:layout_height="match_parent"
-                        android:background="@drawable/main_contacts" />
+                    <TextView
+                        style="@style/textMainMenuTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/main_title_reservation" />
 
-                    <LinearLayout
+                    <TextView
+                        style="@style/textMainMenuDescription"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
                         android:gravity="center"
-                        android:orientation="vertical">
-
-                        <TextView
-                            style="@style/textMainMenuTitle"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/main_title_contacts" />
-
-                        <TextView
-                            style="@style/textMainMenuDescription"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:gravity="center"
-                            android:text="@string/main_text_contacts" />
-                    </LinearLayout>
-
+                        android:text="@string/main_text_reservation" />
                 </LinearLayout>
 
-            </android.support.v7.widget.CardView>
+            </LinearLayout>
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="#BDBDBD"/>
+            <include layout="@layout/devider_main_menu" />
+
+            <LinearLayout
+                android:id="@+id/llContacts"
+                style="@style/itemMainMenu"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="@dimen/main_menu_item_iv_width"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/main_contacts" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <TextView
+                        style="@style/textMainMenuTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/main_title_contacts" />
+
+                    <TextView
+                        style="@style/textMainMenuDescription"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="@string/main_text_contacts" />
+                </LinearLayout>
+
+            </LinearLayout>
 
             <Button
                 android:id="@+id/btnStartService"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="startService delivery"
-                android:visibility="gone"/>
+                android:visibility="gone" />
 
             <Button
                 android:id="@+id/btnStopService"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="stopService delivery"
-                android:visibility="gone"/>
+                android:visibility="gone" />
 
         </LinearLayout>
     </ScrollView>
