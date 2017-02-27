@@ -15,6 +15,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
@@ -54,7 +55,8 @@ public class DishEditActivity extends BaseActivity implements View.OnClickListen
     private Spinner spinnerGroup;
     private EditText etName, etDescription, etPrice;
     private ImageView ivPhoto;
-    private Button btnRemovePhoto, btnOk;
+    private Button btnOk;
+    private ImageButton ibRemovePhoto;
     private StorageReference folderRef;
     private Boolean isNeedRemovePhoto = false;
     private String keyGroup = "";
@@ -99,8 +101,8 @@ public class DishEditActivity extends BaseActivity implements View.OnClickListen
         etDescription = (EditText) findViewById(R.id.etDescription);
         ivPhoto = (ImageView) findViewById(R.id.ivPhoto);
         ivPhoto.setOnClickListener(this);
-        btnRemovePhoto = (Button) findViewById(R.id.btnRemovePhoto);
-        btnRemovePhoto.setOnClickListener(this);
+        ibRemovePhoto = (ImageButton) findViewById(R.id.ibRemovePhoto);
+        ibRemovePhoto.setOnClickListener(this);
         btnOk = (Button) findViewById(R.id.btnOk);
         btnOk.setOnClickListener(this);
         findViewById(R.id.btnCancel).setOnClickListener(this);
@@ -138,7 +140,7 @@ public class DishEditActivity extends BaseActivity implements View.OnClickListen
         // анализируем переданные данные в активити если таковые были (при повороте, скрытии и т.д.)
         if (savedInstanceState != null){
             if (savedInstanceState.getBoolean(STATE_URI_HAVE)){
-                btnRemovePhoto.setVisibility(View.VISIBLE);
+                ibRemovePhoto.setVisibility(View.VISIBLE);
                 uriPhoto = Uri.parse(savedInstanceState.getString(STATE_URI_PHOTO));
                 Glide.with(this)
                         .load(uriPhoto)
@@ -212,7 +214,7 @@ public class DishEditActivity extends BaseActivity implements View.OnClickListen
                 if ((!isNewDish) && (oldDish.getPhotoName().length() > 0)) {
                     isNeedRemovePhoto = true;
                 }
-                btnRemovePhoto.setVisibility(View.VISIBLE);
+                ibRemovePhoto.setVisibility(View.VISIBLE);
             }
         } else {
             uriPhoto = null;
@@ -226,7 +228,7 @@ public class DishEditActivity extends BaseActivity implements View.OnClickListen
             etPrice.setText("");
             uriPhoto = null;
             ivPhoto.setImageResource(R.drawable.dish_empty);
-            btnRemovePhoto.setVisibility(View.INVISIBLE);
+            ibRemovePhoto.setVisibility(View.INVISIBLE);
             btnOk.setEnabled(false);
         } else {
             etName.setText(dish.getName());
@@ -238,10 +240,10 @@ public class DishEditActivity extends BaseActivity implements View.OnClickListen
                         .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                         .error(R.drawable.dish_empty)
                         .into(ivPhoto);
-                btnRemovePhoto.setVisibility(View.VISIBLE);
+                ibRemovePhoto.setVisibility(View.VISIBLE);
             } else {
                 ivPhoto.setImageResource(R.drawable.dish_empty);
-                btnRemovePhoto.setVisibility(View.INVISIBLE);
+                ibRemovePhoto.setVisibility(View.INVISIBLE);
             }
         }
     }
@@ -346,13 +348,13 @@ public class DishEditActivity extends BaseActivity implements View.OnClickListen
             case R.id.btnOk:
                 sendToServer();
                 break;
-            case R.id.btnRemovePhoto:
+            case R.id.ibRemovePhoto:
                 if ((oldDish != null) &&(oldDish.getPhotoName().length() > 0)){
                     isNeedRemovePhoto = true;
                 }
                 uriPhoto = null;
                 ivPhoto.setImageResource(R.drawable.dish_empty);
-                btnRemovePhoto.setVisibility(View.INVISIBLE);
+                ibRemovePhoto.setVisibility(View.INVISIBLE);
                 break;
             case R.id.ivPhoto:
                 Utils.choosePhoto(this);

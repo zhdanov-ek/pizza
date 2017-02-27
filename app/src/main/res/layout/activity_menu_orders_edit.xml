@@ -50,8 +50,7 @@
             android:gravity="center"
             android:orientation="horizontal">
 
-
-
+            
             <Button
                 android:id="@+id/btnCancel"
                 style="@style/RaisedButtonCancel"
@@ -60,11 +59,9 @@
 
             <Button
                 android:id="@+id/btnOk"
-
                 android:text="@string/ok"
                 android:enabled="false"
-                style="@style/RaisedButton"
-                />
+                style="@style/RaisedButton"/>
         </LinearLayout>
 
 

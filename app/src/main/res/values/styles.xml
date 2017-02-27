@@ -59,6 +59,12 @@
         <item name="android:textColor">@color/colorButtonRaisedLightGreen</item>
     </style>
 
+    <style name="RemoveButton" parent="@android:style/Widget.Button.Small">
+        <item name="android:background">@drawable/bg_raised_button_remove</item>
+        <item name="android:layout_height">@dimen/button_small_size</item>
+        <item name="android:layout_width">@dimen/button_small_size</item>
+    </style>
+
     <style name="textMainMenuTitle">
         <item name="android:textSize">@dimen/text_size_main_menu_title</item>
         <item name="android:textColor">@color/colorMainMenuTitle</item>

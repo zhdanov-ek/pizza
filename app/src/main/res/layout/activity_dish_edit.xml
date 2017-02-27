@@ -44,11 +44,12 @@
                         tools:background="@drawable/dish_empty" />
 
 
-                    <Button
-                        android:id="@+id/btnRemovePhoto"
-                        style="@style/RaisedButtonCancel"
-                        android:text="Clear"
-                        android:visibility="visible" />
+                    <ImageButton
+                        android:id="@+id/ibRemovePhoto"
+                        style="@style/RemoveButton"
+                        android:layout_marginLeft="30dp"
+                        android:src="@drawable/ic_delete" />
+
                 </LinearLayout>
 
                 <android.support.design.widget.TextInputLayout
