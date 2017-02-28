@@ -112,6 +112,7 @@ public class Utils {
     }
 
 
+    // todo перенести этот метод в корзину
     /** Ищет блюдо в корзине. Возвращает 0 если его там нет и кол-во если блюдо уже в заказе */
     public static int findInBasket(Dish dish){
         for (int i = 0; i < Basket.getInstance().orders.size(); i++) {
