@@ -85,14 +85,17 @@ public abstract class BaseActivity extends AppCompatActivity
                     case Const.AUTH_SHOP:
                         navigationView.getMenu().findItem(R.id.nav_shop_group).setVisible(true);
                         navigationView.getMenu().findItem(R.id.nav_delivery_status).setVisible(false);
+                        navigationView.getMenu().findItem(R.id.nav_favorite).setVisible(false);
                         break;
                     case Const.AUTH_USER:
                         navigationView.getMenu().findItem(R.id.nav_shop_group).setVisible(false);
                         navigationView.getMenu().findItem(R.id.nav_delivery_status).setVisible(true);
+                        navigationView.getMenu().findItem(R.id.nav_favorite).setVisible(true);
                         break;
                     case Const.AUTH_NULL:
                         navigationView.getMenu().findItem(R.id.nav_shop_group).setVisible(false);
                         navigationView.getMenu().findItem(R.id.nav_delivery_status).setVisible(false);
+                        navigationView.getMenu().findItem(R.id.nav_favorite).setVisible(false);
                         break;
                 }
 
@@ -133,22 +136,31 @@ public abstract class BaseActivity extends AppCompatActivity
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
-        int id = item.getItemId();
+        switch (item.getItemId()){
+            case R.id.nav_dishes:
+                startActivity(new Intent(this, MenuOrdersActivity.class));
+                break;
+            case R.id.nav_news:
+                startActivity(new Intent(this, NewsActivity.class));
+                break;
+            case R.id.nav_favorite:
 
-        if (id == R.id.nav_dishes) {
-            startActivity(new Intent(this, MenuOrdersActivity.class));
-        } else if (id == R.id.nav_news) {
-            startActivity(new Intent(this, NewsActivity.class));
-        } else if (id == R.id.nav_deliveries) {
-            startActivity(new Intent(this, DeliveriesActivity.class));
-        } else if (id == R.id.nav_reservation) {
-            startActivity(new Intent(this, ReserveTableActivity.class));
-        } else if (id == R.id.nav_settings) {
-            startActivity(new Intent(this, SettingsActivity.class));
-        } else if (id == R.id.nav_delivery_status) {
-            startActivity(new Intent(this, DeliveryStatus.class));
-        } else if (id == R.id.nav_about) {
-            startActivity(new Intent(this, AboutActivity.class));
+                break;
+            case R.id.nav_deliveries:
+                startActivity(new Intent(this, DeliveriesActivity.class));
+                break;
+            case R.id.nav_reservation:
+                startActivity(new Intent(this, ReserveTableActivity.class));
+                break;
+            case R.id.nav_settings:
+                startActivity(new Intent(this, SettingsActivity.class));
+                break;
+            case R.id.nav_delivery_status:
+                startActivity(new Intent(this, DeliveryStatus.class));
+                break;
+            case R.id.nav_about:
+                startActivity(new Intent(this, AboutActivity.class));
+                break;
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

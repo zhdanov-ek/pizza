@@ -43,6 +43,7 @@
     <!-- TITLE ACTIVITIES -->
     <string name="title_news">All news</string>
     <string name="title_menu_order">Menu</string>
+    <string name="title_favorite">Favorite</string>
     <string name="title_about">About us</string>
     <string name="title_settings">Settings</string>
     <string name="title_basket">Basket</string>

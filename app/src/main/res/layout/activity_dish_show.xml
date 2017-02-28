@@ -70,6 +70,15 @@
                     style="@style/FlatButtonNegative"
                     android:text="@string/remove" />
             </LinearLayout>
+
+            <ImageView
+                android:id="@+id/ivFavorite"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/ic_star_empty"
+                android:layout_alignParentTop="true"
+                android:layout_alignRight="@+id/tvPrice"
+                android:layout_alignEnd="@+id/tvPrice" />
         </RelativeLayout>
 
         <LinearLayout
