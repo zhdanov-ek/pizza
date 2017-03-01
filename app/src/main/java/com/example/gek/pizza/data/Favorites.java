@@ -1,5 +1,6 @@
 package com.example.gek.pizza.data;
 
+
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -10,12 +11,12 @@ import java.util.ArrayList;
 import static com.example.gek.pizza.data.Const.db;
 
 /**
- * Singleton store favorite dishesFavorites for current user
+ * Singleton store favorite dishes for current user
  */
 
 public class Favorites {
     private static Favorites instance;
-    private ArrayList<Dish> dishesFavorites;
+    private ArrayList<FavoriteDish> dishesLinks;
     private String userId;
     public static Favorites getInstance() {
         if (instance == null) {
@@ -26,19 +27,23 @@ public class Favorites {
 
     private Favorites() {
         userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        dishesFavorites = new ArrayList<>();
+        dishesLinks = new ArrayList<>();
         db.child(Const.CHILD_USERS)
                 .child(userId)
                 .child(Const.CHILD_USER_FAVORITES)
                 .addValueEventListener(listenerFavoritesDishes);
     }
 
+
+    /** Make list of dishes for correctly add and remove items */
     private ValueEventListener listenerFavoritesDishes = new ValueEventListener() {
         @Override
         public void onDataChange(DataSnapshot dataSnapshot) {
-            dishesFavorites.clear();
+            dishesLinks.clear();
+            FavoriteDish favoriteDish;
             for (DataSnapshot snapshotChild: dataSnapshot.getChildren()) {
-                dishesFavorites.add(snapshotChild.getValue(Dish.class));
+                favoriteDish = snapshotChild.getValue(FavoriteDish.class);
+                dishesLinks.add(favoriteDish);
             }
         }
 
@@ -48,36 +53,42 @@ public class Favorites {
     };
 
     /** Add new dish in favorites if it not find in list */
-    public void addDish(Dish dish){
-        if (! searchDish(dish)){
+    public void addDish(String keyDish){
+        if (searchDish(keyDish) == null){
             String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+            String key = db.child(Const.CHILD_USERS)
+                    .child(userId)
+                    .child(Const.CHILD_USER_FAVORITES)
+                    .push()
+                    .getKey();
             db.child(Const.CHILD_USERS)
                     .child(userId)
                     .child(Const.CHILD_USER_FAVORITES)
-                    .child(dish.getKey())
-                    .setValue(dish);
+                    .child(key)
+                    .setValue(new FavoriteDish(keyDish, key));
         }
     }
 
-    
-    /** Find dish in list*/
-    public Boolean searchDish(Dish dishSearch){
-        for (Dish dish: dishesFavorites) {
-            if (dish.getKey().contentEquals(dishSearch.getKey())){
-                return true;
+
+    /** Return key of favoriteDish if result true and empty if fail */
+    public String searchDish(String keyDish){
+        for (FavoriteDish favoriteDish: dishesLinks) {
+            if (favoriteDish.getKeyOfDish().contentEquals(keyDish)){
+                return favoriteDish.getKey();
             }
         }
-        return false;
+        return null;
     }
 
-    /** Remove dish from favorites */
-    public void removeDish(Dish dish) {
-        String keyRemove = dish.getKey();
-        db.child(Const.CHILD_USERS)
-            .child(userId)
-            .child(Const.CHILD_USER_FAVORITES)
-            .child(keyRemove)
-            .removeValue();
+    public void removeDish(String keyDish) {
+        String keyRemove = searchDish(keyDish);
+        if (keyRemove != null) {
+            db.child(Const.CHILD_USERS)
+                    .child(userId)
+                    .child(Const.CHILD_USER_FAVORITES)
+                    .child(keyRemove)
+                    .removeValue();
+        }
     }
 
 }

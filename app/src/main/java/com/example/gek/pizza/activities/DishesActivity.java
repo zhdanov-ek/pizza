@@ -18,9 +18,12 @@ import android.widget.Toast;
 
 import com.example.gek.pizza.R;
 import com.example.gek.pizza.adapters.DishesAdapter;
+import com.example.gek.pizza.data.AllDishes;
 import com.example.gek.pizza.data.Connection;
 import com.example.gek.pizza.data.Const;
 import com.example.gek.pizza.data.Dish;
+import com.example.gek.pizza.data.FavoriteDish;
+import com.example.gek.pizza.data.Favorites;
 import com.example.gek.pizza.data.MenuGroup;
 import com.example.gek.pizza.helpers.Utils;
 import com.google.firebase.auth.FirebaseAuth;
@@ -97,7 +100,7 @@ public class DishesActivity extends BaseActivity {
         fab.setOnClickListener(fabListener);
     }
 
-    // Слушаем юзерскую папку с избранными блюдами и передаем в адаптер
+    // Слушаем юзерскую папку с ключами избранных блюд и передаем в адаптер
     private ValueEventListener favoriteDishesListener = new ValueEventListener() {
         @Override
         public void onDataChange(DataSnapshot dataSnapshot) {
@@ -107,13 +110,16 @@ public class DishesActivity extends BaseActivity {
                 selectedDishes.clear();
             }
 
-            // if dish not removed (in archive) add in list
+            Dish currentDish;
+            // По ключам формируем список блюд
             for (DataSnapshot child: dataSnapshot.getChildren()) {
-                Dish currentDish = child.getValue(Dish.class);
+                FavoriteDish favoriteDish = child.getValue(FavoriteDish.class);
+                currentDish = AllDishes.getInstance().getDish(favoriteDish.getKeyOfDish());
                 if (!currentDish.getKeyGroup().contentEquals(Const.DISH_GROUP_VALUE_REMOVED)){
                     selectedDishes.add(currentDish);
                 }
             }
+
             if (selectedDishes.isEmpty()){
                 tvEmpty.setVisibility(View.VISIBLE);
                 rv.setVisibility(View.GONE);

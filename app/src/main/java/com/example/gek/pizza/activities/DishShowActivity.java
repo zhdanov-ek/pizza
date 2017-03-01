@@ -148,7 +148,7 @@ public class DishShowActivity extends BaseActivity implements View.OnClickListen
     ValueEventListener favoritesListener = new ValueEventListener() {
         @Override
         public void onDataChange(DataSnapshot dataSnapshot) {
-            if (Favorites.getInstance().searchDish(dishOpen)) {
+            if (Favorites.getInstance().searchDish(dishOpen.getKey()) != null) {
                 isFavorite = true;
                 ivFavorites.setImageResource(R.drawable.ic_star_solid);
             } else {
@@ -191,9 +191,9 @@ public class DishShowActivity extends BaseActivity implements View.OnClickListen
     /** Добавляем или убираем из избранного блюдо */
     private void pressFavorites(){
         if (isFavorite){
-            Favorites.getInstance().removeDish(dishOpen);
+            Favorites.getInstance().removeDish(dishOpen.getKey());
         } else {
-            Favorites.getInstance().addDish(dishOpen);
+            Favorites.getInstance().addDish(dishOpen.getKey());
         }
         ivFavorites.setClickable(false);
     }
