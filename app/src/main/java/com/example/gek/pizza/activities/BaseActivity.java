@@ -15,6 +15,7 @@ import android.widget.TextView;
 import com.example.gek.pizza.R;
 import com.example.gek.pizza.data.Connection;
 import com.example.gek.pizza.data.Const;
+import com.example.gek.pizza.data.Favorites;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -91,6 +92,8 @@ public abstract class BaseActivity extends AppCompatActivity
                         navigationView.getMenu().findItem(R.id.nav_shop_group).setVisible(false);
                         navigationView.getMenu().findItem(R.id.nav_delivery_status).setVisible(true);
                         navigationView.getMenu().findItem(R.id.nav_favorite).setVisible(true);
+                        //initialize list of favorites dishes
+                        Favorites.getInstance();
                         break;
                     case Const.AUTH_NULL:
                         navigationView.getMenu().findItem(R.id.nav_shop_group).setVisible(false);
@@ -144,7 +147,9 @@ public abstract class BaseActivity extends AppCompatActivity
                 startActivity(new Intent(this, NewsActivity.class));
                 break;
             case R.id.nav_favorite:
-
+                Intent favoritesIntent = new Intent(this, DishesActivity.class);
+                favoritesIntent.putExtra(Const.EXTRA_IS_FAVORITE, true);
+                startActivity(favoritesIntent);
                 break;
             case R.id.nav_deliveries:
                 startActivity(new Intent(this, DeliveriesActivity.class));

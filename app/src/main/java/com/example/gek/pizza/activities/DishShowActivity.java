@@ -6,6 +6,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -143,10 +144,11 @@ public class DishShowActivity extends BaseActivity implements View.OnClickListen
         }
     }
 
+    /** Следим за изменениями в списках избранного и обновляем ЮАй если это касается нашего блюда */
     ValueEventListener favoritesListener = new ValueEventListener() {
         @Override
         public void onDataChange(DataSnapshot dataSnapshot) {
-            if (Favorites.getInstance().searchDish(dishOpen.getKey()) != null) {
+            if (Favorites.getInstance().searchDish(dishOpen)) {
                 isFavorite = true;
                 ivFavorites.setImageResource(R.drawable.ic_star_solid);
             } else {
@@ -189,9 +191,9 @@ public class DishShowActivity extends BaseActivity implements View.OnClickListen
     /** Добавляем или убираем из избранного блюдо */
     private void pressFavorites(){
         if (isFavorite){
-            Favorites.getInstance().removeDish(dishOpen.getKey());
+            Favorites.getInstance().removeDish(dishOpen);
         } else {
-            Favorites.getInstance().addDish(dishOpen.getKey());
+            Favorites.getInstance().addDish(dishOpen);
         }
         ivFavorites.setClickable(false);
     }
