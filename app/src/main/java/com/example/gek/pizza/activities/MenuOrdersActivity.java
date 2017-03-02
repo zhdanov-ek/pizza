@@ -77,17 +77,18 @@ public class MenuOrdersActivity extends BaseActivity {
         rv = (RecyclerView) findViewById(R.id.rv);
 
         // задаем лаяют с твумя или тремя столбцами в зависимости от поворота экрана
-        GridLayoutManager lLayout;
+        // и устанавливаем расстояния между айтемами
+        GridLayoutManager gridLayoutManager;
         if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT){
-            lLayout = new GridLayoutManager(MenuOrdersActivity.this, 2);
+            gridLayoutManager = new GridLayoutManager(MenuOrdersActivity.this, 2);
             int spacingInPixels = getResources().getDimensionPixelSize(R.dimen.item_menu_orders_offset);
             rv.addItemDecoration(new GridSpacingItemDecoration(2, spacingInPixels, true));
         } else {
-            lLayout = new GridLayoutManager(MenuOrdersActivity.this, 3);
+            gridLayoutManager = new GridLayoutManager(MenuOrdersActivity.this, 3);
             int spacingInPixels = getResources().getDimensionPixelSize(R.dimen.item_menu_orders_offset_land);
             rv.addItemDecoration(new GridSpacingItemDecoration(3, spacingInPixels, true));
         }
-        rv.setLayoutManager(lLayout);
+        rv.setLayoutManager(gridLayoutManager);
 
         fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(fabListener);
@@ -123,7 +124,6 @@ public class MenuOrdersActivity extends BaseActivity {
 
         // устанавливаем слушатель на изменения в нашей базе в разделе контактов
         Const.db.child(Const.CHILD_MENU_GROUPS).addValueEventListener(menuGroupListener);
-
     }
 
 

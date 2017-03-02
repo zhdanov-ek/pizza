@@ -63,6 +63,8 @@ public abstract class BaseActivity extends AppCompatActivity
         authListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                // refresh menu
+                invalidateOptionsMenu();
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 if(user != null) {
                     // Check user: is shop or other users

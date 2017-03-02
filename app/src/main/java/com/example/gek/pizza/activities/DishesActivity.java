@@ -2,6 +2,7 @@ package com.example.gek.pizza.activities;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.support.design.widget.FloatingActionButton;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -25,6 +26,7 @@ import com.example.gek.pizza.data.Dish;
 import com.example.gek.pizza.data.FavoriteDish;
 import com.example.gek.pizza.data.Favorites;
 import com.example.gek.pizza.data.MenuGroup;
+import com.example.gek.pizza.helpers.GridSpacingItemDecoration;
 import com.example.gek.pizza.helpers.Utils;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -77,9 +79,21 @@ public class DishesActivity extends BaseActivity {
 
         tvEmpty = (TextView) findViewById(R.id.tvEmpty);
         rv = (RecyclerView) findViewById(R.id.rv);
-        // задаем лаяют с твумя столбцами
-        GridLayoutManager lLayout = new GridLayoutManager(DishesActivity.this, 2);
-        rv.setLayoutManager(lLayout);
+
+        // Задаем лаяют с твумя или тремя столбцами в зависимости от поворота экрана
+        // и устанавливаем расстояния между айтемами
+        GridLayoutManager gridLayoutManager;
+        if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT){
+            gridLayoutManager = new GridLayoutManager(DishesActivity.this, 2);
+            int spacingInPixels = getResources().getDimensionPixelSize(R.dimen.item_dish_offset);
+            rv.addItemDecoration(new GridSpacingItemDecoration(2, spacingInPixels, true));
+        } else {
+            gridLayoutManager = new GridLayoutManager(DishesActivity.this, 3);
+            int spacingInPixels = getResources().getDimensionPixelSize(R.dimen.item_dish_offset_land);
+            rv.addItemDecoration(new GridSpacingItemDecoration(3, spacingInPixels, true));
+        }
+
+        rv.setLayoutManager(gridLayoutManager);
 
         // Слушаем либо избранное либо общий список блюд
         Intent intent = getIntent();

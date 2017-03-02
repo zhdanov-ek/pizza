@@ -57,6 +57,8 @@
     <dimen name="item_dish_width">150dp</dimen>
     <dimen name="item_dish_height">180dp</dimen>
     <dimen name="item_dish_photo_height">110dp</dimen>
+    <dimen name="item_dish_offset">5dp</dimen>
+    <dimen name="item_dish_offset_land">20dp</dimen>
 
     <!-- DISH COUNTER -->
     <dimen name="image_counter_size">25dp</dimen>

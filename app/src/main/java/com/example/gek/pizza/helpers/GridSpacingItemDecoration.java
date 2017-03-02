@@ -6,7 +6,7 @@ import android.util.Log;
 import android.view.View;
 
 /**
- * Use for show list with group of dishes
+ * Use for show list dishes and group of dishes
  * Create fine spacing between items
  */
 public class GridSpacingItemDecoration extends RecyclerView.ItemDecoration {

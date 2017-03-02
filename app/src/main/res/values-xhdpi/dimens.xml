@@ -1,0 +1,18 @@
+<resources>
+    <!--    values-xhdpi            4.7”   1280x720 xhdpi
+            values-xhdpi            4.65”  720x1280 xhdpi
+            values-xhdpi            5.1"   1920х1080 xhdpi -->
+
+    <!-- MENU_ORDERS -->
+    <dimen name="item_menu_orders_width">160dp</dimen>
+    <dimen name="item_menu_orders_height">140dp</dimen>
+    <dimen name="item_menu_orders_offset">15dp</dimen>
+    <dimen name="item_menu_orders_offset_land">35dp</dimen>
+
+    <!-- DISH ITEM -->
+    <dimen name="item_dish_width">160dp</dimen>
+    <dimen name="item_dish_height">190dp</dimen>
+    <dimen name="item_dish_photo_height">115dp</dimen>
+    <dimen name="item_dish_offset">10dp</dimen>
+    <dimen name="item_dish_offset_land">35dp</dimen>
+</resources>
