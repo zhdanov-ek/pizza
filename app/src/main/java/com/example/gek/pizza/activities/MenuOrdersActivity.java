@@ -24,6 +24,7 @@ import com.example.gek.pizza.adapters.MenuOrdersAdapter;
 import com.example.gek.pizza.data.Connection;
 import com.example.gek.pizza.data.Const;
 import com.example.gek.pizza.data.MenuGroup;
+import com.example.gek.pizza.helpers.GridSpacingItemDecoration;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -79,14 +80,14 @@ public class MenuOrdersActivity extends BaseActivity {
         GridLayoutManager lLayout;
         if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT){
             lLayout = new GridLayoutManager(MenuOrdersActivity.this, 2);
+            int spacingInPixels = getResources().getDimensionPixelSize(R.dimen.item_menu_orders_offset);
+            rv.addItemDecoration(new GridSpacingItemDecoration(2, spacingInPixels, true));
         } else {
             lLayout = new GridLayoutManager(MenuOrdersActivity.this, 3);
+            int spacingInPixels = getResources().getDimensionPixelSize(R.dimen.item_menu_orders_offset_land);
+            rv.addItemDecoration(new GridSpacingItemDecoration(3, spacingInPixels, true));
         }
         rv.setLayoutManager(lLayout);
-
-        // Выравниваем отступы между айтемами
-        ItemOffsetDecoration itemDecoration = new ItemOffsetDecoration(ctx, R.dimen.item_menu_orders_offset);
-        rv.addItemDecoration(itemDecoration);
 
         fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(fabListener);
@@ -96,7 +97,7 @@ public class MenuOrdersActivity extends BaseActivity {
         // Описываем слушатель, который возвращает в программу весь список данных,
         // которые находятся в child(CHILD_MENU_GROUPS)
         // В итоге при любом изменении вся база перезаливается с БД в программу
-        ValueEventListener contactCardListener = new ValueEventListener() {
+        ValueEventListener menuGroupListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 long num = dataSnapshot.getChildrenCount();
@@ -121,7 +122,7 @@ public class MenuOrdersActivity extends BaseActivity {
         };
 
         // устанавливаем слушатель на изменения в нашей базе в разделе контактов
-        Const.db.child(Const.CHILD_MENU_GROUPS).addValueEventListener(contactCardListener);
+        Const.db.child(Const.CHILD_MENU_GROUPS).addValueEventListener(menuGroupListener);
 
     }
 
@@ -163,25 +164,6 @@ public class MenuOrdersActivity extends BaseActivity {
     };
 
 
-    /** С помощью этого класса регулируем отступы между айтемами */
-    public class ItemOffsetDecoration extends RecyclerView.ItemDecoration {
-        private int mItemOffset;
-
-        public ItemOffsetDecoration(int itemOffset) {
-            mItemOffset = itemOffset;
-        }
-
-        public ItemOffsetDecoration(@NonNull Context context, @DimenRes int itemOffsetId) {
-            this(context.getResources().getDimensionPixelSize(itemOffsetId));
-        }
-
-        @Override
-        public void getItemOffsets(Rect outRect, View view, RecyclerView parent,
-                                   RecyclerView.State state) {
-            super.getItemOffsets(outRect, view, parent, state);
-            outRect.set(mItemOffset, mItemOffset, mItemOffset, mItemOffset);
-        }
-    }
 
     /** Открываем активити со списком удаленных блюд */
     private void showRemovedDishes(){
