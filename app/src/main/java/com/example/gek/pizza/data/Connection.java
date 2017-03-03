@@ -3,6 +3,7 @@ package com.example.gek.pizza.data;
 import android.content.Context;
 import android.util.Log;
 
+import com.facebook.login.LoginManager;
 import com.google.firebase.auth.FirebaseAuth;
 
 /**
@@ -38,6 +39,10 @@ public class Connection {
         FirebaseAuth.getInstance().signOut();
         currentAuthStatus = Const.AUTH_NULL;
         Log.d(TAG, "sign out FireBase");
+
+//      programmatically logout
+        LoginManager.getInstance().logOut();
+
     }
 
 

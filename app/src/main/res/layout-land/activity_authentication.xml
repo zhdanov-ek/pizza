@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:facebook="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_authentication"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.example.gek.pizza.activities.AuthenticationActivity">
+
+    <include layout="@layout/toolbar" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center_horizontal"
+        android:orientation="horizontal"
+        android:padding="@dimen/activity_padding">
+
+        <ImageView
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_gravity="center"
+            android:src="@drawable/logo"
+            android:layout_weight="1" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_weight="2">
+
+            <TextView
+                style="@style/textBig"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginBottom="@dimen/auth_title_margin_bottom"
+                android:layout_marginTop="@dimen/auth_title_margin_top"
+                android:gravity="center"
+                android:text="@string/title_auth"
+                android:textSize="@dimen/text_size_middle" />
+
+            <TextView
+                android:id="@+id/tvStatus"
+                style="@style/textMiddle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:visibility="gone"
+                android:textColor="@color/delete_toolbar_pink_200"
+                android:layout_marginBottom="@dimen/auth_title_margin_bottom"
+                android:text="@string/msg_link_auth"/>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:orientation="horizontal">
+
+                <com.facebook.login.widget.LoginButton
+                    android:id="@+id/btnFacebook"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    facebook:com_facebook_login_text="Facebook" />
+
+                <Button
+                    android:id="@+id/btnGoogleSignIn"
+                    style="@style/SignInButtonGoogle"
+                    android:layout_width="150dp"
+                    android:layout_marginRight="@dimen/activity_padding"
+                    android:drawableLeft="@drawable/btn_google_light"
+                    android:text="@string/google_sign_in"
+                    android:textSize="@dimen/text_size_small" />
+
+                <Button
+                    android:id="@+id/btnFacebookSignIn"
+                    style="@style/SignInButtonFacebook"
+                    android:layout_width="150dp"
+                    android:layout_marginLeft="@dimen/activity_padding"
+                    android:drawableLeft="@drawable/com_facebook_button_icon"
+                    android:padding="@dimen/floating_button_layout_margin"
+                    android:text="@string/facebook_sign_in"
+                    android:textSize="@dimen/text_size_small" />
+            </LinearLayout>
+
+            <ProgressBar
+                android:id="@+id/progressBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="@dimen/counter_margin"
+                android:visibility="invisible" />
+
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+</LinearLayout>

@@ -127,4 +127,22 @@
         <item name="android:src">@drawable/ic_arrow_up_down</item>
     </style>
 
+
+    <style name="SignInButtonGoogle" parent="@android:style/Widget.Button.Small">
+        <item name="android:layout_width">@dimen/button_raised_width</item>
+        <item name="android:layout_height">@dimen/button_raised_height</item>
+        <item name="android:textSize">@dimen/button_raised_font_size</item>
+        <item name="android:background">@drawable/bg_sign_button_google</item>
+        <item name="android:textColor">@color/colorDeliveryDishes</item>
+    </style>
+
+    <style name="SignInButtonFacebook" parent="@android:style/Widget.Button.Small">
+        <item name="android:layout_width">@dimen/button_raised_width</item>
+        <item name="android:layout_height">@dimen/button_raised_height</item>
+        <item name="android:textSize">@dimen/button_raised_font_size</item>
+        <item name="android:background">@drawable/bg_sign_button_facebook</item>
+        <item name="android:textColor">@color/colorButtonRaisedText</item>
+    </style>
+
+
 </resources>

@@ -193,5 +193,14 @@
     <string name="table_name_6">table6</string>
     <string name="table_name_8">table8</string>
 
+    <string name="facebook_app_id">405419523151306</string>
+
+    <!--Authentication-->
+    <string name="facebook_sign_in">FACEBOOK</string>
+    <string name="google_sign_in">GOOGLE</string>
+    <string name="title_auth">Log in with your account</string>
+    <string name="authentication_failed">Authentication failed</string>
+    <string name="msg_link_auth">You have already signed in with %1$s. Please confirm your account, and in future you will be able to sign in with %2$s.</string>
+
 
 </resources>

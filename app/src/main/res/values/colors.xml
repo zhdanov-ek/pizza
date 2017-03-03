@@ -63,4 +63,13 @@
 
     <color name="delete_toolbar_pink_200">#FF4081</color>
 
+    <color name="colorButtonFacebookRaised">#3949AB</color>
+    <color name="colorButtonFacebookPress">#283593</color>
+    <color name="colorButtonFacebookFocus">#7986CB</color>
+
+    <color name="colorButtonGoogleRaised">#F5F5F5</color>
+    <color name="colorButtonGooglePress">#EEEEEE</color>
+    <color name="colorButtonGoogleFocus">#FAFAFA</color>
+
+
 </resources>
