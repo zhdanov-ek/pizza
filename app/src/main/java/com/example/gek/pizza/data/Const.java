@@ -109,4 +109,7 @@ public class Const {
     public static final int RESERVATION_TABLE_STATE_CONFIRMED = 1;
     public static final int RESERVATION_TABLE_STATE_CANCEL = 2;
 
+    public static final String GOOGLE_PROVIDER = "google.com";
+    public static final String FACEBOOK_PROVIDER = "facebook.com";
+
 }
