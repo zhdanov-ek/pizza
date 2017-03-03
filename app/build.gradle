@@ -5,7 +5,8 @@ buildscript {
 
     dependencies {
         // Crashlytics:
-        classpath 'io.fabric.tools:gradle:1.0'
+        classpath 'io.fabric.tools:gradle:1.+'
+        // с самой последней версиее не приходят уведомления 1.21.5
     }
 }
 

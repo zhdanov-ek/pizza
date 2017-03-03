@@ -28,7 +28,6 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.ScrollView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.gek.pizza.R;
 import com.example.gek.pizza.data.Connection;
@@ -46,12 +45,13 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
-import com.google.firebase.auth.FirebaseAuth;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
 import java.util.ArrayList;
@@ -114,6 +114,7 @@ public class AboutActivity extends BaseActivity implements
     public List<LatLng> listOfMarkers;
     LatLng pizzeriaLocation;
     private Animation animationArrowRotation;
+    private BitmapDescriptor bdPizza;
 
     @Override
     public void updateUI() {
@@ -128,6 +129,7 @@ public class AboutActivity extends BaseActivity implements
         View contentView = inflater.inflate(R.layout.activity_about, null, false);
         mDrawer.addView(contentView, 0);
 
+        bdPizza = BitmapDescriptorFactory.fromResource(R.drawable.local_pizza_map);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolBar);
         toolbar.setTitle(R.string.title_about);
@@ -400,7 +402,9 @@ public class AboutActivity extends BaseActivity implements
     public void addPizzeriaOnMap(){
         // добавление маркера с пиццерией на карту
         googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(pizzeriaLocation, Const.ZOOM_MAP));
+
         googleMap.addMarker(new MarkerOptions()
+                .icon(bdPizza)
                 .title(getString(R.string.hint_on_map))
                 .snippet(getString(R.string.snipset_on_map))
                 .position(pizzeriaLocation));
