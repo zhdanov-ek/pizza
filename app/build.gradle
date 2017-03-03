@@ -1,21 +1,21 @@
-buildscript {
-    repositories {
-        maven { url 'https://maven.fabric.io/public' }
-    }
-
-    dependencies {
-        // Crashlytics:
-        classpath 'io.fabric.tools:gradle:1.+'
-    }
-}
+//buildscript {
+//    repositories {
+//        maven { url 'https://maven.fabric.io/public' }
+//    }
+//
+//    dependencies {
+//        // Crashlytics:
+//        classpath 'io.fabric.tools:gradle:1.0'
+//    }
+//}
 
 apply plugin: 'com.android.application'
 
-// Crashlytics:
-apply plugin: 'io.fabric'
-repositories {
-    maven { url 'https://maven.fabric.io/public'}
-}
+//// Crashlytics:
+//apply plugin: 'io.fabric'
+//repositories {
+//    maven { url 'https://maven.fabric.io/public'}
+//}
 
 android {
     compileSdkVersion 25
@@ -70,9 +70,9 @@ dependencies {
 
     testCompile 'junit:junit:4.12'
 
-    compile('com.crashlytics.sdk.android:crashlytics:2.6.6@aar') {
-        transitive = true;
-    }
+//    compile('com.crashlytics.sdk.android:crashlytics:2.6.6@aar') {
+//        transitive = true;
+//    }
 }
 
 

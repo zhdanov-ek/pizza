@@ -123,7 +123,7 @@ public class DeliveriesActivity extends BaseActivity {
 
             // В зависимости от номера вкладки ставим слушатель на нужный нам раздел в БД
             // и создаем адаптер с соответствующим параметром
-            ValueEventListener contactCardListener = new ValueEventListener() {
+            ValueEventListener deliveriesListener = new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     listDeliveries.clear();
@@ -161,13 +161,13 @@ public class DeliveriesActivity extends BaseActivity {
 
             switch (num){
                 case 1:
-                    Const.db.child(Const.CHILD_DELIVERIES_NEW).addValueEventListener(contactCardListener);
+                    Const.db.child(Const.CHILD_DELIVERIES_NEW).addValueEventListener(deliveriesListener);
                     break;
                 case 2:
-                    Const.db.child(Const.CHILD_DELIVERIES_COOKING).addValueEventListener(contactCardListener);
+                    Const.db.child(Const.CHILD_DELIVERIES_COOKING).addValueEventListener(deliveriesListener);
                     break;
                 case 3:
-                    Const.db.child(Const.CHILD_DELIVERIES_TRANSPORT).addValueEventListener(contactCardListener);
+                    Const.db.child(Const.CHILD_DELIVERIES_TRANSPORT).addValueEventListener(deliveriesListener);
                     break;
             }
 

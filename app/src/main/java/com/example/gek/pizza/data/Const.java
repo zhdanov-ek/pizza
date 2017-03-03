@@ -21,6 +21,7 @@ public class Const {
     public static final String CHILD_USERS = "users";
     public static final String CHILD_USER_DELIVERY_STATE = "delivery_state";
     public static final String CHILD_USER_RESERVATION_STATE = "reservation_state";
+    public static final String CHILD_USER_FAVORITES = "favorites";
 
     // Отображают текущее состояние заказа в юзерской папке
     public static final int DELIVERY_STATE_NEW = 0;
@@ -58,6 +59,7 @@ public class Const {
     public static final String EXTRA_NEWS = "news_object";
     public static final String EXTRA_DISH = "dish_object";
     public static final String EXTRA_MENU_GROUP = "menu_group_object";
+    public static final String EXTRA_IS_FAVORITE = "is_favorite";
     public static final String EXTRA_TABLE = "table_object";
     public static final String EXTRA_TABLE_KEY = "table_object_key";
     public static final String EXTRA_DELIVERY_ID = "delivery_id";

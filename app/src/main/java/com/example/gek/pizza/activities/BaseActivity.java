@@ -15,6 +15,7 @@ import android.widget.TextView;
 import com.example.gek.pizza.R;
 import com.example.gek.pizza.data.Connection;
 import com.example.gek.pizza.data.Const;
+import com.example.gek.pizza.data.Favorites;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -62,6 +63,8 @@ public abstract class BaseActivity extends AppCompatActivity
         authListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                // refresh menu
+                invalidateOptionsMenu();
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 if(user != null) {
                     // Check user: is shop or other users
@@ -85,14 +88,19 @@ public abstract class BaseActivity extends AppCompatActivity
                     case Const.AUTH_SHOP:
                         navigationView.getMenu().findItem(R.id.nav_shop_group).setVisible(true);
                         navigationView.getMenu().findItem(R.id.nav_delivery_status).setVisible(false);
+                        navigationView.getMenu().findItem(R.id.nav_favorite).setVisible(false);
                         break;
                     case Const.AUTH_USER:
                         navigationView.getMenu().findItem(R.id.nav_shop_group).setVisible(false);
                         navigationView.getMenu().findItem(R.id.nav_delivery_status).setVisible(true);
+                        navigationView.getMenu().findItem(R.id.nav_favorite).setVisible(true);
+                        //initialize list of favorites dishes
+                        Favorites.getInstance();
                         break;
                     case Const.AUTH_NULL:
                         navigationView.getMenu().findItem(R.id.nav_shop_group).setVisible(false);
                         navigationView.getMenu().findItem(R.id.nav_delivery_status).setVisible(false);
+                        navigationView.getMenu().findItem(R.id.nav_favorite).setVisible(false);
                         break;
                 }
 
@@ -133,22 +141,33 @@ public abstract class BaseActivity extends AppCompatActivity
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
-        int id = item.getItemId();
-
-        if (id == R.id.nav_dishes) {
-            startActivity(new Intent(this, MenuOrdersActivity.class));
-        } else if (id == R.id.nav_news) {
-            startActivity(new Intent(this, NewsActivity.class));
-        } else if (id == R.id.nav_deliveries) {
-            startActivity(new Intent(this, DeliveriesActivity.class));
-        } else if (id == R.id.nav_reservation) {
-            startActivity(new Intent(this, ReserveTableActivity.class));
-        } else if (id == R.id.nav_settings) {
-            startActivity(new Intent(this, SettingsActivity.class));
-        } else if (id == R.id.nav_delivery_status) {
-            startActivity(new Intent(this, DeliveryStatus.class));
-        } else if (id == R.id.nav_about) {
-            startActivity(new Intent(this, AboutActivity.class));
+        switch (item.getItemId()){
+            case R.id.nav_dishes:
+                startActivity(new Intent(this, MenuOrdersActivity.class));
+                break;
+            case R.id.nav_news:
+                startActivity(new Intent(this, NewsActivity.class));
+                break;
+            case R.id.nav_favorite:
+                Intent favoritesIntent = new Intent(this, DishesActivity.class);
+                favoritesIntent.putExtra(Const.EXTRA_IS_FAVORITE, true);
+                startActivity(favoritesIntent);
+                break;
+            case R.id.nav_deliveries:
+                startActivity(new Intent(this, DeliveriesActivity.class));
+                break;
+            case R.id.nav_reservation:
+                startActivity(new Intent(this, ReserveTableActivity.class));
+                break;
+            case R.id.nav_settings:
+                startActivity(new Intent(this, SettingsActivity.class));
+                break;
+            case R.id.nav_delivery_status:
+                startActivity(new Intent(this, DeliveryStatus.class));
+                break;
+            case R.id.nav_about:
+                startActivity(new Intent(this, AboutActivity.class));
+                break;
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

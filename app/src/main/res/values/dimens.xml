@@ -31,7 +31,6 @@
     <dimen name="text_size_very_small">10sp</dimen>
 
     <!-- MAIN MENU -->
-
     <dimen name="main_menu_title_size">24sp</dimen>
     <dimen name="main_menu_text_size">16sp</dimen>
     <dimen name="main_menu_item_height">100dp</dimen>
@@ -51,12 +50,15 @@
     <dimen name="item_menu_orders_width">150dp</dimen>
     <dimen name="item_menu_orders_height">130dp</dimen>
     <dimen name="item_menu_orders_offset">5dp</dimen>
+    <dimen name="item_menu_orders_offset_land">20dp</dimen>
 
 
     <!-- DISH ITEM -->
     <dimen name="item_dish_width">150dp</dimen>
     <dimen name="item_dish_height">180dp</dimen>
     <dimen name="item_dish_photo_height">110dp</dimen>
+    <dimen name="item_dish_offset">5dp</dimen>
+    <dimen name="item_dish_offset_land">20dp</dimen>
 
     <!-- DISH COUNTER -->
     <dimen name="image_counter_size">25dp</dimen>

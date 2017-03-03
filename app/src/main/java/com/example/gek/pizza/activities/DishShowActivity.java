@@ -4,9 +4,9 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -15,6 +15,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -23,11 +24,21 @@ import com.example.gek.pizza.data.Basket;
 import com.example.gek.pizza.data.Connection;
 import com.example.gek.pizza.data.Const;
 import com.example.gek.pizza.data.Dish;
+import com.example.gek.pizza.data.Favorites;
 import com.example.gek.pizza.helpers.Utils;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ValueEventListener;
+
+import static com.example.gek.pizza.data.Const.db;
 
 public class DishShowActivity extends BaseActivity implements View.OnClickListener{
     private TextView tvName, tvPrice, tvDescription;
     private ImageView ivPhoto;
+    private ImageView ivFavorites;
+    private Boolean isFavorite;
     private Button btnAdd;
     private Button btnRemove;
     private Button btnEdit;
@@ -35,14 +46,25 @@ public class DishShowActivity extends BaseActivity implements View.OnClickListen
     private TextView tvCounter;
     private ImageView ivMinus, ivPlus;
     private Dish dishOpen;
+    private Boolean isSetListenerFavorites;
 
     @Override
     public void updateUI() {
-        if (Connection.getInstance().getCurrentAuthStatus() != Const.AUTH_SHOP){
-            btnEdit.setVisibility(View.GONE);
-            btnRemove.setVisibility(View.GONE);
-        } else {
-            btnAdd.setEnabled(false);
+        switch (Connection.getInstance().getCurrentAuthStatus()){
+            case Const.AUTH_USER:
+                btnEdit.setVisibility(View.GONE);
+                btnRemove.setVisibility(View.GONE);
+                btnAdd.setEnabled(true);
+                break;
+            case Const.AUTH_SHOP:
+                btnEdit.setVisibility(View.VISIBLE);
+                btnRemove.setVisibility(View.VISIBLE);
+                btnAdd.setEnabled(false);
+                break;
+            default:
+                btnEdit.setVisibility(View.GONE);
+                btnRemove.setVisibility(View.GONE);
+                btnAdd.setEnabled(true);
         }
     }
 
@@ -69,6 +91,8 @@ public class DishShowActivity extends BaseActivity implements View.OnClickListen
         tvPrice = (TextView) findViewById(R.id.tvPrice);
         tvDescription = (TextView) findViewById(R.id.tvDescription);
         ivPhoto = (ImageView) findViewById(R.id.ivPhoto);
+        ivFavorites = (ImageView) findViewById(R.id.ivFavorites);
+        ivFavorites.setOnClickListener(this);
         btnAdd = (Button) findViewById(R.id.btnAdd);
         btnAdd.setOnClickListener(this);
         btnRemove = (Button) findViewById(R.id.btnRemove);
@@ -90,6 +114,8 @@ public class DishShowActivity extends BaseActivity implements View.OnClickListen
         }
     }
 
+
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -103,7 +129,40 @@ public class DishShowActivity extends BaseActivity implements View.OnClickListen
             btnAdd.setVisibility(View.VISIBLE);
             llCounter.setVisibility(View.GONE);
         }
+
+        // listen change in favorites for USER auth
+        isSetListenerFavorites = false;
+        if (Connection.getInstance().getCurrentAuthStatus() == Const.AUTH_USER) {
+            ivFavorites.setVisibility(View.VISIBLE);
+            db.child(Const.CHILD_USERS)
+                    .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                    .child(Const.CHILD_USER_FAVORITES)
+                    .addValueEventListener(favoritesListener);
+
+        } else {
+            ivFavorites.setVisibility(View.GONE);
+        }
     }
+
+    /** Следим за изменениями в списках избранного и обновляем ЮАй если это касается нашего блюда */
+    ValueEventListener favoritesListener = new ValueEventListener() {
+        @Override
+        public void onDataChange(DataSnapshot dataSnapshot) {
+            if (Favorites.getInstance().searchDish(dishOpen.getKey()) != null) {
+                isFavorite = true;
+                ivFavorites.setImageResource(R.drawable.ic_star_solid);
+            } else {
+                isFavorite = false;
+                ivFavorites.setImageResource(R.drawable.ic_star_empty);
+            }
+            ivFavorites.setVisibility(View.VISIBLE);
+            ivFavorites.setClickable(true);
+        }
+
+        @Override
+        public void onCancelled(DatabaseError databaseError) {
+        }
+    };
 
     @Override
     public void onClick(View view) {
@@ -123,9 +182,21 @@ public class DishShowActivity extends BaseActivity implements View.OnClickListen
             case R.id.ivPlus:
                 pressPlus();
                 break;
+            case R.id.ivFavorites:
+                pressFavorites();
+                break;
         }
     }
 
+    /** Добавляем или убираем из избранного блюдо */
+    private void pressFavorites(){
+        if (isFavorite){
+            Favorites.getInstance().removeDish(dishOpen.getKey());
+        } else {
+            Favorites.getInstance().addDish(dishOpen.getKey());
+        }
+        ivFavorites.setClickable(false);
+    }
 
     /** Увеличиваем количество в заказе на 1 */
     private void pressPlus(){
@@ -217,7 +288,7 @@ public class DishShowActivity extends BaseActivity implements View.OnClickListen
             public void onClick(DialogInterface dialogInterface, int i) {
                 // Заменяем ключ группы, после чего это блюдо не будет возможности выбрать в меню
                 dish.setKeyGroup(Const.DISH_GROUP_VALUE_REMOVED);
-                Const.db.child(Const.CHILD_DISHES).child(dish.getKey()).setValue(dish);
+                db.child(Const.CHILD_DISHES).child(dish.getKey()).setValue(dish);
                 finish();
             }
         });
@@ -242,5 +313,16 @@ public class DishShowActivity extends BaseActivity implements View.OnClickListen
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onPause() {
+        if (isSetListenerFavorites){
+            db.child(Const.CHILD_USERS)
+                    .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                    .child(Const.CHILD_USER_FAVORITES)
+                    .removeEventListener(favoritesListener);
+        }
+        super.onPause();
     }
 }

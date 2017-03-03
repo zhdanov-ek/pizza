@@ -32,8 +32,7 @@
             android:launchMode="singleTask" />
         <activity android:name=".activities.MenuOrdersEditActivity" />
         <activity
-            android:name=".activities.DishesActivity"
-            android:launchMode="singleTask" />
+            android:name=".activities.DishesActivity"/>
         <activity android:name=".activities.DishEditActivity" />
         <activity android:name=".activities.MakePizzaActivity" />
         <activity

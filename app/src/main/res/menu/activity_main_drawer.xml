@@ -23,6 +23,13 @@
             android:id="@+id/nav_dishes"
             android:icon="@drawable/ic_menu_dishes"
             android:title="@string/title_menu_order" />
+
+
+        <item
+            android:id="@+id/nav_favorite"
+            android:icon="@drawable/ic_menu_favorite"
+            android:title="@string/title_favorites" />
+
         <item
             android:id="@+id/nav_news"
             android:icon="@drawable/ic_menu_news"

@@ -26,7 +26,7 @@ public class AllDishes {
     private AllDishes(){
         dishes = new ArrayList<>();
         db.child(Const.CHILD_DISHES).addValueEventListener(dishesListener);
-        Log.d(TAG, "Add dish listener");
+        Log.d(TAG, "Add dish listenerFavoritesDishes");
     }
 
     // Получаем инстанс через метод, а не конструктор, который скрыт
@@ -47,11 +47,6 @@ public class AllDishes {
         return null;
     }
 
-    //todo Вызвать этот метод при уничтожении программы
-    public void removeListener(){
-        db.child(Const.CHILD_DISHES).removeEventListener(dishesListener);
-        Log.d(TAG, "Remove dish listener");
-    }
 
     private ValueEventListener dishesListener = new ValueEventListener() {
         @Override
