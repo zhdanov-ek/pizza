@@ -22,6 +22,8 @@ import android.widget.RelativeLayout;
 import com.example.gek.pizza.R;
 import com.example.gek.pizza.data.Connection;
 import com.example.gek.pizza.data.Const;
+import com.example.gek.pizza.data.Ingredient;
+import com.example.gek.pizza.data.Ingredients;
 
 import java.util.ArrayList;
 
@@ -35,7 +37,9 @@ public class MakePizzaActivity extends BaseActivity {
     private LinearLayout llIngredients;
     private ImageView ivPizza;
     private ArrayList<Integer> listIngredients;
+    private ArrayList<Ingredient> basicListIngredients;
     private ImageView currentIngredient;
+    private int numCurrentIngredient;
 
 
     @Override
@@ -72,6 +76,7 @@ public class MakePizzaActivity extends BaseActivity {
         // cлушаем события перетягивания на нашу пиццу
         ivPizza.setOnDragListener(onDragListenerIngredient);
 
+        basicListIngredients = Ingredients.getIngredients();
         clearPizza();
     }
 
@@ -83,6 +88,7 @@ public class MakePizzaActivity extends BaseActivity {
             View.DragShadowBuilder shadowBuilder = new View.DragShadowBuilder(view);
             view.startDrag(data, shadowBuilder, view, 0);
             currentIngredient = (ImageView) view;
+            numCurrentIngredient = view.getId();
             return true;
         }
     };
@@ -103,6 +109,7 @@ public class MakePizzaActivity extends BaseActivity {
 //        }
 //    };
 
+    /** Убираем все ингредиенты */
     private void clearPizza(){
         if (listIngredients == null) {
             listIngredients = new ArrayList<>();
@@ -110,20 +117,25 @@ public class MakePizzaActivity extends BaseActivity {
             listIngredients.clear();
         }
 
+        //todo создание перенести в онкриете, а тут просто видимость включать
         llIngredients.removeAllViews();
 
-        for (int i = 0; i < 5; i++) {
-            ImageView imageView = new ImageView(this);
-            imageView.setId(i);
-            imageView.setPadding(2, 2, 2, 2);
-            imageView.setImageBitmap(
-                    BitmapFactory.decodeResource(getResources(), R.drawable.pizza_list_tomato));
-            imageView.setOnLongClickListener(ingredientLongClickListener);
-            llIngredients.addView(imageView);
+        for (int i = 0; i < basicListIngredients.size(); i++) {
+            ImageView ivCurrent = new ImageView(this);
+            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(150, 150);
+            ivCurrent.setLayoutParams(params);
+            ivCurrent.setId(i);
+            ivCurrent.setPadding(2, 2, 2, 2);
+            ivCurrent.setImageBitmap(
+                    BitmapFactory.decodeResource(getResources(), basicListIngredients.get(i).getListImageResource()));
+            ivCurrent.setOnLongClickListener(ingredientLongClickListener);
+            llIngredients.addView(ivCurrent);
         }
         updatePizza();
     }
 
+
+    /** Прорисовка пиццы: рисуем основу и затем ингредиенты если они есть */
     private void updatePizza(){
         Bitmap basis = BitmapFactory.decodeResource(getResources(), R.drawable.pizza_basis);
 
@@ -152,7 +164,7 @@ public class MakePizzaActivity extends BaseActivity {
     };
 
 
-    // Отрабатываем события во время перетягивания
+    /** Отрабатываем события во время перетягивания */
     private View.OnDragListener onDragListenerIngredient = new View.OnDragListener() {
         @Override
         public boolean onDrag(View view, DragEvent dragEvent) {
@@ -172,9 +184,9 @@ public class MakePizzaActivity extends BaseActivity {
                     break;
 
                 case DragEvent.ACTION_DROP:
+                    // Скрываем ингредиент в списке и добавляем новый слой в массив, перерисовываем
                     currentIngredient.setVisibility(View.GONE);
-                    listIngredients.add(R.drawable.pizza_bacon);
-                    listIngredients.add(R.drawable.pizza_tomatoes);
+                    listIngredients.add(basicListIngredients.get(numCurrentIngredient).getPizzaImageResource());
                     updatePizza();
                     Log.d(TAG, "Action is DragEvent.ACTION_DRAG_DROPPED");
                     break;
