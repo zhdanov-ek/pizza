@@ -34,6 +34,15 @@ public class Favorites {
                 .addValueEventListener(listenerFavoritesDishes);
     }
 
+    /** If user make logout remove listener end destroy instance */
+    public void closeSession(){
+        db.child(Const.CHILD_USERS)
+                .child(userId)
+                .child(Const.CHILD_USER_FAVORITES)
+                .removeEventListener(listenerFavoritesDishes);
+        instance = null;
+    }
+
 
     /** Make list of dishes for correctly add and remove items */
     private ValueEventListener listenerFavoritesDishes = new ValueEventListener() {

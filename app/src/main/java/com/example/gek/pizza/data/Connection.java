@@ -37,6 +37,11 @@ public class Connection {
 //            ctx.stopService(new Intent(ctx, ShopService.class));
 //        }
         FirebaseAuth.getInstance().signOut();
+
+        // destroy Favorites if signOut from UserStatus. Need for correct work favorites in new session
+        if (currentAuthStatus ==  Const.AUTH_USER)  {
+            Favorites.getInstance().closeSession();
+        }
         currentAuthStatus = Const.AUTH_NULL;
         Log.d(TAG, "sign out FireBase");
 

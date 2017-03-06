@@ -54,16 +54,19 @@ public class DishShowActivity extends BaseActivity implements View.OnClickListen
             case Const.AUTH_USER:
                 btnEdit.setVisibility(View.GONE);
                 btnRemove.setVisibility(View.GONE);
+                ivFavorites.setVisibility(View.VISIBLE);
                 btnAdd.setEnabled(true);
                 break;
             case Const.AUTH_SHOP:
                 btnEdit.setVisibility(View.VISIBLE);
                 btnRemove.setVisibility(View.VISIBLE);
+                ivFavorites.setVisibility(View.GONE);
                 btnAdd.setEnabled(false);
                 break;
             default:
                 btnEdit.setVisibility(View.GONE);
                 btnRemove.setVisibility(View.GONE);
+                ivFavorites.setVisibility(View.GONE);
                 btnAdd.setEnabled(true);
         }
     }
