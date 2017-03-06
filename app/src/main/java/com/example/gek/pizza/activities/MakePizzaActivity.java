@@ -13,17 +13,19 @@ import android.view.DragEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.example.gek.pizza.R;
 import com.example.gek.pizza.data.Connection;
 import com.example.gek.pizza.data.Const;
 import com.example.gek.pizza.data.Ingredient;
 import com.example.gek.pizza.data.Ingredients;
+import com.example.gek.pizza.helpers.Utils;
 
 import java.util.ArrayList;
 
@@ -36,11 +38,13 @@ public class MakePizzaActivity extends BaseActivity {
     private RelativeLayout rlContent;
     private LinearLayout llIngredients;
     private ImageView ivPizza;
-    private ArrayList<Integer> listIngredients;
+    private TextView tvTotal;
+    private Button btnClear, btnAdd;
+    private ArrayList<Integer> listIdAllImageView;
+    private ArrayList<Integer> listIngredientsLayers;
     private ArrayList<Ingredient> basicListIngredients;
-    private ImageView currentIngredient;
-    private int numCurrentIngredient;
-
+    private ImageView ivCurrentIngredient;
+    private StringBuffer sbTotal;
 
     @Override
     public void updateUI() {
@@ -70,13 +74,37 @@ public class MakePizzaActivity extends BaseActivity {
         llIngredients = (LinearLayout) findViewById(R.id.llIngredients);
         rlContent = (RelativeLayout) findViewById(R.id.rlContent);
         ivPizza = (ImageView) findViewById(R.id.ivPizza);
+        tvTotal = (TextView) findViewById(R.id.tvTotal);
+        btnClear = (Button) findViewById(R.id.btnClear);
+        btnAdd = (Button) findViewById(R.id.btnAdd);
 
-        findViewById(R.id.btnClear).setOnClickListener(listenerClear);
+        btnClear.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                clearPizza();
+            }
+        });
+        btnAdd.setOnClickListener(listenerAdd);
 
         // cлушаем события перетягивания на нашу пиццу
         ivPizza.setOnDragListener(onDragListenerIngredient);
 
         basicListIngredients = Ingredients.getIngredients();
+        listIdAllImageView = new ArrayList<>();
+
+        // id для ImageView берем по значению картинки из ресурсов программы
+        for (int i = 0; i < basicListIngredients.size(); i++) {
+            ImageView ivCurrent = new ImageView(this);
+            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(150, 150);
+            ivCurrent.setLayoutParams(params);
+            ivCurrent.setId(basicListIngredients.get(i).getListImageResource());
+            listIdAllImageView.add(basicListIngredients.get(i).getListImageResource());
+            ivCurrent.setPadding(2, 2, 2, 2);
+            ivCurrent.setImageBitmap(
+                    BitmapFactory.decodeResource(getResources(), basicListIngredients.get(i).getListImageResource()));
+            ivCurrent.setOnLongClickListener(ingredientLongClickListener);
+            llIngredients.addView(ivCurrent);
+        }
         clearPizza();
     }
 
@@ -87,50 +115,25 @@ public class MakePizzaActivity extends BaseActivity {
             ClipData data = ClipData.newPlainText("", "");
             View.DragShadowBuilder shadowBuilder = new View.DragShadowBuilder(view);
             view.startDrag(data, shadowBuilder, view, 0);
-            currentIngredient = (ImageView) view;
-            numCurrentIngredient = view.getId();
+            ivCurrentIngredient = (ImageView) view;
             return true;
         }
     };
 
-//    View.OnTouchListener ingredientTouchListener = new View.OnTouchListener() {
-//        @Override
-//        public boolean onTouch(View view, MotionEvent motionEvent) {
-//
-//            if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
-//                ClipData data = ClipData.newPlainText("", "");
-//                View.DragShadowBuilder shadowBuilder = new View.DragShadowBuilder(view);
-//                view.startDrag(data, shadowBuilder, view, 0);
-//                view.setVisibility(View.GONE);
-//                return true;
-//            } else {
-//                return false;
-//            }
-//        }
-//    };
 
-    /** Убираем все ингредиенты */
+    /** Убираем все выбранные ингредиенты  и показываем иконки скрытые */
     private void clearPizza(){
-        if (listIngredients == null) {
-            listIngredients = new ArrayList<>();
+        if (listIngredientsLayers == null) {
+            listIngredientsLayers = new ArrayList<>();
         } else {
-            listIngredients.clear();
+            listIngredientsLayers.clear();
+            setVisibleIngredients();
         }
-
-        //todo создание перенести в онкриете, а тут просто видимость включать
-        llIngredients.removeAllViews();
-
-        for (int i = 0; i < basicListIngredients.size(); i++) {
-            ImageView ivCurrent = new ImageView(this);
-            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(150, 150);
-            ivCurrent.setLayoutParams(params);
-            ivCurrent.setId(i);
-            ivCurrent.setPadding(2, 2, 2, 2);
-            ivCurrent.setImageBitmap(
-                    BitmapFactory.decodeResource(getResources(), basicListIngredients.get(i).getListImageResource()));
-            ivCurrent.setOnLongClickListener(ingredientLongClickListener);
-            llIngredients.addView(ivCurrent);
+        for (int i = 0; i < llIngredients.getChildCount(); i++) {
+            llIngredients.getChildAt(0).setVisibility(View.VISIBLE);
         }
+        sbTotal = new StringBuffer();
+        tvTotal.setText(sbTotal);
         updatePizza();
     }
 
@@ -147,19 +150,28 @@ public class MakePizzaActivity extends BaseActivity {
         canvas.drawBitmap(basis, 0, 0, null);
 
         // выводим все слои с массива - выбранные ингредиенты
-        for (int resource: listIngredients){
+        for (int resource: listIngredientsLayers){
             Bitmap layer = BitmapFactory.decodeResource(getResources(), resource);
             canvas.drawBitmap(layer, 0, 0, null);
         }
 
         // Выводим картинку во вью
         ivPizza.setImageBitmap(result);
+
+        if (sbTotal.length() == 0) {
+            btnAdd.setVisibility(View.GONE);
+            btnClear.setVisibility(View.GONE);
+        } else {
+            btnAdd.setVisibility(View.VISIBLE);
+            btnClear.setVisibility(View.VISIBLE);
+        }
     }
 
-    private View.OnClickListener listenerClear = new View.OnClickListener() {
+
+    private View.OnClickListener listenerAdd =  new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            clearPizza();
+
         }
     };
 
@@ -185,8 +197,12 @@ public class MakePizzaActivity extends BaseActivity {
 
                 case DragEvent.ACTION_DROP:
                     // Скрываем ингредиент в списке и добавляем новый слой в массив, перерисовываем
-                    currentIngredient.setVisibility(View.GONE);
-                    listIngredients.add(basicListIngredients.get(numCurrentIngredient).getPizzaImageResource());
+                    ivCurrentIngredient.setVisibility(View.GONE);
+                    Ingredient choosedIngredient = getIngredientWithId(ivCurrentIngredient.getId());
+                    sbTotal.append(choosedIngredient.getName() + " " +
+                            Utils.toPrice(choosedIngredient.getPrice()) + "\n");
+                    tvTotal.setText(sbTotal);
+                    listIngredientsLayers.add(choosedIngredient.getPizzaImageResource());
                     updatePizza();
                     Log.d(TAG, "Action is DragEvent.ACTION_DRAG_DROPPED");
                     break;
@@ -198,7 +214,21 @@ public class MakePizzaActivity extends BaseActivity {
         }
     };
 
+    /** Находим по айди ImageView инредиент (id задаются как listImageResource) */
+    private Ingredient getIngredientWithId(int id){
+        for (Ingredient ingredient: basicListIngredients) {
+            if (ingredient.getListImageResource() == id){
+                return ingredient;
+            }
+        }
+        return null;
+    }
 
+    private void setVisibleIngredients(){
+        for (int id: listIdAllImageView) {
+            findViewById(id).setVisibility(View.VISIBLE);
+        }
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
