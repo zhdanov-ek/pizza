@@ -38,13 +38,15 @@ public class MakePizzaActivity extends BaseActivity {
     private RelativeLayout rlContent;
     private LinearLayout llIngredients;
     private ImageView ivPizza;
-    private TextView tvTotal;
+    private TextView tvTotalSum;
+    private TextView tvListIngredients;
     private Button btnClear, btnAdd;
     private ArrayList<Integer> listIdAllImageView;
     private ArrayList<Integer> listIngredientsLayers;
     private ArrayList<Ingredient> basicListIngredients;
     private ImageView ivCurrentIngredient;
     private StringBuffer sbTotal;
+    private float totalSum;
 
     @Override
     public void updateUI() {
@@ -74,7 +76,8 @@ public class MakePizzaActivity extends BaseActivity {
         llIngredients = (LinearLayout) findViewById(R.id.llIngredients);
         rlContent = (RelativeLayout) findViewById(R.id.rlContent);
         ivPizza = (ImageView) findViewById(R.id.ivPizza);
-        tvTotal = (TextView) findViewById(R.id.tvTotal);
+        tvListIngredients = (TextView) findViewById(R.id.tvListIngredients);
+        tvTotalSum = (TextView) findViewById(R.id.tvTotal);
         btnClear = (Button) findViewById(R.id.btnClear);
         btnAdd = (Button) findViewById(R.id.btnAdd);
 
@@ -133,7 +136,8 @@ public class MakePizzaActivity extends BaseActivity {
             llIngredients.getChildAt(0).setVisibility(View.VISIBLE);
         }
         sbTotal = new StringBuffer();
-        tvTotal.setText(sbTotal);
+        tvListIngredients.setText(sbTotal);
+        tvTotalSum.setText("");
         updatePizza();
     }
 
@@ -196,12 +200,22 @@ public class MakePizzaActivity extends BaseActivity {
                     break;
 
                 case DragEvent.ACTION_DROP:
+                    if (sbTotal.length() == 0){
+                        sbTotal.append("\n" + Ingredients.getBasis().getName() + " " +
+                            Utils.toPrice(Ingredients.getBasis().getPrice()));
+                        totalSum = Ingredients.getBasis().getPrice();
+                    }
+
                     // Скрываем ингредиент в списке и добавляем новый слой в массив, перерисовываем
                     ivCurrentIngredient.setVisibility(View.GONE);
                     Ingredient choosedIngredient = getIngredientWithId(ivCurrentIngredient.getId());
-                    sbTotal.append(choosedIngredient.getName() + " " +
-                            Utils.toPrice(choosedIngredient.getPrice()) + "\n");
-                    tvTotal.setText(sbTotal);
+                    sbTotal.append("\n" + choosedIngredient.getName() + " " +
+                            Utils.toPrice(choosedIngredient.getPrice()));
+                    tvListIngredients.setText(sbTotal);
+                    totalSum += choosedIngredient.getPrice();
+                    String strTotal = getResources().getString(R.string.total) + " = " +
+                        Utils.toPrice(totalSum);
+                    tvTotalSum.setText(strTotal);
                     listIngredientsLayers.add(choosedIngredient.getPizzaImageResource());
                     updatePizza();
                     Log.d(TAG, "Action is DragEvent.ACTION_DRAG_DROPPED");

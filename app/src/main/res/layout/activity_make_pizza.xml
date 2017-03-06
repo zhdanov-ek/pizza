@@ -48,35 +48,40 @@
                     android:layout_gravity="center_horizontal"
                     tools:src="@drawable/pizza_basis" />
 
-
                 <TextView
-                    android:id="@+id/tvTotal"
+                    android:id="@+id/tvListIngredients"
                     style="@style/textMiddle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/ivPizza"
                     android:text="Bacon 3 usd" />
 
+                <TextView
+                    android:id="@+id/tvTotal"
+                    style="@style/textMiddle"
+                    android:textColor="@color/colorButtonFlatTextPositive"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/tvListIngredients"
+                    android:text="Total : 3 usd" />
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/tvTotal"
                     android:gravity="center"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:padding="@dimen/ll_padding">
 
                     <Button
                         android:id="@+id/btnClear"
                         style="@style/RaisedButtonNegative"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
                         android:layout_marginRight="5dp"
                         android:text="@string/clear" />
 
                     <Button
                         android:id="@+id/btnAdd"
                         style="@style/RaisedButtonPositive"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
                         android:text="@string/add" />
 
                 </LinearLayout>

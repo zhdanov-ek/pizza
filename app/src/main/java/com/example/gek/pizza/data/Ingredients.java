@@ -23,4 +23,8 @@ public class Ingredients {
 
         return list;
     }
+
+    public static Ingredient getBasis(){
+        return new Ingredient("Basis and cheese", 40, 0, 0);
+    }
 }
