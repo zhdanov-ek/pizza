@@ -39,21 +39,35 @@
                 android:layout_height="match_parent"
                 android:padding="@dimen/activity_padding">
 
-                <ImageView
-                    android:id="@+id/ivPizza"
-                    android:layout_width="@dimen/make_pizza_size_basis_pizza"
-                    android:layout_height="@dimen/make_pizza_size_basis_pizza"
-                    android:layout_alignParentTop="true"
-                    android:layout_centerHorizontal="true"
-                    android:layout_gravity="center_horizontal"
-                    tools:src="@drawable/pizza_basis" />
+                <RelativeLayout
+                    android:id="@+id/llPizza"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:id="@+id/ivFocus"
+                        android:layout_width="@dimen/make_pizza_size_basis_focus"
+                        android:layout_height="@dimen/make_pizza_size_basis_focus"
+                        android:src="@drawable/bg_oval"
+                        android:layout_centerInParent="true"
+                        android:visibility="invisible"/>
+
+                    <ImageView
+                        android:id="@+id/ivPizza"
+                        android:layout_width="@dimen/make_pizza_size_basis_pizza"
+                        android:layout_height="@dimen/make_pizza_size_basis_pizza"
+                        tools:src="@drawable/pizza_basis"
+                        android:layout_centerInParent="true"/>
+
+                </RelativeLayout>
+
 
                 <TextView
                     android:id="@+id/tvListIngredients"
                     style="@style/textMiddle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/ivPizza"
+                    android:layout_below="@+id/llPizza"
                     android:text="Bacon 3 usd" />
 
                 <TextView

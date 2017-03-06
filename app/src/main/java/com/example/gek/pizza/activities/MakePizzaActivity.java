@@ -14,6 +14,8 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -38,6 +40,7 @@ public class MakePizzaActivity extends BaseActivity {
     private RelativeLayout rlContent;
     private LinearLayout llIngredients;
     private ImageView ivPizza;
+    private ImageView ivFocus;
     private TextView tvTotalSum;
     private TextView tvListIngredients;
     private Button btnClear, btnAdd;
@@ -47,6 +50,8 @@ public class MakePizzaActivity extends BaseActivity {
     private ImageView ivCurrentIngredient;
     private StringBuffer sbTotal;
     private float totalSum;
+    private Animation animShow;
+    private Animation animHide;
 
     @Override
     public void updateUI() {
@@ -73,9 +78,13 @@ public class MakePizzaActivity extends BaseActivity {
         mDrawer.addDrawerListener(toggle);
         toggle.syncState();
 
+        animShow = AnimationUtils.loadAnimation(this, R.anim.alpha_show);
+        animHide = AnimationUtils.loadAnimation(this, R.anim.alpha_hide);
+
         llIngredients = (LinearLayout) findViewById(R.id.llIngredients);
         rlContent = (RelativeLayout) findViewById(R.id.rlContent);
         ivPizza = (ImageView) findViewById(R.id.ivPizza);
+        ivFocus = (ImageView) findViewById(R.id.ivFocus);
         tvListIngredients = (TextView) findViewById(R.id.tvListIngredients);
         tvTotalSum = (TextView) findViewById(R.id.tvTotal);
         btnClear = (Button) findViewById(R.id.btnClear);
@@ -95,14 +104,18 @@ public class MakePizzaActivity extends BaseActivity {
         basicListIngredients = Ingredients.getIngredients();
         listIdAllImageView = new ArrayList<>();
 
+        int sizeIngredient = (int) getResources().getDimension(R.dimen.make_pizza_size_ingredient_in_list);
+        int paddingIngredient = (int) getResources().getDimension(R.dimen.make_pizza_padding_ingredient_in_list);
         // id для ImageView берем по значению картинки из ресурсов программы
         for (int i = 0; i < basicListIngredients.size(); i++) {
             ImageView ivCurrent = new ImageView(this);
-            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(150, 150);
+
+
+            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(sizeIngredient, sizeIngredient);
             ivCurrent.setLayoutParams(params);
             ivCurrent.setId(basicListIngredients.get(i).getListImageResource());
             listIdAllImageView.add(basicListIngredients.get(i).getListImageResource());
-            ivCurrent.setPadding(2, 2, 2, 2);
+            ivCurrent.setPadding(paddingIngredient, paddingIngredient, paddingIngredient, paddingIngredient);
             ivCurrent.setImageBitmap(
                     BitmapFactory.decodeResource(getResources(), basicListIngredients.get(i).getListImageResource()));
             ivCurrent.setOnLongClickListener(ingredientLongClickListener);
@@ -111,6 +124,8 @@ public class MakePizzaActivity extends BaseActivity {
         clearPizza();
     }
 
+
+    /** Начинаем тянуть картинку */
     View.OnLongClickListener ingredientLongClickListener = new View.OnLongClickListener() {
         @Override
         public boolean onLongClick(View view) {
@@ -185,28 +200,21 @@ public class MakePizzaActivity extends BaseActivity {
         @Override
         public boolean onDrag(View view, DragEvent dragEvent) {
             switch (dragEvent.getAction()) {
-                case DragEvent.ACTION_DRAG_STARTED:
-                    Log.d(TAG, "Action is DragEvent.ACTION_DRAG_STARTED");
-                    break;
-
-                case DragEvent.ACTION_DRAG_LOCATION:
-                    float X = dragEvent.getX();
-                    float Y = dragEvent.getY();
-                    Log.d(TAG, "X " + (int) X + " Y " + (int) Y);
-                    break;
-
                 case DragEvent.ACTION_DRAG_ENTERED:
+                    ivFocus.startAnimation(animShow);
+                    ivFocus.setVisibility(View.VISIBLE);
                     Log.d(TAG, "Action is DragEvent.ACTION_DRAG_ENTERED");
                     break;
 
                 case DragEvent.ACTION_DROP:
+                    // Если это первый ингредиент то добавляем сначала основу
                     if (sbTotal.length() == 0){
                         sbTotal.append("\n" + Ingredients.getBasis().getName() + " " +
                             Utils.toPrice(Ingredients.getBasis().getPrice()));
                         totalSum = Ingredients.getBasis().getPrice();
                     }
 
-                    // Скрываем ингредиент в списке и добавляем новый слой в массив, перерисовываем
+                    // Скрываем ингредиент в списке и добавляем новый ингредиент
                     ivCurrentIngredient.setVisibility(View.GONE);
                     Ingredient choosedIngredient = getIngredientWithId(ivCurrentIngredient.getId());
                     sbTotal.append("\n" + choosedIngredient.getName() + " " +
@@ -218,9 +226,16 @@ public class MakePizzaActivity extends BaseActivity {
                     tvTotalSum.setText(strTotal);
                     listIngredientsLayers.add(choosedIngredient.getPizzaImageResource());
                     updatePizza();
+                    ivFocus.startAnimation(animHide);
+                    ivFocus.setVisibility(View.INVISIBLE);
                     Log.d(TAG, "Action is DragEvent.ACTION_DRAG_DROPPED");
                     break;
 
+                case DragEvent.ACTION_DRAG_EXITED:
+                    ivFocus.startAnimation(animHide);
+                    ivFocus.setVisibility(View.INVISIBLE);
+                    Log.d(TAG, "Action is DragEvent.ACTION_DRAG_EXITED");
+                    break;
                 default:
                     break;
             }

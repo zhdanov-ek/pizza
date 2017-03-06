@@ -15,4 +15,12 @@
     <dimen name="item_dish_photo_height">115dp</dimen>
     <dimen name="item_dish_offset">10dp</dimen>
     <dimen name="item_dish_offset_land">35dp</dimen>
+
+
+    <!-- MAKE PIZZA -->
+    <dimen name="make_pizza_size_basis_pizza">180dp</dimen>
+    <dimen name="make_pizza_size_basis_focus">190dp</dimen>
+    <dimen name="make_pizza_size_ingredient_in_list">100dp</dimen>
+    <dimen name="make_pizza_padding_ingredient_in_list">2dp</dimen>
+
 </resources>
