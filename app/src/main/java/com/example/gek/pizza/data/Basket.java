@@ -4,11 +4,17 @@ import java.util.ArrayList;
 
 /**
  * Синглтон - корзина, куда добавляются и где хранятся все заказы
+ *
+ * Своя собранная пицца формируется в модель Dish на лету и не хранится в общем списке блюд как шаблон
+ * В заказе на доставку она храниится в отдельном массиве
  */
 
 public class Basket {
     public ArrayList<Order> orders;
     private static Basket instance;
+    private ArrayList<String> textMyPizza;      // Списки ингрединтов кастомных пицц
+
+    private ArrayList<Integer> numbersMyPizza;  // Количество каждой кастомной пиццы
 
 
     private Basket() {
@@ -69,6 +75,30 @@ public class Basket {
         return list;
     }
 
+    // Изымаем кастомные пиццы из общего списка заказов и помещаем их в отдельные массивы
+    public Boolean extractMyPizza(){
+        Boolean isFinded  = false;
+        textMyPizza = new ArrayList<>();
+        numbersMyPizza = new ArrayList<>();
+        for (int i = 0; i < orders.size(); i++) {
+            Order order = orders.get(i);
+            if (order.getKeyDish().contentEquals(Const.KEY_DISH_MY_PIZZA)){
+                textMyPizza.add(order.getDish().getDescription());
+                numbersMyPizza.add(order.getCount());
+                orders.remove(i);
+                isFinded = true;
+            }
+        }
+        return isFinded;
+    }
+
+    public ArrayList<String> getTextMyPizza() {
+        return textMyPizza;
+    }
+
+    public ArrayList<Integer> getNumbersMyPizza() {
+        return numbersMyPizza;
+    }
 
 
 }

@@ -74,7 +74,7 @@
     <string name="mes_no_internet">No internet connection</string>
     <string name="mes_no_records">No data in the program</string>
     <string name="mes_check_data">Please check data</string>
-    <string name="mes_have_delivery">You have active delivery now</string>
+    <string name="mes_have_delivery">You have active delivery</string>
     <string name="mes_no_orders">Here is empty. First, you need to add one or more dish.</string>
     <string name="mes_your_order_performed">Your order performed now</string>
 
@@ -206,4 +206,6 @@
     <string name="msg_link_auth">You have already signed in with %1$s. Please confirm your account, and in future you will be able to sign in with %2$s.</string>
 
 
+    <!--- MAKE THE PIZZA  -->
+    <string name="name_of_pizza">My pizza</string>
 </resources>

@@ -2,7 +2,6 @@ package com.example.gek.pizza.adapters;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,7 +12,6 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.gek.pizza.R;
-import com.example.gek.pizza.activities.BasketActivity;
 import com.example.gek.pizza.data.Basket;
 import com.example.gek.pizza.data.Order;
 import com.example.gek.pizza.helpers.Utils;
@@ -23,11 +21,11 @@ import com.example.gek.pizza.helpers.Utils;
  * Адаптер формирующий список заказа
  */
 
-public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder>{
+public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.ViewHolder>{
     private Context ctx;
     private RefreshTotalCallback refreshTotalCallback;
 
-    public OrderAdapter(Context ctx) {
+    public OrdersAdapter(Context ctx) {
         this.ctx = ctx;
         // проверяем реализует ли активити интерфейс нашего адаптера
         try {
@@ -46,14 +44,14 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder>{
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(ctx).inflate(R.layout.item_order_dish, parent, false);
-        OrderAdapter.ViewHolder viewHolder = new OrderAdapter.ViewHolder(view);
+        OrdersAdapter.ViewHolder viewHolder = new OrdersAdapter.ViewHolder(view);
         return viewHolder;
     }
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         final Order order = Basket.getInstance().orders.get(position);
-        if (order.getPhotoUrlDish().length() > 0){
+        if ((order.getPhotoUrlDish() != null ) && (order.getPhotoUrlDish().length() > 0)){
             Glide.with(ctx)
                     .load(order.getPhotoUrlDish())
                     .diskCacheStrategy(DiskCacheStrategy.SOURCE)

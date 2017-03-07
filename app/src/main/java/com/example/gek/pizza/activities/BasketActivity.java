@@ -1,9 +1,7 @@
 package com.example.gek.pizza.activities;
 
 import android.content.Intent;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -14,14 +12,12 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.gek.pizza.R;
-import com.example.gek.pizza.adapters.OrderAdapter;
+import com.example.gek.pizza.adapters.OrdersAdapter;
 import com.example.gek.pizza.data.Basket;
 import com.example.gek.pizza.data.Connection;
 import com.example.gek.pizza.data.Const;
-import com.example.gek.pizza.data.Order;
 import com.example.gek.pizza.data.StateLastDelivery;
 import com.example.gek.pizza.helpers.Utils;
 import com.google.firebase.auth.FirebaseAuth;
@@ -33,7 +29,7 @@ import static com.example.gek.pizza.data.Const.db;
 
 /**  Отображает корзину заказов и отправляет заказ */
 
-public class BasketActivity extends BaseActivity implements OrderAdapter.RefreshTotalCallback{
+public class BasketActivity extends BaseActivity implements OrdersAdapter.RefreshTotalCallback{
 
     private RecyclerView rv;
     private TextView tvEmpty;
@@ -132,7 +128,7 @@ public class BasketActivity extends BaseActivity implements OrderAdapter.Refresh
                 mIsSetListener = true;
                 // если в корзине есть, что-то то показываем список блюд
                 if (Basket.getInstance().orders.size() > 0) {
-                    OrderAdapter orderAdapter = new OrderAdapter(this);
+                    OrdersAdapter orderAdapter = new OrdersAdapter(this);
                     rv.setAdapter(orderAdapter);
                 } else {
                     // Если корзина пуста то информируем об этом
@@ -145,7 +141,7 @@ public class BasketActivity extends BaseActivity implements OrderAdapter.Refresh
                 //AUTH_NULL
                 // если в корзине есть, что-то то показываем
                 if (Basket.getInstance().orders.size() > 0) {
-                    OrderAdapter orderAdapter = new OrderAdapter(this);
+                    OrdersAdapter orderAdapter = new OrdersAdapter(this);
                     rv.setAdapter(orderAdapter);
                 } else {
                     // Если корзина пуста то информируем об этом

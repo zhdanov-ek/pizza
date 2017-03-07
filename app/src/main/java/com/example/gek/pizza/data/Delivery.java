@@ -5,6 +5,13 @@ import java.util.Date;
 
 /**
  * Класс используется для передачи заявки на доставку в заведение
+ *
+ * Содержит в себе:
+ * - контактную информацию о клиенте
+ * - список блюд и их количество
+ * - описания кастомных пицц и их количество
+ * - сумму всего заказа
+ * - время обработки заказа в заведении на каждом из этапов
  */
 
 public class Delivery {
@@ -14,17 +21,19 @@ public class Delivery {
     private String commentClient;
     private String commentShop;
     private float totalSum;
-    private ArrayList<Integer> numbersDishes;   // количество каждого блюда в заказе
-    private ArrayList<String> keysDishes;       // ключи каждого из блюд в заказе
+    private ArrayList<String> keysDishes;       // Ключи каждого из блюд в заказе
+    private ArrayList<Integer> numbersDishes;   // Количество каждого блюда в заказе
+    private ArrayList<String> textMyPizza;      // Списки ингрединтов кастомных пицц
+    private ArrayList<Integer> numbersMyPizza;  // Количество каждой кастомной пиццы
     private String key;
-    private Date dateNew;                       // время смены состояния доставки
+    private Date dateNew;                       // Время смены состояния доставки
     private Date dateCooking;
     private Date dateTransport;
     private Date dateArchive;
-    private Boolean isPaid;
-    private String userId;                      // владелец заказа - FireBaseAuth user ID
+    private Boolean isPaid;                     // оплачен/не оплачен заказ (для индикации в архиве)
+    private String userId;                      // Владелец заказа - FireBaseAuth user ID
     private String userEmail;
-    private String longitude;                   // где создавался заказ
+    private String longitude;                   // Где создавался заказ
     private String latitude;
 
 
@@ -96,6 +105,22 @@ public class Delivery {
         this.keysDishes = keysDishes;
     }
 
+    public ArrayList<String> getTextMyPizza() {
+        return textMyPizza;
+    }
+
+    public void setTextMyPizza(ArrayList<String> textMyPizza) {
+        this.textMyPizza = textMyPizza;
+    }
+
+    public ArrayList<Integer> getNumbersMyPizza() {
+        return numbersMyPizza;
+    }
+
+    public void setNumbersMyPizza(ArrayList<Integer> numbersMyPizza) {
+        this.numbersMyPizza = numbersMyPizza;
+    }
+
     public String getKey() {
         return key;
     }
@@ -152,7 +177,6 @@ public class Delivery {
         this.userId = userId;
     }
 
-
     public String getUserEmail() {
         return userEmail;
     }
@@ -168,7 +192,6 @@ public class Delivery {
     public void setLongitude(String longitude) {
         this.longitude = longitude;
     }
-
 
     public String getLatitude() {
         return latitude;

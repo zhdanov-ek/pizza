@@ -23,8 +23,10 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.gek.pizza.R;
+import com.example.gek.pizza.data.Basket;
 import com.example.gek.pizza.data.Connection;
 import com.example.gek.pizza.data.Const;
+import com.example.gek.pizza.data.Dish;
 import com.example.gek.pizza.data.Ingredient;
 import com.example.gek.pizza.data.Ingredients;
 import com.example.gek.pizza.helpers.Utils;
@@ -69,7 +71,7 @@ public class MakePizzaActivity extends BaseActivity {
         mDrawer.addView(contentView, 0);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolBar);
-        toolbar.setTitle("");
+        toolbar.setTitle(R.string.title_make_pizza);
         setSupportActionBar(toolbar);
 
         //add button for open DrawerLayout
@@ -96,7 +98,12 @@ public class MakePizzaActivity extends BaseActivity {
                 clearPizza();
             }
         });
-        btnAdd.setOnClickListener(listenerAdd);
+        btnAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                addPizzaToBasket();
+            }
+        });
 
         // cлушаем события перетягивания на нашу пиццу
         ivPizza.setOnDragListener(onDragListenerIngredient);
@@ -187,13 +194,17 @@ public class MakePizzaActivity extends BaseActivity {
     }
 
 
-    private View.OnClickListener listenerAdd =  new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
+   /** Добавляем пиццу в корзину (заворачиваем данные в Dish, который принимает наш адаптер в корзине */
+    private void addPizzaToBasket(){
+        Dish pizza = new Dish();
+        pizza.setName(getResources().getString(R.string.name_of_pizza));
+        pizza.setDescription(sbTotal.toString());
+        pizza.setPrice(totalSum);
+        pizza.setKey(Const.KEY_DISH_MY_PIZZA);
 
-        }
-    };
-
+        Basket.getInstance().addDish(pizza);
+        clearPizza();
+    }
 
     /** Отрабатываем события во время перетягивания */
     private View.OnDragListener onDragListenerIngredient = new View.OnDragListener() {
