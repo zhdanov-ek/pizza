@@ -54,6 +54,7 @@
     <string name="title_reserve_table">Reserve table</string>
     <string name="title_reserve_table_delete">Delete</string>
     <string name="title_authentication">Authentication</string>
+    <string name="title_push">Send notification</string>
 
 
     <!-- MAIN MENU -->
@@ -195,6 +196,7 @@
     <string name="table_name_8">table8</string>
 
     <string name="facebook_app_id">405419523151306</string>
+    <string name="firebase_server_key">AAAA7nMzSqQ:APA91bE3YJQt794cGiH6OusEd2LJQZpms4nQkrF9YEnTYVnHn0dilsr-aM3v7B9Vuc4eUJDFdhaHm7BJGvRB8tPgQUeu9-IPUfGz9RV7aH0LQtCzh8r6YPiMf2lisOFIuvCuuqNVMugt</string>
 
     <!--Authentication-->
     <string name="facebook_sign_in">FACEBOOK</string>
@@ -202,6 +204,13 @@
     <string name="title_auth">Sign in with your account</string>
     <string name="authentication_failed">Authentication failed</string>
     <string name="msg_link_auth">You have already signed in with %1$s. Please confirm your account, and in future you will be able to sign in with %2$s.</string>
+
+    <!--Notifications-->
+    <string name="hint_push_title">Title of the message</string>
+    <string name="hint_push_message">Your message</string>
+    <string name="notification_send_success">Notification send</string>
+    <string name="notification_send_failed">Notification send failed</string>
+
 
 
 </resources>

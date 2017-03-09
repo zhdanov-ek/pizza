@@ -10,6 +10,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -62,7 +64,10 @@ public class AuthenticationActivity extends BaseActivity
     private static LoginResult loginResultFacebook;
     private final String VISIBILITY_BUTTON_GOOGLE = "visibility_button_google";
     private final String VISIBILITY_BUTTON_FACEBOOK = "visibility_button_facebook";
+
     private final String VISIBILITY_TV_STATUS = "visibility_tv_status";
+    private RadioButton rbtnUser,rbtnAdmin;
+    private RadioGroup rgUserAdmin;
 
     private boolean isBtnGoogleSignInVisibile, isBtnFacebookSignInVisible, isTvStatusVisible;
 
@@ -134,6 +139,24 @@ public class AuthenticationActivity extends BaseActivity
 
         btnGoogleSignIn.setOnClickListener(this);
         btnFacebookSignIn.setOnClickListener(this);
+
+        //убрать, для удобной отладки, потом убрать
+        signInAsAdmin = false;
+
+        rbtnUser = (RadioButton) findViewById(R.id.rbtnUser);
+        rbtnAdmin  = (RadioButton) findViewById(R.id.rbtnAdmin);
+        rgUserAdmin = (RadioGroup) findViewById(R.id.rgUserAdmin);
+
+        rbtnUser.setChecked(true);
+        signInAsAdmin = false;
+        rgUserAdmin.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener()
+        {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                signInAsAdmin = rbtnAdmin.isChecked();
+
+            }
+        });
 
         // Формируем параметры GoogleApiClient, которые будут переданы при создании намерения при авторизации
         GoogleSignInOptions gso = new GoogleSignInOptions

@@ -1,12 +1,12 @@
 package com.example.gek.pizza.activities;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -16,6 +16,7 @@ import com.example.gek.pizza.R;
 import com.example.gek.pizza.data.Connection;
 import com.example.gek.pizza.data.Const;
 import com.example.gek.pizza.data.Favorites;
+import com.example.gek.pizza.helpers.Utils;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -30,6 +31,7 @@ public abstract class BaseActivity extends AppCompatActivity
     public abstract void updateUI();
 
     private String TAG = this.getClass().getSimpleName();
+    public static boolean signInAsAdmin = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,11 +72,20 @@ public abstract class BaseActivity extends AppCompatActivity
                     // Check user: is shop or other users
 
                     tvAuth.setText(user.getDisplayName() + "\n" +user.getEmail());
-                    if (user.getEmail().contentEquals(Connection.getInstance().getShopEmail())){
+                    if (((user.getEmail().contentEquals(Connection.getInstance().getShopEmail()))
+                            //убрать, для удобной отладки, потом убрать
+                            && signInAsAdmin) || (signInAsAdmin)) {
                         Connection.getInstance().setCurrentAuthStatus(Const.AUTH_SHOP);
+
+                        // если admin то отписываемся от рассылки
+                        Utils.subscribeOrUnsubscribeFromTopic(false);
+
                         Log.d(TAG, "FireBase authentication success (SHOP) " + user.getEmail());
                     } else {
                         Connection.getInstance().setCurrentAuthStatus(Const.AUTH_USER);
+
+                        Utils.subscribeOrUnsubscribeFromTopic(true);
+
                         Log.d(TAG, "FireBase authentication success (USER) " + user.getEmail());
                     }
                 } else {
@@ -168,6 +179,8 @@ public abstract class BaseActivity extends AppCompatActivity
             case R.id.nav_about:
                 startActivity(new Intent(this, AboutActivity.class));
                 break;
+            case R.id.nav_push:
+                startActivity(new Intent(this,PushActivity.class));
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

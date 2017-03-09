@@ -53,6 +53,7 @@ dependencies {
     compile "com.google.firebase:firebase-auth:$googleVer"
     compile "com.google.firebase:firebase-database:$googleVer"
     compile "com.google.firebase:firebase-storage:$googleVer"
+    compile "com.google.firebase:firebase-messaging:$googleVer"
     compile "com.google.android.gms:play-services-maps:$googleVer"
     compile "com.google.android.gms:play-services-location:$googleVer"
 

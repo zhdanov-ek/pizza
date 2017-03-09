@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include layout="@layout/toolbar" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:id="@+id/etPushTitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:hint="@string/hint_push_title"
+                    android:inputType="text"
+                    android:maxLength="50" />
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:id="@+id/etPushMessage"
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp"
+                    android:layout_marginTop="5dp"
+                    android:hint="@string/hint_push_message"
+                    android:inputType="textMultiLine"
+                    android:maxLength="500" />
+            </android.support.design.widget.TextInputLayout>
+
+
+            <Spinner
+                android:id="@+id/spinnerTopics"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:spinnerMode="dropdown" />
+
+
+            <Button
+                android:id="@+id/btnSendMessage"
+                style="@style/RaisedButtonPositive"
+                android:layout_gravity="center"
+                android:layout_marginTop="@dimen/auth_title_margin_top"
+                android:text="Send " />
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

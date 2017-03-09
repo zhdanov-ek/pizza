@@ -17,6 +17,7 @@ public class Const {
     public static final String CHILD_TABLES = "tables";
     public static final String CHILD_RESERVED_TABLES_NEW = "reserved_tables/new";
     public static final String CHILD_RESERVED_TABLES_ARCHIVE = "reserved_tables/archive";
+    public static final String CHILD_TOPICS = "topics";
 
     public static final String CHILD_USERS = "users";
     public static final String CHILD_USER_DELIVERY_STATE = "delivery_state";
@@ -105,11 +106,22 @@ public class Const {
     public static final Integer ODRED_NOTIFY_ID = 1;
     public static final Integer STATUS_CHECKED_BY_ADMIN = 1;
     public static final Integer RESERVED_TABLE_USER_NOTIFY_ID = 201;
+    public static final Integer PUSH_NITIFICATIONS_ID = 301;
 
     public static final int RESERVATION_TABLE_STATE_CONFIRMED = 1;
     public static final int RESERVATION_TABLE_STATE_CANCEL = 2;
 
     public static final String GOOGLE_PROVIDER = "google.com";
     public static final String FACEBOOK_PROVIDER = "facebook.com";
+
+    public static final String FCM_TITLE="title";
+    public static final String FCM_BODY="body";
+    public static final String FCM_DATA="data";
+    public static final String FCM_TO="to";
+    public static final String FCM_TOPICS="/topics/";
+    public static final String FCM_AUTHORIZATION="authorization";
+    public static final String FCM_KEY="key=";
+    public static final String FCM_API="https://fcm.googleapis.com/fcm/send";
+
 
 }

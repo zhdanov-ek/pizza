@@ -5,7 +5,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -115,8 +114,8 @@ public class MainActivity extends BaseActivity
             }
         };
         Const.db.child(Const.CHILD_SETTINGS).addValueEventListener(settingsListener);
-    }
 
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

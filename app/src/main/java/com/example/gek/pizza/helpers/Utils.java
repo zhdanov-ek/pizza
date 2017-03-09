@@ -11,16 +11,17 @@ import android.text.Spanned;
 import android.widget.Toast;
 
 import com.example.gek.pizza.R;
+import com.example.gek.pizza.data.AllTopics;
 import com.example.gek.pizza.data.Basket;
 import com.example.gek.pizza.data.Const;
 import com.example.gek.pizza.data.Delivery;
 import com.example.gek.pizza.data.Dish;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Random;
 
 /**
  * Вспомогательные методы
@@ -172,6 +173,16 @@ public class Utils {
                     formatShort.format(delivery.getDateArchive());
         }
         return str;
+    }
+
+    public static void subscribeOrUnsubscribeFromTopic(boolean isSubscribe)  {
+        for (String topic: AllTopics.getInstance().topics) {
+            if(isSubscribe){
+                FirebaseMessaging.getInstance().subscribeToTopic(topic);
+            } else{
+                FirebaseMessaging.getInstance().unsubscribeFromTopic(topic);
+            }
+        }
     }
 
 //    public static long getTimeCreated(){

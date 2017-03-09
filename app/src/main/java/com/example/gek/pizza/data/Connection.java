@@ -17,7 +17,7 @@ public class Connection {
     private int currentAuthStatus;
 
     // Еmail of shop for auth as administration of pizzeria
-    private String shopEmail = "ivleshuch@gmail.com";
+    private String shopEmail = "ivleshch@gmail.com";
 
     public static synchronized Connection getInstance(){
         if (instance == null) {
@@ -54,9 +54,11 @@ public class Connection {
     public String getShopEmail() {
         return shopEmail;
     }
+
     public int getCurrentAuthStatus() {
         return currentAuthStatus;
     }
+
     public void setCurrentAuthStatus(int currentAuthStatus) {
         this.currentAuthStatus = currentAuthStatus;
     }
