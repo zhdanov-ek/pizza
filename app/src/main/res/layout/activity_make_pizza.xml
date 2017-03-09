@@ -1,15 +1,107 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/activity_make_pizza"
+    android:id="@+id/llMain"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
+    android:orientation="vertical"
     tools:context="com.example.gek.pizza.activities.MakePizzaActivity">
 
-    <include layout="@layout/toolbar"/>
+    <include layout="@layout/toolbar" />
 
-</RelativeLayout>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <HorizontalScrollView
+                android:id="@+id/horizontal_scroll"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:id="@+id/llIngredients"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                </LinearLayout>
+
+            </HorizontalScrollView>
+
+            <RelativeLayout
+                android:id="@+id/rlContent"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="@dimen/activity_padding">
+
+                <RelativeLayout
+                    android:id="@+id/llPizza"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:id="@+id/ivFocus"
+                        android:layout_width="@dimen/make_pizza_size_basis_focus"
+                        android:layout_height="@dimen/make_pizza_size_basis_focus"
+                        android:src="@drawable/bg_oval"
+                        android:layout_centerInParent="true"
+                        android:visibility="invisible"/>
+
+                    <ImageView
+                        android:id="@+id/ivPizza"
+                        android:layout_width="@dimen/make_pizza_size_basis_pizza"
+                        android:layout_height="@dimen/make_pizza_size_basis_pizza"
+                        tools:src="@drawable/pizza_basis"
+                        android:layout_centerInParent="true"/>
+
+                </RelativeLayout>
+
+
+                <TextView
+                    android:id="@+id/tvListIngredients"
+                    style="@style/textMiddle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/llPizza"
+                    android:text="Bacon 3 usd" />
+
+                <TextView
+                    android:id="@+id/tvTotal"
+                    style="@style/textMiddle"
+                    android:textColor="@color/colorButtonFlatTextPositive"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/tvListIngredients"
+                    android:text="Total : 3 usd" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/tvTotal"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/ll_padding">
+
+                    <Button
+                        android:id="@+id/btnClear"
+                        style="@style/RaisedButtonNegative"
+                        android:layout_marginRight="5dp"
+                        android:text="@string/clear" />
+
+                    <Button
+                        android:id="@+id/btnAdd"
+                        style="@style/RaisedButtonPositive"
+                        android:text="@string/add" />
+
+                </LinearLayout>
+
+            </RelativeLayout>
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

@@ -93,4 +93,10 @@
 
     <dimen name="auth_title_margin_top">25dp</dimen>
     <dimen name="auth_title_margin_bottom">15dp</dimen>
+
+    <!-- MAKE PIZZA -->
+    <dimen name="make_pizza_size_basis_pizza">180dp</dimen>
+    <dimen name="make_pizza_size_basis_focus">190dp</dimen>
+    <dimen name="make_pizza_size_ingredient_in_list">75dp</dimen>
+    <dimen name="make_pizza_padding_ingredient_in_list">3dp</dimen>
 </resources>

@@ -79,6 +79,9 @@ public class Const {
     public static final int REQUEST_EDIT_DISH = 11;
     public static final int REQUEST_RESERVE_TABLE = 12;
 
+    // Ключ для кастомной пиццы. Эти блюда не попадают в БД, а используются только на клиенте
+    public static final String KEY_DISH_MY_PIZZA = "my_pizza";
+
     //key для настроек
     public static final String SETTINGS_KEY             = "com.example.gek.pizza";
     public static final String SETTINGS_PHONE_KEY       = "phone";

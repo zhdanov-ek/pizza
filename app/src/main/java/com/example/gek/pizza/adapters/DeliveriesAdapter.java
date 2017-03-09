@@ -75,8 +75,17 @@ public class DeliveriesAdapter extends RecyclerView.Adapter<DeliveriesAdapter.Vi
         holder.tvTime.setText(Utils.getTimeHistoryDelivery(delivery, ctx));
         holder.tvEmail.setText(delivery.getUserEmail());
 
-        // По ключу блюда находим его в списке и получаем полную инфу. Берем кол-во и формируем строку
+
         String details = "";
+        if (delivery.getTextMyPizza() != null){
+            for (int j = 0; j < delivery.getTextMyPizza().size(); j++) {
+                details += ctx.getResources().getString(R.string.name_of_pizza) + " x " +
+                        delivery.getNumbersMyPizza().get(j);
+                details += delivery.getTextMyPizza().get(j) + "\n\n";
+            }
+        }
+
+        // По ключу блюда находим его в списке и получаем полную инфу. Берем кол-во и формируем строку
         for (int i = 0; i < delivery.getNumbersDishes().size(); i++) {
             Dish nextDish = AllDishes.getInstance().getDish(delivery.getKeysDishes().get(i));
             details += Utils.makeOrderString(nextDish, delivery.getNumbersDishes().get(i));

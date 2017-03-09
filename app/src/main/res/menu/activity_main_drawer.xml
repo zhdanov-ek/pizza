@@ -36,6 +36,12 @@
             android:icon="@drawable/ic_menu_favorite"
             android:title="@string/title_favorites" />
 
+
+        <item
+            android:id="@+id/nav_pizza"
+            android:icon="@drawable/ic_menu_pizza"
+            android:title="@string/title_make_pizza" />
+
         <item
             android:id="@+id/nav_news"
             android:icon="@drawable/ic_menu_news"

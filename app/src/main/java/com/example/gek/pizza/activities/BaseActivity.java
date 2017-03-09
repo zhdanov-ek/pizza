@@ -100,11 +100,13 @@ public abstract class BaseActivity extends AppCompatActivity
                         navigationView.getMenu().findItem(R.id.nav_shop_group).setVisible(true);
                         navigationView.getMenu().findItem(R.id.nav_delivery_status).setVisible(false);
                         navigationView.getMenu().findItem(R.id.nav_favorite).setVisible(false);
+                        navigationView.getMenu().findItem(R.id.nav_pizza).setVisible(false);
                         break;
                     case Const.AUTH_USER:
                         navigationView.getMenu().findItem(R.id.nav_shop_group).setVisible(false);
                         navigationView.getMenu().findItem(R.id.nav_delivery_status).setVisible(true);
                         navigationView.getMenu().findItem(R.id.nav_favorite).setVisible(true);
+                        navigationView.getMenu().findItem(R.id.nav_pizza).setVisible(true);
                         //initialize list of favorites dishes
                         Favorites.getInstance();
                         break;
@@ -112,6 +114,7 @@ public abstract class BaseActivity extends AppCompatActivity
                         navigationView.getMenu().findItem(R.id.nav_shop_group).setVisible(false);
                         navigationView.getMenu().findItem(R.id.nav_delivery_status).setVisible(false);
                         navigationView.getMenu().findItem(R.id.nav_favorite).setVisible(false);
+                        navigationView.getMenu().findItem(R.id.nav_pizza).setVisible(true);
                         break;
                 }
 
@@ -163,6 +166,9 @@ public abstract class BaseActivity extends AppCompatActivity
                 Intent favoritesIntent = new Intent(this, DishesActivity.class);
                 favoritesIntent.putExtra(Const.EXTRA_IS_FAVORITE, true);
                 startActivity(favoritesIntent);
+                break;
+            case R.id.nav_pizza:
+                startActivity(new Intent(this, MakePizzaActivity.class));
                 break;
             case R.id.nav_deliveries:
                 startActivity(new Intent(this, DeliveriesActivity.class));

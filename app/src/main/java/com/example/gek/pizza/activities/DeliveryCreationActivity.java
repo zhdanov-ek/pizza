@@ -20,13 +20,15 @@ import com.example.gek.pizza.services.MonitoringYourDeliveryService;
 import com.google.firebase.auth.FirebaseAuth;
 
 
+import java.util.ArrayList;
+
 import static com.example.gek.pizza.data.Const.db;
 
 /** Оформление доставки на дом */
 public class DeliveryCreationActivity extends AppCompatActivity {
 
-    EditText etName, etPhone, etAddress, etComment;
-    Button btnCreateDelivery;
+    private EditText etName, etPhone, etAddress, etComment;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,8 +43,7 @@ public class DeliveryCreationActivity extends AppCompatActivity {
         etPhone = (EditText) findViewById(R.id.etPhone);
         etAddress = (EditText) findViewById(R.id.etAddress);
         etComment = (EditText) findViewById(R.id.etComment);
-        btnCreateDelivery = (Button) findViewById(R.id.btnCreateDelivery);
-        btnCreateDelivery.setOnClickListener(createDelivery);
+        findViewById(R.id.btnCreateDelivery).setOnClickListener(createDelivery);
 
     }
 
@@ -68,6 +69,12 @@ public class DeliveryCreationActivity extends AppCompatActivity {
                         delivery.setAddressClient(etAddress.getText().toString());
                         delivery.setCommentClient(etComment.getText().toString());
                         delivery.setTotalSum(Basket.getInstance().getTotalSum());
+                        // Extract custom pizza from list of dishes
+                        if (Basket.getInstance().extractMyPizza()){
+                            delivery.setTextMyPizza(Basket.getInstance().getTextMyPizza());
+                            delivery.setNumbersMyPizza(Basket.getInstance().getNumbersMyPizza());
+                        }
+
                         delivery.setNumbersDishes(Basket.getInstance().getNumberDishes());
                         delivery.setKeysDishes(Basket.getInstance().getKeysDishes());
 
@@ -109,6 +116,8 @@ public class DeliveryCreationActivity extends AppCompatActivity {
             }
         }
     };
+
+
 
     // validate input data
     private Boolean checkData(){
