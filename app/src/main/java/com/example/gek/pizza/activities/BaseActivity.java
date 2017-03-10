@@ -72,9 +72,10 @@ public abstract class BaseActivity extends AppCompatActivity
                     // Check user: is shop or other users
 
                     tvAuth.setText(user.getDisplayName() + "\n" +user.getEmail());
-                    if (((user.getEmail().contentEquals(Connection.getInstance().getShopEmail()))
+                    if (((user.getEmail().contentEquals(Connection.getInstance().getShopEmail()))))
                             //убрать, для удобной отладки, потом убрать
-                            && signInAsAdmin) || (signInAsAdmin)) {
+//                            && signInAsAdmin) || (signInAsAdmin))
+                    {
                         Connection.getInstance().setCurrentAuthStatus(Const.AUTH_SHOP);
 
                         // если admin то отписываемся от рассылки
