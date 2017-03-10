@@ -14,7 +14,7 @@ import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
 /**
- * Created by Ivleshch on 07.03.2017.
+ * Сервис отлавливает входящие сообщения. Используется для нотификации
  */
 
 public class MessagingService extends FirebaseMessagingService {

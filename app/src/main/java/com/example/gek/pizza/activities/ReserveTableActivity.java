@@ -55,6 +55,9 @@ import java.util.HashMap;
 
 import static com.example.gek.pizza.data.Const.db;
 
+/**
+ * Класс для расстановки столов, и их заказов
+ */
 
 public class ReserveTableActivity extends BaseActivity implements RotationGestureDetector.OnRotationGestureListener {
 

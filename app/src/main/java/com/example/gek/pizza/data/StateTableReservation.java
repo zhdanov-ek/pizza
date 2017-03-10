@@ -1,7 +1,7 @@
 package com.example.gek.pizza.data;
 
 /**
- * Created by Ivleshch on 22.02.2017.
+ * Состояние заказанного стола
  */
 
 public class StateTableReservation {

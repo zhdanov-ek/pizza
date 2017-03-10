@@ -46,6 +46,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 
+/**  Обработка аутентефикации */
+
 public class AuthenticationActivity extends BaseActivity
         implements GoogleApiClient.OnConnectionFailedListener, View.OnClickListener {
 

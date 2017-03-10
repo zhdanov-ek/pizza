@@ -3,7 +3,7 @@ package com.example.gek.pizza.helpers;
 import android.view.MotionEvent;
 
 /**
- * Created by Ivleshch on 02.02.2017.
+ * Клас для отловки жестов. Используется для поворотов стола
  */
 
 public class RotationGestureDetector {
