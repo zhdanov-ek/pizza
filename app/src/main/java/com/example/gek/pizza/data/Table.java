@@ -4,7 +4,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 /**
- * Created by Ivleshch on 04.02.2017.
+  Модель стола. Вид столика, размещение и т.д.
  */
 
 public class Table implements Parcelable{

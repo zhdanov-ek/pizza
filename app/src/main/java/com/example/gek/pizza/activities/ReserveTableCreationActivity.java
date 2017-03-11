@@ -28,7 +28,7 @@ import static com.example.gek.pizza.R.id.btnCreateDelivery;
 import static com.example.gek.pizza.data.Const.db;
 
 /**
- * Created by Ivleshch on 08.02.2017.
+ * Класс для оформления заказа стола
  */
 
 public class ReserveTableCreationActivity extends AppCompatActivity {

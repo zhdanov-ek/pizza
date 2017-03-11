@@ -13,7 +13,7 @@ import com.example.gek.pizza.data.Const;
 import static com.example.gek.pizza.data.Const.db;
 
 /**
- * Created by Ivleshch on 26.01.2017.
+ * Settings for SHOP user. Configure of global settings
  */
 
 public class SettingsFragment extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener {

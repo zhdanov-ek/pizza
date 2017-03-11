@@ -90,36 +90,35 @@
                         android:textSize="@dimen/text_size_small" />
                 </LinearLayout>
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginTop="10dp"
-                    android:text="Sign in as:(for debug)"
-                    android:textSize="@dimen/text_size_middle"
-                    android:visibility="invisible"/>
+                <!--<TextView-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_gravity="center"-->
+                    <!--android:layout_marginTop="10dp"-->
+                    <!--android:text="Sign in as:(for debug)"-->
+                    <!--android:textSize="@dimen/text_size_middle" />-->
 
-                <RadioGroup
-                    android:id="@+id/rgUserAdmin"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:orientation="horizontal"
-                    android:visibility="invisible">
+                <!--<RadioGroup-->
+                    <!--android:id="@+id/rgUserAdmin"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_gravity="center"-->
+                    <!--android:orientation="horizontal">-->
 
-                    <RadioButton
-                        android:id="@+id/rbtnUser"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="User" />
+                    <!--<RadioButton-->
+                        <!--android:id="@+id/rbtnUser"-->
+                        <!--android:layout_width="wrap_content"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:text="User" />-->
 
-                    <RadioButton
-                        android:id="@+id/rbtnAdmin"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Admin" />
+                    <!--<RadioButton-->
+                        <!--android:id="@+id/rbtnAdmin"-->
+                        <!--android:layout_width="wrap_content"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:text="Admin" />-->
 
-                </RadioGroup>
+                <!--</RadioGroup>-->
+>>>>>>> ca68361ae8ab24f2c38152633400846868cee589
 
                 <ProgressBar
                     android:id="@+id/progressBar"

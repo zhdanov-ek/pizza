@@ -9,9 +9,12 @@ import java.util.ArrayList;
 
 import static com.example.gek.pizza.data.Const.db;
 
-/**
- * Created by Ivleshch on 07.03.2017.
+
+ /**
+ * Синглтон, который хранит актуальный список всех топиков для рассылки. Загружается при старте программы.
+ * Данные используются отправки уведомлений
  */
+
 
 public class AllTopics {
 

@@ -26,7 +26,7 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 /**
- * Created by Ivleshch on 07.03.2017.
+ * Класс для отправки "Data message" через FCM
  */
 
 public class PushActivity extends BaseActivity implements View.OnClickListener {

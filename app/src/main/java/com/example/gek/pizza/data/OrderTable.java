@@ -3,7 +3,7 @@ package com.example.gek.pizza.data;
 import java.util.Date;
 
 /**
- * Created by Ivleshch on 08.02.2017.
+  Заказынные столики. Хранится информация о резерве
  */
 
 public class OrderTable{
