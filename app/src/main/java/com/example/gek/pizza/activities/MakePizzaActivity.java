@@ -132,6 +132,14 @@ public class MakePizzaActivity extends BaseActivity {
     }
 
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MenuItem item = navigationView.getMenu().findItem(R.id.nav_pizza);
+        item.setCheckable(true);
+        item.setChecked(true);
+    }
+
     /** Начинаем тянуть картинку */
     View.OnLongClickListener ingredientLongClickListener = new View.OnLongClickListener() {
         @Override

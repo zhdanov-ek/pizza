@@ -24,8 +24,9 @@ public abstract class BaseActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener{
 
     protected DrawerLayout mDrawer;
-    protected TextView tvAuth;
+    protected TextView tvAuthEmail, tvAuthName;
     protected FirebaseAuth.AuthStateListener authListener;
+    protected NavigationView navigationView;
 
     // In this method we will draw UI: hide or show menu, block activity and other
     public abstract void updateUI();
@@ -40,14 +41,15 @@ public abstract class BaseActivity extends AppCompatActivity
 
         mDrawer = (DrawerLayout) findViewById(R.id.drawer_layout);
 
-        final NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
 
         // Give header and find TextView
         View header = navigationView.getHeaderView(0);
-        tvAuth = (TextView) header.findViewById(R.id.tvAuth);
-        tvAuth.setOnClickListener(new View.OnClickListener() {
+        tvAuthName = (TextView) header.findViewById(R.id.tvAuthName);
+        tvAuthEmail = (TextView) header.findViewById(R.id.tvAuthEmail);
+        tvAuthEmail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (Connection.getInstance().getCurrentAuthStatus() == Const.AUTH_NULL){
@@ -71,7 +73,9 @@ public abstract class BaseActivity extends AppCompatActivity
                 if(user != null) {
                     // Check user: is shop or other users
 
-                    tvAuth.setText(user.getDisplayName() + "\n" +user.getEmail());
+                    tvAuthName.setText(user.getDisplayName());
+                    tvAuthName.setVisibility(View.VISIBLE);
+                    tvAuthEmail.setText(user.getEmail());
                     if (((user.getEmail().contentEquals(Connection.getInstance().getShopEmail()))
                             //убрать, для удобной отладки, потом убрать
                             && signInAsAdmin) || (signInAsAdmin)) {
@@ -89,7 +93,8 @@ public abstract class BaseActivity extends AppCompatActivity
                         Log.d(TAG, "FireBase authentication success (USER) " + user.getEmail());
                     }
                 } else {
-                    tvAuth.setText(R.string.common_signin_button_text);
+                    tvAuthName.setVisibility(View.INVISIBLE);
+                    tvAuthEmail.setText(R.string.common_signin_button_text);
                     Connection.getInstance().setCurrentAuthStatus(Const.AUTH_NULL);
                     Log.d(TAG, "FireBase authentication failed ");
                 }

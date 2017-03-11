@@ -11,6 +11,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -151,6 +152,13 @@ public class DishEditActivity extends BaseActivity implements View.OnClickListen
         }
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MenuItem item = navigationView.getMenu().findItem(R.id.nav_dishes);
+        item.setCheckable(true);
+        item.setChecked(true);
+    }
 
     private void loadListGroupsMenu(){
         // Описываем слушатель, который вернет один раз в программу весь список данных,

@@ -316,6 +316,9 @@ public class ReserveTableActivity extends BaseActivity implements RotationGestur
         super.onResume();
         updateTables();
         updateOrderedTable();
+        MenuItem item = navigationView.getMenu().findItem(R.id.nav_reservation);
+        item.setCheckable(true);
+        item.setChecked(true);
     }
 
     private int isPortraitMode() {

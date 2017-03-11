@@ -6,7 +6,6 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -15,7 +14,6 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -29,7 +27,6 @@ import com.example.gek.pizza.helpers.Utils;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 
 import static com.example.gek.pizza.data.Const.db;
@@ -90,7 +87,7 @@ public class DishShowActivity extends BaseActivity implements View.OnClickListen
         mDrawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        tvName = (TextView) findViewById(R.id.tvName);
+        tvName = (TextView) findViewById(R.id.tvAuthName);
         tvPrice = (TextView) findViewById(R.id.tvPrice);
         tvDescription = (TextView) findViewById(R.id.tvDescription);
         ivPhoto = (ImageView) findViewById(R.id.ivPhoto);
@@ -122,6 +119,10 @@ public class DishShowActivity extends BaseActivity implements View.OnClickListen
     @Override
     protected void onResume() {
         super.onResume();
+        MenuItem item = navigationView.getMenu().findItem(R.id.nav_dishes);
+        item.setCheckable(true);
+        item.setChecked(true);
+
         // смотрим в корзине в заказе ли это блюдо
         int countDishInOrder = Utils.findInBasket(dishOpen);
         if (countDishInOrder != 0) {

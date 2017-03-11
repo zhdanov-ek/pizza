@@ -9,7 +9,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -19,7 +18,6 @@ import com.example.gek.pizza.data.Const;
 import com.example.gek.pizza.data.MenuGroup;
 
 import java.util.ArrayList;
-import java.util.Random;
 
 
 /**
@@ -81,7 +79,7 @@ public class MenuOrdersAdapter extends RecyclerView.Adapter<MenuOrdersAdapter.Vi
         public ViewHolder(View itemView) {
             super(itemView);
             llContainer = (LinearLayout) itemView.findViewById(R.id.llContainer);
-            tvName = (TextView) itemView.findViewById(R.id.tvName);
+            tvName = (TextView) itemView.findViewById(R.id.tvAuthName);
             ivPhoto = (ImageView) itemView.findViewById(R.id.ivPhoto);
             itemView.setOnClickListener(this);
         }

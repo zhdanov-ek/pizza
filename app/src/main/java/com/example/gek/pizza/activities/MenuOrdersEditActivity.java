@@ -10,7 +10,6 @@ import android.text.Editable;
 import android.text.InputFilter;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -97,7 +96,7 @@ public class MenuOrdersEditActivity extends BaseActivity implements View.OnClick
 
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
         llContainer = (LinearLayout) findViewById(R.id.llContainer);
-        tvName = (TextView) findViewById(R.id.tvName);
+        tvName = (TextView) findViewById(R.id.tvAuthName);
 
         etName = (EditText) findViewById(R.id.etName);
         etName.addTextChangedListener(textWatcher);

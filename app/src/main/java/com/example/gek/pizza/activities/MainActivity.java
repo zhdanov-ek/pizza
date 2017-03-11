@@ -117,6 +117,9 @@ public class MainActivity extends BaseActivity
 
     }
 
+
+
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         if (Connection.getInstance().getCurrentAuthStatus() != Const.AUTH_SHOP){

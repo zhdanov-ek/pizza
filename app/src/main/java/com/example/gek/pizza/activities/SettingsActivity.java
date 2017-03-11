@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 
 import com.example.gek.pizza.R;
@@ -43,5 +44,13 @@ public class SettingsActivity extends BaseActivity {
                 this, mDrawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         mDrawer.addDrawerListener(toggle);
         toggle.syncState();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MenuItem item = navigationView.getMenu().findItem(R.id.nav_settings);
+        item.setCheckable(true);
+        item.setChecked(true);
     }
 }

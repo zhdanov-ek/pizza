@@ -83,7 +83,7 @@ public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.ViewHolder
 
         public ViewHolder(View itemView) {
             super(itemView);
-            tvName = (TextView) itemView.findViewById(R.id.tvName);
+            tvName = (TextView) itemView.findViewById(R.id.tvAuthName);
             ivPhoto = (ImageView) itemView.findViewById(R.id.ivPhoto);
             llCounter = (LinearLayout) itemView.findViewById(R.id.llCounter);
             llCounter.setVisibility(View.VISIBLE);

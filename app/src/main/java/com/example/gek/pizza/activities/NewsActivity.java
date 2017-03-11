@@ -47,6 +47,14 @@ public class NewsActivity extends BaseActivity{
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        MenuItem item = navigationView.getMenu().findItem(R.id.nav_news);
+        item.setCheckable(true);
+        item.setChecked(true);
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 

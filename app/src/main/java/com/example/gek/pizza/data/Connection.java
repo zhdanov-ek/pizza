@@ -17,7 +17,7 @@ public class Connection {
     private int currentAuthStatus;
 
     // Еmail of shop for auth as administration of pizzeria
-    private String shopEmail = "zhdanov.ke2007@gmail.com";
+    private String shopEmail = "zhdanov.ek@gmail.com";
 
     public static synchronized Connection getInstance(){
         if (instance == null) {

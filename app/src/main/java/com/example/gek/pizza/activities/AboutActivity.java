@@ -238,6 +238,14 @@ public class AboutActivity extends BaseActivity implements
 
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MenuItem item = navigationView.getMenu().findItem(R.id.nav_about);
+        item.setCheckable(true);
+        item.setChecked(true);
+    }
+
     private void setSlidingUpPanelLayoutListeners() {
         final ImageView left = (ImageView) findViewById(R.id.ivArrowLeft);
         final ImageView right = (ImageView) findViewById(R.id.ivArrowRight);

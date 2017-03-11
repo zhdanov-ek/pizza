@@ -82,6 +82,7 @@ public class DeliveriesAdapter extends RecyclerView.Adapter<DeliveriesAdapter.Vi
                 details += ctx.getResources().getString(R.string.name_of_pizza) + " x " +
                         delivery.getNumbersMyPizza().get(j);
                 details += delivery.getTextMyPizza().get(j) + "\n\n";
+                details += delivery.getTextMyPizza().get(j) + "\n\n";
             }
         }
 

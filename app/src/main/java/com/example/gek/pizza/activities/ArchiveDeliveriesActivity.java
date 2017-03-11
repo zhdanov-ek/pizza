@@ -9,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 
 import com.example.gek.pizza.R;
@@ -76,5 +77,13 @@ public class ArchiveDeliveriesActivity extends BaseActivity {
 
         db.child(Const.CHILD_DELIVERIES_ARCHIVE).addValueEventListener(listener);
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MenuItem item = navigationView.getMenu().findItem(R.id.nav_deliveries);
+        item.setCheckable(true);
+        item.setChecked(true);
     }
 }

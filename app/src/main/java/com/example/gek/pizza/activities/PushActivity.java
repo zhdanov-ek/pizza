@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -71,6 +72,14 @@ public class PushActivity extends BaseActivity implements View.OnClickListener {
                 android.R.layout.simple_spinner_item, AllTopics.getInstance().topics);
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerTopics.setAdapter(dataAdapter);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MenuItem item = navigationView.getMenu().findItem(R.id.nav_push);
+        item.setCheckable(true);
+        item.setChecked(true);
     }
 
     @Override

@@ -8,6 +8,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -107,7 +108,13 @@ public class NewsEditActivity extends BaseActivity implements View.OnClickListen
         folderRef = storage.getReferenceFromUrl(Const.STORAGE).child(Const.NEWS_IMAGES_FOLDER);
     }
 
-
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MenuItem item = navigationView.getMenu().findItem(R.id.nav_news);
+        item.setCheckable(true);
+        item.setChecked(true);
+    }
 
     /** Получаем URI фото с галереи */
     @Override

@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -83,6 +84,9 @@ public class DeliveryStatus extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        MenuItem item = navigationView.getMenu().findItem(R.id.nav_delivery_status);
+        item.setCheckable(true);
+        item.setChecked(true);
         mStateListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -324,7 +328,7 @@ public class DeliveryStatus extends BaseActivity {
     @Override
     protected void onPause() {
         // if listener not set we will retrieve error
-        if (mIsSetListener) {
+        if ((mIsSetListener) && (FirebaseAuth.getInstance().getCurrentUser() != null)){
             db.child(Const.CHILD_USERS)
                     .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
                     .child(Const.CHILD_USER_DELIVERY_STATE)

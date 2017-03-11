@@ -50,7 +50,6 @@ public class AuthenticationActivity extends BaseActivity
         implements GoogleApiClient.OnConnectionFailedListener, View.OnClickListener {
 
     private static int RC_SIGN_IN_GOOGLE = 1;               // request code for auth Google
-    private static int RC_SIGN_IN_FACEBOOK = 2;
     private static String TAG = "AUTHENTICATION_ACTIVITY";
     private GoogleApiClient mGoogleApiClient;
     private ProgressBar progressBar;
@@ -69,7 +68,7 @@ public class AuthenticationActivity extends BaseActivity
     private RadioButton rbtnUser,rbtnAdmin;
     private RadioGroup rgUserAdmin;
 
-    private boolean isBtnGoogleSignInVisibile, isBtnFacebookSignInVisible, isTvStatusVisible;
+    private boolean isBtnGoogleSignInVisible, isBtnFacebookSignInVisible, isTvStatusVisible;
 
 
     @Override
@@ -84,8 +83,8 @@ public class AuthenticationActivity extends BaseActivity
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
 
-        if (isBtnGoogleSignInVisibile || isBtnFacebookSignInVisible) {
-            outState.putBoolean(VISIBILITY_BUTTON_GOOGLE, isBtnGoogleSignInVisibile);
+        if (isBtnGoogleSignInVisible || isBtnFacebookSignInVisible) {
+            outState.putBoolean(VISIBILITY_BUTTON_GOOGLE, isBtnGoogleSignInVisible);
             outState.putBoolean(VISIBILITY_BUTTON_FACEBOOK, isBtnFacebookSignInVisible);
             outState.putBoolean(VISIBILITY_TV_STATUS, isTvStatusVisible);
         }
@@ -96,8 +95,8 @@ public class AuthenticationActivity extends BaseActivity
         super.onRestoreInstanceState(savedInstanceState);
 
         if (savedInstanceState != null) {
-            isBtnGoogleSignInVisibile = savedInstanceState.getBoolean(VISIBILITY_BUTTON_GOOGLE, true);
-            btnGoogleSignIn.setVisibility(isBtnGoogleSignInVisibile ? View.VISIBLE : View.GONE);
+            isBtnGoogleSignInVisible = savedInstanceState.getBoolean(VISIBILITY_BUTTON_GOOGLE, true);
+            btnGoogleSignIn.setVisibility(isBtnGoogleSignInVisible ? View.VISIBLE : View.GONE);
 
             isBtnFacebookSignInVisible = savedInstanceState.getBoolean(VISIBILITY_BUTTON_FACEBOOK, true);
             btnFacebookSignIn.setVisibility(isBtnFacebookSignInVisible ? View.VISIBLE : View.GONE);
@@ -359,7 +358,7 @@ public class AuthenticationActivity extends BaseActivity
             case Const.GOOGLE_PROVIDER:
                 btnFacebookSignIn.setVisibility(View.VISIBLE);
                 btnGoogleSignIn.setVisibility(View.GONE);
-                isBtnGoogleSignInVisibile = false;
+                isBtnGoogleSignInVisible = false;
                 isBtnFacebookSignInVisible = true;
                 tvStatus.setText(String.format(getResources().getString(R.string.msg_link_auth), "Facebook", "Google"));
                 break;
@@ -367,7 +366,7 @@ public class AuthenticationActivity extends BaseActivity
                 btnFacebookSignIn.setVisibility(View.GONE);
                 btnGoogleSignIn.setVisibility(View.VISIBLE);
                 isBtnFacebookSignInVisible = false;
-                isBtnGoogleSignInVisibile = true;
+                isBtnGoogleSignInVisible = true;
                 tvStatus.setText(String.format(getResources().getString(R.string.msg_link_auth), "Google", "Facebook"));
                 break;
         }

@@ -113,6 +113,14 @@ public class DishesActivity extends BaseActivity {
         fab.setOnClickListener(fabListener);
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MenuItem item = navigationView.getMenu().findItem(R.id.nav_dishes);
+        item.setCheckable(true);
+        item.setChecked(true);
+    }
+
     // Слушаем юзерскую папку с ключами избранных блюд и передаем в адаптер
     private ValueEventListener favoriteDishesListener = new ValueEventListener() {
         @Override

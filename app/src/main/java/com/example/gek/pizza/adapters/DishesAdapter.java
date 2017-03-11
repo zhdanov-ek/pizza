@@ -8,7 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -70,7 +69,7 @@ public class DishesAdapter  extends RecyclerView.Adapter<DishesAdapter.ViewHolde
         public ViewHolder(View itemView) {
             super(itemView);
             ivPhoto = (ImageView) itemView.findViewById(R.id.ivPhoto);
-            tvName = (TextView) itemView.findViewById(R.id.tvName);
+            tvName = (TextView) itemView.findViewById(R.id.tvAuthName);
             tvPrice = (TextView) itemView.findViewById(R.id.tvPrice);
             itemView.setOnClickListener(this);
         }

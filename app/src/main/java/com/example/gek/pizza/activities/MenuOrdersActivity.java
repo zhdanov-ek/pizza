@@ -40,6 +40,7 @@ import java.util.ArrayList;
 public class MenuOrdersActivity extends BaseActivity {
 
     private static final String TAG = "Menu orders ";
+
     private RecyclerView rv;
     private Context ctx = this;
     private MenuOrdersAdapter menuOrdersAdapter;
@@ -127,6 +128,13 @@ public class MenuOrdersActivity extends BaseActivity {
     }
 
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MenuItem item = navigationView.getMenu().findItem(R.id.nav_dishes);
+        item.setCheckable(true);
+        item.setChecked(true);
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

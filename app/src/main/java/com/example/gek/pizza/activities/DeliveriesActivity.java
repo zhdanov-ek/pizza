@@ -89,6 +89,13 @@ public class DeliveriesActivity extends BaseActivity {
         tabLayout.setupWithViewPager(mViewPager);
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MenuItem item = navigationView.getMenu().findItem(R.id.nav_deliveries);
+        item.setCheckable(true);
+        item.setChecked(true);
+    }
 
     /** Фрагмент, содержащий контент наших вкладок */
     public static class PlaceholderFragment extends Fragment {
