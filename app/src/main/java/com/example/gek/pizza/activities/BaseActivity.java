@@ -76,9 +76,10 @@ public abstract class BaseActivity extends AppCompatActivity
                     tvAuthName.setText(user.getDisplayName());
                     tvAuthName.setVisibility(View.VISIBLE);
                     tvAuthEmail.setText(user.getEmail());
-                    if (((user.getEmail().contentEquals(Connection.getInstance().getShopEmail()))
+                    if (((user.getEmail().contentEquals(Connection.getInstance().getShopEmail()))))
                             //убрать, для удобной отладки, потом убрать
-                            && signInAsAdmin) || (signInAsAdmin)) {
+//                            && signInAsAdmin) || (signInAsAdmin))
+                    {
                         Connection.getInstance().setCurrentAuthStatus(Const.AUTH_SHOP);
 
                         // если admin то отписываемся от рассылки
