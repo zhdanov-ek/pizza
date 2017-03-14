@@ -37,9 +37,11 @@ import java.util.ArrayList;
 
 public class MakePizzaActivity extends BaseActivity {
 
-    public static final String TAG = "3333333333";
+    public static final String TAG = "MAKE_PIZZA";
+    public static final String STATE_LIST_INGREDIENTS = "list_ingredients";
+    public static final String STATE_TEXT_ORDER = "text_order";
+    public static final String STATE_TOTAL_SUM = "total_sum";
 
-    private RelativeLayout rlContent;
     private LinearLayout llIngredients;
     private ImageView ivPizza;
     private ImageView ivFocus;
@@ -84,7 +86,6 @@ public class MakePizzaActivity extends BaseActivity {
         animHide = AnimationUtils.loadAnimation(this, R.anim.alpha_hide);
 
         llIngredients = (LinearLayout) findViewById(R.id.llIngredients);
-        rlContent = (RelativeLayout) findViewById(R.id.rlContent);
         ivPizza = (ImageView) findViewById(R.id.ivPizza);
         ivFocus = (ImageView) findViewById(R.id.ivFocus);
         tvListIngredients = (TextView) findViewById(R.id.tvListIngredients);
@@ -117,7 +118,6 @@ public class MakePizzaActivity extends BaseActivity {
         for (int i = 0; i < basicListIngredients.size(); i++) {
             ImageView ivCurrent = new ImageView(this);
 
-
             RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(sizeIngredient, sizeIngredient);
             ivCurrent.setLayoutParams(params);
             ivCurrent.setId(basicListIngredients.get(i).getListImageResource());
@@ -128,7 +128,29 @@ public class MakePizzaActivity extends BaseActivity {
             ivCurrent.setOnLongClickListener(ingredientLongClickListener);
             llIngredients.addView(ivCurrent);
         }
+
+        // initialize to default value
         clearPizza();
+
+        // restore if need
+        if (savedInstanceState != null){
+            listIngredientsLayers = savedInstanceState.getIntegerArrayList(STATE_LIST_INGREDIENTS);
+            totalSum = savedInstanceState.getFloat(STATE_TOTAL_SUM);
+            sbTotal.append(savedInstanceState.getString(STATE_TEXT_ORDER));
+            hideChoosedIngredients();
+            updatePizza();
+        }
+    }
+
+    // По списку ID слоев пиццы определяем какие ингредиенты из списка нужно скрыть
+    private void hideChoosedIngredients(){
+        for (int id: listIngredientsLayers) {
+            for (Ingredient ingredient: basicListIngredients) {
+                if (ingredient.getPizzaImageResource() == id){
+                    findViewById(ingredient.getListImageResource()).setVisibility(View.GONE);
+                }
+            }
+        }
     }
 
 
@@ -196,13 +218,17 @@ public class MakePizzaActivity extends BaseActivity {
             btnAdd.setVisibility(View.GONE);
             btnClear.setVisibility(View.GONE);
         } else {
+            tvListIngredients.setText(sbTotal);
+            String strTotal = getResources().getString(R.string.total) + " = " +
+                    Utils.toPrice(totalSum);
+            tvTotalSum.setText(strTotal);
             btnAdd.setVisibility(View.VISIBLE);
             btnClear.setVisibility(View.VISIBLE);
         }
     }
 
 
-   /** Добавляем пиццу в корзину (заворачиваем данные в Dish, который принимает наш адаптер в корзине */
+    /** Добавляем пиццу в корзину (заворачиваем данные в Dish, который принимает наш адаптер в корзине */
     private void addPizzaToBasket(){
         Dish pizza = new Dish();
         pizza.setName(getResources().getString(R.string.name_of_pizza));
@@ -229,7 +255,7 @@ public class MakePizzaActivity extends BaseActivity {
                     // Если это первый ингредиент то добавляем сначала основу
                     if (sbTotal.length() == 0){
                         sbTotal.append("\n" + Ingredients.getBasis().getName() + " " +
-                            Utils.toPrice(Ingredients.getBasis().getPrice()));
+                                Utils.toPrice(Ingredients.getBasis().getPrice()));
                         totalSum = Ingredients.getBasis().getPrice();
                     }
 
@@ -238,11 +264,7 @@ public class MakePizzaActivity extends BaseActivity {
                     Ingredient choosedIngredient = getIngredientWithId(ivCurrentIngredient.getId());
                     sbTotal.append("\n" + choosedIngredient.getName() + " " +
                             Utils.toPrice(choosedIngredient.getPrice()));
-                    tvListIngredients.setText(sbTotal);
                     totalSum += choosedIngredient.getPrice();
-                    String strTotal = getResources().getString(R.string.total) + " = " +
-                        Utils.toPrice(totalSum);
-                    tvTotalSum.setText(strTotal);
                     listIngredientsLayers.add(choosedIngredient.getPizzaImageResource());
                     updatePizza();
                     ivFocus.startAnimation(animHide);
@@ -297,4 +319,13 @@ public class MakePizzaActivity extends BaseActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putIntegerArrayList(STATE_LIST_INGREDIENTS, listIngredientsLayers);
+        outState.putFloat(STATE_TOTAL_SUM, totalSum);
+        outState.putString(STATE_TEXT_ORDER, sbTotal.toString());
+    }
+
 }
