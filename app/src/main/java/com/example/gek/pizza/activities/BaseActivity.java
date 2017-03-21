@@ -163,7 +163,7 @@ public abstract class BaseActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         switch (item.getItemId()){
             case R.id.nav_dishes:
-                startActivity(new Intent(this, MenuOrdersActivity.class));
+                startActivity(new Intent(this, MenuGroupsActivity.class));
                 break;
             case R.id.nav_news:
                 startActivity(new Intent(this, NewsActivity.class));

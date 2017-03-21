@@ -28,7 +28,7 @@
             android:launchMode="singleTask" />
         <activity android:name=".activities.NewsEditActivity" />
         <activity
-            android:name=".activities.MenuOrdersActivity"
+            android:name=".activities.MenuGroupsActivity"
             android:launchMode="singleTask" />
         <activity android:name=".activities.MenuOrdersEditActivity" />
         <activity

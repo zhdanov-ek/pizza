@@ -28,7 +28,7 @@ public class MainActivity extends BaseActivity
     private LinearLayout llMenuOrder, llNews, llOrders, llContacts, llReservations;
     private LinearLayout llOrdersDevider;
     private Button btnStartService, btnStopService;
-    private static final String TAG = "List of settings ";
+    private static final String TAG = "MAIN_MENU";
 
     // todo убрать кнопки запуска сервиса, а сервис запускать после аутентификации ЗАВЕДЕНИЯ. Выключать
     // при логауте
@@ -146,7 +146,7 @@ public class MainActivity extends BaseActivity
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.llMenuOrder:
-                Intent menuIntent = new Intent(this, MenuOrdersActivity.class);
+                Intent menuIntent = new Intent(this, MenuGroupsActivity.class);
                 startActivity(menuIntent);
                 break;
             case R.id.llNews:
@@ -170,9 +170,7 @@ public class MainActivity extends BaseActivity
             case R.id.btnStopService:
                 stopService(new Intent(this, ShopService.class));
                 break;
-
         }
-
     }
 
 }

@@ -45,10 +45,12 @@ public class DishesActivity extends BaseActivity {
     private Context ctx = this;
     private FloatingActionButton fab;
     private MenuGroup menuGroup;
-    private DishesAdapter dishesAdapter;
+    private DishesAdapter mDishesAdapter;
     private ArrayList<Dish> allDishes = new ArrayList<>();
-    private ArrayList<Dish> selectedDishes;
+    private ArrayList<Dish> mSelectedDishes;
     private final String TAG = "DISHES ACTIVITY";
+    private ValueEventListener mFavoriteDishesListener;
+    private ValueEventListener mAllDishesListener;
 
     @Override
     public void updateUI() {
@@ -98,15 +100,19 @@ public class DishesActivity extends BaseActivity {
         Intent intent = getIntent();
         if (intent != null) {
             if (intent.hasExtra(Const.EXTRA_IS_FAVORITE)) {
+                initFavoriteDishesListener();
                 db.child(Const.CHILD_USERS)
                         .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
                         .child(Const.CHILD_USER_FAVORITES)
-                        .addValueEventListener(favoriteDishesListener);
+                        .addValueEventListener(mFavoriteDishesListener);
+                Log.d(TAG, "onCreate: set listener FAVORITES");
                 toolbar.setTitle(R.string.title_favorites);
             } else {
+                initAllDishesListener();
                 menuGroup = intent.getParcelableExtra(Const.EXTRA_MENU_GROUP);
                 toolbar.setTitle(menuGroup.getName());
-                db.child(Const.CHILD_DISHES).addValueEventListener(allDishesListener);
+                db.child(Const.CHILD_DISHES).addValueEventListener(mAllDishesListener);
+                Log.d(TAG, "onCreate: set listener ALL DISHES");
             }
         }
         fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -121,73 +127,85 @@ public class DishesActivity extends BaseActivity {
         item.setChecked(true);
     }
 
-    // Слушаем юзерскую папку с ключами избранных блюд и передаем в адаптер
-    private ValueEventListener favoriteDishesListener = new ValueEventListener() {
-        @Override
-        public void onDataChange(DataSnapshot dataSnapshot) {
-            if (selectedDishes == null){
-                selectedDishes = new ArrayList<>();
-            } else {
-                selectedDishes.clear();
-            }
 
-            Dish currentDish;
-            // По ключам формируем список блюд
-            for (DataSnapshot child: dataSnapshot.getChildren()) {
-                FavoriteDish favoriteDish = child.getValue(FavoriteDish.class);
-                currentDish = AllDishes.getInstance().getDish(favoriteDish.getKeyOfDish());
-                if (!currentDish.getKeyGroup().contentEquals(Const.DISH_GROUP_VALUE_REMOVED)){
-                    selectedDishes.add(currentDish);
+    /** Инициализация лисенара юзерской папки с ключами избранных блюд и передачей в адаптер */
+    private void initFavoriteDishesListener(){
+        mFavoriteDishesListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (mSelectedDishes == null){
+                    mSelectedDishes = new ArrayList<>();
+                } else {
+                    mSelectedDishes.clear();
+                }
+                Dish currentDish;
+                // По ключам формируем список блюд
+                for (DataSnapshot child: dataSnapshot.getChildren()) {
+                    FavoriteDish favoriteDish = child.getValue(FavoriteDish.class);
+                    currentDish = AllDishes.getInstance().getDish(favoriteDish.getKeyOfDish());
+                    if (!currentDish.getKeyGroup().contentEquals(Const.DISH_GROUP_VALUE_REMOVED)){
+                        mSelectedDishes.add(currentDish);
+                    }
+                }
+                if (mSelectedDishes.isEmpty()){
+                    tvEmpty.setVisibility(View.VISIBLE);
+                    rv.setVisibility(View.GONE);
+                } else {
+                    tvEmpty.setVisibility(View.GONE);
+                    rv.setVisibility(View.VISIBLE);
+                    if (mDishesAdapter == null) {
+                        mDishesAdapter = new DishesAdapter(ctx, mSelectedDishes);
+                        rv.setAdapter(mDishesAdapter);
+                    } else {
+                        mDishesAdapter.notifyDataSetChanged();
+                    }
                 }
             }
 
-            if (selectedDishes.isEmpty()){
-                tvEmpty.setVisibility(View.VISIBLE);
-                rv.setVisibility(View.GONE);
-            } else {
-                tvEmpty.setVisibility(View.GONE);
-                rv.setVisibility(View.VISIBLE);
-                dishesAdapter = new DishesAdapter(ctx, selectedDishes);
-                rv.setAdapter(dishesAdapter);
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
             }
-        }
+        };
 
-        @Override
-        public void onCancelled(DatabaseError databaseError) {
-
-        }
-    };
+    }
 
 
 
-    // Описываем слушатель, который возвращает в программу весь список данных,
-    // которые находятся в child(CHILD_DISHES)
-    // Из этого списка выбираем блюда с нашего раздела
-    private ValueEventListener allDishesListener = new ValueEventListener() {
-        @Override
-        public void onDataChange(DataSnapshot dataSnapshot) {
-            allDishes.clear();
-            for (DataSnapshot child: dataSnapshot.getChildren()) {
-                Dish currentDish = child.getValue(Dish.class);
-                allDishes.add(currentDish);
+    /** Описываем слушатель, который возвращает в программу весь список данных,
+     *  которые находятся в child(CHILD_DISHES)
+     *  Из этого списка выбираем блюда с нашего раздела
+     */
+    private void initAllDishesListener(){
+        mAllDishesListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                allDishes.clear();
+                for (DataSnapshot child: dataSnapshot.getChildren()) {
+                    Dish currentDish = child.getValue(Dish.class);
+                    allDishes.add(currentDish);
+                }
+                mSelectedDishes = Utils.selectGroup(allDishes, menuGroup.getKey());
+                if (mSelectedDishes.size() == 0){
+                    tvEmpty.setVisibility(View.VISIBLE);
+                    rv.setVisibility(View.GONE);
+                } else {
+                    tvEmpty.setVisibility(View.GONE);
+                    rv.setVisibility(View.VISIBLE);
+                    if (mDishesAdapter == null) {
+                        mDishesAdapter = new DishesAdapter(ctx, mSelectedDishes);
+                        rv.setAdapter(mDishesAdapter);
+                    } else {
+                        mDishesAdapter.notifyDataSetChanged();
+                    }
+                }
             }
-            selectedDishes = Utils.selectGroup(allDishes, menuGroup.getKey());
-            if (selectedDishes.size() == 0){
-                tvEmpty.setVisibility(View.VISIBLE);
-                rv.setVisibility(View.GONE);
-            } else {
-                tvEmpty.setVisibility(View.GONE);
-                rv.setVisibility(View.VISIBLE);
-                dishesAdapter = new DishesAdapter(ctx, selectedDishes);
-                rv.setAdapter(dishesAdapter);
-            }
-        }
 
-        @Override
-        public void onCancelled(DatabaseError databaseError) {
-            Log.w(TAG, "loadPost:onCancelled", databaseError.toException());
-        }
-    };
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.w(TAG, "loadPost:onCancelled", databaseError.toException());
+            }
+        };
+    }
 
 
     /** Запуск активити на добавление блюда в текущей группе */
@@ -240,7 +258,7 @@ public class DishesActivity extends BaseActivity {
     // Remove group dishes if she's empty
     private void removeGroupDishes(){
         if (Utils.hasInternet(ctx)){
-            if (selectedDishes.isEmpty()){
+            if (mSelectedDishes.isEmpty()){
                 db.child(Const.CHILD_MENU_GROUPS).child(menuGroup.getKey()).setValue(null);
                 Toast.makeText(ctx, "Group " + menuGroup.getName() + " removed", Toast.LENGTH_LONG).show();
             } else {
@@ -248,6 +266,24 @@ public class DishesActivity extends BaseActivity {
             }
         } else {
             Toast.makeText(ctx, R.string.mes_no_internet, Toast.LENGTH_LONG).show();
+        }
+    }
+
+
+    // remove FireBase listeners
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (mAllDishesListener != null) {
+            db.child(Const.CHILD_DISHES).removeEventListener(mAllDishesListener);
+            Log.d(TAG, "onDestroy: remove listener ALL DISHES");
+        }
+        if ((mFavoriteDishesListener != null) && (FirebaseAuth.getInstance().getCurrentUser() != null)) {
+            db.child(Const.CHILD_USERS)
+                    .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                    .child(Const.CHILD_USER_FAVORITES)
+                    .removeEventListener(mFavoriteDishesListener);
+            Log.d(TAG, "onDestroy: remove listener FAVORITES");
         }
     }
 }

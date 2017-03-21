@@ -13,7 +13,7 @@ public class GridSpacingItemDecoration extends RecyclerView.ItemDecoration {
     private int spanCount;
     private int spacing;
     private boolean includeEdge;
-    public static final String TAG = "2222222";
+    public static final String TAG = "ITEM_DECORATION";
 
     public GridSpacingItemDecoration(int spanCount, int spacing, boolean includeEdge) {
         this.spanCount = spanCount;
@@ -40,10 +40,10 @@ public class GridSpacingItemDecoration extends RecyclerView.ItemDecoration {
                 outRect.top = spacing;
             }
         }
-        String s = "LEFT = " + outRect.left + "\n" +
-                "RIGHT = " + outRect.right + "\n" +
-                "TOP = " + outRect.top + "\n" +
-                "BOTTOM = " + outRect.bottom + "\n";
-        Log.d(TAG, "getItemOffsets: position = " + position + ", spacing = " + spacing + "\n" + s);
+//        String s = "LEFT = " + outRect.left + "\n" +
+//                "RIGHT = " + outRect.right + "\n" +
+//                "TOP = " + outRect.top + "\n" +
+//                "BOTTOM = " + outRect.bottom + "\n";
+//        Log.d(TAG, "getItemOffsets: position = " + position + ", spacing = " + spacing + "\n" + s);
     }
 }
