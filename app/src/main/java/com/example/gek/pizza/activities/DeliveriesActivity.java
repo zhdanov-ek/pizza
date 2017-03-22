@@ -44,7 +44,6 @@ public class DeliveriesActivity extends BaseActivity {
 
     // Хранит все наши вкладки с переключателем
     private ViewPager mViewPager;
-
     public static boolean activeDeliveriesActivity;
 
 
@@ -58,15 +57,11 @@ public class DeliveriesActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         activeDeliveriesActivity = false;
-
         LayoutInflater inflater = (LayoutInflater) this
                 .getSystemService(this.LAYOUT_INFLATER_SERVICE);
         View contentView = inflater.inflate(R.layout.activity_deliveries, null, false);
         mDrawer.addView(contentView, 0);
-
-
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolBar);
         toolbar.setTitle(R.string.title_orders);
         setSupportActionBar(toolbar);

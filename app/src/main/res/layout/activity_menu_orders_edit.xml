@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.example.gek.pizza.activities.MenuOrdersEditActivity">
+    tools:context="com.example.gek.pizza.activities.MenuGroupEditActivity">
 
     <include layout="@layout/toolbar" />
 

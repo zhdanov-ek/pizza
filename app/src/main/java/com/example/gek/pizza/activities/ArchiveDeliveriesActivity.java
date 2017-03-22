@@ -25,7 +25,7 @@ import java.util.ArrayList;
 import static com.example.gek.pizza.data.Const.db;
 
 public class ArchiveDeliveriesActivity extends BaseActivity {
-    private static final String TAG = "ArchiveDeliveries";
+    private static final String TAG = "ARCHIVE_DELIVERIES";
     private RecyclerView rv;
     private ArrayList<Delivery> list;
     private Context ctx;

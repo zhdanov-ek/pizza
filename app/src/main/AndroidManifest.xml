@@ -30,7 +30,7 @@
         <activity
             android:name=".activities.MenuGroupsActivity"
             android:launchMode="singleTask" />
-        <activity android:name=".activities.MenuOrdersEditActivity" />
+        <activity android:name=".activities.MenuGroupEditActivity" />
         <activity
             android:name=".activities.DishesActivity"/>
         <activity android:name=".activities.DishEditActivity" />

@@ -238,7 +238,7 @@ public class DishesActivity extends BaseActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
             case Const.ACTION_EDIT:
-                Intent editIntent = new Intent(this, MenuOrdersEditActivity.class);
+                Intent editIntent = new Intent(this, MenuGroupEditActivity.class);
                 editIntent.putExtra(Const.MODE, Const.MODE_EDIT);
                 editIntent.putExtra(Const.EXTRA_MENU_GROUP, menuGroup);
                 startActivity(editIntent);

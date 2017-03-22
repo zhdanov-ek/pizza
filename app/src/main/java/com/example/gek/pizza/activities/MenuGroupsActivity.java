@@ -166,7 +166,7 @@ public class MenuGroupsActivity extends BaseActivity {
     View.OnClickListener fabListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            Intent addMenuGroup = new Intent(ctx, MenuOrdersEditActivity.class);
+            Intent addMenuGroup = new Intent(ctx, MenuGroupEditActivity.class);
             addMenuGroup.putExtra(Const.MODE, Const.MODE_NEW);
             startActivity(addMenuGroup);
         }

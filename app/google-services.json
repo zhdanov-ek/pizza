@@ -15,11 +15,11 @@
       },
       "oauth_client": [
         {
-          "client_id": "1024134957732-ipu1ptp9tupa31i7le6fmahd3hdufqg2.apps.googleusercontent.com",
+          "client_id": "1024134957732-lhdiemh2d3cm5skirvqii30034c5iltc.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.example.gek.pizza",
-            "certificate_hash": "2A78BEBC1B15D09F589443BEC93C10F0389BF359"
+            "certificate_hash": "5e214ab8e858250c42daea89c2125e1e0f0c5afb"
           }
         },
         {
