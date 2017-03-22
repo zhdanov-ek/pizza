@@ -40,7 +40,7 @@ import static com.example.gek.pizza.data.Const.db;
  * Edit group of dishes
  * */
 
-public class MenuOrdersEditActivity extends BaseActivity implements View.OnClickListener{
+public class MenuGroupEditActivity extends BaseActivity implements View.OnClickListener{
 
     private static final String STATE_BUTTON_OK = "button_ok";
     private static final String STATE_URI_PHOTO = "uri_photo";

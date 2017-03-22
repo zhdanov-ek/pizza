@@ -54,3 +54,5 @@ Thumbs.db
 /.idea/misc.xml
 .externalNativeBuild
 
+# Config for Key Store
+keystore.properties

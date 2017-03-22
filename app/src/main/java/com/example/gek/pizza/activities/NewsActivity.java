@@ -30,12 +30,14 @@ import java.util.ArrayList;
 
 public class NewsActivity extends BaseActivity{
 
-    private static final String TAG = "List of news ";
+    private static final String TAG = "LIST_NEWS";
     private ArrayList<News> allNews;
     private RecyclerView rv;
     private NewsAdapter newsAdapter;
     private Context ctx = this;
     private FloatingActionButton fab;
+    private ValueEventListener mNewsValueListener;
+    private Query mGetNewsSorted;
 
     @Override
     public void updateUI() {
@@ -84,8 +86,14 @@ public class NewsActivity extends BaseActivity{
         // Описываем запрос, который отсортирует данные по ключу timeStamp и возвращает в программу
         // весь список данных, которые находятся в child(CHILD_NEWS).
         // В итоге при любом изменении вся база перезаливается с БД в программу
-        Query getNewsSorted = Const.db.child(Const.CHILD_NEWS).orderByChild("timeStamp");
-        getNewsSorted.addValueEventListener(new ValueEventListener() {
+        initNewsListener();
+        mGetNewsSorted = Const.db.child(Const.CHILD_NEWS).orderByChild("timeStamp");
+        mGetNewsSorted.addValueEventListener(mNewsValueListener);
+    }
+
+    /** Initialization news listener */
+    private void initNewsListener(){
+        mNewsValueListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 allNews.clear();
@@ -104,7 +112,7 @@ public class NewsActivity extends BaseActivity{
             public void onCancelled(DatabaseError databaseError) {
                 Log.w(TAG, "onCancelled: ", databaseError.toException() );
             }
-        });
+        };
     }
 
     /** Запуск активити на добавление новости */
@@ -138,5 +146,11 @@ public class NewsActivity extends BaseActivity{
         return super.onOptionsItemSelected(item);
     }
 
-
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if ((mNewsValueListener != null) && (mGetNewsSorted != null)){
+            mGetNewsSorted.removeEventListener(mNewsValueListener);
+        }
+    }
 }
