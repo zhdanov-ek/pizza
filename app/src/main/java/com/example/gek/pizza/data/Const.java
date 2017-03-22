@@ -18,6 +18,7 @@ public class Const {
     public static final String CHILD_RESERVED_TABLES_NEW = "reserved_tables/new";
     public static final String CHILD_RESERVED_TABLES_ARCHIVE = "reserved_tables/archive";
     public static final String CHILD_TOPICS = "topics";
+    public static final String CHILD_COURIER = "courier";
 
     public static final String CHILD_USERS = "users";
     public static final String CHILD_USER_DELIVERY_STATE = "delivery_state";
@@ -126,5 +127,6 @@ public class Const {
     public static final String FCM_KEY="key=";
     public static final String FCM_API="https://fcm.googleapis.com/fcm/send";
 
+    public static final int LOCATION_COURIER_INTERVAL_UPDATE = 3;
 
 }

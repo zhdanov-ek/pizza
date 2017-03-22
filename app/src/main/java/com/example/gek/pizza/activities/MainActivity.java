@@ -17,6 +17,7 @@ import android.widget.LinearLayout;
 import com.example.gek.pizza.R;
 import com.example.gek.pizza.data.Connection;
 import com.example.gek.pizza.data.Const;
+import com.example.gek.pizza.services.CourierService;
 import com.example.gek.pizza.services.ShopService;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -44,8 +45,8 @@ public class MainActivity extends BaseActivity
             case Const.AUTH_USER:
                 llOrdersDevider.setVisibility(View.GONE);
                 llOrders.setVisibility(View.GONE);
-                btnStartService.setVisibility(View.GONE);
-                btnStopService.setVisibility(View.GONE);
+              //  btnStartService.setVisibility(View.GONE);
+              //  btnStopService.setVisibility(View.GONE);
                 break;
             case Const.AUTH_SHOP:
                 llOrdersDevider.setVisibility(View.VISIBLE);
@@ -165,10 +166,10 @@ public class MainActivity extends BaseActivity
 
 
             case R.id.btnStartService:
-                startService(new Intent(this, ShopService.class));
+                startService(new Intent(this, CourierService.class));
                 break;
             case R.id.btnStopService:
-                stopService(new Intent(this, ShopService.class));
+                stopService(new Intent(this, CourierService.class));
                 break;
         }
     }

@@ -31,8 +31,7 @@
             android:name=".activities.MenuGroupsActivity"
             android:launchMode="singleTask" />
         <activity android:name=".activities.MenuGroupEditActivity" />
-        <activity
-            android:name=".activities.DishesActivity"/>
+        <activity android:name=".activities.DishesActivity" />
         <activity android:name=".activities.DishEditActivity" />
         <activity android:name=".activities.MakePizzaActivity" />
         <activity
@@ -58,19 +57,17 @@
         <activity android:name=".activities.DeliveryCreationActivity" />
 
         <service android:name=".services.ShopService" />
+        <service android:name=".services.CourierService" />
         <service android:name=".services.MonitoringYourDeliveryService" />
         <service android:name=".services.MonitoringYourReservationService" />
         <service
-            android:name=".services.MessagingService"
-            android:exported="false">
+            android:name=".services.MessagingService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
-
         <service
-            android:name=".services.InstanceIDListenerService"
-            android:exported="false">
+            android:name=".services.InstanceIDListenerService">
             <intent-filter>
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>
@@ -83,22 +80,22 @@
         <activity android:name=".activities.ArchiveDeliveriesActivity" />
         <activity
             android:name=".activities.DeliveryStatus"
-            android:launchMode="singleTask"/>
+            android:launchMode="singleTask" />
         <activity
             android:name=".activities.ReserveTableActivity"
             android:launchMode="singleTask" />
-        <activity android:name=".activities.AuthenticationActivity"/>
+        <activity android:name=".activities.AuthenticationActivity" />
         <activity
             android:name=".activities.PushActivity"
-            android:launchMode="singleTask"/>
+            android:launchMode="singleTask" />
 
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
-            android:value="@string/facebook_app_id"/>
-
+            android:value="@string/facebook_app_id" />
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"
             android:resource="@drawable/local_pizza_map" />
+
     </application>
 
 </manifest>
