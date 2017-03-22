@@ -83,35 +83,6 @@
                     android:textSize="@dimen/text_size_small" />
             </LinearLayout>
 
-            <!--<TextView-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:layout_gravity="center"-->
-                <!--android:layout_marginTop="20dp"-->
-                <!--android:text="Sign in as:(for debug)"-->
-                <!--android:textSize="@dimen/text_size_middle" />-->
-
-            <!--<RadioGroup-->
-                <!--android:id="@+id/rgUserAdmin"-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:layout_gravity="center"-->
-                <!--android:orientation="horizontal">-->
-
-                <!--<RadioButton-->
-                    <!--android:id="@+id/rbtnUser"-->
-                    <!--android:layout_width="wrap_content"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:text="User" />-->
-
-                <!--<RadioButton-->
-                    <!--android:id="@+id/rbtnAdmin"-->
-                    <!--android:layout_width="wrap_content"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:text="Admin" />-->
-
-            <!--</RadioGroup>-->
-
             <ProgressBar
                 android:id="@+id/progressBar"
                 android:layout_width="wrap_content"

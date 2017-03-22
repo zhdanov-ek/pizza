@@ -32,7 +32,6 @@ public abstract class BaseActivity extends AppCompatActivity
     public abstract void updateUI();
 
     private String TAG = this.getClass().getSimpleName();
-    public static boolean signInAsAdmin = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,9 +75,7 @@ public abstract class BaseActivity extends AppCompatActivity
                     tvAuthName.setText(user.getDisplayName());
                     tvAuthName.setVisibility(View.VISIBLE);
                     tvAuthEmail.setText(user.getEmail());
-                    if (((user.getEmail().contentEquals(Connection.getInstance().getShopEmail()))))
-                            //убрать, для удобной отладки, потом убрать
-//                            && signInAsAdmin) || (signInAsAdmin))
+                    if (user.getEmail().contentEquals(Connection.getInstance().getShopEmail()))
                     {
                         Connection.getInstance().setCurrentAuthStatus(Const.AUTH_SHOP);
 
