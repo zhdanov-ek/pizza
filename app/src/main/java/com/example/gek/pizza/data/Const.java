@@ -53,10 +53,12 @@ public class Const {
     public static final String DISHES_IMAGES_FOLDER = "dishes_images";
 
 
-    // Константы для редактирования и создания элементов
-    public static final String MODE = "edit_mode";
+    // Константы для редактирования и создания элементов, запуска активити в различных режимов
+    public static final String MODE = "mode";
     public static final int MODE_NEW = 0;
     public static final int MODE_EDIT = 1;
+    public static final int MODE_ARCHIVE_DELIVERIES = 11;
+    public static final int MODE_TRANSPORT_DELIVERIES = 12;
 
     public static final String EXTRA_NEWS = "news_object";
     public static final String EXTRA_DISH = "dish_object";
@@ -80,6 +82,7 @@ public class Const {
     public static final int REQUEST_EDIT_DISH = 11;
     public static final int REQUEST_RESERVE_TABLE = 12;
 
+
     // Ключ для кастомной пиццы. Эти блюда не попадают в БД, а используются только на клиенте
     public static final String KEY_DISH_MY_PIZZA = "my_pizza";
 
@@ -98,7 +101,7 @@ public class Const {
 
     public static final Integer LOCATION_INTERVAL_UPDATE = 10;
     public static final Integer LOCATION_DISTANCE_UPDATE = 30;
-    public static final Integer OFFSET_FROM_EDGES_OF_THE_MAP= 150;
+    public static final Integer OFFSET_FROM_EDGES_OF_THE_MAP= 50;
 
     public static final String OPEN_FROM_NOTIFICATION = "open_from_notification";
 

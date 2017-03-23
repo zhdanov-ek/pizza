@@ -51,6 +51,7 @@
     <string name="title_basket">Basket</string>
     <string name="title_delivery">Your delivery</string>
     <string name="title_archive_deliveries">Archive of deliveries</string>
+    <string name="title_transport_deliveries">Transport of deliveries</string>
     <string name="title_archive_dishes">Archive of dishes</string>
     <string name="title_orders">Hot orders</string>
     <string name="title_reserve_table">Reserve table</string>
@@ -214,7 +215,10 @@
     <string name="notification_send_failed">Notification send failed</string>
 
 
-
     <!--- MAKE THE PIZZA  -->
     <string name="name_of_pizza">My pizza</string>
+
+    <string name="title_activity_courier">CourierActivity</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
 </resources>

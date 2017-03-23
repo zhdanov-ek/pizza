@@ -21,6 +21,11 @@ public class LastPosition {
         this.date = date;
     }
 
+    public String toString(){
+        String s = "Lat = " + latitude + ", Long = " + longitude;
+        return s;
+    }
+
     public Double getLatitude() {
         return latitude;
     }

@@ -225,7 +225,9 @@ public class DeliveriesActivity extends BaseActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
             case Const.ACTION_ARCHIVE:
-                startActivity(new Intent(this, ArchiveDeliveriesActivity.class));
+                Intent intentArchive = new Intent(this, OneGroupDeliveriesActivity.class);
+                intentArchive.putExtra(Const.MODE, Const.MODE_ARCHIVE_DELIVERIES);
+                startActivity(intentArchive);
                 break;
         }
         return super.onOptionsItemSelected(item);
