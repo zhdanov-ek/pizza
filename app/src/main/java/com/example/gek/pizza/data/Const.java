@@ -19,6 +19,8 @@ public class Const {
     public static final String CHILD_RESERVED_TABLES_ARCHIVE = "reserved_tables/archive";
     public static final String CHILD_TOPICS = "topics";
 
+    public static final String REMOTE_CONFIG_ADMIN_EMAIL = "admin_email";
+
     public static final String CHILD_USERS = "users";
     public static final String CHILD_USER_DELIVERY_STATE = "delivery_state";
     public static final String CHILD_USER_RESERVATION_STATE = "reservation_state";
@@ -126,5 +128,6 @@ public class Const {
     public static final String FCM_KEY="key=";
     public static final String FCM_API="https://fcm.googleapis.com/fcm/send";
 
+    public static final String ADMIN_EMAIL_BY_DEFAULT="ivleshch@gmail.com";
 
 }

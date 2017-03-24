@@ -32,6 +32,8 @@ import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
@@ -39,9 +41,14 @@ import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.auth.ProviderQueryResult;
+import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
+import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
 
 
 /**  Обработка аутентефикации */
@@ -67,6 +74,7 @@ public class AuthenticationActivity extends BaseActivity
     private final String VISIBILITY_TV_STATUS = "visibility_tv_status";
 
     private boolean isBtnGoogleSignInVisible, isBtnFacebookSignInVisible, isTvStatusVisible;
+    protected FirebaseRemoteConfig firebaseRemoteConfig;
 
 
     @Override
@@ -195,16 +203,56 @@ public class AuthenticationActivity extends BaseActivity
                 Log.d("Auth", "facebook:onError", error);
             }
         });
+
+        // Initialize Firebase Remote Config.
+        firebaseRemoteConfig = FirebaseRemoteConfig.getInstance();
+        // Define Firebase Remote Config Settings.
+        FirebaseRemoteConfigSettings firebaseRemoteConfigSettings =
+                new FirebaseRemoteConfigSettings.Builder()
+                        .setDeveloperModeEnabled(true)
+                        .build();
+
+        // Default config values
+        Map<String, Object> defaultConfigMap = new HashMap<>();
+        defaultConfigMap.put(Const.REMOTE_CONFIG_ADMIN_EMAIL, Const.ADMIN_EMAIL_BY_DEFAULT);
+
+        // Apply config settings and default values.
+        firebaseRemoteConfig.setConfigSettings(firebaseRemoteConfigSettings);
+        firebaseRemoteConfig.setDefaults(defaultConfigMap);
+    }
+
+    public void fetchConfig(int id) {
+        final int btnID = id;
+        long cacheExpiration = 3600; // 1 hour in seconds
+        // Cache actuality
+        if (firebaseRemoteConfig.getInfo().getConfigSettings().isDeveloperModeEnabled()) {
+            cacheExpiration = 0;
+        }
+        firebaseRemoteConfig.fetch(cacheExpiration)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        firebaseRemoteConfig.activateFetched();
+                        applyRetrievedAdminEmail(btnID);
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Error fetching config: " +
+                                e.getMessage());
+                        applyRetrievedAdminEmail(btnID);
+                    }
+                });
     }
 
 
-    @Override
-    public void onClick(View view) {
-        switch (view.getId()) {
+    private void applyRetrievedAdminEmail(int btnID) {
+        String adminEmail = firebaseRemoteConfig.getString(Const.REMOTE_CONFIG_ADMIN_EMAIL);
+        Connection.getInstance().setShopEmail(adminEmail);
+
+        switch (btnID) {
             case R.id.btnGoogleSignIn:
-//                btnGoogleSignIn.setVisibility(View.INVISIBLE);
-//                tvStatus.setText("Connection to Google...\n\n");
-//                tvStatus.setVisibility(View.VISIBLE);
                 progressBar.setVisibility(View.VISIBLE);
                 // Формируем интент гугл апи, которому передаем подготовленные ранее параметры
                 Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
@@ -215,6 +263,20 @@ public class AuthenticationActivity extends BaseActivity
                 break;
         }
 
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.btnGoogleSignIn:
+                // Fetch remote config. Get admin email
+                fetchConfig(view.getId());
+                break;
+            case R.id.btnFacebookSignIn:
+                // Fetch remote config. Get admin email
+                fetchConfig(view.getId());
+                break;
+        }
     }
 
     /**

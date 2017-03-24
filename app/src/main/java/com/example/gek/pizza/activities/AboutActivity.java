@@ -120,6 +120,7 @@ public class AboutActivity extends BaseActivity implements
     public void updateUI() {
     }
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -244,6 +245,8 @@ public class AboutActivity extends BaseActivity implements
         MenuItem item = navigationView.getMenu().findItem(R.id.nav_about);
         item.setCheckable(true);
         item.setChecked(true);
+
+
     }
 
     private void setSlidingUpPanelLayoutListeners() {

@@ -18,7 +18,7 @@ public class Connection {
 
     // Еmail of shop for auth as administration of pizzeria
 
-    private String shopEmail = "ivlesh6ch@gmail.com";
+    private String shopEmail = Const.ADMIN_EMAIL_BY_DEFAULT;
 
     public static synchronized Connection getInstance(){
         if (instance == null) {
@@ -54,6 +54,10 @@ public class Connection {
 
     public String getShopEmail() {
         return shopEmail;
+    }
+
+    public void setShopEmail(String shopEmail) {
+        this.shopEmail = shopEmail;
     }
 
     public int getCurrentAuthStatus() {
