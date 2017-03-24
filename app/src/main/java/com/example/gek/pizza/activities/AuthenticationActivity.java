@@ -39,6 +39,7 @@ import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.auth.ProviderQueryResult;
+import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -67,6 +68,7 @@ public class AuthenticationActivity extends BaseActivity
     private final String VISIBILITY_TV_STATUS = "visibility_tv_status";
 
     private boolean isBtnGoogleSignInVisible, isBtnFacebookSignInVisible, isTvStatusVisible;
+    protected FirebaseRemoteConfig firebaseRemoteConfig;
 
 
     @Override
@@ -195,6 +197,7 @@ public class AuthenticationActivity extends BaseActivity
                 Log.d("Auth", "facebook:onError", error);
             }
         });
+
     }
 
 
@@ -202,9 +205,6 @@ public class AuthenticationActivity extends BaseActivity
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.btnGoogleSignIn:
-//                btnGoogleSignIn.setVisibility(View.INVISIBLE);
-//                tvStatus.setText("Connection to Google...\n\n");
-//                tvStatus.setVisibility(View.VISIBLE);
                 progressBar.setVisibility(View.VISIBLE);
                 // Формируем интент гугл апи, которому передаем подготовленные ранее параметры
                 Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);

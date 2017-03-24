@@ -127,6 +127,7 @@ public abstract class BaseActivity extends AppCompatActivity
 
     }
 
+
     @Override
     protected void onResume() {
         super.onResume();

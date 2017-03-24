@@ -1,10 +1,14 @@
 package com.example.gek.pizza.data;
 
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
 import com.facebook.login.LoginManager;
 import com.google.firebase.auth.FirebaseAuth;
+
+import static com.facebook.FacebookSdk.getApplicationContext;
 
 /**
  * Singleton
@@ -18,7 +22,8 @@ public class Connection {
 
     // Еmail of shop for auth as administration of pizzeria
 
-    private String shopEmail = "ivlesh6ch@gmail.com";
+    private SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+    private String shopEmail = sharedPreferences.getString(Const.SETTINGS_ADMIN_EMAIL_KEY, Const.ADMIN_EMAIL_BY_DEFAULT);
 
     public static synchronized Connection getInstance(){
         if (instance == null) {
@@ -54,6 +59,10 @@ public class Connection {
 
     public String getShopEmail() {
         return shopEmail;
+    }
+
+    public void setShopEmail(String shopEmail) {
+        this.shopEmail = shopEmail;
     }
 
     public int getCurrentAuthStatus() {
