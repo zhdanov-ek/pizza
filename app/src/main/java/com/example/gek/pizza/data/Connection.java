@@ -20,10 +20,13 @@ public class Connection {
     private static Connection instance;
     private int currentAuthStatus;
 
-    // Еmail of shop for auth as administration of pizzeria
-
-    private SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-    private String shopEmail = sharedPreferences.getString(Const.SETTINGS_ADMIN_EMAIL_KEY, Const.ADMIN_EMAIL_BY_DEFAULT);
+    // Еmails for auth as shop and courier of pizzeria
+    private SharedPreferences sharedPreferences =
+            PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+    private String shopEmail =
+            sharedPreferences.getString(Const.SETTINGS_ADMIN_EMAIL_KEY, Const.ADMIN_EMAIL_BY_DEFAULT);
+    private String courierEmail =
+            sharedPreferences.getString(Const.SETTINGS_COURIER_EMAIL_KEY, Const.COURIER_EMAIL_BY_DEFAULT);
 
     public static synchronized Connection getInstance(){
         if (instance == null) {
@@ -60,9 +63,15 @@ public class Connection {
     public String getShopEmail() {
         return shopEmail;
     }
-
     public void setShopEmail(String shopEmail) {
         this.shopEmail = shopEmail;
+    }
+
+    public String getCourierEmail() {
+        return courierEmail;
+    }
+    public void setCourierEmail(String courierEmail) {
+        this.courierEmail = courierEmail;
     }
 
     public int getCurrentAuthStatus() {

@@ -75,21 +75,28 @@ public abstract class BaseActivity extends AppCompatActivity
                     tvAuthName.setText(user.getDisplayName());
                     tvAuthName.setVisibility(View.VISIBLE);
                     tvAuthEmail.setText(user.getEmail());
-                    if (user.getEmail().contentEquals(Connection.getInstance().getShopEmail()))
-                    {
-                        Connection.getInstance().setCurrentAuthStatus(Const.AUTH_SHOP);
 
+                    // admin
+                    if (user.getEmail().contentEquals(Connection.getInstance().getShopEmail())){
                         // если admin то отписываемся от рассылки
+                        Connection.getInstance().setCurrentAuthStatus(Const.AUTH_SHOP);
                         Utils.subscribeOrUnsubscribeFromTopic(false);
-
                         Log.d(TAG, "FireBase authentication success (SHOP) " + user.getEmail());
+
+                    // courier
+                    } else if (user.getEmail().contentEquals(Connection.getInstance().getCourierEmail())){
+                        Connection.getInstance().setCurrentAuthStatus(Const.AUTH_COURIER);
+                        Utils.subscribeOrUnsubscribeFromTopic(true);
+                        Log.d(TAG, "FireBase authentication success (COURIER) " + user.getEmail());
+
+                    // auth client
                     } else {
                         Connection.getInstance().setCurrentAuthStatus(Const.AUTH_USER);
-
                         Utils.subscribeOrUnsubscribeFromTopic(true);
-
                         Log.d(TAG, "FireBase authentication success (USER) " + user.getEmail());
                     }
+
+                // guest client
                 } else {
                     tvAuthName.setVisibility(View.INVISIBLE);
                     tvAuthEmail.setText(R.string.common_signin_button_text);
@@ -101,12 +108,21 @@ public abstract class BaseActivity extends AppCompatActivity
                 switch (Connection.getInstance().getCurrentAuthStatus()){
                     case Const.AUTH_SHOP:
                         navigationView.getMenu().findItem(R.id.nav_shop_group).setVisible(true);
+                        navigationView.getMenu().findItem(R.id.nav_courier_group).setVisible(false);
+                        navigationView.getMenu().findItem(R.id.nav_delivery_status).setVisible(false);
+                        navigationView.getMenu().findItem(R.id.nav_favorite).setVisible(false);
+                        navigationView.getMenu().findItem(R.id.nav_pizza).setVisible(false);
+                        break;
+                    case Const.AUTH_COURIER:
+                        navigationView.getMenu().findItem(R.id.nav_shop_group).setVisible(false);
+                        navigationView.getMenu().findItem(R.id.nav_courier_group).setVisible(true);
                         navigationView.getMenu().findItem(R.id.nav_delivery_status).setVisible(false);
                         navigationView.getMenu().findItem(R.id.nav_favorite).setVisible(false);
                         navigationView.getMenu().findItem(R.id.nav_pizza).setVisible(false);
                         break;
                     case Const.AUTH_USER:
                         navigationView.getMenu().findItem(R.id.nav_shop_group).setVisible(false);
+                        navigationView.getMenu().findItem(R.id.nav_courier_group).setVisible(false);
                         navigationView.getMenu().findItem(R.id.nav_delivery_status).setVisible(true);
                         navigationView.getMenu().findItem(R.id.nav_favorite).setVisible(true);
                         navigationView.getMenu().findItem(R.id.nav_pizza).setVisible(true);
@@ -115,16 +131,15 @@ public abstract class BaseActivity extends AppCompatActivity
                         break;
                     case Const.AUTH_NULL:
                         navigationView.getMenu().findItem(R.id.nav_shop_group).setVisible(false);
+                        navigationView.getMenu().findItem(R.id.nav_courier_group).setVisible(false);
                         navigationView.getMenu().findItem(R.id.nav_delivery_status).setVisible(false);
                         navigationView.getMenu().findItem(R.id.nav_favorite).setVisible(false);
                         navigationView.getMenu().findItem(R.id.nav_pizza).setVisible(true);
                         break;
                 }
-
                 updateUI();
             }
         };
-
     }
 
 
@@ -170,6 +185,14 @@ public abstract class BaseActivity extends AppCompatActivity
                 Intent favoritesIntent = new Intent(this, DishesActivity.class);
                 favoritesIntent.putExtra(Const.EXTRA_IS_FAVORITE, true);
                 startActivity(favoritesIntent);
+                break;
+            case R.id.nav_list_addresses:
+                Intent addressesIntent = new Intent(this, OneGroupDeliveriesActivity.class);
+                addressesIntent.putExtra(Const.MODE, Const.MODE_TRANSPORT_DELIVERIES);
+                startActivity(addressesIntent);
+                break;
+            case R.id.nav_map_with_addresses:
+                // TODO: 24.03.17 open map with clients
                 break;
             case R.id.nav_pizza:
                 startActivity(new Intent(this, MakePizzaActivity.class));

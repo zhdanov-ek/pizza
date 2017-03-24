@@ -43,8 +43,8 @@ public class OneGroupDeliveriesActivity extends BaseActivity {
 
     @Override
     public void updateUI() {
-        if ((Connection.getInstance().getCurrentAuthStatus() != Const.AUTH_SHOP) ||
-        (Connection.getInstance().getCurrentAuthStatus() != Const.AUTH_COURIER)) {
+        if ((Connection.getInstance().getCurrentAuthStatus() == Const.AUTH_NULL) ||
+        (Connection.getInstance().getCurrentAuthStatus() == Const.AUTH_USER)) {
             finish();
         }
     }

@@ -96,7 +96,9 @@ public class Const {
     public static final String SETTINGS_LATITUDE_KEY    = "latitude";
     public static final String SETTINGS_LONGITUDE_KEY   = "longitude";
     public static final String SETTINGS_ADMIN_EMAIL_KEY = "admin_email";
-    public static final String ADMIN_EMAIL_BY_DEFAULT   = "none@gmail.com";
+    public static final String SETTINGS_COURIER_EMAIL_KEY = "courier_email";
+    public static final String COURIER_EMAIL_BY_DEFAULT = "nonecourier@gmail.com";
+    public static final String ADMIN_EMAIL_BY_DEFAULT   = "noneadmin@gmail.com";
     public static final Integer ZOOM_MAP                = 17;
 
     public static final int REQUEST_CODE_LOCATION  = 20;

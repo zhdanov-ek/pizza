@@ -3,39 +3,55 @@
 
     <group android:checkableBehavior="single">
 
-    <item android:title="@string/shop"
-        android:id="@+id/nav_shop_group"
-        android:visible="false">
-        <menu>
         <item
-            android:id="@+id/nav_deliveries"
-            android:icon="@drawable/ic_menu_delivery"
-            android:title="@string/main_title_orders" />
+            android:id="@+id/nav_shop_group"
+            android:title="@string/shop"
+            android:visible="false">
+            <menu>
+                <item
+                    android:id="@+id/nav_deliveries"
+                    android:icon="@drawable/ic_menu_delivery"
+                    android:title="@string/main_title_orders" />
 
-            <item
-                android:id="@+id/nav_settings"
-                android:icon="@drawable/ic_menu_settings"
-                android:title="@string/title_settings" />
+                <item
+                    android:id="@+id/nav_settings"
+                    android:icon="@drawable/ic_menu_settings"
+                    android:title="@string/title_settings" />
 
-            <item
-                android:id="@+id/nav_push"
-                android:icon="@drawable/ic_menu_push"
-                android:title="@string/title_push" />
+                <item
+                    android:id="@+id/nav_push"
+                    android:icon="@drawable/ic_menu_push"
+                    android:title="@string/title_push" />
 
-        </menu>
-    </item>
+            </menu>
+        </item>
+
+        <item
+            android:id="@+id/nav_courier_group"
+            android:title="@string/courier"
+            android:visible="false">
+            <menu>
+                <item
+                    android:id="@+id/nav_list_addresses"
+                    android:icon="@drawable/ic_menu_list"
+                    android:title="@string/title_transport_deliveries" />
+
+                <item
+                    android:id="@+id/nav_map_with_addresses"
+                    android:icon="@drawable/ic_menu_place"
+                    android:title="@string/title_addresses_on_map" />
+            </menu>
+        </item>
 
         <item
             android:id="@+id/nav_dishes"
             android:icon="@drawable/ic_menu_dishes"
             android:title="@string/title_menu_order" />
 
-
         <item
             android:id="@+id/nav_favorite"
             android:icon="@drawable/ic_menu_favorite"
             android:title="@string/title_favorites" />
-
 
         <item
             android:id="@+id/nav_pizza"
@@ -56,7 +72,7 @@
             android:id="@+id/nav_delivery_status"
             android:icon="@drawable/ic_menu_delivery_status"
             android:title="@string/title_delivery"
-            android:visible="false"/>
+            android:visible="false" />
 
         <item
             android:id="@+id/nav_about"

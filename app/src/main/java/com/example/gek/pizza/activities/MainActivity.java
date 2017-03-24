@@ -36,6 +36,7 @@ public class MainActivity extends BaseActivity
     @Override
     public void updateUI() {
         switch (Connection.getInstance().getCurrentAuthStatus()){
+            //// TODO: 24.03.17 optimize this
             case Const.AUTH_NULL:
                 llOrdersDevider.setVisibility(View.GONE);
                 llOrders.setVisibility(View.GONE);
@@ -53,6 +54,12 @@ public class MainActivity extends BaseActivity
                 llOrders.setVisibility(View.VISIBLE);
                 btnStartService.setVisibility(View.VISIBLE);
                 btnStopService.setVisibility(View.VISIBLE);
+                break;
+            case Const.AUTH_COURIER:
+                llOrdersDevider.setVisibility(View.GONE);
+                llOrders.setVisibility(View.GONE);
+                btnStartService.setVisibility(View.GONE);
+                btnStopService.setVisibility(View.GONE);
                 break;
         }
     }
@@ -105,12 +112,22 @@ public class MainActivity extends BaseActivity
         ValueEventListener settingsListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                long num = dataSnapshot.getChildrenCount();
-                Log.d(TAG, "Load all list Settings: total Children objects:" + num);
                 for (DataSnapshot child: dataSnapshot.getChildren()) {
+                    // get admin email
                     if (child.getKey().equals(Const.SETTINGS_ADMIN_EMAIL_KEY)) {
-                        String currentAdminEmail = sharedPreferences.getString(Const.SETTINGS_ADMIN_EMAIL_KEY, Const.ADMIN_EMAIL_BY_DEFAULT);
+                        String currentAdminEmail = sharedPreferences.getString(
+                                Const.SETTINGS_ADMIN_EMAIL_KEY,
+                                Const.ADMIN_EMAIL_BY_DEFAULT);
                         if (!currentAdminEmail.equals(child.getValue().toString())){
+                            Connection.getInstance().setShopEmail(child.getValue().toString());
+                        }
+                    }
+                    // get courier email
+                    if (child.getKey().equals(Const.SETTINGS_COURIER_EMAIL_KEY)) {
+                        String currentCourierEmail = sharedPreferences.getString(
+                                Const.SETTINGS_COURIER_EMAIL_KEY,
+                                Const.COURIER_EMAIL_BY_DEFAULT);
+                        if (!currentCourierEmail.equals(child.getValue().toString())){
                             Connection.getInstance().setShopEmail(child.getValue().toString());
                         }
                     }
@@ -171,7 +188,6 @@ public class MainActivity extends BaseActivity
             case R.id.llReservations:
                 startActivity(new Intent(this, ReserveTableActivity.class));
                 break;
-
 
             case R.id.btnStartService:
                 startService(new Intent(this, CourierService.class));
