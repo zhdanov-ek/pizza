@@ -96,7 +96,7 @@ public class MainActivity extends BaseActivity
 
 
         //Получение настроек приложения
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         final SharedPreferences.Editor editor = sharedPreferences.edit();
 
         ValueEventListener settingsListener = new ValueEventListener() {
@@ -105,6 +105,12 @@ public class MainActivity extends BaseActivity
                 long num = dataSnapshot.getChildrenCount();
                 Log.d(TAG, "Load all list Settings: total Children objects:" + num);
                 for (DataSnapshot child: dataSnapshot.getChildren()) {
+                    if (child.getKey().equals(Const.SETTINGS_ADMIN_EMAIL_KEY)) {
+                        String currentAdminEmail = sharedPreferences.getString(Const.SETTINGS_ADMIN_EMAIL_KEY, Const.ADMIN_EMAIL_BY_DEFAULT);
+                        if (!currentAdminEmail.equals(child.getValue().toString())){
+                            Connection.getInstance().setShopEmail(child.getValue().toString());
+                        }
+                    }
                     editor.putString(child.getKey(), child.getValue().toString()).apply();
                 }
             }

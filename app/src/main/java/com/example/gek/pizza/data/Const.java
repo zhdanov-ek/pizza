@@ -91,6 +91,8 @@ public class Const {
     public static final String SETTINGS_EMAIL_KEY       = "email";
     public static final String SETTINGS_LATITUDE_KEY    = "latitude";
     public static final String SETTINGS_LONGITUDE_KEY   = "longitude";
+    public static final String SETTINGS_ADMIN_EMAIL_KEY = "admin_email";
+    public static final String ADMIN_EMAIL_BY_DEFAULT   = "none@gmail.com";
     public static final Integer ZOOM_MAP                = 17;
 
     public static final int REQUEST_CODE_LOCATION  = 20;
@@ -127,7 +129,5 @@ public class Const {
     public static final String FCM_AUTHORIZATION="authorization";
     public static final String FCM_KEY="key=";
     public static final String FCM_API="https://fcm.googleapis.com/fcm/send";
-
-    public static final String ADMIN_EMAIL_BY_DEFAULT="ivleshch@gmail.com";
 
 }
