@@ -83,6 +83,8 @@
     <string name="mes_no_orders">Here is empty. First, you need to add one or more dish.</string>
     <string name="mes_your_order_performed">Your order performed now</string>
 
+    <string name="permission_location_not_granded">No permissions for use locales</string>
+
     <string name="confirm_remove_item">Do you want remove item?</string>
 
     <string name="hint_title_news">Title of news</string>

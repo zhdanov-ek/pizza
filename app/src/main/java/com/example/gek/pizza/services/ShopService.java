@@ -95,7 +95,7 @@ public class ShopService extends Service {
         setListenerNewDeliveries();
         setListenerArchiveOrderedTableListener();
         setListenerNewOrderedTableListener();
-
+        Connection.getInstance().setServiceRunning(true);
         return START_STICKY;
     }
 

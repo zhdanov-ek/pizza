@@ -1,10 +1,15 @@
 package com.example.gek.pizza.data;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
+import com.example.gek.pizza.services.CourierService;
+import com.example.gek.pizza.services.MonitoringYourDeliveryService;
+import com.example.gek.pizza.services.MonitoringYourReservationService;
+import com.example.gek.pizza.services.ShopService;
 import com.facebook.login.LoginManager;
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -19,6 +24,7 @@ public class Connection {
     private static final String TAG = "CONNECTION singleton";
     private static Connection instance;
     private int currentAuthStatus;
+    private boolean serviceRunning;
 
     // Еmails for auth as shop and courier of pizzeria
     private SharedPreferences sharedPreferences =
@@ -37,26 +43,35 @@ public class Connection {
 
     // Constructor
     private Connection(){
+        serviceRunning = false;
     }
 
 
+    /** Sign out user: close service if need */
     public void signOut(Context ctx){
-        //todo включить после основных работ отладочных и удаления кнопок в главном меню (запуск сервиса)
-//        if (currentAuthStatus == Const.AUTH_SHOP) {
-//            ctx.stopService(new Intent(ctx, ShopService.class));
-//        }
-        FirebaseAuth.getInstance().signOut();
-
-        // destroy Favorites if signOut from UserStatus. Need for correct work favorites in new session
-        if (currentAuthStatus ==  Const.AUTH_USER)  {
-            Favorites.getInstance().closeSession();
+        switch (currentAuthStatus){
+            case Const.AUTH_SHOP:
+                ctx.stopService(new Intent(ctx, ShopService.class));
+                break;
+            case Const.AUTH_COURIER:
+                ctx.stopService(new Intent(ctx, CourierService.class));
+                break;
+            case Const.AUTH_USER:
+                ctx.stopService(new Intent(ctx, MonitoringYourDeliveryService.class));
+                ctx.stopService(new Intent(ctx, MonitoringYourReservationService.class));
+                // destroy Favorites if signOut from UserStatus.
+                // Need for correct work favorites in new session
+                Favorites.getInstance().closeSession();
+                break;
         }
+
+        FirebaseAuth.getInstance().signOut();
         currentAuthStatus = Const.AUTH_NULL;
+        serviceRunning = false;
         Log.d(TAG, "sign out FireBase");
 
 //      programmatically logout
         LoginManager.getInstance().logOut();
-
     }
 
 
@@ -77,8 +92,14 @@ public class Connection {
     public int getCurrentAuthStatus() {
         return currentAuthStatus;
     }
-
     public void setCurrentAuthStatus(int currentAuthStatus) {
         this.currentAuthStatus = currentAuthStatus;
+    }
+
+    public boolean getServiceRunning() {
+        return serviceRunning;
+    }
+    public void setServiceRunning(boolean serviceRunning) {
+        serviceRunning = serviceRunning;
     }
 }

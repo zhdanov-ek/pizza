@@ -244,6 +244,7 @@ public class DeliveryStatus extends BaseActivity {
      */
     private void showStateDeliveryClosed(Delivery d) {
         String mes = "";
+        btnShowCourier.setVisibility(View.GONE);
         if (d.getPaid()) {
             ivStep4.setImageResource(R.drawable.step_circle_current);
             tvStep1Num.setText("+");

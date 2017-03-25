@@ -28,38 +28,20 @@ public class MainActivity extends BaseActivity
 
     private LinearLayout llMenuOrder, llNews, llOrders, llContacts, llReservations;
     private LinearLayout llOrdersDevider;
-    private Button btnStartService, btnStopService, btnShowCourier;
     private static final String TAG = "MAIN_MENU";
 
-    // todo убрать кнопки запуска сервиса, а сервис запускать после аутентификации ЗАВЕДЕНИЯ. Выключать
-    // при логауте
     @Override
     public void updateUI() {
         switch (Connection.getInstance().getCurrentAuthStatus()){
-            //// TODO: 24.03.17 optimize this
             case Const.AUTH_NULL:
-                llOrdersDevider.setVisibility(View.GONE);
-                llOrders.setVisibility(View.GONE);
-                btnStartService.setVisibility(View.GONE);
-                btnStopService.setVisibility(View.GONE);
-                break;
             case Const.AUTH_USER:
+            case Const.AUTH_COURIER:
                 llOrdersDevider.setVisibility(View.GONE);
                 llOrders.setVisibility(View.GONE);
-                btnStartService.setVisibility(View.GONE);
-                btnStopService.setVisibility(View.GONE);
                 break;
             case Const.AUTH_SHOP:
                 llOrdersDevider.setVisibility(View.VISIBLE);
                 llOrders.setVisibility(View.VISIBLE);
-                btnStartService.setVisibility(View.VISIBLE);
-                btnStopService.setVisibility(View.VISIBLE);
-                break;
-            case Const.AUTH_COURIER:
-                llOrdersDevider.setVisibility(View.GONE);
-                llOrders.setVisibility(View.GONE);
-                btnStartService.setVisibility(View.GONE);
-                btnStopService.setVisibility(View.GONE);
                 break;
         }
     }
@@ -96,15 +78,6 @@ public class MainActivity extends BaseActivity
         llReservations = (LinearLayout) findViewById(R.id.llReservations);
         llReservations.setOnClickListener(this);
 
-        //todo move to settings
-        btnStartService = (Button) findViewById(R.id.btnStartService);
-        btnStopService = (Button) findViewById(R.id.btnStopService);
-        btnShowCourier = (Button) findViewById(R.id.btnShowCourier);
-        btnStartService.setOnClickListener(this);
-        btnStopService.setOnClickListener(this);
-        btnShowCourier.setOnClickListener(this);
-
-
         //Получение настроек приложения
         final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         final SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -128,7 +101,7 @@ public class MainActivity extends BaseActivity
                                 Const.SETTINGS_COURIER_EMAIL_KEY,
                                 Const.COURIER_EMAIL_BY_DEFAULT);
                         if (!currentCourierEmail.equals(child.getValue().toString())){
-                            Connection.getInstance().setShopEmail(child.getValue().toString());
+                            Connection.getInstance().setCourierEmail(child.getValue().toString());
                         }
                     }
                     editor.putString(child.getKey(), child.getValue().toString()).apply();
@@ -140,10 +113,7 @@ public class MainActivity extends BaseActivity
             }
         };
         Const.db.child(Const.CHILD_SETTINGS).addValueEventListener(settingsListener);
-
     }
-
-
 
 
     @Override
@@ -188,17 +158,14 @@ public class MainActivity extends BaseActivity
             case R.id.llReservations:
                 startActivity(new Intent(this, ReserveTableActivity.class));
                 break;
-
-            case R.id.btnStartService:
-                startService(new Intent(this, CourierService.class));
-                break;
-            case R.id.btnStopService:
-                stopService(new Intent(this, CourierService.class));
-                break;
-            case R.id.btnShowCourier:
-                startActivity(new Intent(this, CourierActivity.class));
-                break;
         }
     }
 
+    @Override
+    protected void onDestroy() {
+        if (Connection.getInstance().getCurrentAuthStatus() == Const.AUTH_COURIER){
+            stopService(new Intent(this, CourierService.class));
+        }
+        super.onDestroy();
+    }
 }

@@ -82,18 +82,20 @@ public class DeliveriesAdapter extends RecyclerView.Adapter<DeliveriesAdapter.Vi
                 details += ctx.getResources().getString(R.string.name_of_pizza) + " x " +
                         delivery.getNumbersMyPizza().get(j);
                 details += delivery.getTextMyPizza().get(j) + "\n\n";
-                details += delivery.getTextMyPizza().get(j) + "\n\n";
             }
         }
 
         // По ключу блюда находим его в списке и получаем полную инфу. Берем кол-во и формируем строку
-        for (int i = 0; i < delivery.getNumbersDishes().size(); i++) {
-            Dish nextDish = AllDishes.getInstance().getDish(delivery.getKeysDishes().get(i));
-            details += Utils.makeOrderString(nextDish, delivery.getNumbersDishes().get(i));
-            if (i < delivery.getNumbersDishes().size()){
-                details += "\n";
+        if (delivery.getKeysDishes() != null) {
+            for (int i = 0; i < delivery.getNumbersDishes().size(); i++) {
+                Dish nextDish = AllDishes.getInstance().getDish(delivery.getKeysDishes().get(i));
+                details += Utils.makeOrderString(nextDish, delivery.getNumbersDishes().get(i));
+                if (i < delivery.getNumbersDishes().size()){
+                    details += "\n";
+                }
             }
         }
+
         holder.tvDetails.setText(details);
 
         // Формируем надписи на кнопках в зависимости в каком состоянии доставка

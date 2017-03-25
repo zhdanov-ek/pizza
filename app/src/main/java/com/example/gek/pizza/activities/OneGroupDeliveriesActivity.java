@@ -90,7 +90,12 @@ public class OneGroupDeliveriesActivity extends BaseActivity {
 
         mList = new ArrayList<>();
         initListener();
-        db.child(Const.CHILD_DELIVERIES_ARCHIVE).addValueEventListener(mDeliveriesListener);
+        if (isArchive) {
+            db.child(Const.CHILD_DELIVERIES_ARCHIVE).addValueEventListener(mDeliveriesListener);
+        } else {
+            db.child(Const.CHILD_DELIVERIES_TRANSPORT).addValueEventListener(mDeliveriesListener);
+        }
+
     }
 
 

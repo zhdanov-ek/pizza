@@ -9,6 +9,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
+import com.example.gek.pizza.data.Connection;
 import com.example.gek.pizza.data.Const;
 import com.example.gek.pizza.data.LastPosition;
 import com.google.android.gms.common.ConnectionResult;
@@ -25,7 +26,7 @@ import java.util.Date;
  *  Clients read this data for see where the pizza now
  *
  *  Service work if "deliveries/transport" not empty. If courier move last delivery to "archive"
- *  service must be stop. When courier open application and receive deliveries service mast be start.
+ *  service must be stop. When courier open application and receive deliveries service must be start.
  * */
 
 public class CourierService extends Service
@@ -55,6 +56,7 @@ public class CourierService extends Service
                     .build();
         }
         mGoogleApiClient.connect();
+        Connection.getInstance().setServiceRunning(true);
         return START_STICKY;
     }
 

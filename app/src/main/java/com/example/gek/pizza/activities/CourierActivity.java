@@ -2,19 +2,22 @@ package com.example.gek.pizza.activities;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
-import android.location.Criteria;
 import android.location.Location;
-import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
+import android.view.View;
+import android.widget.LinearLayout;
 
 import com.example.gek.pizza.R;
 import com.example.gek.pizza.data.Const;
 import com.example.gek.pizza.data.LastPosition;
+import com.example.gek.pizza.helpers.Utils;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
@@ -44,7 +47,8 @@ public class CourierActivity extends FragmentActivity
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener {
 
-    public static final String TAG = "COURIER_ACTIVITY";
+    private static final String TAG = "COURIER_ACTIVITY";
+    private LinearLayout llContainer;
     private GoogleMap mMap;
     private GoogleApiClient mGoogleApiClient;
     private LastPosition mPositionCourier;
@@ -56,11 +60,9 @@ public class CourierActivity extends FragmentActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_courier);
 
+        llContainer = (LinearLayout) findViewById(R.id.llContainer);
         // get location courier from DB
         Const.db.child(Const.CHILD_COURIER).addValueEventListener(mPositionCourierListener);
-
-//        // get current location of client
-//        mClientLocation = getCurrentLocation();*/
 
         // Устанавливаем колбек для найденного фрагмента, который сработает после загрузки карты
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -76,11 +78,11 @@ public class CourierActivity extends FragmentActivity
                 .build();
     }
 
-    // Инициализировалась карта - подключаем GoogleApiClient
+    // Инициализировалась карта - проверяем разрешения и если они есть то подключаем GoogleApiClient
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        mGoogleApiClient.connect();
+        connectToGoogleApiClient();
     }
 
     // Подключился GoogleApiClient
@@ -98,14 +100,14 @@ public class CourierActivity extends FragmentActivity
                     || (Build.VERSION.SDK_INT < Build.VERSION_CODES.M)) {
 
                 mMap.setMyLocationEnabled(true);
-               // lastLocation = LocationServices.FusedLocationApi.getLastLocation(googleApiClient);
                 LocationRequest locationRequest = LocationRequest.create()
                         .setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY)
                         .setInterval(Const.LOCATION_INTERVAL_UPDATE * 1000);  // проверка положение каждые 10 сек.
                 LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, locationRequest, this);
+                updateUi();
             }
         }else {
-            mGoogleApiClient.connect();
+            connectToGoogleApiClient();
         }
     }
 
@@ -114,7 +116,7 @@ public class CourierActivity extends FragmentActivity
     @Override
     public void onLocationChanged(Location location) {
         mClientLocation = new LatLng(location.getLatitude(), location.getLongitude());
-        if ((mMap != null) && (mPositionCourier != null)){
+        if (mMap != null){
             updateUi();
         }
     }
@@ -122,11 +124,14 @@ public class CourierActivity extends FragmentActivity
 
     /** Перерисовываем всю карту */
     private void updateUi(){
+        if ((mClientLocation == null) || (mPositionCourier == null)){
+            return;
+        }
+
         mMap.clear();
         mMap.addMarker(new MarkerOptions()
                 .position(mClientLocation)
                 .title(FirebaseAuth.getInstance().getCurrentUser().getDisplayName()));
-
         mMap.addMarker(new MarkerOptions()
                 .position(new LatLng(mPositionCourier.getLatitude(), mPositionCourier.getLongitude()))
                 .icon(bdPizza)
@@ -150,7 +155,7 @@ public class CourierActivity extends FragmentActivity
         public void onDataChange(DataSnapshot dataSnapshot) {
             mPositionCourier = dataSnapshot.getValue(LastPosition.class);
             Log.d(TAG, "onDataChange: get Location " + mPositionCourier.toString());
-            if ((mMap != null) && (mClientLocation != null)) {
+            if (mMap != null) {
                 updateUi();
             }
         }
@@ -160,6 +165,50 @@ public class CourierActivity extends FragmentActivity
             Log.e(TAG, "onCancelled: " + databaseError.getDetails());
         }
     };
+
+
+    private void connectToGoogleApiClient() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M &&
+                this.checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            requestPermissions(
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                    Const.REQUEST_CODE_LOCATION);
+        } else {
+            mGoogleApiClient.connect();
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case REQUEST_CODE_LOCATION: {
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    mGoogleApiClient.connect();
+                } else {
+                    if (!ActivityCompat.shouldShowRequestPermissionRationale(
+                            CourierActivity.this,
+                            Manifest.permission.ACCESS_FINE_LOCATION )) {
+                        showSnackToSettingsOpen();
+                    }
+                }
+            }
+        }
+    }
+
+
+
+    // Когда разрешения можно будет включит только через настройки бросаем этот тост
+    private void showSnackToSettingsOpen(){
+        Snackbar.make(llContainer, R.string.permission_location_not_granded, Snackbar.LENGTH_LONG)
+                .setAction(R.string.action_settings, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Utils.openPermissionSettings(getBaseContext());
+                    }
+                })
+                .show();
+    }
+
 
 
     // Разорвалось соединение GoogleApiClient

@@ -1,6 +1,9 @@
 package com.example.gek.pizza.activities;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -11,12 +14,15 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.gek.pizza.R;
 import com.example.gek.pizza.data.Connection;
 import com.example.gek.pizza.data.Const;
 import com.example.gek.pizza.data.Favorites;
 import com.example.gek.pizza.helpers.Utils;
+import com.example.gek.pizza.services.CourierService;
+import com.example.gek.pizza.services.ShopService;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -81,12 +87,27 @@ public abstract class BaseActivity extends AppCompatActivity
                         // если admin то отписываемся от рассылки
                         Connection.getInstance().setCurrentAuthStatus(Const.AUTH_SHOP);
                         Utils.subscribeOrUnsubscribeFromTopic(false);
+                        if (!Connection.getInstance().getServiceRunning()){
+                            startService(new Intent(getBaseContext(), ShopService.class));
+                        }
                         Log.d(TAG, "FireBase authentication success (SHOP) " + user.getEmail());
 
                     // courier
                     } else if (user.getEmail().contentEquals(Connection.getInstance().getCourierEmail())){
                         Connection.getInstance().setCurrentAuthStatus(Const.AUTH_COURIER);
                         Utils.subscribeOrUnsubscribeFromTopic(true);
+                        if (!Connection.getInstance().getServiceRunning()){
+                            // todo check permissions
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M &&
+                                    checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                                Toast.makeText(getBaseContext(),
+                                        "Please enable permission for location service and restart program",
+                                        Toast.LENGTH_LONG).show();
+                            } else {
+                                startService(new Intent(getBaseContext(), CourierService.class));
+                            }
+
+                        }
                         Log.d(TAG, "FireBase authentication success (COURIER) " + user.getEmail());
 
                     // auth client

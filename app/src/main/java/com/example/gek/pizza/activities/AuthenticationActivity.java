@@ -45,7 +45,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 
-/**  Обработка аутентефикации */
+/**  Обработка аутентификации */
 
 public class AuthenticationActivity extends BaseActivity
         implements GoogleApiClient.OnConnectionFailedListener, View.OnClickListener {
@@ -64,11 +64,8 @@ public class AuthenticationActivity extends BaseActivity
     private static LoginResult loginResultFacebook;
     private final String VISIBILITY_BUTTON_GOOGLE = "visibility_button_google";
     private final String VISIBILITY_BUTTON_FACEBOOK = "visibility_button_facebook";
-
     private final String VISIBILITY_TV_STATUS = "visibility_tv_status";
-
     private boolean isBtnGoogleSignInVisible, isBtnFacebookSignInVisible, isTvStatusVisible;
-    protected FirebaseRemoteConfig firebaseRemoteConfig;
 
 
     @Override
@@ -82,7 +79,6 @@ public class AuthenticationActivity extends BaseActivity
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-
         if (isBtnGoogleSignInVisible || isBtnFacebookSignInVisible) {
             outState.putBoolean(VISIBILITY_BUTTON_GOOGLE, isBtnGoogleSignInVisible);
             outState.putBoolean(VISIBILITY_BUTTON_FACEBOOK, isBtnFacebookSignInVisible);
@@ -106,10 +102,10 @@ public class AuthenticationActivity extends BaseActivity
         }
     }
 
-    private int getVisibility(int viewVisibility) {
-
-        return View.VISIBLE;
-    }
+//    private int getVisibility(int viewVisibility) {
+//
+//        return View.VISIBLE;
+//    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -232,9 +228,7 @@ public class AuthenticationActivity extends BaseActivity
                 // в случае успеха изымаем эккаунт и передаем полученный токен в авторизацю файрбейс
                 GoogleSignInAccount account = result.getSignInAccount();
                 firebaseAuthWithGoogle(account);
-//                tvStatus.append("Google authentication success \n" + account.getEmail() + "\n\n");
             } else {
-//                tvStatus.append("Google authentication failed");
                 Toast.makeText(getApplicationContext(), R.string.authentication_failed, Toast.LENGTH_SHORT).show();
                 Log.d(TAG, "Google Login Failed " + result.getStatus().toString());
             }
