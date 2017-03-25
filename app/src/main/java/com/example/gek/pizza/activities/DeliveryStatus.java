@@ -1,5 +1,6 @@
 package com.example.gek.pizza.activities;
 
+import android.content.Intent;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -7,6 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -45,6 +47,7 @@ public class DeliveryStatus extends BaseActivity {
     private ValueEventListener mStateListener;
     private Boolean mIsSetListener = false;
     private ProgressBar progressBar;
+    private Button btnShowCourier;
 
 
     @Override
@@ -75,6 +78,12 @@ public class DeliveryStatus extends BaseActivity {
         toggle.syncState();
 
         findAllView();
+        btnShowCourier.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(DeliveryStatus.this, CourierActivity.class));
+            }
+        });
     }
 
 
@@ -165,6 +174,7 @@ public class DeliveryStatus extends BaseActivity {
      */
     private void showStateDelivery(Delivery d) {
         String mes = "";
+        btnShowCourier.setVisibility(View.GONE);
         // State 3 (Transport)
         if (d.getDateTransport() != null) {
             if (d.getDateArchive() != null) {
@@ -178,6 +188,7 @@ public class DeliveryStatus extends BaseActivity {
                 mes = getResources().getString(R.string.delivery_state_description_step3_start)
                         + " " + Utils.formatDate(d.getDateTransport());
                 ivStep3.setImageResource(R.drawable.step_circle_current);
+                btnShowCourier.setVisibility(View.VISIBLE);
                 tvStep3Description.setText(mes);
             }
         }
@@ -323,6 +334,8 @@ public class DeliveryStatus extends BaseActivity {
         ivStep2 = (ImageView) findViewById(R.id.ivStep2);
         ivStep3 = (ImageView) findViewById(R.id.ivStep3);
         ivStep4 = (ImageView) findViewById(R.id.ivStep4);
+
+        btnShowCourier = (Button) findViewById(R.id.btnShowCourier);
     }
 
     @Override

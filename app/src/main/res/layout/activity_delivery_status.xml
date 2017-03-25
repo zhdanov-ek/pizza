@@ -198,6 +198,7 @@
                         android:text="@string/delivery_state_title_step3"
                         android:textSize="20sp"
                         android:textStyle="bold" />
+
                 </LinearLayout>
 
                 <LinearLayout
@@ -214,15 +215,27 @@
                         android:layout_marginRight="12dp"
                         android:background="@color/colorStepLine" />
 
-                    <TextView
-                        android:id="@+id/tvStep3Description"
-                        android:layout_width="wrap_content"
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:gravity="center_vertical"
-                        android:paddingBottom="40dp"
-                        android:paddingLeft="12dp"
-                        android:textSize="20sp"
-                        tools:text="Now the courier delivers your order" />
+                        android:orientation="vertical">
+                        <TextView
+                            android:id="@+id/tvStep3Description"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:paddingBottom="40dp"
+                            android:paddingLeft="12dp"
+                            android:textSize="20sp"
+                            tools:text="Now the courier delivers your order" />
+
+                        <Button
+                            android:id="@+id/btnShowCourier"
+                            style="@style/RaisedButtonPositive"
+                            android:text="@string/map"
+                            android:visibility="gone"/>
+
+                    </LinearLayout>
 
                 </LinearLayout>
 
