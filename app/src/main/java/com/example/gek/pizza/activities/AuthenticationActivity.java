@@ -14,7 +14,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.gek.pizza.R;
-import com.example.gek.pizza.data.Connection;
+import com.example.gek.pizza.helpers.Connection;
 import com.example.gek.pizza.data.Const;
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
@@ -39,7 +39,6 @@ import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.auth.ProviderQueryResult;
-import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
 
 import org.json.JSONException;
 import org.json.JSONObject;

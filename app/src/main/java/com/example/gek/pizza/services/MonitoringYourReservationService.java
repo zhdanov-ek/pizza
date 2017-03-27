@@ -15,7 +15,6 @@ import android.util.Log;
 
 import com.example.gek.pizza.R;
 import com.example.gek.pizza.activities.ReserveTableActivity;
-import com.example.gek.pizza.data.Connection;
 import com.example.gek.pizza.data.Const;
 import com.example.gek.pizza.data.StateTableReservation;
 import com.google.firebase.auth.FirebaseAuth;

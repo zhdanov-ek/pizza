@@ -18,11 +18,11 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.gek.pizza.R;
-import com.example.gek.pizza.data.Basket;
-import com.example.gek.pizza.data.Connection;
+import com.example.gek.pizza.helpers.Basket;
+import com.example.gek.pizza.helpers.Connection;
 import com.example.gek.pizza.data.Const;
 import com.example.gek.pizza.data.Dish;
-import com.example.gek.pizza.data.Favorites;
+import com.example.gek.pizza.helpers.Favorites;
 import com.example.gek.pizza.helpers.Utils;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -57,6 +57,12 @@ public class DishShowActivity extends BaseActivity implements View.OnClickListen
             case Const.AUTH_SHOP:
                 btnEdit.setVisibility(View.VISIBLE);
                 btnRemove.setVisibility(View.VISIBLE);
+                ivFavorites.setVisibility(View.GONE);
+                btnAdd.setEnabled(false);
+                break;
+            case Const.AUTH_COURIER:
+                btnEdit.setVisibility(View.GONE);
+                btnRemove.setVisibility(View.GONE);
                 ivFavorites.setVisibility(View.GONE);
                 btnAdd.setEnabled(false);
                 break;
@@ -301,7 +307,8 @@ public class DishShowActivity extends BaseActivity implements View.OnClickListen
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        if (Connection.getInstance().getCurrentAuthStatus() != Const.AUTH_SHOP){
+        if ((Connection.getInstance().getCurrentAuthStatus() == Const.AUTH_NULL) ||
+                (Connection.getInstance().getCurrentAuthStatus() == Const.AUTH_USER)){
             menu.add(0, Const.ACTION_BASKET, 0, R.string.action_basket)
                     .setIcon(R.drawable.ic_basket)
                     .setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);

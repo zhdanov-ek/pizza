@@ -9,7 +9,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
-import com.example.gek.pizza.data.Connection;
+import com.example.gek.pizza.helpers.Connection;
 import com.example.gek.pizza.data.Const;
 import com.example.gek.pizza.data.LastPosition;
 import com.google.android.gms.common.ConnectionResult;

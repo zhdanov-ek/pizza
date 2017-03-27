@@ -36,7 +36,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.gek.pizza.R;
-import com.example.gek.pizza.data.Connection;
+import com.example.gek.pizza.helpers.Connection;
 import com.example.gek.pizza.data.Const;
 import com.example.gek.pizza.data.OrderTable;
 import com.example.gek.pizza.data.StateTableReservation;

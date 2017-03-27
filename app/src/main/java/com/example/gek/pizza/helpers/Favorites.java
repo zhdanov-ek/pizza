@@ -1,6 +1,8 @@
-package com.example.gek.pizza.data;
+package com.example.gek.pizza.helpers;
 
 
+import com.example.gek.pizza.data.Const;
+import com.example.gek.pizza.data.FavoriteDish;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;

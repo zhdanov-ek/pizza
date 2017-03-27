@@ -1,4 +1,8 @@
-package com.example.gek.pizza.data;
+package com.example.gek.pizza.helpers;
+
+import com.example.gek.pizza.data.Const;
+import com.example.gek.pizza.data.Dish;
+import com.example.gek.pizza.data.Order;
 
 import java.util.ArrayList;
 
@@ -19,6 +23,8 @@ public class Basket {
 
     private Basket() {
         orders = new ArrayList<>();
+        textMyPizza = new ArrayList<>();
+        numbersMyPizza = new ArrayList<>();
     }
 
     // Получаем инстанс через метод, а не конструктор, который скрыт
@@ -28,6 +34,14 @@ public class Basket {
         }
         return instance;
     }
+
+
+    public void clearOrders(){
+        orders.clear();
+        textMyPizza.clear();
+        numbersMyPizza.clear();
+    }
+
 
     public void addDish(Dish dish){
         orders.add(new Order(dish));

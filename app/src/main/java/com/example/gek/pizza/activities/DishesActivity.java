@@ -19,8 +19,8 @@ import android.widget.Toast;
 
 import com.example.gek.pizza.R;
 import com.example.gek.pizza.adapters.DishesAdapter;
-import com.example.gek.pizza.data.AllDishes;
-import com.example.gek.pizza.data.Connection;
+import com.example.gek.pizza.helpers.AllDishes;
+import com.example.gek.pizza.helpers.Connection;
 import com.example.gek.pizza.data.Const;
 import com.example.gek.pizza.data.Dish;
 import com.example.gek.pizza.data.FavoriteDish;
@@ -223,14 +223,21 @@ public class DishesActivity extends BaseActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        if (Connection.getInstance().getCurrentAuthStatus() == Const.AUTH_SHOP) {
-            menu.add(0, Const.ACTION_EDIT, 0, R.string.action_edit_group);
-            menu.add(0, Const.ACTION_REMOVE, 0, R.string.action_remove_group);
-        } else {
-            menu.add(0, Const.ACTION_BASKET, 0, R.string.action_basket)
-                    .setIcon(R.drawable.ic_basket)
-                    .setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+        switch (Connection.getInstance().getCurrentAuthStatus()){
+            case Const.AUTH_SHOP:
+                menu.add(0, Const.ACTION_EDIT, 0, R.string.action_edit_group);
+                menu.add(0, Const.ACTION_REMOVE, 0, R.string.action_remove_group);
+                break;
+            case Const.AUTH_NULL:
+            case Const.AUTH_USER:
+                menu.add(0, Const.ACTION_BASKET, 0, R.string.action_basket)
+                        .setIcon(R.drawable.ic_basket)
+                        .setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+                break;
+            default:
+                break;
         }
+
         return super.onCreateOptionsMenu(menu);
     }
 

@@ -4,7 +4,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 /**
- * Created by gek on 21.01.17.
+ * Model of MenuGroup
  */
 
 public class MenuGroup implements Parcelable {

@@ -11,14 +11,12 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.LinearLayout;
 
 import com.example.gek.pizza.R;
-import com.example.gek.pizza.data.Connection;
+import com.example.gek.pizza.helpers.Connection;
 import com.example.gek.pizza.data.Const;
 import com.example.gek.pizza.services.CourierService;
-import com.example.gek.pizza.services.ShopService;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
@@ -27,7 +25,7 @@ public class MainActivity extends BaseActivity
         implements View.OnClickListener {
 
     private LinearLayout llMenuOrder, llNews, llOrders, llContacts, llReservations;
-    private LinearLayout llOrdersDevider;
+    private LinearLayout llOrdersDevider, llReservationsDevider;
     private static final String TAG = "MAIN_MENU";
 
     @Override
@@ -35,13 +33,22 @@ public class MainActivity extends BaseActivity
         switch (Connection.getInstance().getCurrentAuthStatus()){
             case Const.AUTH_NULL:
             case Const.AUTH_USER:
+                llOrdersDevider.setVisibility(View.GONE);
+                llOrders.setVisibility(View.GONE);
+                llReservations.setVisibility(View.VISIBLE);
+                llReservationsDevider.setVisibility(View.VISIBLE);
+                break;
             case Const.AUTH_COURIER:
                 llOrdersDevider.setVisibility(View.GONE);
                 llOrders.setVisibility(View.GONE);
+                llReservations.setVisibility(View.GONE);
+                llReservationsDevider.setVisibility(View.GONE);
                 break;
             case Const.AUTH_SHOP:
                 llOrdersDevider.setVisibility(View.VISIBLE);
                 llOrders.setVisibility(View.VISIBLE);
+                llReservations.setVisibility(View.VISIBLE);
+                llReservationsDevider.setVisibility(View.VISIBLE);
                 break;
         }
     }
@@ -71,6 +78,7 @@ public class MainActivity extends BaseActivity
         llNews = (LinearLayout) findViewById(R.id.llNews);
         llNews.setOnClickListener(this);
         llOrdersDevider = (LinearLayout) findViewById(R.id.llOrdersDevider);
+        llReservationsDevider = (LinearLayout) findViewById(R.id.llReservationsDevider);
         llOrders = (LinearLayout) findViewById(R.id.llOrders);
         llOrders.setOnClickListener(this);
         llContacts = (LinearLayout) findViewById(R.id.llContacts);
@@ -118,7 +126,8 @@ public class MainActivity extends BaseActivity
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        if (Connection.getInstance().getCurrentAuthStatus() != Const.AUTH_SHOP){
+        if ((Connection.getInstance().getCurrentAuthStatus() == Const.AUTH_NULL) ||
+                (Connection.getInstance().getCurrentAuthStatus() == Const.AUTH_USER)){
             menu.add(0, Const.ACTION_BASKET, 0, R.string.action_basket)
                     .setIcon(R.drawable.ic_basket)
                     .setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);

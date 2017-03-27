@@ -1,4 +1,4 @@
-package com.example.gek.pizza.data;
+package com.example.gek.pizza.helpers;
 
 import android.content.Context;
 import android.content.Intent;
@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
+import com.example.gek.pizza.data.Const;
 import com.example.gek.pizza.services.CourierService;
 import com.example.gek.pizza.services.MonitoringYourDeliveryService;
 import com.example.gek.pizza.services.MonitoringYourReservationService;
@@ -59,8 +60,10 @@ public class Connection {
             case Const.AUTH_USER:
                 ctx.stopService(new Intent(ctx, MonitoringYourDeliveryService.class));
                 ctx.stopService(new Intent(ctx, MonitoringYourReservationService.class));
-                // destroy Favorites if signOut from UserStatus.
+
+                // destroy Favorites and orders
                 // Need for correct work favorites in new session
+                Basket.getInstance().clearOrders();
                 Favorites.getInstance().closeSession();
                 break;
         }

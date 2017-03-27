@@ -5,13 +5,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.gek.pizza.R;
-import com.example.gek.pizza.data.Basket;
-import com.example.gek.pizza.data.Connection;
+import com.example.gek.pizza.helpers.Basket;
+import com.example.gek.pizza.helpers.Connection;
 import com.example.gek.pizza.data.Const;
 import com.example.gek.pizza.data.Delivery;
 import com.example.gek.pizza.data.StateLastDelivery;
@@ -20,15 +19,12 @@ import com.example.gek.pizza.services.MonitoringYourDeliveryService;
 import com.google.firebase.auth.FirebaseAuth;
 
 
-import java.util.ArrayList;
-
 import static com.example.gek.pizza.data.Const.db;
 
 /** Оформление доставки на дом */
+
 public class DeliveryCreationActivity extends AppCompatActivity {
-
     private EditText etName, etPhone, etAddress, etComment;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,10 +49,10 @@ public class DeliveryCreationActivity extends AppCompatActivity {
         public void onClick(View view) {
             if (checkData()) {
                 switch (Connection.getInstance().getCurrentAuthStatus()){
-                    case Const.AUTH_SHOP:
-                        Connection.getInstance().signOut(getBaseContext());
-                        finish();
-                        break;
+//                    case Const.AUTH_SHOP:
+//                        Connection.getInstance().signOut(getBaseContext());
+//                        finish();
+//                        break;
                     case Const.AUTH_NULL:
                         startActivity(new Intent(getBaseContext(), AuthenticationActivity.class));
                         break;
@@ -103,7 +99,7 @@ public class DeliveryCreationActivity extends AppCompatActivity {
                                 .setValue(stateLastDelivery);
 
                         // очищаем корзину
-                        Basket.getInstance().orders.clear();
+                        Basket.getInstance().clearOrders();
 
                         // запускаем сервис для отслеживание доставки, передаем ему ИД доставки
                         // ИД нужен для корректного выключения сервиса, что бы не спутать с закешированным

@@ -14,12 +14,9 @@ import android.support.v7.app.NotificationCompat;
 import android.util.Log;
 
 import com.example.gek.pizza.R;
-import com.example.gek.pizza.activities.DeliveryStatus;
 import com.example.gek.pizza.activities.MainActivity;
-import com.example.gek.pizza.data.Connection;
 import com.example.gek.pizza.data.Const;
 import com.example.gek.pizza.data.StateLastDelivery;
-import com.example.gek.pizza.helpers.Utils;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;

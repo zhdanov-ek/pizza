@@ -14,7 +14,7 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.example.gek.pizza.R;
-import com.example.gek.pizza.data.AllTopics;
+import com.example.gek.pizza.helpers.AllTopics;
 import com.example.gek.pizza.data.Const;
 
 import org.json.JSONObject;

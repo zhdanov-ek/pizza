@@ -9,7 +9,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.example.gek.pizza.R;
-import com.example.gek.pizza.data.Connection;
+import com.example.gek.pizza.helpers.Connection;
 import com.example.gek.pizza.data.Const;
 
 /**

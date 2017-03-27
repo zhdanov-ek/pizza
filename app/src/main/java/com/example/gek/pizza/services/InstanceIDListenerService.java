@@ -1,6 +1,6 @@
 package com.example.gek.pizza.services;
 
-import com.example.gek.pizza.data.Connection;
+import com.example.gek.pizza.helpers.Connection;
 import com.example.gek.pizza.data.Const;
 import com.example.gek.pizza.helpers.Utils;
 import com.google.firebase.iid.FirebaseInstanceIdService;

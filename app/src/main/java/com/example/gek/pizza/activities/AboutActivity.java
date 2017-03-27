@@ -30,7 +30,7 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.example.gek.pizza.R;
-import com.example.gek.pizza.data.Connection;
+import com.example.gek.pizza.helpers.Connection;
 import com.example.gek.pizza.data.Const;
 import com.example.gek.pizza.data.RetrofitMaps;
 import com.example.gek.pizza.data.routes.Example;
@@ -616,7 +616,8 @@ public class AboutActivity extends BaseActivity implements
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        if (Connection.getInstance().getCurrentAuthStatus() != Const.AUTH_SHOP){
+        if ((Connection.getInstance().getCurrentAuthStatus() == Const.AUTH_NULL) ||
+                (Connection.getInstance().getCurrentAuthStatus() == Const.AUTH_USER)){
             menu.add(0, Const.ACTION_BASKET, 0, R.string.action_basket)
                     .setIcon(R.drawable.ic_basket)
                     .setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);

@@ -12,7 +12,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.gek.pizza.R;
-import com.example.gek.pizza.data.Basket;
+import com.example.gek.pizza.helpers.Basket;
 import com.example.gek.pizza.data.Order;
 import com.example.gek.pizza.helpers.Utils;
 

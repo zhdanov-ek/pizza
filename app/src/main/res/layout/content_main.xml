@@ -133,7 +133,14 @@
                 </LinearLayout>
             </LinearLayout>
 
-            <include layout="@layout/devider_main_menu" />
+            <LinearLayout
+                android:id="@+id/llReservationsDevider"
+                android:visibility="gone"
+                tools:visibility="visible"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <include layout="@layout/devider_main_menu" />
+            </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/llReservations"

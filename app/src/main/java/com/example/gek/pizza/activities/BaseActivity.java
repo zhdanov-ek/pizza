@@ -17,9 +17,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.gek.pizza.R;
-import com.example.gek.pizza.data.Connection;
+import com.example.gek.pizza.helpers.Connection;
 import com.example.gek.pizza.data.Const;
-import com.example.gek.pizza.data.Favorites;
+import com.example.gek.pizza.helpers.Favorites;
 import com.example.gek.pizza.helpers.Utils;
 import com.example.gek.pizza.services.CourierService;
 import com.example.gek.pizza.services.ShopService;
@@ -132,6 +132,7 @@ public abstract class BaseActivity extends AppCompatActivity
                         navigationView.getMenu().findItem(R.id.nav_courier_group).setVisible(false);
                         navigationView.getMenu().findItem(R.id.nav_delivery_status).setVisible(false);
                         navigationView.getMenu().findItem(R.id.nav_favorite).setVisible(false);
+                        navigationView.getMenu().findItem(R.id.nav_reservation).setVisible(true);
                         navigationView.getMenu().findItem(R.id.nav_pizza).setVisible(false);
                         break;
                     case Const.AUTH_COURIER:
@@ -139,6 +140,7 @@ public abstract class BaseActivity extends AppCompatActivity
                         navigationView.getMenu().findItem(R.id.nav_courier_group).setVisible(true);
                         navigationView.getMenu().findItem(R.id.nav_delivery_status).setVisible(false);
                         navigationView.getMenu().findItem(R.id.nav_favorite).setVisible(false);
+                        navigationView.getMenu().findItem(R.id.nav_reservation).setVisible(false);
                         navigationView.getMenu().findItem(R.id.nav_pizza).setVisible(false);
                         break;
                     case Const.AUTH_USER:
@@ -146,6 +148,7 @@ public abstract class BaseActivity extends AppCompatActivity
                         navigationView.getMenu().findItem(R.id.nav_courier_group).setVisible(false);
                         navigationView.getMenu().findItem(R.id.nav_delivery_status).setVisible(true);
                         navigationView.getMenu().findItem(R.id.nav_favorite).setVisible(true);
+                        navigationView.getMenu().findItem(R.id.nav_reservation).setVisible(true);
                         navigationView.getMenu().findItem(R.id.nav_pizza).setVisible(true);
                         //initialize list of favorites dishes
                         Favorites.getInstance();
@@ -155,6 +158,7 @@ public abstract class BaseActivity extends AppCompatActivity
                         navigationView.getMenu().findItem(R.id.nav_courier_group).setVisible(false);
                         navigationView.getMenu().findItem(R.id.nav_delivery_status).setVisible(false);
                         navigationView.getMenu().findItem(R.id.nav_favorite).setVisible(false);
+                        navigationView.getMenu().findItem(R.id.nav_reservation).setVisible(true);
                         navigationView.getMenu().findItem(R.id.nav_pizza).setVisible(true);
                         break;
                 }
