@@ -26,6 +26,11 @@ import com.example.gek.pizza.services.ShopService;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+
+/**
+ * Basic activity need for implement NavigationDrawer and FirebaseAuth
+ * */
+
 public abstract class BaseActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener{
 
@@ -83,8 +88,9 @@ public abstract class BaseActivity extends AppCompatActivity
                     tvAuthEmail.setText(user.getEmail());
 
                     // admin
-                    if (user.getEmail().contentEquals(Connection.getInstance().getShopEmail())){
-                        // если admin то отписываемся от рассылки
+                    if ((user.getEmail() != null) &&
+                            (user.getEmail().contentEquals(Connection.getInstance().getShopEmail()))){
+                        // remove subscribe for get message
                         Connection.getInstance().setCurrentAuthStatus(Const.AUTH_SHOP);
                         Utils.subscribeOrUnsubscribeFromTopic(false);
                         if (!Connection.getInstance().getServiceRunning()){

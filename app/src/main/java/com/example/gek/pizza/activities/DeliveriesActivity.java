@@ -42,7 +42,7 @@ public class DeliveriesActivity extends BaseActivity {
      */
     private SectionsPagerAdapter mSectionsPagerAdapter;
 
-    // Хранит все наши вкладки с переключателем
+    // Store all tabs and togles
     private ViewPager mViewPager;
     public static boolean activeDeliveriesActivity;
 
@@ -62,6 +62,7 @@ public class DeliveriesActivity extends BaseActivity {
                 .getSystemService(this.LAYOUT_INFLATER_SERVICE);
         View contentView = inflater.inflate(R.layout.activity_deliveries, null, false);
         mDrawer.addView(contentView, 0);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolBar);
         toolbar.setTitle(R.string.title_orders);
         setSupportActionBar(toolbar);
@@ -72,14 +73,13 @@ public class DeliveriesActivity extends BaseActivity {
         mDrawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        // Создаем адаптер, который будет возвращать фрагменты для каждой из трех секций активити
+        // This adapter generate fragment for each tab of activity
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
-        // Указываем ViewPager-у наш адаптер, который обеспечит контентом вкладки
+        // define adapter for ViewPager
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
-        // Указываем переключателю вкладок вью, которое будет отображать контент
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
     }
@@ -92,17 +92,15 @@ public class DeliveriesActivity extends BaseActivity {
         item.setChecked(true);
     }
 
-    /** Фрагмент, содержащий контент наших вкладок */
+    /** Fragment store content of one tab */
     public static class PlaceholderFragment extends Fragment {
-
-        // Через эту переменную будет указывать номер выбранной вкладки
         private static final String ARG_SECTION_NUMBER = "section_number";
         private ArrayList<Delivery> listDeliveries = new ArrayList<>();
         private RecyclerView rv;
         public PlaceholderFragment() {
         }
 
-        // Создаем фрагмент и передаем ему параметр с номером, соответствующим вкладке
+        // Make fragment and set him number of tab
         public static PlaceholderFragment newInstance(int sectionNumber) {
             PlaceholderFragment fragment = new PlaceholderFragment();
             Bundle args = new Bundle();
@@ -111,7 +109,7 @@ public class DeliveriesActivity extends BaseActivity {
             return fragment;
         }
 
-        // Собственно отрисовка фрагмента с заполнением вью контентом по полученному номеру вкладки
+        // Fill data in fragment
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
@@ -123,8 +121,7 @@ public class DeliveriesActivity extends BaseActivity {
 
             final int num = getArguments().getInt(ARG_SECTION_NUMBER);
 
-            // В зависимости от номера вкладки ставим слушатель на нужный нам раздел в БД
-            // и создаем адаптер с соответствующим параметром
+            // define number tab and set listener for needed group of data in db
             ValueEventListener deliveriesListener = new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
@@ -172,16 +169,15 @@ public class DeliveriesActivity extends BaseActivity {
                     Const.db.child(Const.CHILD_DELIVERIES_TRANSPORT).addValueEventListener(deliveriesListener);
                     break;
             }
-
             return rootView;
         }
     }
 
 
-    /** Фрагмент адаптер, который хранит наши фрагменты в памяти и обеспечивает к ним доступ */
-    public class SectionsPagerAdapter extends FragmentPagerAdapter {
+    /** This adapter store fragments with group of data */
+    private class SectionsPagerAdapter extends FragmentPagerAdapter {
 
-        public SectionsPagerAdapter(FragmentManager fm) {
+        private SectionsPagerAdapter(FragmentManager fm) {
             super(fm);
         }
 

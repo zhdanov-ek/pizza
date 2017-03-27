@@ -64,7 +64,6 @@ public class CourierActivity extends FragmentActivity
         // get location courier from DB
         Const.db.child(Const.CHILD_COURIER).addValueEventListener(mPositionCourierListener);
 
-        // Устанавливаем колбек для найденного фрагмента, который сработает после загрузки карты
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
@@ -78,21 +77,21 @@ public class CourierActivity extends FragmentActivity
                 .build();
     }
 
-    // Инициализировалась карта - проверяем разрешения и если они есть то подключаем GoogleApiClient
+    // Map is ready. Check permissions and connect GoogleApiClient
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
         connectToGoogleApiClient();
     }
 
-    // Подключился GoogleApiClient
+    // GoogleApiClient is connected
     @Override
     public void onConnected(@Nullable Bundle bundle) {
         locationAndMapSettings();
     }
 
 
-    /** Устанавливаем лисенер на изменение положения нашего устройства - получение координат клиента */
+    /**  Set listener for get location of client */
     private void locationAndMapSettings() {
         if (mGoogleApiClient.isConnected()) {
             if ((Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
@@ -102,7 +101,7 @@ public class CourierActivity extends FragmentActivity
                 mMap.setMyLocationEnabled(true);
                 LocationRequest locationRequest = LocationRequest.create()
                         .setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY)
-                        .setInterval(Const.LOCATION_INTERVAL_UPDATE * 1000);  // проверка положение каждые 10 сек.
+                        .setInterval(Const.LOCATION_INTERVAL_UPDATE * 1000);
                 LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, locationRequest, this);
                 updateUi();
             }
@@ -112,7 +111,7 @@ public class CourierActivity extends FragmentActivity
     }
 
 
-    /** Получили кооринаты устройства - обновляем карту */
+    /** Receive location of device - refresh the map */
     @Override
     public void onLocationChanged(Location location) {
         mClientLocation = new LatLng(location.getLatitude(), location.getLongitude());
@@ -122,12 +121,11 @@ public class CourierActivity extends FragmentActivity
     }
 
 
-    /** Перерисовываем всю карту */
+    /** Refresh the map */
     private void updateUi(){
         if ((mClientLocation == null) || (mPositionCourier == null)){
             return;
         }
-
         mMap.clear();
         mMap.addMarker(new MarkerOptions()
                 .position(mClientLocation)
@@ -135,21 +133,21 @@ public class CourierActivity extends FragmentActivity
         mMap.addMarker(new MarkerOptions()
                 .position(new LatLng(mPositionCourier.getLatitude(), mPositionCourier.getLongitude()))
                 .icon(bdPizza)
-                .title("Your pizza"));
+                .title(getResources().getString(R.string.courier)));
 
-        // Формируем границы выводимой карты по всем нашим маркерам, что бы они были видны
+        // Make bounderies for our markers
         LatLngBounds.Builder boundsBuilder = new LatLngBounds.Builder();
         boundsBuilder.include(mClientLocation);
         boundsBuilder.include(new LatLng(mPositionCourier.getLatitude(), mPositionCourier.getLongitude()));
         LatLngBounds bounds = boundsBuilder.build();
 
-        // Позиционируем камеру по указанным границам со смещением от краев экрана относительно крайних маркеров
+        // Set camera in bounderies and offset from edge
         CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, Const.OFFSET_FROM_EDGES_OF_THE_MAP);
         mMap.moveCamera(cu);
     }
 
 
-    /** следим за координатами курьера, которые меняются в БД */
+    /** Listen location of courier from DB */
     private ValueEventListener mPositionCourierListener = new ValueEventListener() {
         @Override
         public void onDataChange(DataSnapshot dataSnapshot) {
@@ -196,8 +194,7 @@ public class CourierActivity extends FragmentActivity
     }
 
 
-
-    // Когда разрешения можно будет включит только через настройки бросаем этот тост
+    // If permission can enable from settings OS show SnackBar
     private void showSnackToSettingsOpen(){
         Snackbar.make(llContainer, R.string.permission_location_not_granded, Snackbar.LENGTH_LONG)
                 .setAction(R.string.action_settings, new View.OnClickListener() {
@@ -210,14 +207,11 @@ public class CourierActivity extends FragmentActivity
     }
 
 
-
-    // Разорвалось соединение GoogleApiClient
     @Override
     public void onConnectionSuspended(int i) {
         mGoogleApiClient.connect();
     }
 
-    // При завершении работы с активити разываем соединение GoogleApiClient
     @Override
     public void onStop() {
         if (mGoogleApiClient.isConnected()) {

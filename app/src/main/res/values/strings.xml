@@ -1,20 +1,4 @@
 <resources>
-    <!-- Логика именования и размещения строчных ресурсов
-        Ресурсы объединяютя в блоки по следующим принципам:
-            - заголовки окон
-            - названия меню
-            - текст сообщений в диалоговых окнах, тостах и т.д.
-            - строки с одной логической единицы программы (активити, сервис и тд)
-        Название стоит начинать с типа. Например
-        для кнопок           btn_
-        для сообщений        mes_
-        заголовков активити  title_
-        Или с названия класса или какой-то логической части приложения. Например
-        settings_
-        notification_
-        Таким образом, при обращении к ресурсам через R будет значительно легче найти нужный ресурс
-    -->
-
     <string name="app_name">Pizza</string>
     <string name="shop">Shop</string>
     <string name="courier">Courier</string>
@@ -80,6 +64,7 @@
     <string name="mes_no_records">No data in the program</string>
     <string name="mes_check_data">Please check data</string>
     <string name="mes_have_delivery">You have active delivery</string>
+    <string name="mes_dont_have_delivery">You don\'t have deliveries</string>
     <string name="mes_no_orders">Here is empty. First, you need to add one or more dish.</string>
     <string name="mes_your_order_performed">Your order performed now</string>
 
@@ -111,8 +96,6 @@
     <string name="button_facebook">Facebook</string>
 
     <!-- NOTIFICATION -->
-    <!--<string name="notification_delivery_title">New order</string>-->
-    <!--<string name="notification_delivery_content">Total orders</string>-->
     <string name="notification_delivery_title">New orders</string>
     <string name="notification_delivery_content">Confirm or cancel deliveries</string>
 
@@ -173,12 +156,8 @@
     <string name="delivery_state_description_step2_finish">Cooking is complete</string>
     <string name="delivery_state_description_step3_start">Courier went to you</string>
     <string name="delivery_state_description_step3_finish">Delivery was performed</string>
-    <string name="delivery_state_description_step4_paid">Bon Appetit</string>
+    <string name="delivery_state_description_step4_paid">Bon Apetit</string>
     <string name="delivery_state_description_step4_fail">Fail</string>
-
-
-    <!-- Строка куда передается значение переменной из кода -->
-    <string name="section_format">Вкладка №: %1$d</string>
 
     <!-- ABOUT US -->
     <string name="title_button_drive">Drive</string>

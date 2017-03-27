@@ -9,7 +9,6 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -27,7 +26,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import static com.example.gek.pizza.data.Const.db;
 
-/**  Отображает корзину заказов и отправляет заказ */
+/**  Show current order and make request for create delivery */
 
 public class BasketActivity extends BaseActivity implements OrdersAdapter.RefreshTotalCallback{
 
@@ -35,7 +34,6 @@ public class BasketActivity extends BaseActivity implements OrdersAdapter.Refres
     private TextView tvEmpty;
     private TextView tvTotal;
     private RelativeLayout rlOrderPanel, rlDeliveryPanel;
-    private Button btnOrderNow, btnShowStatusDelivery;
     private ValueEventListener mStateListener;
     private Boolean mIsSetListener = false;
 
@@ -45,7 +43,6 @@ public class BasketActivity extends BaseActivity implements OrdersAdapter.Refres
                 (Connection.getInstance().getCurrentAuthStatus() == Const.AUTH_COURIER)) {
             finish();
         }
-
     }
 
     @Override
@@ -68,12 +65,10 @@ public class BasketActivity extends BaseActivity implements OrdersAdapter.Refres
         toggle.syncState();
 
         tvTotal = (TextView) findViewById(R.id.tvTotal);
-        btnOrderNow = (Button) findViewById(R.id.btnOrderNow);
-        btnOrderNow.setOnClickListener(orderNowListener);
         rlOrderPanel = (RelativeLayout) findViewById(R.id.rlOrderPanel);
         rlDeliveryPanel = (RelativeLayout) findViewById(R.id.rlDeliveryPanel);
-        btnShowStatusDelivery = (Button) findViewById(R.id.btnShowStatusDelivery);
-        btnShowStatusDelivery.setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.btnOrderNow).setOnClickListener(orderNowListener);
+        findViewById(R.id.btnShowStatusDelivery).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(getBaseContext(), DeliveryStatus.class));
@@ -112,50 +107,33 @@ public class BasketActivity extends BaseActivity implements OrdersAdapter.Refres
     protected void onResume() {
         super.onResume();
 
-        // определяем разделители для айтемов
+        // create divider for items
         DividerItemDecoration dividerItemDecoration =
                 new DividerItemDecoration(this,DividerItemDecoration.VERTICAL );
         rv.setLayoutManager(new LinearLayoutManager(this));
         rv.addItemDecoration(dividerItemDecoration);
-
-        switch (Connection.getInstance().getCurrentAuthStatus()){
-            case Const.AUTH_USER:
-                // смотрим состояние последней доставки и если она не закрыта то показываем сообщение
-                db.child(Const.CHILD_USERS)
-                        .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
-                        .child(Const.CHILD_USER_DELIVERY_STATE)
-                        .addValueEventListener(mStateListener);
-                mIsSetListener = true;
-                // если в корзине есть, что-то то показываем список блюд
-                if (Basket.getInstance().orders.size() > 0) {
-                    OrdersAdapter orderAdapter = new OrdersAdapter(this);
-                    rv.setAdapter(orderAdapter);
-                } else {
-                    // Если корзина пуста то информируем об этом
-                    rv.setVisibility(View.GONE);
-                    rlOrderPanel.setVisibility(View.GONE);
-                    tvEmpty.setVisibility(View.VISIBLE);
-                }
-                break;
-            default:
-                //AUTH_NULL
-                // если в корзине есть, что-то то показываем
-                if (Basket.getInstance().orders.size() > 0) {
-                    OrdersAdapter orderAdapter = new OrdersAdapter(this);
-                    rv.setAdapter(orderAdapter);
-                } else {
-                    // Если корзина пуста то информируем об этом
-                    rlOrderPanel.setVisibility(View.GONE);
-                    rv.setVisibility(View.GONE);
-                    tvEmpty.setVisibility(View.VISIBLE);
-                }
-                break;
+        if (Connection.getInstance().getCurrentAuthStatus() == Const.AUTH_USER) {
+            db.child(Const.CHILD_USERS)
+                    .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                    .child(Const.CHILD_USER_DELIVERY_STATE)
+                    .addValueEventListener(mStateListener);
+            mIsSetListener = true;
         }
 
+        // show list of dishes if have them
+        if (Basket.getInstance().orders.size() > 0) {
+            OrdersAdapter orderAdapter = new OrdersAdapter(this);
+            rv.setAdapter(orderAdapter);
+        } else {
+            // Show message if basket empty
+            rv.setVisibility(View.GONE);
+            rlOrderPanel.setVisibility(View.GONE);
+            tvEmpty.setVisibility(View.VISIBLE);
+        }
     }
 
 
-    /** Реализация интерфейса адаптера в которой мы обновляем итоговую сумму или скрываем РВ */
+    /** Implement interface of adapter where we update total sum or hide RecyclerView */
     @Override
     public void refreshTotal() {
         if (Basket.getInstance().orders.size() == 0){
@@ -167,7 +145,6 @@ public class BasketActivity extends BaseActivity implements OrdersAdapter.Refres
             tvTotal.setText(s);
         }
     }
-
     View.OnClickListener orderNowListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {

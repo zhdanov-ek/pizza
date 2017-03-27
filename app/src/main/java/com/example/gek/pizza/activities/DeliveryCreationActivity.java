@@ -21,7 +21,7 @@ import com.google.firebase.auth.FirebaseAuth;
 
 import static com.example.gek.pizza.data.Const.db;
 
-/** Оформление доставки на дом */
+/** Create delivery */
 
 public class DeliveryCreationActivity extends AppCompatActivity {
     private EditText etName, etPhone, etAddress, etComment;
@@ -49,10 +49,6 @@ public class DeliveryCreationActivity extends AppCompatActivity {
         public void onClick(View view) {
             if (checkData()) {
                 switch (Connection.getInstance().getCurrentAuthStatus()){
-//                    case Const.AUTH_SHOP:
-//                        Connection.getInstance().signOut(getBaseContext());
-//                        finish();
-//                        break;
                     case Const.AUTH_NULL:
                         startActivity(new Intent(getBaseContext(), AuthenticationActivity.class));
                         break;
@@ -65,6 +61,7 @@ public class DeliveryCreationActivity extends AppCompatActivity {
                         delivery.setAddressClient(etAddress.getText().toString());
                         delivery.setCommentClient(etComment.getText().toString());
                         delivery.setTotalSum(Basket.getInstance().getTotalSum());
+
                         // Extract custom pizza from list of dishes
                         if (Basket.getInstance().extractMyPizza()){
                             delivery.setTextMyPizza(Basket.getInstance().getTextMyPizza());
@@ -85,8 +82,8 @@ public class DeliveryCreationActivity extends AppCompatActivity {
                         }
 
                         //todo get location of user and save to delivery
-                        delivery.setLongitude("xxxx longitude");
-                        delivery.setLatitude("xxxx latitude");
+                        delivery.setLongitude("0");
+                        delivery.setLatitude("0");
                         db.child(Const.CHILD_DELIVERIES_NEW).child(numberDelivery).setValue(delivery);
 
                         // Info to user folder for monitoring
@@ -98,12 +95,10 @@ public class DeliveryCreationActivity extends AppCompatActivity {
                                 .child(Const.CHILD_USER_DELIVERY_STATE)
                                 .setValue(stateLastDelivery);
 
-                        // очищаем корзину
                         Basket.getInstance().clearOrders();
 
-                        // запускаем сервис для отслеживание доставки, передаем ему ИД доставки
-                        // ИД нужен для корректного выключения сервиса, что бы не спутать с закешированным
-                        // старым заказом
+                        // Start service for trace delivery.
+                        // Id need for correct define current delivery and stop service
                         Intent monitoringDelivery = new Intent(getBaseContext(), MonitoringYourDeliveryService.class);
                         monitoringDelivery.putExtra(Const.EXTRA_DELIVERY_ID, numberDelivery);
                         startService(monitoringDelivery);
@@ -133,7 +128,6 @@ public class DeliveryCreationActivity extends AppCompatActivity {
             etAddress.setFocusable(true);
             isCorrect = false;
         }
-
         return isCorrect;
     }
 

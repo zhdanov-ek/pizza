@@ -39,7 +39,6 @@ public class DeliveryStatus extends BaseActivity {
     public static final String TAG = "STATUS_DELIVERY";
     private ScrollView scrollView;
     private TextView tvStep1Num, tvStep2Num, tvStep3Num, tvStep4Num;
-    private TextView tvStep1Title, tvStep2Title, tvStep3Title, tvStep4Title;
     private TextView tvStep1Description, tvStep2Description, tvStep3Description, tvStep4Description;
     private ImageView ivStep1, ivStep2, ivStep3, ivStep4;
     private ValueEventListener mStateListener;
@@ -101,9 +100,11 @@ public class DeliveryStatus extends BaseActivity {
                 if (stateLastDelivery == null) {
                     progressBar.setVisibility(View.GONE);
                     scrollView.setVisibility(View.GONE);
-                    Toast.makeText(getBaseContext(), "You don't have deliveries", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getBaseContext(),
+                            getResources().getString(R.string.mes_dont_have_delivery),
+                            Toast.LENGTH_SHORT).show();
                 } else {
-                    String childFolder = "";
+                    String childFolder;
                     switch (stateLastDelivery.getDeliveryState()) {
                         case Const.DELIVERY_STATE_NEW:
                             childFolder = Const.CHILD_DELIVERIES_NEW;
@@ -125,8 +126,8 @@ public class DeliveryStatus extends BaseActivity {
             public void onCancelled(DatabaseError databaseError) {
             }
         };
-        // На данном моменте авторизации может не быть если окно открывается с сервиса а приложение было уничтожено
-        // Log.d(TAG, "onResume: USER "+ Connection.getInstance().getCurrentAuthStatus());
+
+        // If this activity open from Notification and app destroy we will have crash: auth - null
         if (Connection.getInstance().getCurrentAuthStatus() == Const.AUTH_USER){
             db.child(Const.CHILD_USERS)
                     .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
@@ -155,7 +156,9 @@ public class DeliveryStatus extends BaseActivity {
                         }
                     } else {
                         progressBar.setVisibility(View.GONE);
-                        Toast.makeText(getBaseContext(), "You don't have deliveries", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getBaseContext(),
+                                getResources().getString(R.string.mes_dont_have_delivery),
+                                Toast.LENGTH_SHORT).show();
                     }
                 }
             }
@@ -171,7 +174,7 @@ public class DeliveryStatus extends BaseActivity {
      * Show state of current not closed delivery
      */
     private void showStateDelivery(Delivery d) {
-        String mes = "";
+        String mes;
         btnShowCourier.setVisibility(View.GONE);
         // State 3 (Transport)
         if (d.getDateTransport() != null) {
@@ -241,7 +244,7 @@ public class DeliveryStatus extends BaseActivity {
      * Show state if delivery closed (paid or fail)
      */
     private void showStateDeliveryClosed(Delivery d) {
-        String mes = "";
+        String mes;
         btnShowCourier.setVisibility(View.GONE);
         if (d.getPaid()) {
             ivStep4.setImageResource(R.drawable.step_circle_current);
@@ -267,7 +270,7 @@ public class DeliveryStatus extends BaseActivity {
                     " (" + Utils.formatDate(d.getDateArchive()) + ")";
             tvStep4Description.setText(mes);
         } else {
-            // Отклонена доставка
+            // Reject delivery
             mes = getResources().getString(R.string.delivery_state_description_step4_fail) +
                     "\n" + d.getCommentShop();
             if (d.getDateTransport() != null) {
@@ -300,7 +303,6 @@ public class DeliveryStatus extends BaseActivity {
                         "\n" + Utils.formatDate(d.getDateCooking());
                 tvStep1Description.setText(mes);
             } else {
-                tvStep1Title.setText(getResources().getString(R.string.delivery_state_title_step1));
                 tvStep1Description.setText(mes + "\n" + Utils.formatDate(d.getDateArchive()));
                 ivStep1.setImageResource(R.drawable.step_circle_fail);
                 tvStep1Num.setText("-");
@@ -318,11 +320,6 @@ public class DeliveryStatus extends BaseActivity {
         tvStep2Num = (TextView) findViewById(R.id.tvStep2Num);
         tvStep3Num = (TextView) findViewById(R.id.tvStep3Num);
         tvStep4Num = (TextView) findViewById(R.id.tvStep4Num);
-
-        tvStep1Title = (TextView) findViewById(R.id.tvStep1Title);
-        tvStep2Title = (TextView) findViewById(R.id.tvStep2Title);
-        tvStep3Title = (TextView) findViewById(R.id.tvStep3Title);
-        tvStep4Title = (TextView) findViewById(R.id.tvStep4Title);
 
         tvStep1Description = (TextView) findViewById(R.id.tvStep1Description);
         tvStep2Description = (TextView) findViewById(R.id.tvStep2Description);
