@@ -104,6 +104,10 @@ public class Const {
     public static final int REQUEST_CODE_LOCATION  = 20;
 
     public static final String GOOGLE_DIRECTIONS_API   = "https://maps.googleapis.com/maps/";
+    public static final String TYPE_ROUTE_DRIVE        = "driving";
+    public static final String TYPE_ROUTE_WALK         = "walking";
+    public static final String TYPE_METRIC             = "metric";
+
 
     public static final Integer LOCATION_INTERVAL_UPDATE = 10;
     public static final Integer LOCATION_DISTANCE_UPDATE = 30;

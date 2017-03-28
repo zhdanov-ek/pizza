@@ -61,9 +61,11 @@ public class AuthenticationActivity extends BaseActivity
     private static AuthCredential credentialLink;
     private String currentProvider;
     private static LoginResult loginResultFacebook;
+
     private final String VISIBILITY_BUTTON_GOOGLE = "visibility_button_google";
     private final String VISIBILITY_BUTTON_FACEBOOK = "visibility_button_facebook";
     private final String VISIBILITY_TV_STATUS = "visibility_tv_status";
+
     private boolean isBtnGoogleSignInVisible, isBtnFacebookSignInVisible, isTvStatusVisible;
 
 

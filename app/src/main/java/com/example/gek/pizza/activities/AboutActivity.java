@@ -461,7 +461,7 @@ public class AboutActivity extends BaseActivity implements
                 lastLocation = LocationServices.FusedLocationApi.getLastLocation(googleApiClient);
                 LocationRequest locationRequest = LocationRequest.create()
                         .setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY)
-                        .setInterval(Const.LOCATION_INTERVAL_UPDATE * 1000);  // проверка положение каждые 10 сек.
+                        .setInterval(Const.LOCATION_INTERVAL_UPDATE * 1000);  // interval update
                 LocationServices.FusedLocationApi.requestLocationUpdates(googleApiClient, locationRequest, this);
             }
         } else {
@@ -494,10 +494,10 @@ public class AboutActivity extends BaseActivity implements
                 markerPoints.add(myLatLng);
                 markerPoints.add(pizzeriaLocation);
 
-                if (isWalk == true) {
-                    getRoutes("walking");
+                if (isWalk) {
+                    getRoutes(Const.TYPE_ROUTE_WALK);
                 } else {
-                    getRoutes("driving");
+                    getRoutes(Const.TYPE_ROUTE_DRIVE);
                 }
 
 
@@ -524,7 +524,7 @@ public class AboutActivity extends BaseActivity implements
 
         RetrofitMaps service = retrofit.create(RetrofitMaps.class);
 
-        Call<Example> call = service.getDistanceDuration("metric", myLatLng.latitude + "," + myLatLng.longitude, pizzeriaLocation.latitude + "," + pizzeriaLocation.longitude, type);
+        Call<Example> call = service.getDistanceDuration(Const.TYPE_METRIC, myLatLng.latitude + "," + myLatLng.longitude, pizzeriaLocation.latitude + "," + pizzeriaLocation.longitude, type);
 
         call.enqueue(new Callback<Example>() {
             @Override

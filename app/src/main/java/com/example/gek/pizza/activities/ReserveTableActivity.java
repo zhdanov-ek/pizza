@@ -470,7 +470,7 @@ public class ReserveTableActivity extends BaseActivity implements RotationGestur
         }
     }
 
-    // touch and long touch on table. During long touch began DragandDrop
+    // touch and long touch on table. During long touch start DragandDrop
     private View.OnClickListener onClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
