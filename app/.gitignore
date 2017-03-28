@@ -38,7 +38,7 @@ captures/
 .idea
 
 # Keystore files
-*.jks
+#*.jks
 
 # Eclipse project files
 .classpath
