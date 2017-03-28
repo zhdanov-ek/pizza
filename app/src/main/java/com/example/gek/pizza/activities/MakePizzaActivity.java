@@ -10,7 +10,6 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.DragEvent;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -67,10 +66,7 @@ public class MakePizzaActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        LayoutInflater inflater = (LayoutInflater) this
-                .getSystemService(this.LAYOUT_INFLATER_SERVICE);
-        View contentView = inflater.inflate(R.layout.activity_make_pizza, null, false);
-        mDrawer.addView(contentView, 0);
+        inflateLayout(R.layout.activity_make_pizza);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolBar);
         toolbar.setTitle(R.string.title_make_pizza);

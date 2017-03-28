@@ -10,7 +10,6 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -55,11 +54,7 @@ public class MenuGroupsActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        LayoutInflater inflater = (LayoutInflater) this
-                .getSystemService(this.LAYOUT_INFLATER_SERVICE);
-        View contentView = inflater.inflate(R.layout.activity_menu_dishes, null, false);
-        mDrawer.addView(contentView, 0);
+        inflateLayout(R.layout.activity_menu_dishes);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolBar);
         toolbar.setTitle(R.string.title_menu_order);

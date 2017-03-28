@@ -6,7 +6,6 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
@@ -71,10 +70,10 @@ public class AuthenticationActivity extends BaseActivity
 
     @Override
     public void updateUI() {
-        if (Connection.getInstance().getCurrentAuthStatus() == Const.AUTH_USER) {
-            String email = FirebaseAuth.getInstance().getCurrentUser().getEmail();
-            Toast.makeText(this, getResources().getString(R.string.firebase_current_user) + email, Toast.LENGTH_SHORT).show();
-        }
+//        if (Connection.getInstance().getCurrentAuthStatus() == Const.AUTH_USER) {
+//            String email = FirebaseAuth.getInstance().getCurrentUser().getEmail();
+//            Toast.makeText(this, getResources().getString(R.string.firebase_current_user) + email, Toast.LENGTH_SHORT).show();
+//        }
     }
 
     @Override
@@ -106,12 +105,7 @@ public class AuthenticationActivity extends BaseActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        // Content inflate in VIEW and put in DrawerLayout
-        LayoutInflater inflater = (LayoutInflater) this
-                .getSystemService(this.LAYOUT_INFLATER_SERVICE);
-        View contentView = inflater.inflate(R.layout.activity_authentication, null, false);
-        mDrawer.addView(contentView, 0);
+        inflateLayout(R.layout.activity_authentication);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolBar);
         toolbar.setTitle(R.string.title_authentication);

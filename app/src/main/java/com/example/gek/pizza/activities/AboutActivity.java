@@ -15,7 +15,6 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.view.Display;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -123,10 +122,7 @@ public class AboutActivity extends BaseActivity implements
         RadioGroup rgDriveWalk;
         String textAddress;
 
-        LayoutInflater inflater = (LayoutInflater) this
-                .getSystemService(this.LAYOUT_INFLATER_SERVICE);
-        View contentView = inflater.inflate(R.layout.activity_about, null, false);
-        mDrawer.addView(contentView, 0);
+        inflateLayout(R.layout.activity_about);
 
         bdPizza = BitmapDescriptorFactory.fromResource(R.drawable.local_pizza_map);
 

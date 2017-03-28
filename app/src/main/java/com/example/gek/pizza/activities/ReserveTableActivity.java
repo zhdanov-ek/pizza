@@ -16,7 +16,6 @@ import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
 import android.view.Display;
 import android.view.DragEvent;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -97,16 +96,11 @@ public class ReserveTableActivity extends BaseActivity implements RotationGestur
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        inflateLayout(R.layout.activity_reserve_table);
         String textPhone, textEmail, textAddress;
         TextView tvPhone, tvEmail, tvAddress;
 
         activeReserveTableActivity = false;
-
-        LayoutInflater inflater = (LayoutInflater) this
-                .getSystemService(this.LAYOUT_INFLATER_SERVICE);
-        View contentView = inflater.inflate(R.layout.activity_reserve_table, null, false);
-        mDrawer.addView(contentView, 0);
 
         shortenedDateFormat = new SimpleDateFormat("yyyyMMdd", Locale.US);
 

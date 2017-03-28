@@ -1,6 +1,5 @@
 package com.example.gek.pizza.activities;
 
-import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.os.Bundle;
@@ -8,9 +7,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.MenuItem;
-import android.view.View;
 
 import com.example.gek.pizza.R;
 import com.example.gek.pizza.adapters.DeliveriesAdapter;
@@ -29,14 +26,12 @@ import static com.example.gek.pizza.data.Const.db;
  * Show list od deliveries from one group:
  * 1) transport for courier
  * 2) archive for shop
- *
  * */
 
 public class OneGroupDeliveriesActivity extends BaseActivity {
     private static final String TAG = "ONE_GROUP_DELIVERIES";
     private RecyclerView rv;
     private ArrayList<Delivery> mList;
-    private Context ctx;
     private Boolean isArchive;  // true - archive, false - transport
     private ValueEventListener mDeliveriesListener;
     private DeliveriesAdapter mDeliveriesAdapter;
@@ -52,20 +47,15 @@ public class OneGroupDeliveriesActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        // Content inflate in VIEW and put in DrawerLayout
-        LayoutInflater inflater = (LayoutInflater) this
-                .getSystemService(this.LAYOUT_INFLATER_SERVICE);
-        View contentView = inflater.inflate(R.layout.activity_group_deliveries, null, false);
-        mDrawer.addView(contentView, 0);
-        ctx = this;
+        inflateLayout(R.layout.activity_group_deliveries);
 
         // Define mList of deliveries for output from extras from intent
         Intent intent = getIntent();
         if ((intent == null) || !(intent.hasExtra(Const.MODE))) {
             finish();
         } else {
-            if (intent.getIntExtra(Const.MODE, Const.MODE_ARCHIVE_DELIVERIES) == Const.MODE_ARCHIVE_DELIVERIES){
+            if (intent.getIntExtra(Const.MODE, Const.MODE_ARCHIVE_DELIVERIES) ==
+                    Const.MODE_ARCHIVE_DELIVERIES){
                 isArchive = true;
             } else {
                 isArchive = false;
@@ -116,7 +106,7 @@ public class OneGroupDeliveriesActivity extends BaseActivity {
                     } else {
                         group = Const.CHILD_DELIVERIES_TRANSPORT;
                     }
-                    mDeliveriesAdapter = new DeliveriesAdapter(mList, ctx, group);
+                    mDeliveriesAdapter = new DeliveriesAdapter(mList, getBaseContext(), group);
                     rv.setAdapter(mDeliveriesAdapter);
                 } else {
                     mDeliveriesAdapter.notifyDataSetChanged();

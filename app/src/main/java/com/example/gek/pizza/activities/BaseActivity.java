@@ -11,6 +11,7 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
@@ -173,6 +174,13 @@ public abstract class BaseActivity extends AppCompatActivity
         };
     }
 
+    // Inflate layout and put in DrawerLayout
+    protected void inflateLayout(int resIdLayout){
+        LayoutInflater inflater = (LayoutInflater) this
+                .getSystemService(LAYOUT_INFLATER_SERVICE);
+        View contentView = inflater.inflate(resIdLayout, null, false);
+        mDrawer.addView(contentView, 0);
+    }
 
     @Override
     protected void onResume() {
