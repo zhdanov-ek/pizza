@@ -105,7 +105,7 @@ public class Const {
     public static final Integer LOCATION_INTERVAL_UPDATE = 10;
     public static final Integer LOCATION_DISTANCE_UPDATE = 30;
     public static final Integer OFFSET_FROM_EDGES_OF_THE_MAP= 50;
-    
+
 
     public static final Integer COUNT_OF_NOTIFICATION_REPEAT_ALARM = 2;
     public static final Integer TIME_INTERVAL_NOTIFICATION_START = 10000;  //10 sec
