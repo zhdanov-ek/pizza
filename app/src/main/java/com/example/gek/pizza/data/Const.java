@@ -83,7 +83,6 @@ public class Const {
     public static final String KEY_DISH_MY_PIZZA = "my_pizza";
 
     // Keys for settings
-   // public static final String SETTINGS_KEY             = "com.example.gek.pizza";
     public static final String SETTINGS_PHONE_KEY       = "phone";
     public static final String SETTINGS_ADDRESS_KEY     = "address";
     public static final String SETTINGS_EMAIL_KEY       = "email";
@@ -106,8 +105,7 @@ public class Const {
     public static final Integer LOCATION_INTERVAL_UPDATE = 10;
     public static final Integer LOCATION_DISTANCE_UPDATE = 30;
     public static final Integer OFFSET_FROM_EDGES_OF_THE_MAP= 50;
-
-    //public static final String OPEN_FROM_NOTIFICATION = "open_from_notification";
+    
 
     public static final Integer COUNT_OF_NOTIFICATION_REPEAT_ALARM = 2;
     public static final Integer TIME_INTERVAL_NOTIFICATION_START = 10000;  //10 sec
