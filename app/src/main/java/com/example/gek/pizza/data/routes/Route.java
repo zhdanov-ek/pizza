@@ -6,10 +6,6 @@ import com.google.gson.annotations.SerializedName;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by Ivleshch on 27.01.2017.
- */
-
 public class Route {
     @SerializedName("legs")
     @Expose

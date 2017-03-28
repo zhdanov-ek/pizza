@@ -14,7 +14,6 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.Display;
 import android.view.DragEvent;
 import android.view.LayoutInflater;
@@ -26,7 +25,6 @@ import android.view.ViewTreeObserver;
 import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -36,11 +34,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.gek.pizza.R;
-import com.example.gek.pizza.helpers.Connection;
 import com.example.gek.pizza.data.Const;
 import com.example.gek.pizza.data.OrderTable;
 import com.example.gek.pizza.data.StateTableReservation;
 import com.example.gek.pizza.data.Table;
+import com.example.gek.pizza.helpers.Connection;
 import com.example.gek.pizza.helpers.RotationGestureDetector;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -52,41 +50,38 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
 
 import static com.example.gek.pizza.data.Const.db;
 
 /**
- * Класс для расстановки столов, и их заказов
+ * Arrangement of tables (admin) and their orders (user)
  */
 
 public class ReserveTableActivity extends BaseActivity implements RotationGestureDetector.OnRotationGestureListener {
 
     private ImageView ivAddTable6, ivAddTable8, ivAddTable4;
-    private String textPhone, textEmail, textAddress;
-    private TextView tvPhone, tvEmail, tvAddress, tvTitleSettings;
+
+    private TextView tvTitleSettings;
     private RelativeLayout rlReserveTable, rlSettingsReserveTable;
     private LinearLayout llAboutUs;
-    private ImageView ivTable, ivOldTable;
+    private ImageView ivTable;
     private android.widget.RelativeLayout.LayoutParams layoutParams;
-    private String msg = "DRAGDROP";
-    private int xCoordinate, yCootdinate;
     private int windowWidth, windowHeight;
-    public int idTable;
-    public String tableName;
+    private int idTable;
+    private String tableName;
     private DisplayMetrics displayMetrics;
     private SlidingUpPanelLayout slidingUpPanelLayout;
     private Animation animationArrowRotation;
     private boolean isPanelExpanded = false, isPanelCollapsedDragAndDrop = false;
-    boolean isNewTable;
+    private boolean isNewTable;
     private ArrayList<Table> allTables;
     private ArrayList<OrderTable> allReservedTables;
-    private Button btnOk, btnRemove;
     private Toolbar myToolbar;
     private ImageButton ibTrash;
     private SimpleDateFormat shortenedDateFormat;
     private FloatingActionButton fabSaveSchema, fabReserveTable, fabConfirm, fabCancel;
     private Toast toastReserved;
-//    private String tableKeyNotification;
     private HashMap<String, Boolean> hmReservedConfirmed;
 
     private final String IS_PANEL_EXPANDED = "is_panel_expanded";
@@ -103,6 +98,9 @@ public class ReserveTableActivity extends BaseActivity implements RotationGestur
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        String textPhone, textEmail, textAddress;
+        TextView tvPhone, tvEmail, tvAddress;
+
         activeReserveTableActivity = false;
 
         LayoutInflater inflater = (LayoutInflater) this
@@ -110,13 +108,7 @@ public class ReserveTableActivity extends BaseActivity implements RotationGestur
         View contentView = inflater.inflate(R.layout.activity_reserve_table, null, false);
         mDrawer.addView(contentView, 0);
 
-//        tableKeyNotification = "";
-//        if (getIntent().hasExtra(Const.OPEN_FROM_NOTIFICATION)) {
-//            tableKeyNotification = getIntent().getStringExtra(Const.OPEN_FROM_NOTIFICATION);
-//        }
-
-
-        shortenedDateFormat = new SimpleDateFormat("yyyyMMdd");
+        shortenedDateFormat = new SimpleDateFormat("yyyyMMdd", Locale.US);
 
         fabSaveSchema = (FloatingActionButton) findViewById(R.id.fabSaveSchema);
         fabSaveSchema.setOnClickListener(onClickListenerBtn);
@@ -163,7 +155,7 @@ public class ReserveTableActivity extends BaseActivity implements RotationGestur
         fabCancel.setVisibility(View.GONE);
         fabConfirm.setVisibility(View.GONE);
 
-        // устанавливае слушатель на тулбар, для удаления столов
+        // toolbar delete tables
         myToolbar.setOnDragListener(new View.OnDragListener() {
             @Override
             public boolean onDrag(View view, DragEvent dragEvent) {
@@ -188,7 +180,7 @@ public class ReserveTableActivity extends BaseActivity implements RotationGestur
             }
         });
 
-        // устанавливаем слушатель на добавления новых столов
+        // add new table listener
         ValueEventListener tablesListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -210,7 +202,7 @@ public class ReserveTableActivity extends BaseActivity implements RotationGestur
 
         Const.db.child(Const.CHILD_TABLES).addValueEventListener(tablesListener);
 
-        // устанавливаем слушатель на добавления новых заказов
+        // add new orders listener
         ValueEventListener tablesReservedListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -250,7 +242,7 @@ public class ReserveTableActivity extends BaseActivity implements RotationGestur
         rlSettingsReserveTable = (RelativeLayout) findViewById(R.id.settings_reserve_table);
         llAboutUs = (LinearLayout) findViewById(R.id.llAboutUs);
 
-        // отрисовываем столы, только после того как можем определить размеры экрана
+        // draw table, after screen parametrs avaible
         ViewTreeObserver greenObserver = rlReserveTable.getViewTreeObserver();
         greenObserver.addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
 
@@ -349,16 +341,18 @@ public class ReserveTableActivity extends BaseActivity implements RotationGestur
             isPanelExpanded = savedInstanceState.getBoolean(IS_PANEL_EXPANDED, false);
             isPanelCollapsedDragAndDrop = savedInstanceState.getBoolean(IS_PANEL_COLLAPSED_DRAG_AND_DROP, false);
             allTables = savedInstanceState.getParcelableArrayList(TABLES_MARKERS);
-            if (allTables.size() != 0) {
-                updateTables();
+            if (allTables!=null){
+                if (allTables.size() != 0) {
+                    updateTables();
+                }
             }
         }
     }
 
-    // получение нового id
+    // get new id for the table
     public int getNewId() {
         int counter;
-        counter = 1;
+        counter = 1000;
         int newId = allTables.size() + counter;
         while (findViewById(newId) != null) {
             counter = counter + 1;
@@ -367,14 +361,15 @@ public class ReserveTableActivity extends BaseActivity implements RotationGestur
         return newId;
     }
 
-    // слушатель перетаскивания столов по залу
+    // drag and drop listener for tables
     private View.OnDragListener onDragListenerTable = new View.OnDragListener() {
         @Override
         public boolean onDrag(View v, DragEvent event) {
+            int xCoordinate, yCootdinate;
+
             switch (event.getAction()) {
                 case DragEvent.ACTION_DRAG_STARTED:
                     layoutParams = (RelativeLayout.LayoutParams) ivTable.getLayoutParams();
-                    Log.d(msg, "Action is DragEvent.ACTION_DRAG_STARTED");
                     break;
                 case DragEvent.ACTION_DRAG_LOCATION:
                     myToolbar.setTitle(R.string.title_reserve_table_delete);
@@ -393,10 +388,8 @@ public class ReserveTableActivity extends BaseActivity implements RotationGestur
                         isPanelCollapsedDragAndDrop = true;
                         isPanelExpanded = false;
                     }
-                    Log.d(msg, "Action is DragEvent.ACTION_DRAG_LOCATION");
                     break;
                 case DragEvent.ACTION_DROP:
-                    Log.d(msg, "Action is DragEvent.ACTION_DRAG_DROPPED");
 
                     myToolbar.setTitle(R.string.title_reserve_table);
                     myToolbar.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorPrimary));
@@ -464,7 +457,7 @@ public class ReserveTableActivity extends BaseActivity implements RotationGestur
         }
     };
 
-    // изменение параметров стола
+    // change table properties
     public void modifyTable(int id, int xCoordinate, int yCootdinate) {
         for (Table table : allTables) {
             if (table.getTableId() == id) {
@@ -477,7 +470,7 @@ public class ReserveTableActivity extends BaseActivity implements RotationGestur
         }
     }
 
-    // обработка нажатия и долгого нажатия по столу. При долгом нажатии апускаем перетаскивание
+    // touch and long touch on table. During long touch start DragandDrop
     private View.OnClickListener onClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
@@ -500,9 +493,7 @@ public class ReserveTableActivity extends BaseActivity implements RotationGestur
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {
                     if (ivTable != null) {
-//                        if (!isReserved(ivTable.getId(), false)) {
                         ivTable.setBackgroundColor(Color.TRANSPARENT);
-//                        }
                     }
                     ivTable = (ImageView) v;
 
@@ -534,7 +525,7 @@ public class ReserveTableActivity extends BaseActivity implements RotationGestur
         }
     };
 
-    // проверка заказ столик или нет, если заказн то заказ подтвержден или нет
+    // check table status, reserved, confirmed
     private HashMap<String, Boolean> isReserved(int id, boolean showInfo) {
         HashMap<String, Boolean> hmTableReserverConfirmed;
         hmTableReserverConfirmed = new HashMap<>();
@@ -575,7 +566,7 @@ public class ReserveTableActivity extends BaseActivity implements RotationGestur
         return hmTableReserverConfirmed;
     }
 
-    // перетаскивание в панели столов
+    // DragAndDrop listener in new table panel
     private View.OnDragListener onDragListenerSettings = new View.OnDragListener() {
         @Override
         public boolean onDrag(View v, DragEvent event) {
@@ -677,7 +668,6 @@ public class ReserveTableActivity extends BaseActivity implements RotationGestur
             if (data.hasExtra(Const.EXTRA_TABLE)) {
                 Table table = data.getParcelableExtra(Const.EXTRA_TABLE);
                 ivTable = (ImageView) findViewById(table.getTableId());
-//                ivTable.setBackgroundColor(Color.GRAY);
             }
         }
     }
@@ -701,7 +691,7 @@ public class ReserveTableActivity extends BaseActivity implements RotationGestur
         return (int) (coordinate * sizeWidthHeight) / resolution;
     }
 
-    //отрисока уже заказанных столов по двум состояниям заказан, подтвержден
+    // draw tables according to status
     private void updateOrderedTable() {
         getRelativeLayoutInfo();
         if (windowWidth != 0 && windowHeight != 0) {
@@ -717,7 +707,6 @@ public class ReserveTableActivity extends BaseActivity implements RotationGestur
                     if (table.getKey().equals(orderedTable.getTableKey())) {
                         ImageView reservedTable = (ImageView) findViewById(table.getTableId());
                         if (reservedTable != null) {
-//                            reservedTable.setBackgroundColor(Color.GRAY);
 
                             Drawable[] layers = new Drawable[2];
                             layers[0] = ContextCompat.getDrawable(getApplicationContext(), getResources().getIdentifier(table.getPictureName(), "drawable", getPackageName()));
@@ -747,7 +736,7 @@ public class ReserveTableActivity extends BaseActivity implements RotationGestur
         }
     }
 
-    // отрисовка столов
+    // draw tables
     private void updateTables() {
         getRelativeLayoutInfo();
         if (windowWidth != 0 && windowHeight != 0) {
@@ -755,9 +744,7 @@ public class ReserveTableActivity extends BaseActivity implements RotationGestur
                 if (findViewById(table.getTableId()) == null) {
                     final ImageView newTable = new ImageView(getApplicationContext());
 
-//                    получения индекса картинки, при ребилде проэекта индексы могут изменяться
                     int pictureId = getResources().getIdentifier(table.getPictureName(), "drawable", getPackageName());
-                    ;
 
                     newTable.setImageResource(pictureId);
                     LayoutParams lp = new LayoutParams(Math.round(120 * displayMetrics.density), Math.round(75 * displayMetrics.density));
@@ -801,11 +788,10 @@ public class ReserveTableActivity extends BaseActivity implements RotationGestur
         }
         fabSaveSchema.setVisibility(View.GONE);
 
-//        finish();
     }
 
 
-    // добавления нового стола из нижней панели
+    // add new table from slide panel
     private View.OnTouchListener onClickListenerNewTable = new View.OnTouchListener() {
         ImageView ivShadow;
 
@@ -830,15 +816,12 @@ public class ReserveTableActivity extends BaseActivity implements RotationGestur
             }
 
             if (ivTable != null) {
-//                if (!isReserved(ivTable.getId(), false)) {
                 ivTable.setBackgroundColor(Color.TRANSPARENT);
-//                }
             }
             ivTable = new ImageView(getApplicationContext());
             ivTable.setImageResource(idTable);
             RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(Math.round(120 * displayMetrics.density), Math.round(75 * displayMetrics.density));
             lp.addRule(RelativeLayout.CENTER_HORIZONTAL, 1);
-//            lp.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, 1);
             ivTable.setLayoutParams(lp);
             rlSettingsReserveTable.addView(ivTable);
 
@@ -934,7 +917,6 @@ public class ReserveTableActivity extends BaseActivity implements RotationGestur
             if (Connection.getInstance().getCurrentAuthStatus() == Const.AUTH_SHOP){
                 float angle = rotationDetector.getAngle();
                 ivTable.setRotation(ivTable.getRotation() + (-angle));
-                Log.d("RotationGestureDetector", "Rotation: " + Float.toString(angle));
                 if (Connection.getInstance().getCurrentAuthStatus() == Const.AUTH_SHOP){
                     fabSaveSchema.setVisibility(View.VISIBLE);
                 }

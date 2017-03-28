@@ -1,7 +1,7 @@
 package com.example.gek.pizza.data;
 
 /**
- * State of table in order
+ * State of table reservation
  */
 
 public class StateTableReservation {

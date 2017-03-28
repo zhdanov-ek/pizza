@@ -3,7 +3,7 @@ package com.example.gek.pizza.data;
 import java.util.Date;
 
 /**
- * Reserved table
+  Information about reservation
  */
 
 public class OrderTable{

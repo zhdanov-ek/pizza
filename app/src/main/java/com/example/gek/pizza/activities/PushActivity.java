@@ -26,16 +26,14 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 /**
- * Класс для отправки "Data message" через FCM
+ * Data message sending FCM
  */
 
 public class PushActivity extends BaseActivity implements View.OnClickListener {
 
-    private Toolbar myToolbar;
-    private Button btnSendMessage;
     private EditText etPushMessage, etPushTitle;
     private String txtPushMessage, txtPushTitle, txtTopic;
-    public static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
+    public static final MediaType JSON = MediaType.parse(Const.FCM_JSON);
     private Spinner spinnerTopics;
 
     @Override
@@ -46,6 +44,9 @@ public class PushActivity extends BaseActivity implements View.OnClickListener {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        Toolbar myToolbar;
+        Button btnSendMessage;
 
         LayoutInflater inflater = (LayoutInflater) this
                 .getSystemService(this.LAYOUT_INFLATER_SERVICE);
@@ -110,12 +111,6 @@ public class PushActivity extends BaseActivity implements View.OnClickListener {
                     OkHttpClient client = new OkHttpClient();
                     JSONObject json = new JSONObject();
                     JSONObject dataJson = new JSONObject();
-//                    dataJson.put("body", txtPushMessage);
-//                    dataJson.put("title", txtPushTitle);
-//                    dataJson.put("sound", "default");
-//                    dataJson.put("icon", "push_icon");
-//
-//                    json.put("notification", dataJson);
                     dataJson.put(Const.FCM_TITLE, txtPushTitle);
                     dataJson.put(Const.FCM_BODY, txtPushMessage);
 
@@ -134,6 +129,7 @@ public class PushActivity extends BaseActivity implements View.OnClickListener {
                     result = response.body().string();
 
                 } catch (Exception e) {
+                    e.printStackTrace();
                 }
                 return result;
             }

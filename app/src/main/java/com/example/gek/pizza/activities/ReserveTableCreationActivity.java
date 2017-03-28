@@ -23,34 +23,35 @@ import com.google.firebase.auth.FirebaseAuth;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 import static com.example.gek.pizza.R.id.btnCreateDelivery;
 import static com.example.gek.pizza.data.Const.db;
 
 /**
- * Класс для оформления заказа стола
+ * Class to reserve tables
  */
 
 public class ReserveTableCreationActivity extends AppCompatActivity {
 
     private Table table;
     private String tableKey;
-    private Button btnReserveTable;
     private EditText etName, etComment, etPhone;
-    private TextView tvTableReservation;
-    private SimpleDateFormat shortenedDateFormat;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reserve_table_creation);
 
+        Button btnReserveTable;
+        TextView tvTableReservation;
+        SimpleDateFormat shortenedDateFormat;
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolBar);
         toolbar.setTitle(R.string.title_reserve_table);
         setSupportActionBar(toolbar);
 
-        shortenedDateFormat = new SimpleDateFormat("dd.MM.yy");
+        shortenedDateFormat = new SimpleDateFormat("dd.MM.yy", Locale.US);
 
         if (getIntent().hasExtra(Const.EXTRA_TABLE)) {
             table = getIntent().getParcelableExtra(Const.EXTRA_TABLE);
@@ -64,7 +65,9 @@ public class ReserveTableCreationActivity extends AppCompatActivity {
         etComment = (EditText) findViewById(R.id.etComment);
         btnReserveTable = (Button) findViewById(btnCreateDelivery);
         tvTableReservation = (TextView) findViewById(R.id.tvTableReservation);
-        tvTableReservation.setText(getResources().getString(R.string.text_reservation_evening) + " " + shortenedDateFormat.format(new Date()));
+        tvTableReservation.setText(getResources().getString(R.string.text_reservation_evening)
+                + " "
+                + shortenedDateFormat.format(new Date()));
 
         btnReserveTable.setOnClickListener(reserveTable);
 
@@ -106,7 +109,6 @@ public class ReserveTableCreationActivity extends AppCompatActivity {
                         getIntent().putExtra(Const.EXTRA_TABLE, table);
                         setResult(RESULT_OK, getIntent());
 
-//                        stopService(new Intent(getBaseContext(), MonitoringYourReservationService.class));
                         if (!isServiceRunning()){
                             startService(new Intent(getBaseContext(), MonitoringYourReservationService.class));
                         }

@@ -41,7 +41,6 @@ public class MonitoringYourDeliveryService extends Service {
 
     @Override
     public void onCreate() {
-        Log.d(TAG, "onCreate: ");
         mIsSetListener = false;
         ctx = getBaseContext();
         mNotificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
@@ -52,15 +51,14 @@ public class MonitoringYourDeliveryService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         String idDelivery = intent.getStringExtra(Const.EXTRA_DELIVERY_ID);
         setListener(idDelivery);
-        Log.d(TAG, "onStartCommand: ");
 
-        // режим при котором интент, который был подан на startService будет передаваться
-        // в onStartCommand повторно после уничтожения во время повторного запуска сервиса
+        // The mode in which the content that was submitted to the startService will be transmitted
+        // In onStartCommand again after the destruction during the restart of the service
         return START_REDELIVER_INTENT;
     }
 
 
-    /** Смотрим состояние выполнения заказа и выводим уведомления о каждой смене состояния */
+    /** Listen state of order, and show notification if state is changed */
     private void setListener(final String idDelivery){
         mStateListener = new ValueEventListener() {
             @Override
@@ -86,8 +84,6 @@ public class MonitoringYourDeliveryService extends Service {
                     if (stateLastDelivery.getDeliveryState() != Const.DELIVERY_STATE_ARCHIVE){
                         showNotification(state);
                     } else {
-                        // Сверяем номе доставки и если доставка наша то останавливаем сервис
-                        // Доставку можно спутать с закешированной предыдущей
                         if  (stateLastDelivery.getDeliveryId().contentEquals(idDelivery)) {
                             showNotification(state);
                             stopSelf();
@@ -125,22 +121,19 @@ public class MonitoringYourDeliveryService extends Service {
         ntfBuilder.setAutoCancel(true);
         ntfBuilder.setLargeIcon(BitmapFactory.decodeResource(ctx.getResources(), R.drawable.ic_notification));
 
-        // В екшен баре появляется на секунду строка вместе со значком
+        // icon in action bar
         ntfBuilder.setTicker(title + ": " + state);
 
-        // Устанавливаем параметры для уведомления (звук, вибро, подсветка и т.д.)
+        // Set notification properties
         ntfBuilder.setDefaults(Notification.DEFAULT_SOUND | Notification.DEFAULT_VIBRATE);
 
-        // Указываем явный интент для запуска окна по нажатию на уведомление
-        // Запускаем меню, а не активити с отслеживанием потому, что в случае уничтожении
-        // приложения не успевает подгрузиться авторизация и окно не отображает инфу
+        // Notification pressed action
         Intent intent = new Intent(ctx, MainActivity.class);
-        // Формируем ОЖИДАЮЩИЙ интент на основе обычного и задаем его в билдере
+
         PendingIntent pendingIntent = PendingIntent.getActivity(ctx, 0, intent, 0);
         ntfBuilder.setContentIntent(pendingIntent);
         Notification notification = ntfBuilder.build();
         mNotificationManager.notify(mNotifyId, notification);
-        Log.d(TAG, "showNotification: " + state);
     }
 
 
@@ -152,7 +145,6 @@ public class MonitoringYourDeliveryService extends Service {
 
     @Override
     public void onTaskRemoved(Intent rootIntent) {
-        Log.d(TAG, "onTaskRemoved: ");
         if (mIsSetListener) {
             db.child(Const.CHILD_USERS)
                     .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
