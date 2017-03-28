@@ -14,7 +14,6 @@ import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -26,14 +25,13 @@ import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.example.gek.pizza.R;
-import com.example.gek.pizza.helpers.Connection;
 import com.example.gek.pizza.data.Const;
-import com.example.gek.pizza.data.RetrofitMaps;
 import com.example.gek.pizza.data.routes.Example;
+import com.example.gek.pizza.data.routes.RetrofitMaps;
+import com.example.gek.pizza.helpers.Connection;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -68,9 +66,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
 import static com.example.gek.pizza.data.Const.REQUEST_CODE_LOCATION;
 
 /**
- * О заведении: контакты, карта
- * Контактные данные должны иметь возможность корректироваться через админскую часть программы
- * Данные хранить в БД в отдельной ветке
+ * About activity: contacts, map
+ * Contacts could be change in Admin version
  */
 
 public class AboutActivity extends BaseActivity implements
@@ -79,16 +76,12 @@ public class AboutActivity extends BaseActivity implements
         GoogleApiClient.OnConnectionFailedListener,
         LocationListener {
 
-    TextView tvPhone, tvEmail, tvAddress, tvLatitude, tvLongitude, tvRouteInformationTime,tvRouteInformationDistance;
-    RadioButton rbtnDrive, rbtnWalk;
-    RadioGroup rgDriveWalk;
-    ImageView ivArrowLeft, ivArrowRight;
-    ScrollView svAboutUs;
-    String textPhone, textEmail, textAddress, textLatitude, textLongitude;
-    LatLng myLatLng;
+    private TextView tvRouteInformationTime, tvRouteInformationDistance;
+    private ImageView ivArrowLeft, ivArrowRight;
+    private String textPhone, textEmail, textLatitude, textLongitude;
+    private LatLng myLatLng;
     private SlidingUpPanelLayout slidingUpPanelLayout;
 
-    public static final String TAG = "Init map :";
     private final String PERMISSION_DIALOG_OPEN_KEY = "permission_dialog_opened";
     private final String ROUTE_MARKERS = "route_markers";
     private final String ROUTES_IS_CALCULATED = "Routes_is_calculated";
@@ -106,13 +99,13 @@ public class AboutActivity extends BaseActivity implements
     private boolean isFullScreen = false;
     private boolean isPanelExpanded = false;
 
-    public GoogleMap googleMap;
-    public GoogleApiClient googleApiClient;
-    public Location lastLocation;
-    ArrayList<LatLng> markerPoints;
-    Polyline route;
-    public List<LatLng> listOfMarkers;
-    LatLng pizzeriaLocation;
+    private GoogleMap googleMap;
+    private GoogleApiClient googleApiClient;
+    private Location lastLocation;
+    private ArrayList<LatLng> markerPoints;
+    private Polyline route;
+    private List<LatLng> listOfMarkers;
+    private LatLng pizzeriaLocation;
     private Animation animationArrowRotation;
     private BitmapDescriptor bdPizza;
 
@@ -124,6 +117,11 @@ public class AboutActivity extends BaseActivity implements
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        TextView tvPhone, tvEmail, tvAddress;
+        RadioButton rbtnDrive;
+        RadioGroup rgDriveWalk;
+        String textAddress;
 
         LayoutInflater inflater = (LayoutInflater) this
                 .getSystemService(this.LAYOUT_INFLATER_SERVICE);
@@ -158,11 +156,10 @@ public class AboutActivity extends BaseActivity implements
 
         rgDriveWalk = (RadioGroup) findViewById(R.id.rgDriveWalk);
         rbtnDrive = (RadioButton) findViewById(R.id.rbtnDrive);
-        rbtnWalk  = (RadioButton) findViewById(R.id.rbtnWalk);
-        ivArrowLeft  = (ImageView) findViewById(R.id.ivArrowLeft);
-        ivArrowRight  = (ImageView) findViewById(R.id.ivArrowRight);
+        ivArrowLeft = (ImageView) findViewById(R.id.ivArrowLeft);
+        ivArrowRight = (ImageView) findViewById(R.id.ivArrowRight);
 
-//        Подключаем слушатель только если ориентация портрет
+        //landscape listener
         slidingUpPanelLayout = (SlidingUpPanelLayout) findViewById(R.id.slidingUpPanel);
         if (isPortraitMode()) {
             setSlidingUpPanelLayoutListeners();
@@ -174,7 +171,7 @@ public class AboutActivity extends BaseActivity implements
                 .addOnConnectionFailedListener(this)
                 .build();
 
-        // проверека доступности гугл сервисов
+        // check google service availability
         GoogleApiAvailability googleApiAvailability = GoogleApiAvailability.getInstance();
         int status = googleApiAvailability.isGooglePlayServicesAvailable(this);
 
@@ -182,20 +179,19 @@ public class AboutActivity extends BaseActivity implements
 
         if (status == ConnectionResult.SUCCESS) {
             try {
-                // отрисовка карты
                 MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.fMapView);
                 if (mapFragment != null) {
                     mapFragment.getMapAsync(this);
                 }
             } catch (NullPointerException exception) {
-                Log.e(TAG, exception.toString());
+                exception.printStackTrace();
             }
         }
 
         tvEmail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intentEmail = new Intent(Intent.ACTION_SENDTO,Uri.fromParts("mailto", textEmail, null));
+                Intent intentEmail = new Intent(Intent.ACTION_SENDTO, Uri.fromParts("mailto", textEmail, null));
                 startActivity(intentEmail);
             }
         });
@@ -204,31 +200,30 @@ public class AboutActivity extends BaseActivity implements
             @Override
             public void onClick(View view) {
                 Intent callIntent = new Intent(Intent.ACTION_VIEW);
-                callIntent.setData(Uri.parse("tel:"+textPhone));
+                callIntent.setData(Uri.parse("tel:" + textPhone));
                 startActivity(callIntent);
             }
         });
 
-//        устанавливаем тип маршрута по умолчанию
-        if (isWalk==false && isDrive==false){
+        //type of route
+        if (!isWalk && !isDrive) {
             isDrive = true;
             rbtnDrive.setChecked(true);
         }
 
-        rgDriveWalk.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener()
-        {
+        rgDriveWalk.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
-                if(isDrive==true){
+                if (isDrive) {
                     isDrive = false;
                     isWalk = true;
-                } else{
+                } else {
                     isDrive = true;
                     isWalk = false;
                 }
-                isRoutesCalculated=false;
+                isRoutesCalculated = false;
                 if (isPermissionsGranted) {
-                    locationAndMapSettings(); // при изменении типа маршрута обновляем карту
+                    locationAndMapSettings(); // refresh route;
                 }
             }
         });
@@ -250,8 +245,8 @@ public class AboutActivity extends BaseActivity implements
     }
 
     private void setSlidingUpPanelLayoutListeners() {
-        final ImageView left = (ImageView) findViewById(R.id.ivArrowLeft);
-        final ImageView right = (ImageView) findViewById(R.id.ivArrowRight);
+        ivArrowLeft = (ImageView) findViewById(R.id.ivArrowLeft);
+        ivArrowRight = (ImageView) findViewById(R.id.ivArrowRight);
         animationArrowRotation = AnimationUtils.loadAnimation(this, R.anim.panel_arrows);
         animationArrowRotation.setAnimationListener(new Animation.AnimationListener() {
             @Override
@@ -261,12 +256,12 @@ public class AboutActivity extends BaseActivity implements
             @Override
             public void onAnimationEnd(Animation animation) {
                 if (isPanelExpanded) {
-                    left.setRotation(0);
-                    right.setRotation(0);
+                    ivArrowLeft.setRotation(0);
+                    ivArrowRight.setRotation(0);
                     isPanelExpanded = false;
                 } else {
-                    left.setRotation(180);
-                    right.setRotation(180);
+                    ivArrowLeft.setRotation(180);
+                    ivArrowRight.setRotation(180);
                     isPanelExpanded = true;
                 }
             }
@@ -286,8 +281,8 @@ public class AboutActivity extends BaseActivity implements
                                             SlidingUpPanelLayout.PanelState newState) {
                 if ((isPanelExpanded && newState == SlidingUpPanelLayout.PanelState.COLLAPSED)
                         || (!isPanelExpanded && newState == SlidingUpPanelLayout.PanelState.EXPANDED)) {
-                    left.startAnimation(animationArrowRotation);
-                    right.startAnimation(animationArrowRotation);
+                    ivArrowLeft.startAnimation(animationArrowRotation);
+                    ivArrowRight.startAnimation(animationArrowRotation);
                 }
             }
         });
@@ -302,7 +297,7 @@ public class AboutActivity extends BaseActivity implements
     private boolean isPortraitMode() {
         Display display = ((WindowManager) getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
         int rotation = display.getRotation();
-        if (rotation == 0){
+        if (rotation == 0) {
             return true;
         } else {
             return false;
@@ -312,7 +307,6 @@ public class AboutActivity extends BaseActivity implements
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        // записываем значение при повороте экрана
         outState.putBoolean(PERMISSION_DIALOG_OPEN_KEY, isOpenedPermissionDialog);
         outState.putBoolean(ROUTES_IS_CALCULATED, isRoutesCalculated);
         outState.putBoolean(DRIVE, isDrive);
@@ -327,19 +321,14 @@ public class AboutActivity extends BaseActivity implements
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
         if (savedInstanceState != null) {
-            // востанавливаем значение при повороте экрана
             isOpenedPermissionDialog = savedInstanceState.getBoolean(PERMISSION_DIALOG_OPEN_KEY, false);
             isRoutesCalculated = savedInstanceState.getBoolean(ROUTES_IS_CALCULATED, false);
             isDrive = savedInstanceState.getBoolean(DRIVE, false);
             isWalk = savedInstanceState.getBoolean(WALK, false);
             isFullScreen = savedInstanceState.getBoolean(FULLSCREEN, false);
             listOfMarkers = savedInstanceState.getParcelableArrayList(ROUTE_MARKERS);
-            tvRouteInformationDistance.setText(savedInstanceState.getString(DISTANCE_MAP,""));
-            tvRouteInformationTime.setText(savedInstanceState.getString(TIME_MAP,""));
-//            if (isFullScreen){
-//                isFullScreen = false;
-//                ivFullScreen.callOnClick();
-//            }
+            tvRouteInformationDistance.setText(savedInstanceState.getString(DISTANCE_MAP, ""));
+            tvRouteInformationTime.setText(savedInstanceState.getString(TIME_MAP, ""));
         }
     }
 
@@ -351,13 +340,6 @@ public class AboutActivity extends BaseActivity implements
         super.onStop();
     }
 
-//    @Override
-//    protected void onStart() {
-//        super.onStart();
-//        if (isPermissionsGranted) {
-//            locationAndMapSettings();
-//        }
-//    }
 
     @Override
     public void onConnected(Bundle bundle) {
@@ -368,12 +350,11 @@ public class AboutActivity extends BaseActivity implements
 
     @Override
     public void onConnectionSuspended(int i) {
-
         googleApiClient.connect();
     }
 
     @Override
-    public void onConnectionFailed(ConnectionResult connectionResult) {
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
 
     }
 
@@ -399,29 +380,24 @@ public class AboutActivity extends BaseActivity implements
         if (map != null && !textLatitude.equals("") && !textLongitude.equals("")) {
             googleMap = map;
 
-            // провека разрешений
+            // check permissions
             verifyLocationPermissions();
-//            if(textLatitude!="" && textLongitude!=""){
-                pizzeriaLocation = new LatLng(Double.parseDouble(textLatitude), Double.parseDouble(textLongitude));
-
-                // добавление данных на карту
-                addPizzeriaOnMap();
-//            }
+            pizzeriaLocation = new LatLng(Double.parseDouble(textLatitude), Double.parseDouble(textLongitude));
+            addPizzeriaOnMap();
         }
     }
 
-    public void addPizzeriaOnMap(){
-        // добавление маркера с пиццерией на карту
+    public void addPizzeriaOnMap() {
         googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(pizzeriaLocation, Const.ZOOM_MAP));
-
+        // add pizzeria marker
         googleMap.addMarker(new MarkerOptions()
                 .icon(bdPizza)
                 .title(getString(R.string.hint_on_map))
                 .snippet(getString(R.string.snipset_on_map))
                 .position(pizzeriaLocation));
 
-        // добавление маршрута на карту
-        if(listOfMarkers!=null){
+        // add route on map
+        if (listOfMarkers != null) {
             if (listOfMarkers.size() > 0) {
                 route = googleMap.addPolyline(new PolylineOptions()
                         .addAll(listOfMarkers)
@@ -430,9 +406,9 @@ public class AboutActivity extends BaseActivity implements
                         .geodesic(true)
                 );
 
-//                позиционирование карты, чтоб старт и финиш были видны на экране
-                if (lastLocation !=null){
-                    googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(lastLocation.getLatitude(),lastLocation.getLongitude()), Const.ZOOM_MAP));
+                // all route is visible on map
+                if (lastLocation != null) {
+                    googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(lastLocation.getLatitude(), lastLocation.getLongitude()), Const.ZOOM_MAP));
 
                     LatLngBounds.Builder boundsBuilder = new LatLngBounds.Builder();
                     boundsBuilder.include(new LatLng(lastLocation.getLatitude(), lastLocation.getLongitude()));
@@ -442,9 +418,8 @@ public class AboutActivity extends BaseActivity implements
                     CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, Const.OFFSET_FROM_EDGES_OF_THE_MAP);
                     googleMap.moveCamera(cu);
                 }
-
             }
-        } else{
+        } else {
             isRoutesCalculated = false;
         }
 
@@ -460,12 +435,15 @@ public class AboutActivity extends BaseActivity implements
 
 
     private void verifyLocationPermissions() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && this.checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
+                && this.checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+
             if (isOpenedPermissionDialog) {
                 return;
             }
             isOpenedPermissionDialog = true;
             requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, Const.REQUEST_CODE_LOCATION);
+
         } else {
             isPermissionsGranted = true;
             googleApiClient.connect();
@@ -479,16 +457,16 @@ public class AboutActivity extends BaseActivity implements
                     && this.checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED)
                     || (Build.VERSION.SDK_INT < Build.VERSION_CODES.M)) {
 
-                        googleMap.setMyLocationEnabled(true);
-                        lastLocation = LocationServices.FusedLocationApi.getLastLocation(googleApiClient);
-                        LocationRequest locationRequest = LocationRequest.create()
-                                .setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY)
-                                .setInterval(Const.LOCATION_INTERVAL_UPDATE * 1000);  // проверка положение каждые 10 сек.
-                        LocationServices.FusedLocationApi.requestLocationUpdates(googleApiClient, locationRequest, this);
-                }
-         }else {
+                googleMap.setMyLocationEnabled(true);
+                lastLocation = LocationServices.FusedLocationApi.getLastLocation(googleApiClient);
+                LocationRequest locationRequest = LocationRequest.create()
+                        .setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY)
+                        .setInterval(Const.LOCATION_INTERVAL_UPDATE * 1000);  // проверка положение каждые 10 сек.
+                LocationServices.FusedLocationApi.requestLocationUpdates(googleApiClient, locationRequest, this);
+            }
+        } else {
             googleApiClient.connect();
-         }
+        }
     }
 
     @Override
@@ -502,12 +480,12 @@ public class AboutActivity extends BaseActivity implements
 
         if (location != null) {
 
-            if(lastLocation == null){
+            if (lastLocation == null) {
                 lastLocation = location;
             }
             double dist = lastLocation.distanceTo(location);
 
-            if ((dist > Const.LOCATION_DISTANCE_UPDATE && googleMap !=null) || !isRoutesCalculated) {
+            if ((dist > Const.LOCATION_DISTANCE_UPDATE && googleMap != null) || !isRoutesCalculated) {
 
                 lastLocation = location;
 
@@ -516,9 +494,9 @@ public class AboutActivity extends BaseActivity implements
                 markerPoints.add(myLatLng);
                 markerPoints.add(pizzeriaLocation);
 
-                if (isWalk==true){
+                if (isWalk == true) {
                     getRoutes("walking");
-                } else{
+                } else {
                     getRoutes("driving");
                 }
 
@@ -528,7 +506,7 @@ public class AboutActivity extends BaseActivity implements
         }
     }
 
-    // отправка запроса для получения маршрута от А до В
+    // google api for routes
     private void getRoutes(String type) {
 
         String url = Const.GOOGLE_DIRECTIONS_API;
@@ -546,7 +524,7 @@ public class AboutActivity extends BaseActivity implements
 
         RetrofitMaps service = retrofit.create(RetrofitMaps.class);
 
-        Call<Example> call = service.getDistanceDuration("metric", myLatLng.latitude + "," + myLatLng.longitude,pizzeriaLocation.latitude + "," + pizzeriaLocation.longitude, type);
+        Call<Example> call = service.getDistanceDuration("metric", myLatLng.latitude + "," + myLatLng.longitude, pizzeriaLocation.latitude + "," + pizzeriaLocation.longitude, type);
 
         call.enqueue(new Callback<Example>() {
             @Override
@@ -556,10 +534,10 @@ public class AboutActivity extends BaseActivity implements
                         route.remove();
                     }
                     for (int i = 0; i < response.body().getRoutes().size(); i++) {
-                        String distance = response.body().getRoutes().get(i).getLegs().get(i).getDistance().getText();
-                        String time = response.body().getRoutes().get(i).getLegs().get(i).getDuration().getText();
-                        tvRouteInformationDistance.setText("Dist.:" + distance);
-                        tvRouteInformationTime.setText("Time:" + time);
+                        String distance = getResources().getString(R.string.dist) + response.body().getRoutes().get(i).getLegs().get(i).getDistance().getText();
+                        String time = getResources().getString(R.string.time) + response.body().getRoutes().get(i).getLegs().get(i).getDuration().getText();
+                        tvRouteInformationDistance.setText(distance);
+                        tvRouteInformationTime.setText(time);
                         String encodedString = response.body().getRoutes().get(0).getOverviewPolyline().getPoints();
                         listOfMarkers = decodeRoutes(encodedString);
                         googleMap.clear();
@@ -580,7 +558,7 @@ public class AboutActivity extends BaseActivity implements
 
     }
 
-    // разбор ответа о маршруте
+    // decode response about route
     private List<LatLng> decodeRoutes(String encoded) {
         List<LatLng> poly = new ArrayList<LatLng>();
         int index = 0, len = encoded.length();
@@ -606,8 +584,8 @@ public class AboutActivity extends BaseActivity implements
             int dlng = ((result & 1) != 0 ? ~(result >> 1) : (result >> 1));
             lng += dlng;
 
-            LatLng p = new LatLng( (((double) lat / 1E5)),
-                    (((double) lng / 1E5) ));
+            LatLng p = new LatLng((((double) lat / 1E5)),
+                    (((double) lng / 1E5)));
             poly.add(p);
         }
 
@@ -617,7 +595,7 @@ public class AboutActivity extends BaseActivity implements
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         if ((Connection.getInstance().getCurrentAuthStatus() == Const.AUTH_NULL) ||
-                (Connection.getInstance().getCurrentAuthStatus() == Const.AUTH_USER)){
+                (Connection.getInstance().getCurrentAuthStatus() == Const.AUTH_USER)) {
             menu.add(0, Const.ACTION_BASKET, 0, R.string.action_basket)
                     .setIcon(R.drawable.ic_basket)
                     .setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
@@ -627,13 +605,12 @@ public class AboutActivity extends BaseActivity implements
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case Const.ACTION_BASKET:
                 startActivity(new Intent(this, BasketActivity.class));
                 break;
         }
         return super.onOptionsItemSelected(item);
     }
-
 
 }

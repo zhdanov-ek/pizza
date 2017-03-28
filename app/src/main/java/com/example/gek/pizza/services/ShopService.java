@@ -30,6 +30,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -39,8 +40,7 @@ import java.util.TimerTask;
 public class ShopService extends Service {
     private static String TAG = "SHOP_SERVICE";
     private Boolean mIsSetListener;
-    // По этому ID мы сможем обращаться к нашему уведомлению, что бы изменить его например
-    // Для изменения уведомления достаточно повторно создать его с тем же номером ID
+
     int orderNotifId = Const.ODRED_NOTIFY_ID;
     int tableNotifyId = Const.RESERVED_TABLE_NOTIFY_ID;
 
@@ -68,30 +68,27 @@ public class ShopService extends Service {
         Log.d(TAG, "onCreate: ");
         ctx = getBaseContext();
 
-        // определяем формат даты
-        shortenedDateFormat = new SimpleDateFormat("yyyyMMdd");
+        // Date format
+        shortenedDateFormat = new SimpleDateFormat("yyyyMMdd", Locale.US);
 
-        // храним заказы столов которые нужно переместить в архив
         listOrderedTablesRemove = new ArrayList<>();
 
-        // список заказнных и не обработанных столов
+        // list of ordered and not processed reservation
         hmOrderTable = new HashMap<>();
         hmOrderTable.clear();
 
-        // список не обработанных доставок
+        // list of ordered and not processed deliveries
         hmDeliveries = new HashMap<>();
         hmDeliveries.clear();
 
-        // храним информацию о состаяюнию фонового задания
+        // background task state
         isTimerStarted = false;
 
-        // Получаем системный менеджер уведомлений
         notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Log.d(TAG, "onStartCommand: setListeners");
         setListenerNewDeliveries();
         setListenerArchiveOrderedTableListener();
         setListenerNewOrderedTableListener();
@@ -109,10 +106,10 @@ public class ShopService extends Service {
                 OrderTable orderedTable = dataSnapshot.getValue(OrderTable.class);
                 orderedTable.setKey(dataSnapshot.getKey());
 
-                // если дата заказа стола сегодня, и он не обработан администратором то выводим уведомление
+                // if date of reservation today, and reservation not processed, when show notification
                 if (shortenedDateFormat.format(orderedTable.getDate()).equals((shortenedDateFormat.format(new Date())))) {
                     if (orderedTable.getIsCheckedByAdmin() == 0) {
-                        // Добавляем в список не обработанных заказов
+                        // add to list not processed orders
                         if (hmOrderTable.get(orderedTable) == null) {
                             hmOrderTable.put(orderedTable.getKey(), orderedTable.getDate());
                         }
@@ -120,7 +117,7 @@ public class ShopService extends Service {
 
                         Const.db.child(Const.CHILD_RESERVED_TABLES_NEW).child(orderedTable.getKey()).setValue(orderedTable);
 
-                        // проверяем запущено ли фоновое задание, для уведомление
+                        // check state of background task
                         checkIsTimerStarted();
                     }
 
@@ -134,8 +131,8 @@ public class ShopService extends Service {
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
                 OrderTable orderedTable = dataSnapshot.getValue(OrderTable.class);
                 orderedTable.setKey(dataSnapshot.getKey());
-                // при мзменении состояния заказа удаляем его из списка не обработанных
-                // и при необходимости запускаем, останавливаем фоновое задание уведомлений
+                // if order state change delete it from not processed orders
+                // and start or stop notification background task
                 if (shortenedDateFormat.format(orderedTable.getDate()).equals((shortenedDateFormat.format(new Date())))) {
                     if (orderedTable.getIsCheckedByAdmin() == Const.STATUS_CHECKED_BY_ADMIN) {
                         if (hmOrderTable.get(orderedTable.getKey()) != null) {
@@ -149,8 +146,8 @@ public class ShopService extends Service {
 
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
-                // при мзменении состояния заказа удаляем его из списка не обработанных
-                // и при необходимости запускаем, останавливаем фоновое задание уведомлений
+                // if order state change delete it from not processed orders
+                // and start or stop notification background task
 
                 OrderTable orderedTable = dataSnapshot.getValue(OrderTable.class);
                 orderedTable.setKey(dataSnapshot.getKey());
@@ -163,8 +160,8 @@ public class ShopService extends Service {
 
             @Override
             public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-                // при мзменении состояния заказа удаляем его из списка не обработанных
-                // и при необходимости запускаем, останавливаем фоновое задание уведомлений
+                // if order state change delete it from not processed orders
+                // and start or stop notification background task
 
                 OrderTable orderedTable = dataSnapshot.getValue(OrderTable.class);
                 orderedTable.setKey(dataSnapshot.getKey());
@@ -228,7 +225,7 @@ public class ShopService extends Service {
         mIsSetListener = true;
     }
 
-    /** фоновое задание для повторения не обработанных уведомлений */
+    /** background task for repetition */
     public void notificationRepeat() {
         isTimerStarted = true;
         timer.scheduleAtFixedRate(new TimerTask() {
@@ -256,7 +253,7 @@ public class ShopService extends Service {
         }, Const.TIME_INTERVAL_NOTIFICATION_START, Const.TIME_INTERVAL_NOTIFICATION_REPEAT);
     }
 
-    // запуск, остановка фонового уведомления в зависимости от наличия необработанных заказов столов или доставок
+    // start, stop backgroun notification task
     private void checkIsTimerStarted() {
         if ((hmOrderTable.size() > 0 || hmDeliveries.size() > 0) && !isTimerStarted) {
             timer = new Timer();
@@ -283,7 +280,7 @@ public class ShopService extends Service {
         ntfBuilder.setContentText(content);
 
         ntfBuilder.setAutoCancel(true);
-        // заперт удаления уведомления
+
         ntfBuilder.setOngoing(true);
         ntfBuilder.setLargeIcon(BitmapFactory.decodeResource(ctx.getResources(), R.drawable.ic_notification));
         ntfBuilder.setDefaults(Notification.DEFAULT_SOUND | Notification.DEFAULT_VIBRATE);
@@ -292,7 +289,7 @@ public class ShopService extends Service {
         PendingIntent pendingIntent = PendingIntent.getActivity(ctx, 0, intent, 0);
         ntfBuilder.setContentIntent(pendingIntent);
         Notification notification = ntfBuilder.build();
-        // если на оповещение никто нериагирует, запускаем более навящевый сигнал
+        // if notification is not processed, make it more intrusive
         if (alert) {
             notification.flags = notification.flags | Notification.FLAG_INSISTENT;
         }
@@ -301,18 +298,16 @@ public class ShopService extends Service {
     }
 
     private void setListenerNewDeliveries() {
-        // Описываем слушатель, который мониторит новые заказы на доставку,
-        // которые находятся в child(CHILD_DELIVERIES_NEW)
+        // listen new orders
         newDeliveriesListener = new ChildEventListener() {
 
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                // Добавление в список не обработанных доставок
+                // add to list not processed orders
                 if (hmDeliveries.get(dataSnapshot.getValue(Delivery.class)) == null) {
                     hmDeliveries.put(dataSnapshot.getValue(Delivery.class).getKey(), dataSnapshot.getValue(Delivery.class).getDateNew());
                 }
 
-//                showNotification(dataSnapshot.getValue(Delivery.class),false);
                 checkIsTimerStarted();
                 showNotification(false);
             }
@@ -324,8 +319,8 @@ public class ShopService extends Service {
 
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
-                // при мзменении состояния заказа удаляем его из списка не обработанных
-                // и при необходимости запускаем, останавливаем фоновое задание уведомлений
+                // if order state change delete it from not processed orders
+                // and start or stop notification background task
                 Delivery delivery = dataSnapshot.getValue(Delivery.class);
                 if (hmDeliveries.get(delivery.getKey()) != null) {
                     hmDeliveries.remove(delivery.getKey());
@@ -350,18 +345,10 @@ public class ShopService extends Service {
     }
 
     private void showNotification(boolean alert) {
-//        float totalPrice = delivery.getTotalSum();
-//        String time = Utils.formatDate(delivery.getDateNew());
-//        String title = getResources().getString(R.string.notification_delivery_title) + " (" + time + ")";
-//        String content = delivery.getAddressClient() +" (" + delivery.getNameClient() + ")";
-
         String title = getResources().getString(R.string.notification_delivery_title);
         String content = getResources().getString(R.string.notification_delivery_content);
 
-        // Создаем наше уведомление
         NotificationCompat.Builder ntfBuilder = new NotificationCompat.Builder(ctx);
-        // Формируем его наполняя информацией
-        // Следующие три параметра являются ОБЯЗАТЕЛЬНЫМИ
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
             ntfBuilder.setSmallIcon(R.drawable.currency_usd);
         } else {
@@ -372,25 +359,17 @@ public class ShopService extends Service {
 
 
         ntfBuilder.setAutoCancel(true);
-        // заперт удаления уведомления
         ntfBuilder.setOngoing(true);
-        // Устанавливаем большую картинку в само уведомление
         ntfBuilder.setLargeIcon(BitmapFactory.decodeResource(ctx.getResources(), R.drawable.ic_notification));
-        // В екшен баре появляется на секунду строка вместе со значком
-        // ntfBuilder.setTicker(title + " (" + contentInfo + ")");
         ntfBuilder.setTicker(title);
-
-        // Устанавливаем параметры для уведомления (звук, вибро, подсветка и т.д.)
         ntfBuilder.setDefaults(Notification.DEFAULT_SOUND | Notification.DEFAULT_VIBRATE);
 
-        // Указываем явный интент для запуска окна по нажатию на уведомление
         Intent intent = new Intent(ctx, DeliveriesActivity.class);
-        // Формируем ОЖИДАЮЩИЙ интент на основе обычного и задаем его в билдере
+
         PendingIntent pendingIntent = PendingIntent.getActivity(ctx, 0, intent, 0);
         ntfBuilder.setContentIntent(pendingIntent);
 
         Notification notification = ntfBuilder.build();
-        // если на оповещение никто нериагирует, запускаем более навящевый сигнал
         if (alert) {
             notification.flags = notification.flags | Notification.FLAG_INSISTENT;
         }
@@ -400,7 +379,6 @@ public class ShopService extends Service {
 
     @Override
     public IBinder onBind(Intent intent) {
-        // TODO: Return the communication channel to the service.
         throw new UnsupportedOperationException("Not yet implemented");
     }
 
@@ -413,14 +391,12 @@ public class ShopService extends Service {
     @Override
     public void onDestroy() {
         Log.d(TAG, "onDestroy: ");
-        // перед уничтожением сервиса убираем наш лисенер. Иначе он будет отрабатывать и без службы
         if (mIsSetListener) {
             Const.db.child(Const.CHILD_DELIVERIES_NEW).removeEventListener(newDeliveriesListener);
             Const.db.child(Const.CHILD_RESERVED_TABLES_NEW).removeEventListener(newOrderedTableListener);
             Const.db.child(Const.CHILD_RESERVED_TABLES_NEW).removeEventListener(archiveOrderedTableListener);
         }
 
-        // отключаем фоновое задание
         if (isTimerStarted && timer != null) {
             timer.cancel();
         }

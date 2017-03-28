@@ -1,13 +1,11 @@
-package com.example.gek.pizza.data;
-
-import com.example.gek.pizza.data.routes.Example;
+package com.example.gek.pizza.data.routes;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
 
 /**
- * Created by Ivleshch on 27.01.2017.
+ * interface for google routes
  */
 
 public interface RetrofitMaps {

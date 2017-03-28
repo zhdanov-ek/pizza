@@ -135,6 +135,7 @@ public class Const {
     public static final String FCM_AUTHORIZATION="authorization";
     public static final String FCM_KEY="key=";
     public static final String FCM_API="https://fcm.googleapis.com/fcm/send";
+    public static final String FCM_JSON="application/json; charset=utf-8";
 
     public static final int LOCATION_COURIER_INTERVAL_UPDATE = 3;
 }

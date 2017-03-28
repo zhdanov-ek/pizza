@@ -1,7 +1,7 @@
 package com.example.gek.pizza.data;
 
 /**
- * Состояние заказанного стола
+ * State of table reservation
  */
 
 public class StateTableReservation {

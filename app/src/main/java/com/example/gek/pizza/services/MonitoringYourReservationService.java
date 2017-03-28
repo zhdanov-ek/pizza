@@ -54,14 +54,14 @@ public class MonitoringYourReservationService extends Service {
         Log.d(TAG, "onStartCommand: ");
         setListener();
 
-        // Режим при котором остановленный системой сервис будет повторно запускаться автоматом
-        // пока не будет остановлен корректно из самой программы
+        // The mode in which the service stopped by the system will be restarted automatically
+        // until it  stopped correctly from the program itself
         return START_STICKY;
     }
 
 
-    /** Лисенер проверяет все резервы столика и бросает уведомление если меняется состояние резерва.
-     * Останавливаем сервис когда все заказы в юзерской папке будут обработаны. */
+    /** Check all reserved tables, and send notification if state of reservation is changed
+     * Stopped service when all reservations processed*/
     private void setListener(){
         mStateListener = new ValueEventListener() {
             @Override
@@ -104,7 +104,6 @@ public class MonitoringYourReservationService extends Service {
             }
         };
 
-        Log.d(TAG, "setListener: ");
         db.child(Const.CHILD_USERS)
                 .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
                 .child(Const.CHILD_USER_RESERVATION_STATE)
@@ -127,15 +126,15 @@ public class MonitoringYourReservationService extends Service {
         ntfBuilder.setAutoCancel(true);
         ntfBuilder.setLargeIcon(BitmapFactory.decodeResource(ctx.getResources(), R.drawable.ic_notification));
 
-        // В екшен баре появляется на секунду строка вместе со значком
+        // icon in action bar
         ntfBuilder.setTicker(title + ": " + state);
 
-        // Устанавливаем параметры для уведомления (звук, вибро, подсветка и т.д.)
+        // Set notification properties
         ntfBuilder.setDefaults(Notification.DEFAULT_SOUND | Notification.DEFAULT_VIBRATE);
 
-        // Указываем явный интент для запуска окна по нажатию на уведомление
+        // Notification pressed action
         Intent intent = new Intent(ctx, ReserveTableActivity.class);
-        // Формируем ОЖИДАЮЩИЙ интент на основе обычного и задаем его в билдере
+
         PendingIntent pendingIntent = PendingIntent.getActivity(ctx, 0, intent, 0);
         ntfBuilder.setContentIntent(pendingIntent);
         Notification notification = ntfBuilder.build();
@@ -150,7 +149,6 @@ public class MonitoringYourReservationService extends Service {
 
     @Override
     public void onTaskRemoved(Intent rootIntent) {
-        Log.d(TAG, "onTaskRemoved: ");
         super.onTaskRemoved(rootIntent);
     }
 

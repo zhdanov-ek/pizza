@@ -163,6 +163,9 @@
     <string name="title_button_drive">Drive</string>
     <string name="title_button_walk">Walk</string>
     <string name="title_button_fullscreen">Fullscreen</string>
+    <string name="dist">Dist.:</string>
+    <string name="time">Time:</string>
+
 
     <!-- RESERVE TABLE -->
     <string name="text_reservation_evening">Table reservation on evening </string>
@@ -184,6 +187,10 @@
 
     <string name="facebook_app_id">405419523151306</string>
     <string name="firebase_server_key">AAAA7nMzSqQ:APA91bE3YJQt794cGiH6OusEd2LJQZpms4nQkrF9YEnTYVnHn0dilsr-aM3v7B9Vuc4eUJDFdhaHm7BJGvRB8tPgQUeu9-IPUfGz9RV7aH0LQtCzh8r6YPiMf2lisOFIuvCuuqNVMugt</string>
+    <string name="facebook_email">email</string>
+    <string name="facebook_permissions">id,name,email</string>
+    <string name="facebook_fields">fields</string>
+
 
     <!--Authentication-->
     <string name="facebook_sign_in">FACEBOOK</string>
@@ -191,6 +198,11 @@
     <string name="title_auth">Sign in with your account</string>
     <string name="authentication_failed">Authentication failed</string>
     <string name="msg_link_auth">You have already signed in with %1$s. Please confirm your account, and in future you will be able to sign in with %2$s.</string>
+    <string name="firebase_current_user">Firebase auth: current user = </string>
+    <string name="facebook">Facebook</string>
+    <string name="google">Google</string>
+
+
 
     <!--Notifications-->
     <string name="hint_push_title">Title of the message</string>

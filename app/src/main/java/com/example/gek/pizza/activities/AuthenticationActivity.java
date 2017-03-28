@@ -44,7 +44,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 
-/**  Обработка аутентификации */
+/**  Authentication */
 
 public class AuthenticationActivity extends BaseActivity
         implements GoogleApiClient.OnConnectionFailedListener, View.OnClickListener {
@@ -71,7 +71,7 @@ public class AuthenticationActivity extends BaseActivity
     public void updateUI() {
         if (Connection.getInstance().getCurrentAuthStatus() == Const.AUTH_USER) {
             String email = FirebaseAuth.getInstance().getCurrentUser().getEmail();
-            Toast.makeText(this, "Firebase auth: current user = " + email, Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getResources().getString(R.string.firebase_current_user) + email, Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -101,11 +101,6 @@ public class AuthenticationActivity extends BaseActivity
         }
     }
 
-//    private int getVisibility(int viewVisibility) {
-//
-//        return View.VISIBLE;
-//    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -134,14 +129,12 @@ public class AuthenticationActivity extends BaseActivity
         btnGoogleSignIn.setOnClickListener(this);
         btnFacebookSignIn.setOnClickListener(this);
 
-        // Формируем параметры GoogleApiClient, которые будут переданы при создании намерения при авторизации
         GoogleSignInOptions gso = new GoogleSignInOptions
                 .Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
                 .build();
 
-        // Создание клиента  через который мы и получаем доступ к PlayServices
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .enableAutoManage(this, this)
                 .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
@@ -158,17 +151,18 @@ public class AuthenticationActivity extends BaseActivity
                 Log.d("Auth", "facebook:onSuccess:" + loginResult);
                 loginResultFacebook = loginResult;
 
-                //получаем почту с facebook
+                // get email from facebook
                 GraphRequest request = GraphRequest.newMeRequest(loginResult.getAccessToken(), new GraphRequest.GraphJSONObjectCallback() {
                     @Override
                     public void onCompleted(JSONObject object, GraphResponse response) {
                         try {
                             String email = "";
-                            email = object.getString("email");
+                            email = object.getString(getResources().getString(R.string.facebook_email));
                             if (!email.equals("")) {
                                 firebaseAuthWithFacebook(loginResultFacebook.getAccessToken(), email);
                             }
-                        } catch (JSONException e1) {
+                        } catch (JSONException e) {
+                            e.printStackTrace();
                         }
 
 
@@ -176,7 +170,7 @@ public class AuthenticationActivity extends BaseActivity
                 });
 
                 Bundle params = new Bundle();
-                params.putString("fields", "id,name,email");
+                params.putString(getResources().getString(R.string.facebook_fields),getResources().getString(R.string.facebook_permissions));
                 request.setParameters(params);
                 request.executeAsync();
             }
@@ -201,7 +195,6 @@ public class AuthenticationActivity extends BaseActivity
         switch (view.getId()) {
             case R.id.btnGoogleSignIn:
                 progressBar.setVisibility(View.VISIBLE);
-                // Формируем интент гугл апи, которому передаем подготовленные ранее параметры
                 Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
                 startActivityForResult(signInIntent, RC_SIGN_IN_GOOGLE);
                 break;
@@ -212,34 +205,28 @@ public class AuthenticationActivity extends BaseActivity
 
     }
 
-    /**
-     * Получаем результат работы вызванного интента на авторизацию через GoogleApi
-     */
+
+    // auth result
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
         progressBar.setVisibility(View.INVISIBLE);
         if (requestCode == RC_SIGN_IN_GOOGLE) {
-            // Изымаем данные с результатом авторизации и проверяем успешно ли авторизировались
             GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
             if (result.isSuccess()) {
-                // в случае успеха изымаем эккаунт и передаем полученный токен в авторизацю файрбейс
                 GoogleSignInAccount account = result.getSignInAccount();
                 firebaseAuthWithGoogle(account);
             } else {
                 Toast.makeText(getApplicationContext(), R.string.authentication_failed, Toast.LENGTH_SHORT).show();
                 Log.d(TAG, "Google Login Failed " + result.getStatus().toString());
             }
-
         } else if (requestCode == CallbackManagerImpl.RequestCodeOffset.Login.toRequestCode()) {
             callbackManager.onActivityResult(requestCode, resultCode, data);
         }
     }
 
-    /**
-     * Изымаем ID токен и подаем его в файрбейс Auth
-     */
+//    auth with google
     public void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
         credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
         currentProvider = Const.GOOGLE_PROVIDER;
@@ -258,7 +245,7 @@ public class AuthenticationActivity extends BaseActivity
                        @Override
                        public void onComplete(@NonNull Task<AuthResult> task) {
                            if (task.isSuccessful()) {
-                               // проверяем нужно ли сослаться на уже существующий аккаунт
+                               // check if current email already sign in
                                if (credentialLink != null) {
                                    firebaseLinkWithCredential(credentialLink);
                                    credentialLink = null;
@@ -286,9 +273,8 @@ public class AuthenticationActivity extends BaseActivity
                 });
     }
 
-    //Вход или ссылка на старый провайдер
+    //Sign in or link on previos provider
     public void signLinkProvider(String email) {
-        // проверяем если ли провайдеры связанные с данной почтой
         FirebaseAuth.getInstance().fetchProvidersForEmail(email)
                 .addOnCompleteListener(new OnCompleteListener<ProviderQueryResult>() {
                     @Override
@@ -333,14 +319,18 @@ public class AuthenticationActivity extends BaseActivity
                 btnGoogleSignIn.setVisibility(View.GONE);
                 isBtnGoogleSignInVisible = false;
                 isBtnFacebookSignInVisible = true;
-                tvStatus.setText(String.format(getResources().getString(R.string.msg_link_auth), "Facebook", "Google"));
+                tvStatus.setText(String.format(getResources().getString(R.string.msg_link_auth)
+                        ,getResources().getString(R.string.facebook)
+                        ,getResources().getString(R.string.google)));
                 break;
             case Const.FACEBOOK_PROVIDER:
                 btnFacebookSignIn.setVisibility(View.GONE);
                 btnGoogleSignIn.setVisibility(View.VISIBLE);
                 isBtnFacebookSignInVisible = false;
                 isBtnGoogleSignInVisible = true;
-                tvStatus.setText(String.format(getResources().getString(R.string.msg_link_auth), "Google", "Facebook"));
+                tvStatus.setText(String.format(getResources().getString(R.string.msg_link_auth)
+                        , getResources().getString(R.string.google)
+                        , getResources().getString(R.string.facebook)));
                 break;
         }
     }
@@ -356,9 +346,6 @@ public class AuthenticationActivity extends BaseActivity
         }
     }
 
-    /**
-     * Реализуем интерфейс обработки ошибок соединений при работе с API GS
-     */
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
         Log.d(TAG, "Connection failed.");

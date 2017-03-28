@@ -14,17 +14,18 @@ import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
 /**
- * Сервис отлавливает входящие сообщения. Используется для нотификации
+ * Service catch incoming masseges. FCM notifications
  */
 
 public class MessagingService extends FirebaseMessagingService {
 
-    private static final String TAG = "MyFMService";
-    private NotificationManager mNotificationManager;
-    private static int notifyId =Const.PUSH_NITIFICATIONS_ID;
+    private static int notifyId = Const.PUSH_NITIFICATIONS_ID;
 
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
+
+        NotificationManager mNotificationManager;
+
         if (remoteMessage==null){
             return;
         }

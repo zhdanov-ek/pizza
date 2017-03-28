@@ -6,7 +6,7 @@ import com.example.gek.pizza.helpers.Utils;
 import com.google.firebase.iid.FirebaseInstanceIdService;
 
 /**
- * Сервис который отлавливает изменения токена. Используется для нотификаций
+ * Service catch token changes. Used for notifications
  */
 
 public class InstanceIDListenerService extends FirebaseInstanceIdService {

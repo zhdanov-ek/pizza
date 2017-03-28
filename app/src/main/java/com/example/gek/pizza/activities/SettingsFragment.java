@@ -77,16 +77,15 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
         }
     }
 
-    //todo Тут надо нормально назвать переменную ведь сюда разные значения приходят, а не только телефон
     public void updateSummary(Preference pref){
-        EditTextPreference etTextPhone = (EditTextPreference) pref;
-        String textPhone = etTextPhone.getText();
+        EditTextPreference etTextSetting = (EditTextPreference) pref;
+        String textPhone = etTextSetting.getText();
         pref.setSummary(textPhone);
 
         sendToServer(textPhone,pref);
     }
 
-    // Запись на сервер данных
+    // Save settings
     private void sendToServer(String settingsValue, Preference pref){
         db.child(Const.CHILD_SETTINGS).child(pref.getKey()).setValue(settingsValue);
     }

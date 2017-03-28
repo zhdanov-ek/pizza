@@ -12,8 +12,8 @@ import static com.example.gek.pizza.data.Const.db;
 
 
  /**
- * Синглтон, который хранит актуальный список всех топиков для рассылки. Загружается при старте программы.
- * Данные используются отправки уведомлений
+ * SingletonСинглтон for all theme of topics
+ * Data used to send notifications
  */
 
 
