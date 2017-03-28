@@ -38,7 +38,7 @@ captures/
 .idea
 
 # Keystore files
-*.jks
+# *.jks
 
 # Eclipse project files
 .classpath
@@ -56,4 +56,4 @@ Thumbs.db
 .externalNativeBuild
 
 # Config for Key Store
-keystore.properties
+# keystore.properties

@@ -4,7 +4,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 /**
- * Блюдо
+ * Dish
  */
 
 public class Dish implements Parcelable {

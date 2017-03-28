@@ -1,6 +1,5 @@
 package com.example.gek.pizza.activities;
 
-import android.content.Context;
 import android.content.Intent;
 import android.support.design.widget.FloatingActionButton;
 import android.os.Bundle;
@@ -33,7 +32,6 @@ public class NewsActivity extends BaseActivity{
     private ArrayList<News> allNews;
     private RecyclerView rv;
     private NewsAdapter newsAdapter;
-    private Context ctx = this;
     private FloatingActionButton fab;
     private ValueEventListener mNewsValueListener;
     private Query mGetNewsSorted;
@@ -68,7 +66,7 @@ public class NewsActivity extends BaseActivity{
         toolbar.setTitle(R.string.title_news);
         setSupportActionBar(toolbar);
 
-        //add button for open DrawerLayout
+        // add button for open DrawerLayout
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, mDrawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         mDrawer.addDrawerListener(toggle);
@@ -82,9 +80,7 @@ public class NewsActivity extends BaseActivity{
 
         allNews = new ArrayList<>();
 
-        // Описываем запрос, который отсортирует данные по ключу timeStamp и возвращает в программу
-        // весь список данных, которые находятся в child(CHILD_NEWS).
-        // В итоге при любом изменении вся база перезаливается с БД в программу
+        // Make request for retrieve news with sorting with timeStamp
         initNewsListener();
         mGetNewsSorted = Const.db.child(Const.CHILD_NEWS).orderByChild("timeStamp");
         mGetNewsSorted.addValueEventListener(mNewsValueListener);
@@ -101,9 +97,9 @@ public class NewsActivity extends BaseActivity{
                     allNews.add(currentNews);
                 }
                 if (allNews.size() == 0) {
-                    Toast.makeText(ctx, R.string.mes_no_records, Toast.LENGTH_LONG).show();
+                    Toast.makeText(getBaseContext(), R.string.mes_no_records, Toast.LENGTH_LONG).show();
                 }
-                newsAdapter = new NewsAdapter(ctx, allNews);
+                newsAdapter = new NewsAdapter(getBaseContext(), allNews);
                 rv.setAdapter(newsAdapter);
             }
 
@@ -114,11 +110,11 @@ public class NewsActivity extends BaseActivity{
         };
     }
 
-    /** Запуск активити на добавление новости */
+    /** Add new news */
     View.OnClickListener fabListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            Intent addNews = new Intent(ctx, NewsEditActivity.class);
+            Intent addNews = new Intent(getBaseContext(), NewsEditActivity.class);
             addNews.putExtra(Const.MODE, Const.MODE_NEW);
             startActivity(addNews);
         }

@@ -20,7 +20,7 @@ import com.example.gek.pizza.helpers.Utils;
 import java.util.ArrayList;
 
 /**
- * Адаптер формирующий список блюд
+ * Create list of dishes
  */
 
 public class DishesAdapter  extends RecyclerView.Adapter<DishesAdapter.ViewHolder>{
@@ -60,7 +60,6 @@ public class DishesAdapter  extends RecyclerView.Adapter<DishesAdapter.ViewHolde
         return listDishes.size();
     }
 
-    // Описываем кастомынй вьюхолдер, который будет хранить наши вьюайтемы
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         private ImageView ivPhoto;
         private TextView tvName;

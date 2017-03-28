@@ -111,13 +111,12 @@ public class MenuGroupEditActivity extends BaseActivity implements View.OnClickL
         btnCancel = (Button) findViewById(R.id.btnCancel);
         btnCancel.setOnClickListener(this);
 
-
         if (!Utils.hasInternet(this)) {
             Toast.makeText(this, R.string.mes_no_internet, Toast.LENGTH_SHORT).show();
             btnOk.setVisibility(View.GONE);
         }
 
-        // Определяем это новая запись или редактирование старой
+        // New or edit old group?
         if (getIntent().hasExtra(Const.MODE) &&
                 (getIntent().getIntExtra(Const.MODE, Const.MODE_NEW) == Const.MODE_EDIT)){
             isNewMenuGroup = false;
@@ -132,13 +131,10 @@ public class MenuGroupEditActivity extends BaseActivity implements View.OnClickL
             toolbar.setTitle(R.string.create_new);
         }
 
-        // Получаем ссылку на наше хранилище
         FirebaseStorage storage = FirebaseStorage.getInstance();
         folderRef = storage.getReferenceFromUrl(Const.STORAGE).child(Const.MENU_GROUP_IMAGES_FOLDER);
 
-        // анализируем переданные данные в активити если таковые были (при повороте, скрытии и т.д.)
         if (savedInstanceState != null){
-            // Данные есть, т.е программа уже работала и что-то сохранила. Смотрим что и восстанавливаем окно
             if (savedInstanceState.getBoolean(STATE_BUTTON_OK)){
                 btnOk.setEnabled(true);
             } else {
@@ -158,7 +154,7 @@ public class MenuGroupEditActivity extends BaseActivity implements View.OnClickL
 
 
 
-    /** Получаем URI фото с галереи и показываем его в макете */
+    /** Fetch URI image choosed in gallery and show in preview */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -210,30 +206,28 @@ public class MenuGroupEditActivity extends BaseActivity implements View.OnClickL
     }
 
 
-    /** Запись на сервер данных */
+    /** Write data to server */
     private void sendToServer(){
         final String name = tvName.getText().toString();
 
         progressBar.setVisibility(View.VISIBLE);
 
-        // Если выбранно фото с галереи то сначало грузим фото, а потом запишем карточку в БД
-        // Удаляем старое фото если оно было
         if (uriPhoto != null) {
             final String photoName = Utils.makePhotoName(tvName.getText().toString());
             StorageReference currentImageRef = folderRef.child(photoName);
             UploadTask uploadTask = currentImageRef.putFile(uriPhoto);
 
-            // Регистрируем слушатель для контроля загрузки файла на сервер.
             uploadTask.addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception exception) {
-                    Toast.makeText(getBaseContext(), "Loading image to server: ERROR", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getBaseContext(),
+                            getBaseContext().getResources().getString(R.string.mes_error_load_image),
+                            Toast.LENGTH_LONG).show();
                     progressBar.setVisibility(View.GONE);
                 }
             }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                    // Получаем ссылку на закачанный файл и сохраняем ее
                     Uri photoUrl = taskSnapshot.getDownloadUrl();
                     MenuGroup menuGroup = new MenuGroup(name, photoUrl.toString(), photoName);
                     if (isNewMenuGroup){
@@ -260,8 +254,6 @@ public class MenuGroupEditActivity extends BaseActivity implements View.OnClickL
                 }
             });
 
-            // Если фото не выбирали то просто делаем запись в БД с изменениями
-            // Удаляем старое фото если его удалил пользователь
         } else {
             MenuGroup menuGroup = new MenuGroup(name, "", "");
             if (isNewMenuGroup){
@@ -316,7 +308,7 @@ public class MenuGroupEditActivity extends BaseActivity implements View.OnClickL
     }
 
 
-    /** Переносим введенный текст в едит вью сразу в наш макет */
+    /** Copy text in preview */
     TextWatcher textWatcher = new TextWatcher() {
         @Override
         public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -338,7 +330,6 @@ public class MenuGroupEditActivity extends BaseActivity implements View.OnClickL
     };
 
 
-    /** Сохраняем данные на случай переворота дисплея или сворачивания окна */
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
         super.onSaveInstanceState(savedInstanceState);

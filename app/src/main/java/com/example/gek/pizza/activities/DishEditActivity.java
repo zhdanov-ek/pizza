@@ -88,7 +88,7 @@ public class DishEditActivity extends BaseActivity implements View.OnClickListen
         toolbar.setTitle("");
         setSupportActionBar(toolbar);
 
-        //add button for open DrawerLayout
+        // add button for open DrawerLayout
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, mDrawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         mDrawer.addDrawerListener(toggle);
@@ -117,7 +117,7 @@ public class DishEditActivity extends BaseActivity implements View.OnClickListen
         }
 
 
-        // Определяем это новое блюдо или редактирование старого
+        // New dish or edit old?
         if (getIntent().hasExtra(Const.MODE) &&
                 (getIntent().getIntExtra(Const.MODE, Const.MODE_NEW) == Const.MODE_EDIT)){
             isNewDish = false;
@@ -134,11 +134,10 @@ public class DishEditActivity extends BaseActivity implements View.OnClickListen
             toolbar.setTitle(R.string.create_new);
         }
 
-        // Получаем ссылку на наше хранилище
+        // get link on storage with images
         FirebaseStorage storage = FirebaseStorage.getInstance();
         folderRef = storage.getReferenceFromUrl(Const.STORAGE).child(Const.DISHES_IMAGES_FOLDER);
 
-        // анализируем переданные данные в активити если таковые были (при повороте, скрытии и т.д.)
         if (savedInstanceState != null){
             if (savedInstanceState.getBoolean(STATE_URI_HAVE)){
                 ibRemovePhoto.setVisibility(View.VISIBLE);
@@ -161,15 +160,13 @@ public class DishEditActivity extends BaseActivity implements View.OnClickListen
     }
 
     private void loadListGroupsMenu(){
-        // Описываем слушатель, который вернет один раз в программу весь список данных,
-        // которые находятся в child(CHILD_MENU_GROUPS)
-        // Полученные данные грузим в Spinner для того, что бы можно было блюдо восстановить
-        // или переместить в другую группу меню
+        // Listen child(CHILD_MENU_GROUPS)
+        // Data load in Spinner for move dish in other group if need
         ValueEventListener groupMenuListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
-                //Добавляем первой заглушку-группу для удаленных блюд
+                // First group is system group for store removed dishes
                 MenuGroup removedGroup = new MenuGroup();
                 removedGroup.setName(getResources().getString(R.string.title_archive_dishes));
                 removedGroup.setKey(Const.DISH_GROUP_VALUE_REMOVED);
@@ -190,7 +187,7 @@ public class DishEditActivity extends BaseActivity implements View.OnClickListen
                         listNameGroups);
                 spinnerGroup.setAdapter(adapter);
 
-                // Показываем в спинере текущую группу
+                // Show in spinner current group of dish
                 for (int i = 0; i < listMenuGroups.size(); i++) {
                     if (keyGroup.contentEquals(listMenuGroups.get(i).getKey())){
                         spinnerGroup.setSelection(i);
@@ -204,12 +201,12 @@ public class DishEditActivity extends BaseActivity implements View.OnClickListen
                 Log.w(TAG, "loadPost:onCancelled", databaseError.toException());
             }
         };
-        // Сам заброс данных из базы
+        // Make request to DB
         Const.db.child(Const.CHILD_MENU_GROUPS).addListenerForSingleValueEvent(groupMenuListener);
     }
 
 
-    /** Получаем URI фото с галереи */
+    /** Get URI of choosed image from gallery */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -258,11 +255,11 @@ public class DishEditActivity extends BaseActivity implements View.OnClickListen
 
 
 
-    /** Запись на сервер данных */
+    /** Write data to server */
     private void sendToServer(){
         final String title = etName.getText().toString();
         final String description = etDescription.getText().toString();
-        //todo сделать проверку корректности ввода значения
+        //todo check input data
         final float price = Float.parseFloat(etPrice.getText().toString());
         if (listMenuGroups != null) {
             keyGroup = listMenuGroups.get(spinnerGroup.getSelectedItemPosition()).getKey();
@@ -270,14 +267,14 @@ public class DishEditActivity extends BaseActivity implements View.OnClickListen
 
         progressBar.setVisibility(View.VISIBLE);
 
-        // Если выбранно фото с галереи то сначало грузим фото, а потом запишем карточку в БД
-        // Удаляем старое фото если оно было
+        // First loading photo and late send text data to server
+        // Remove old photo if need
         if (uriPhoto != null) {
             final String photoName = Utils.makePhotoName(etName.getText().toString());
             StorageReference currentImageRef = folderRef.child(photoName);
             UploadTask uploadTask = currentImageRef.putFile(uriPhoto);
 
-            // Регистрируем слушатель для контроля загрузки файла на сервер.
+            // Control loading image
             uploadTask.addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception exception) {
@@ -287,7 +284,7 @@ public class DishEditActivity extends BaseActivity implements View.OnClickListen
             }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                    // Получаем ссылку на закачанный файл и сохраняем ее
+                    // Fetch link on loaded image and save his
                     Uri photoUrl = taskSnapshot.getDownloadUrl();
                     Dish newDish = new Dish(title, description, price, photoUrl.toString(), photoName, keyGroup);
                     if (isNewDish){
@@ -314,8 +311,8 @@ public class DishEditActivity extends BaseActivity implements View.OnClickListen
                 }
             });
 
-            // Если фото не выбирали то просто делаем запись в БД с изменениями
-            // Удаляем старое фото если его удалил пользователь
+            // Photo don't choosed. Write text data to server
+            // Remove old photo if need
         } else {
             Dish newDish = new Dish(title, description, price, "", "", keyGroup);
             if (isNewDish){
@@ -379,7 +376,6 @@ public class DishEditActivity extends BaseActivity implements View.OnClickListen
     }
 
 
-    /** Сохраняем данные на случай переворота дисплея или сворачивания окна */
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
         super.onSaveInstanceState(savedInstanceState);
@@ -391,7 +387,7 @@ public class DishEditActivity extends BaseActivity implements View.OnClickListen
         }
     }
 
-    /** Отслеживаем изменения в полях Name и Price */
+    /** Watch for field Name and Price */
     TextWatcher textWatcher = new TextWatcher() {
         @Override
         public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {

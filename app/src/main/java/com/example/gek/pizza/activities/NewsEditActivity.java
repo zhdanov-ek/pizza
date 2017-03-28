@@ -39,7 +39,6 @@ public class NewsEditActivity extends BaseActivity implements View.OnClickListen
     private News oldNews;
     private News changedNews;
     private Uri uriPhoto;
-
     private ProgressBar progressBar;
     private EditText etTitle, etDescription;
     private ImageView ivPhoto;
@@ -68,7 +67,7 @@ public class NewsEditActivity extends BaseActivity implements View.OnClickListen
         toolbar.setTitle("");
         setSupportActionBar(toolbar);
 
-        //add button for open DrawerLayout
+        // add button for open DrawerLayout
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, mDrawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         mDrawer.addDrawerListener(toggle);
@@ -90,7 +89,7 @@ public class NewsEditActivity extends BaseActivity implements View.OnClickListen
             btnOk.setVisibility(View.GONE);
         }
 
-        // Определяем это новая новость или редактирование старой
+        // new or edit old?
         if (getIntent().hasExtra(Const.MODE) &&
                 (getIntent().getIntExtra(Const.MODE, Const.MODE_NEW) == Const.MODE_EDIT)){
             isNewNews = false;
@@ -103,7 +102,6 @@ public class NewsEditActivity extends BaseActivity implements View.OnClickListen
             toolbar.setTitle(R.string.create_new);
         }
 
-        // Получаем ссылку на наше хранилище
         FirebaseStorage storage = FirebaseStorage.getInstance();
         folderRef = storage.getReferenceFromUrl(Const.STORAGE).child(Const.NEWS_IMAGES_FOLDER);
     }
@@ -116,7 +114,7 @@ public class NewsEditActivity extends BaseActivity implements View.OnClickListen
         item.setChecked(true);
     }
 
-    /** Получаем URI фото с галереи */
+    /** Fetch URI image from gallery */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -160,31 +158,30 @@ public class NewsEditActivity extends BaseActivity implements View.OnClickListen
 
 
 
-    /** Запись на сервер данных */
+    /** Write to server */
     private void sendToServer(){
         final String title = etTitle.getText().toString();
         final String description = etDescription.getText().toString();
 
         progressBar.setVisibility(View.VISIBLE);
 
-        // Если выбранно фото с галереи то сначало грузим фото, а потом запишем карточку в БД
-        // Удаляем старое фото если оно было
+        // Have image choose. First load image and late write text data
         if (uriPhoto != null) {
             final String photoName = Utils.makePhotoName(etTitle.getText().toString());
             StorageReference currentImageRef = folderRef.child(photoName);
             UploadTask uploadTask = currentImageRef.putFile(uriPhoto);
-
-            // Регистрируем слушатель для контроля загрузки файла на сервер.
-            uploadTask.addOnFailureListener(new OnFailureListener() {
+                    uploadTask.addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception exception) {
-                    Toast.makeText(getBaseContext(), "Loading image to server: ERROR", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getBaseContext(),
+                            getBaseContext().getString(R.string.mes_error_load_image),
+                            Toast.LENGTH_LONG).show();
                     progressBar.setVisibility(View.GONE);
                 }
             }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                    // Получаем ссылку на закачанный файл и сохраняем ее
+                    // get link on image
                     Uri photoUrl = taskSnapshot.getDownloadUrl();
                     News newNews = new News(title, description, photoUrl.toString(), photoName);
                     if (isNewNews){
@@ -211,8 +208,7 @@ public class NewsEditActivity extends BaseActivity implements View.OnClickListen
                 }
             });
 
-            // Если фото не выбирали то просто делаем запись в БД с изменениями
-            // Удаляем старое фото если его удалил пользователь
+            // Image not choose. Write text data only
         } else {
             News newNews = new News(title, description, "", "");
             if (isNewNews){

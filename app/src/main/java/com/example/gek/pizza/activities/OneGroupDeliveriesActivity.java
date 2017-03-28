@@ -52,6 +52,7 @@ public class OneGroupDeliveriesActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         // Content inflate in VIEW and put in DrawerLayout
         LayoutInflater inflater = (LayoutInflater) this
                 .getSystemService(this.LAYOUT_INFLATER_SERVICE);
@@ -120,7 +121,6 @@ public class OneGroupDeliveriesActivity extends BaseActivity {
                 } else {
                     mDeliveriesAdapter.notifyDataSetChanged();
                 }
-
             }
 
             @Override

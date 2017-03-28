@@ -1,7 +1,7 @@
 package com.example.gek.pizza.data;
 
 /**
- * Заказ хранит в себе блюдо и количество, а также вспомогательные методы для работы в корзине
+ * Store dish and count
  */
 
 public class Order {

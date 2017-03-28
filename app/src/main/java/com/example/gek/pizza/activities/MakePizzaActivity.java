@@ -33,7 +33,7 @@ import com.example.gek.pizza.helpers.Utils;
 
 import java.util.ArrayList;
 
-/** Создание своей пиццы */
+/** Make custom pizza */
 
 public class MakePizzaActivity extends BaseActivity {
 
@@ -106,7 +106,7 @@ public class MakePizzaActivity extends BaseActivity {
             }
         });
 
-        // cлушаем события перетягивания на нашу пиццу
+        // Listen ivent drop on pizza
         ivPizza.setOnDragListener(onDragListenerIngredient);
 
         basicListIngredients = Ingredients.getIngredients();
@@ -114,7 +114,7 @@ public class MakePizzaActivity extends BaseActivity {
 
         int sizeIngredient = (int) getResources().getDimension(R.dimen.make_pizza_size_ingredient_in_list);
         int paddingIngredient = (int) getResources().getDimension(R.dimen.make_pizza_padding_ingredient_in_list);
-        // id для ImageView берем по значению картинки из ресурсов программы
+        // id for  ImageView get from resource
         for (int i = 0; i < basicListIngredients.size(); i++) {
             ImageView ivCurrent = new ImageView(this);
 
@@ -142,7 +142,6 @@ public class MakePizzaActivity extends BaseActivity {
         }
     }
 
-    // По списку ID слоев пиццы определяем какие ингредиенты из списка нужно скрыть
     private void hideChoosedIngredients(){
         for (int id: listIngredientsLayers) {
             for (Ingredient ingredient: basicListIngredients) {
@@ -162,7 +161,7 @@ public class MakePizzaActivity extends BaseActivity {
         item.setChecked(true);
     }
 
-    /** Начинаем тянуть картинку */
+    /** Begin drag ingredient */
     View.OnLongClickListener ingredientLongClickListener = new View.OnLongClickListener() {
         @Override
         public boolean onLongClick(View view) {
@@ -176,7 +175,7 @@ public class MakePizzaActivity extends BaseActivity {
     };
 
 
-    /** Убираем все выбранные ингредиенты  и показываем иконки скрытые */
+    /** Remove all ingredient from basic pizza end show full list */
     private void clearPizza(){
         if (listIngredientsLayers == null) {
             listIngredientsLayers = new ArrayList<>();
@@ -194,24 +193,23 @@ public class MakePizzaActivity extends BaseActivity {
     }
 
 
-    /** Прорисовка пиццы: рисуем основу и затем ингредиенты если они есть */
     private void updatePizza(){
         Bitmap basis = BitmapFactory.decodeResource(getResources(), R.drawable.pizza_basis);
 
-        // Создаем канвас через который будем рисовать на нашей битмапе - result
+        // Create canvas where will draw layers
         Bitmap result = Bitmap.createBitmap(basis.getWidth(), basis.getHeight(), basis.getConfig());
         Canvas canvas = new Canvas(result);
 
-        // Выводим первый слой - основу пиццы
+        // Draw basic layer - empty pizza
         canvas.drawBitmap(basis, 0, 0, null);
 
-        // выводим все слои с массива - выбранные ингредиенты
+        // draw all ingredients
         for (int resource: listIngredientsLayers){
             Bitmap layer = BitmapFactory.decodeResource(getResources(), resource);
             canvas.drawBitmap(layer, 0, 0, null);
         }
 
-        // Выводим картинку во вью
+        // Show bitmap to view
         ivPizza.setImageBitmap(result);
 
         if (sbTotal.length() == 0) {
@@ -228,7 +226,7 @@ public class MakePizzaActivity extends BaseActivity {
     }
 
 
-    /** Добавляем пиццу в корзину (заворачиваем данные в Dish, который принимает наш адаптер в корзине */
+    /** Add pizza to Basket as "custom dish" */
     private void addPizzaToBasket(){
         Dish pizza = new Dish();
         pizza.setName(getResources().getString(R.string.name_of_pizza));
@@ -240,7 +238,7 @@ public class MakePizzaActivity extends BaseActivity {
         clearPizza();
     }
 
-    /** Отрабатываем события во время перетягивания */
+    /** Ivents of drag */
     private View.OnDragListener onDragListenerIngredient = new View.OnDragListener() {
         @Override
         public boolean onDrag(View view, DragEvent dragEvent) {
@@ -252,14 +250,14 @@ public class MakePizzaActivity extends BaseActivity {
                     break;
 
                 case DragEvent.ACTION_DROP:
-                    // Если это первый ингредиент то добавляем сначала основу
+                    // First ingredient
                     if (sbTotal.length() == 0){
                         sbTotal.append("\n" + Ingredients.getBasis().getName() + " " +
                                 Utils.toPrice(Ingredients.getBasis().getPrice()));
                         totalSum = Ingredients.getBasis().getPrice();
                     }
 
-                    // Скрываем ингредиент в списке и добавляем новый ингредиент
+                    // Hide in list and redraw pizza with new ingredient
                     ivCurrentIngredient.setVisibility(View.GONE);
                     Ingredient choosedIngredient = getIngredientWithId(ivCurrentIngredient.getId());
                     sbTotal.append("\n" + choosedIngredient.getName() + " " +
@@ -284,7 +282,7 @@ public class MakePizzaActivity extends BaseActivity {
         }
     };
 
-    /** Находим по айди ImageView инредиент (id задаются как listImageResource) */
+    /** Use id for find needed ImageView (ingredient in list) */
     private Ingredient getIngredientWithId(int id){
         for (Ingredient ingredient: basicListIngredients) {
             if (ingredient.getListImageResource() == id){

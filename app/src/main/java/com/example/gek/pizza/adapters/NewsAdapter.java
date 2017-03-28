@@ -26,7 +26,7 @@ import com.google.firebase.storage.StorageReference;
 import java.util.ArrayList;
 
 /**
- * Адаптер для формирование списка новостей
+ * Adapter for list of news
  */
 
 public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder>{
@@ -40,7 +40,6 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder>{
     }
 
 
-    // Создаем вью которые заполнят экран и будут обновляться данными при прокрутке
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(ctx).inflate(R.layout.item_news, parent, false);
@@ -48,7 +47,6 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder>{
         return viewHolder;
     }
 
-    // Заносим значения в наши вью
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         final News currentNews = listNews.get(position);
@@ -123,7 +121,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder>{
         }
     }
 
-    /** Удаление новости из базы и фото с хранилища */
+    /** Remove news from DB and image from storage */
     private void removeNews(News news){
         final News removeItem = news;
         AlertDialog.Builder builder = new AlertDialog.Builder(ctx);
@@ -140,14 +138,14 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder>{
         builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                // Получаем ссылку на наше хранилище и удаляем фото по названию
+                // remove photo
                 FirebaseStorage storage = FirebaseStorage.getInstance();
                 StorageReference storageRef = storage.getReferenceFromUrl(Const.STORAGE);
                 if (removeItem.getPhotoUrl().length() > 0){
                     storageRef.child(Const.NEWS_IMAGES_FOLDER).child(removeItem.getPhotoName()).delete();
                 }
 
-                // Получаем ссылку на базу данных и удаляем новость по ключу
+                // remove item
                 Const.db.child(Const.CHILD_NEWS).child(removeItem.getKey()).removeValue();
             }
         });

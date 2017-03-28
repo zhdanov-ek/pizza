@@ -18,7 +18,7 @@ import com.example.gek.pizza.helpers.Utils;
 
 
 /**
- * Адаптер формирующий список заказа
+ * Adapter for list orders
  */
 
 public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.ViewHolder>{
@@ -27,7 +27,7 @@ public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.ViewHolder
 
     public OrdersAdapter(Context ctx) {
         this.ctx = ctx;
-        // проверяем реализует ли активити интерфейс нашего адаптера
+        // check of implement interface in activity
         try {
             this.refreshTotalCallback = (RefreshTotalCallback) ctx;
         } catch (ClassCastException e){
@@ -36,7 +36,7 @@ public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.ViewHolder
         refreshTotalCallback.refreshTotal();
     }
 
-    // Интерфейс, который должен быть реализован в активити, вызываем в адаптере
+    // This interface must be implement in activity
     public interface RefreshTotalCallback{
         void refreshTotal();
     }
@@ -44,8 +44,7 @@ public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.ViewHolder
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(ctx).inflate(R.layout.item_order_dish, parent, false);
-        OrdersAdapter.ViewHolder viewHolder = new OrdersAdapter.ViewHolder(view);
-        return viewHolder;
+        return new OrdersAdapter.ViewHolder(view);
     }
 
     @Override
@@ -81,7 +80,7 @@ public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.ViewHolder
         private TextView tvSum;
         private ImageView ivClear;
 
-        public ViewHolder(View itemView) {
+        private ViewHolder(View itemView) {
             super(itemView);
             tvName = (TextView) itemView.findViewById(R.id.tvAuthName);
             ivPhoto = (ImageView) itemView.findViewById(R.id.ivPhoto);
@@ -113,7 +112,7 @@ public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.ViewHolder
             }
         }
 
-        /** Удаляем полностью блюдо с заказа */
+        /** Remove dish from order */
         private void removeDish(int position){
             Basket.getInstance().orders.remove(position);
             if (Basket.getInstance().orders.size() == 0) {
@@ -124,7 +123,7 @@ public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.ViewHolder
             }
         }
 
-        /** Увеличиваем количество в заказе на 1 */
+        /** Increase count of dish (+1) */
         private void pressPlus(int position){
             int count = Integer.parseInt(tvCounter.getText().toString()) + 1;
             Basket.getInstance().changeCount(Basket.getInstance().orders.get(position).getKeyDish(), count);
@@ -133,7 +132,7 @@ public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.ViewHolder
             refreshTotalCallback.refreshTotal();
         }
 
-        /** Уменьшаем количество в заказе на 1 (до 1 минимум) */
+        /** Decrease count (-1 (min 1) */
         private void pressMinus(int position){
             int count = Integer.parseInt(tvCounter.getText().toString());
             if (count > 1) {

@@ -67,6 +67,9 @@
     <string name="mes_dont_have_delivery">You don\'t have deliveries</string>
     <string name="mes_no_orders">Here is empty. First, you need to add one or more dish.</string>
     <string name="mes_your_order_performed">Your order performed now</string>
+    <string name="mes_no_soft_for_choose_image">No program for choose image!</string>
+    <string name="mes_error_load_image">Loading image to server: ERROR</string>
+
 
     <string name="permission_location_not_granded">No permissions for use locales</string>
 
@@ -166,7 +169,7 @@
 
     <!-- RESERVE TABLE -->
     <string name="text_reservation_evening">Table reservation on evening </string>
-    <string name="title_button_save">Ok</string>
+    <string name="title_button_save">OK</string>
     <string name="title_button_remove">Remove</string>
     <string name="title_button_reserve">Reserve table</string>
     <string name="title_reserve_table_settings">Tables</string>

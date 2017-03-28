@@ -29,12 +29,12 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 
 /**
- * Показывает список групп меню. По клику на айтеме открывается другое окно со списком блюд
- * Размер картинки 500х300 пикселей
+ * Show list of menu group
+ * After click on item open list of dishes
+ * Icon size 500х300 pix
  * */
 
 public class MenuGroupsActivity extends BaseActivity {
-
     private static final String TAG = "MENU_GROUPS";
     private RecyclerView rv;
     private Context ctx = this;
@@ -73,8 +73,6 @@ public class MenuGroupsActivity extends BaseActivity {
 
         rv = (RecyclerView) findViewById(R.id.rv);
 
-        // задаем лаяют с твумя или тремя столбцами в зависимости от поворота экрана
-        // и устанавливаем расстояния между айтемами
         GridLayoutManager gridLayoutManager;
         if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT){
             gridLayoutManager = new GridLayoutManager(MenuGroupsActivity.this, 2);
@@ -92,15 +90,13 @@ public class MenuGroupsActivity extends BaseActivity {
 
         listMenuGroup = new ArrayList<>();
 
-        // устанавливаем слушатель на изменения в нашей базе в разделе контактов
         initMenuListener();
         Const.db.child(Const.CHILD_MENU_GROUPS).addValueEventListener(mMenuGroupListener);
     }
 
 
-    /** Описываем слушатель, который возвращает в программу весь список данных,
-     *   которые находятся в child(CHILD_MENU_GROUPS)
-     *   В итоге при любом изменении вся база перезаливается с БД в программу
+    /**
+     *   Return and listen for change from  child(CHILD_MENU_GROUPS)
      * */
     private void initMenuListener(){
         mMenuGroupListener = new ValueEventListener() {
@@ -168,7 +164,7 @@ public class MenuGroupsActivity extends BaseActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    /** Запуск активити на добавление группы меню */
+    /** Open activity for add new group */
     View.OnClickListener fabListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
@@ -179,7 +175,7 @@ public class MenuGroupsActivity extends BaseActivity {
     };
 
 
-    /** Открываем активити со списком удаленных блюд */
+    /** Show removed dishes */
     private void showRemovedDishes(){
         MenuGroup groupRemoved = new MenuGroup();
         groupRemoved.setName(getResources().getString(R.string.title_archive_dishes));

@@ -14,8 +14,7 @@ import static com.example.gek.pizza.data.Const.db;
 
 
 /**
- * Синглтон, который хранит актуальный список всех блюд. Загружается при старте программы.
- * Данные используются для вывода списка блюд в обработке заказов на доставку
+ * Singletone for store all dishes. Run at start program.
  */
 
 public class AllDishes {
@@ -24,14 +23,13 @@ public class AllDishes {
     private static String TAG = "AllDishes";
 
 
-    // В конструкторе устанавливаем лисенер, который будет актуализировать список наших блюд
+    // Set listener on FireBase CHILD
     private AllDishes(){
         dishes = new ArrayList<>();
         db.child(Const.CHILD_DISHES).addValueEventListener(dishesListener);
         Log.d(TAG, "Add dish listenerFavoritesDishes");
     }
 
-    // Получаем инстанс через метод, а не конструктор, который скрыт
     public static synchronized AllDishes getInstance(){
         if (instance == null) {
             instance = new AllDishes();
@@ -39,7 +37,6 @@ public class AllDishes {
         return instance;
     }
 
-    // Ищем блюдо по ключу
     public Dish getDish(String key){
         for (Dish dish: dishes) {
             if (dish.getKey().contentEquals(key)){

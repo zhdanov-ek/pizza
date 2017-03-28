@@ -1,7 +1,7 @@
 package com.example.gek.pizza.data;
 
 /**
- * Created by gek on 28.02.17.
+ * Favorites
  */
 
 public class FavoriteDish {

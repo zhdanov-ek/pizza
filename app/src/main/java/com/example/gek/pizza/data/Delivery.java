@@ -4,14 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 /**
- * Класс используется для передачи заявки на доставку в заведение
- *
- * Содержит в себе:
- * - контактную информацию о клиенте
- * - список блюд и их количество
- * - описания кастомных пицц и их количество
- * - сумму всего заказа
- * - время обработки заказа в заведении на каждом из этапов
+ * This model store all data for delivery: list dishes, custom pizza, contacts
  */
 
 public class Delivery {
@@ -21,19 +14,19 @@ public class Delivery {
     private String commentClient;
     private String commentShop;
     private float totalSum;
-    private ArrayList<String> keysDishes;       // Ключи каждого из блюд в заказе
-    private ArrayList<Integer> numbersDishes;   // Количество каждого блюда в заказе
-    private ArrayList<String> textMyPizza;      // Списки ингрединтов кастомных пицц
-    private ArrayList<Integer> numbersMyPizza;  // Количество каждой кастомной пиццы
+    private ArrayList<String> keysDishes;
+    private ArrayList<Integer> numbersDishes;
+    private ArrayList<String> textMyPizza;
+    private ArrayList<Integer> numbersMyPizza;
     private String key;
-    private Date dateNew;                       // Время смены состояния доставки
+    private Date dateNew;
     private Date dateCooking;
     private Date dateTransport;
     private Date dateArchive;
-    private Boolean isPaid;                     // оплачен/не оплачен заказ (для индикации в архиве)
-    private String userId;                      // Владелец заказа - FireBaseAuth user ID
+    private Boolean isPaid;                     // paid or reject (need to archive)
+    private String userId;
     private String userEmail;
-    private String longitude;                   // Где создавался заказ
+    private String longitude;
     private String latitude;
 
 

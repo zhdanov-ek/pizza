@@ -24,7 +24,7 @@ import com.google.firebase.database.ValueEventListener;
 public class MainActivity extends BaseActivity
         implements View.OnClickListener {
 
-    private LinearLayout llMenuOrder, llNews, llOrders, llContacts, llReservations;
+    private LinearLayout llOrders, llReservations;
     private LinearLayout llOrdersDevider, llReservationsDevider;
     private static final String TAG = "MAIN_MENU";
 
@@ -73,20 +73,17 @@ public class MainActivity extends BaseActivity
         mDrawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        llMenuOrder = (LinearLayout) findViewById(R.id.llMenuOrder);
-        llMenuOrder.setOnClickListener(this);
-        llNews = (LinearLayout) findViewById(R.id.llNews);
-        llNews.setOnClickListener(this);
+        findViewById(R.id.llMenuOrder).setOnClickListener(this);
+        findViewById(R.id.llNews).setOnClickListener(this);
+        findViewById(R.id.llContacts).setOnClickListener(this);
         llOrdersDevider = (LinearLayout) findViewById(R.id.llOrdersDevider);
         llReservationsDevider = (LinearLayout) findViewById(R.id.llReservationsDevider);
         llOrders = (LinearLayout) findViewById(R.id.llOrders);
         llOrders.setOnClickListener(this);
-        llContacts = (LinearLayout) findViewById(R.id.llContacts);
-        llContacts.setOnClickListener(this);
         llReservations = (LinearLayout) findViewById(R.id.llReservations);
         llReservations.setOnClickListener(this);
 
-        //Получение настроек приложения
+        // Fetch preferences of app
         final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         final SharedPreferences.Editor editor = sharedPreferences.edit();
 

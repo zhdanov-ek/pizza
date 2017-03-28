@@ -36,7 +36,7 @@ import java.util.ArrayList;
 
 import static com.example.gek.pizza.data.Const.db;
 
-/** Отображение списка блюд в разделе */
+/** Show list of dishes */
 
 public class DishesActivity extends BaseActivity {
 
@@ -81,8 +81,7 @@ public class DishesActivity extends BaseActivity {
         tvEmpty = (TextView) findViewById(R.id.tvEmpty);
         rv = (RecyclerView) findViewById(R.id.rv);
 
-        // Задаем лаяют с твумя или тремя столбцами в зависимости от поворота экрана
-        // и устанавливаем расстояния между айтемами
+        // Set layout with 2 or 3 column, set offset between them
         GridLayoutManager gridLayoutManager;
         if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT){
             gridLayoutManager = new GridLayoutManager(DishesActivity.this, 2);
@@ -96,7 +95,7 @@ public class DishesActivity extends BaseActivity {
 
         rv.setLayoutManager(gridLayoutManager);
 
-        // Слушаем либо избранное либо общий список блюд
+        // Listen favorites or dishes list
         Intent intent = getIntent();
         if (intent != null) {
             if (intent.hasExtra(Const.EXTRA_IS_FAVORITE)) {
@@ -128,7 +127,9 @@ public class DishesActivity extends BaseActivity {
     }
 
 
-    /** Инициализация лисенара юзерской папки с ключами избранных блюд и передачей в адаптер */
+    /**
+     * Initialize listener of user folder with keys of favorites dishes
+     */
     private void initFavoriteDishesListener(){
         mFavoriteDishesListener = new ValueEventListener() {
             @Override
@@ -139,7 +140,7 @@ public class DishesActivity extends BaseActivity {
                     mSelectedDishes.clear();
                 }
                 Dish currentDish;
-                // По ключам формируем список блюд
+                // Use keys for make list of dishes
                 for (DataSnapshot child: dataSnapshot.getChildren()) {
                     FavoriteDish favoriteDish = child.getValue(FavoriteDish.class);
                     currentDish = AllDishes.getInstance().getDish(favoriteDish.getKeyOfDish());
@@ -171,9 +172,9 @@ public class DishesActivity extends BaseActivity {
 
 
 
-    /** Описываем слушатель, который возвращает в программу весь список данных,
-     *  которые находятся в child(CHILD_DISHES)
-     *  Из этого списка выбираем блюда с нашего раздела
+    /**
+     *  Listener get all dishes from  child(CHILD_DISHES)
+     *  Take dishes only from one group
      */
     private void initAllDishesListener(){
         mAllDishesListener = new ValueEventListener() {
@@ -208,7 +209,7 @@ public class DishesActivity extends BaseActivity {
     }
 
 
-    /** Запуск активити на добавление блюда в текущей группе */
+    /** Start activity for add new Dish */
     View.OnClickListener fabListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
@@ -237,7 +238,6 @@ public class DishesActivity extends BaseActivity {
             default:
                 break;
         }
-
         return super.onCreateOptionsMenu(menu);
     }
 

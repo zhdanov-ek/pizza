@@ -29,13 +29,12 @@ import java.util.Date;
 import static com.example.gek.pizza.data.Const.db;
 
 /**
- * Адаптер отображающий заказы на доставку (новые, готовка, доставка и архив)
- * При перемещении доставки с одной папки в другую меняем состояние заказа в персональной папке юзера
+ * Adapter create data for list of deliveries (new, cook, transfer and archive)
+ * If delivery change state need change state in user folder
  */
 
 
 public class DeliveriesAdapter extends RecyclerView.Adapter<DeliveriesAdapter.ViewHolder>{
-
     private ArrayList<Delivery> listDeliveries;
     private Context ctx;
     private String statusDeliveries;
@@ -45,7 +44,6 @@ public class DeliveriesAdapter extends RecyclerView.Adapter<DeliveriesAdapter.Vi
         this.ctx = ctx;
         this.statusDeliveries = statusDeliveries;
     }
-
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -74,8 +72,6 @@ public class DeliveriesAdapter extends RecyclerView.Adapter<DeliveriesAdapter.Vi
         }
         holder.tvTime.setText(Utils.getTimeHistoryDelivery(delivery, ctx));
         holder.tvEmail.setText(delivery.getUserEmail());
-
-
         String details = "";
         if (delivery.getTextMyPizza() != null){
             for (int j = 0; j < delivery.getTextMyPizza().size(); j++) {
@@ -85,11 +81,11 @@ public class DeliveriesAdapter extends RecyclerView.Adapter<DeliveriesAdapter.Vi
             }
         }
 
-        // По ключу блюда находим его в списке и получаем полную инфу. Берем кол-во и формируем строку
+        // Make string line for all dishes
         if (delivery.getKeysDishes() != null) {
             for (int i = 0; i < delivery.getNumbersDishes().size(); i++) {
                 Dish nextDish = AllDishes.getInstance().getDish(delivery.getKeysDishes().get(i));
-                details += Utils.makeOrderString(nextDish, delivery.getNumbersDishes().get(i));
+                details += Utils.makeOrderString(nextDish, delivery.getNumbersDishes().get(i), ctx);
                 if (i < delivery.getNumbersDishes().size()){
                     details += "\n";
                 }
@@ -98,7 +94,7 @@ public class DeliveriesAdapter extends RecyclerView.Adapter<DeliveriesAdapter.Vi
 
         holder.tvDetails.setText(details);
 
-        // Формируем надписи на кнопках в зависимости в каком состоянии доставка
+        // Set text for buttons
         switch (statusDeliveries){
             case Const.CHILD_DELIVERIES_NEW:
                 holder.btnPositive.setText(R.string.btn_cook);
@@ -128,7 +124,6 @@ public class DeliveriesAdapter extends RecyclerView.Adapter<DeliveriesAdapter.Vi
     }
 
 
-    // Описываем холдер, который будет прорисовывать айтемы и обрабатывать клики по ним
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         private TextView tvNameClient;
         private TextView tvPhoneClient;
@@ -189,7 +184,7 @@ public class DeliveriesAdapter extends RecyclerView.Adapter<DeliveriesAdapter.Vi
 
         }
 
-        /** Разворачивает/сворачивает дополнительную информацию о доставке  */
+        /** Expand details  */
         private void doExpand() {
             if (llDetails.getVisibility() == View.GONE) {
                 llDetails.setVisibility(View.VISIBLE);
@@ -201,13 +196,13 @@ public class DeliveriesAdapter extends RecyclerView.Adapter<DeliveriesAdapter.Vi
         }
 
 
-        /** Добавление (изменение) комментария заведения */
+        /** Add (edit) comment from shop */
         private void editShopComment(){
             AlertDialog.Builder builder = new AlertDialog.Builder(ctx);
             builder.setTitle(R.string.dialog_title_edit_comment);
             builder.setIcon(R.drawable.ic_comment);
 
-            // Добавляем вью для ввода в стандартный диалог
+            // Add view in basic dialog
             final EditText etCommentShop = new EditText(ctx);
             LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
                     LinearLayout.LayoutParams.MATCH_PARENT,
@@ -219,7 +214,6 @@ public class DeliveriesAdapter extends RecyclerView.Adapter<DeliveriesAdapter.Vi
                 etCommentShop.setText(tvCommentShop.getText());
             }
 
-            // Кнопки добавления записи в объект
             builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
@@ -236,8 +230,11 @@ public class DeliveriesAdapter extends RecyclerView.Adapter<DeliveriesAdapter.Vi
             builder.show();
         }
 
-        /** Отклонение доставки: запись переносится в архив и перед этим вносится комментарий.
-         * В архиве эта кнопка удаляет запись. Меняем состояние заказа в юзерской папке  */
+        /**
+         * Reject delivery
+         * Delivery moved to archive and append comment.
+         * Later change status in user folder
+         */
         private void pressNegative(){
             final Delivery delivery = listDeliveries.get(getAdapterPosition());
             AlertDialog.Builder builder = new AlertDialog.Builder(ctx);
@@ -248,7 +245,7 @@ public class DeliveriesAdapter extends RecyclerView.Adapter<DeliveriesAdapter.Vi
                 }
             });
 
-            // Если запись в архиве то удаляем ее. Иначе перемещаем заказ в архив с пометкой о не оплате
+            // If item in archive - remove. Else item moved to archive
             if (statusDeliveries.contentEquals(Const.CHILD_DELIVERIES_ARCHIVE)){
                 builder.setTitle(R.string.dialog_title_delivery_remove);
                 builder.setMessage(R.string.confirm_remove_item);
@@ -268,13 +265,13 @@ public class DeliveriesAdapter extends RecyclerView.Adapter<DeliveriesAdapter.Vi
             } else {
                 builder.setTitle(R.string.dialog_title_delivery_reject);
                 delivery.setDateArchive(new Date());
-                // подгружаем вью в базовый диалог и наполняем его данными
+                // Load View in basic dialog and fill his the data
                 View customPart = ((AppCompatActivity) ctx).getLayoutInflater().inflate(R.layout.dialog_reason, null);
                 builder.setView(customPart);
                 final EditText etInput = (EditText) customPart.findViewById(R.id.etInput);
                 etInput.setText(listDeliveries.get(getAdapterPosition()).getCommentShop());
 
-                // Добавляем комментарий заведения в доставку и перемещаем ее в архив
+                // Add comment of shop and move to archive
                 builder.setPositiveButton(R.string.btn_to_archive, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
@@ -299,9 +296,10 @@ public class DeliveriesAdapter extends RecyclerView.Adapter<DeliveriesAdapter.Vi
         }
 
 
-        /** При нажатии на позитивную кнопку перемещаем доставу в следующую группу
-         *  или восстанавливаем из архива. Для этого удаляем запись в текущей месте и
-         *  создаем ее же уже в новом. Меняем состояние заказа в юзерской папке */
+        /**
+         *  Move to next group or restore from archive
+         *  After operations make change in user folder
+         *  */
         private void pressPositive(){
             // Используя ключ доставки переносим ее в другую категорию и меняем состояния заказа в юзерской папке
             String keyDelivery = listDeliveries.get(getAdapterPosition()).getKey();
@@ -361,7 +359,7 @@ public class DeliveriesAdapter extends RecyclerView.Adapter<DeliveriesAdapter.Vi
                     break;
 
                 case Const.CHILD_DELIVERIES_ARCHIVE:
-                    // при восстановлении их архива затираем все даты кроме даты создания
+                    // if restore item from archive need purge old date
                     listDeliveries.get(getAdapterPosition()).setDateCooking(null);
                     listDeliveries.get(getAdapterPosition()).setDateTransport(null);
                     listDeliveries.get(getAdapterPosition()).setDateArchive(null);
@@ -381,10 +379,5 @@ public class DeliveriesAdapter extends RecyclerView.Adapter<DeliveriesAdapter.Vi
                             .setValue(stateLastDelivery);
             }
         }
-
-
-
     }
-
-
 }

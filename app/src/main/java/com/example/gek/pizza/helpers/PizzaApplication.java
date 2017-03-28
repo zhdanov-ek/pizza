@@ -9,7 +9,7 @@ import io.fabric.sdk.android.Fabric;
 
 
 /**
- * Инициализация глобальных настроек
+ * Initialize global values and objects
  */
 
 public class PizzaApplication extends Application {
@@ -21,11 +21,10 @@ public class PizzaApplication extends Application {
         // Crashlytics  (Uncomment before building APK):
         Fabric.with(this, new Crashlytics());
 
-        // Включаем кеширование данных что позволяет отображать данные офлайн
-        // Инициализация этого значения делается до начала работы с FireBase
+        // Enable offline mode for Firebase - caching data in local storage
         FirebaseDatabase.getInstance().setPersistenceEnabled(true);
 
-        //Грузим сразу список блюд в синглтон. Потом в заказах используем эту информацию
+        // Load dishes
         AllDishes.getInstance();
 
         AllTopics.getInstance();

@@ -2,7 +2,6 @@ package com.example.gek.pizza.helpers;
 
 import android.graphics.Rect;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 
 /**
@@ -40,10 +39,5 @@ public class GridSpacingItemDecoration extends RecyclerView.ItemDecoration {
                 outRect.top = spacing;
             }
         }
-//        String s = "LEFT = " + outRect.left + "\n" +
-//                "RIGHT = " + outRect.right + "\n" +
-//                "TOP = " + outRect.top + "\n" +
-//                "BOTTOM = " + outRect.bottom + "\n";
-//        Log.d(TAG, "getItemOffsets: position = " + position + ", spacing = " + spacing + "\n" + s);
     }
 }

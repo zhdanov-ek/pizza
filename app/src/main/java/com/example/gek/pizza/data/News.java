@@ -36,7 +36,7 @@ public class News implements Parcelable {
         this.photoUrl = photoUrl;
         this.photoName = photoName;
 
-        // время со знаком минус для правильной сортировки при выводе: новые - выше.
+        // need for sort in RecyclerView
         this.timeStamp = -1 * new Date().getTime();
     }
 

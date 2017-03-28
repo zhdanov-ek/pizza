@@ -20,32 +20,28 @@ public class Const {
     public static final String CHILD_TOPICS = "topics";
     public static final String CHILD_COURIER = "courier";
 
-    public static final String REMOTE_CONFIG_ADMIN_EMAIL = "admin_email";
-
     public static final String CHILD_USERS = "users";
     public static final String CHILD_USER_DELIVERY_STATE = "delivery_state";
     public static final String CHILD_USER_RESERVATION_STATE = "reservation_state";
     public static final String CHILD_USER_FAVORITES = "favorites";
 
-    // Отображают текущее состояние заказа в юзерской папке
+    // Current status of delivery in user folder
     public static final int DELIVERY_STATE_NEW = 0;
     public static final int DELIVERY_STATE_COOKING = 1;
     public static final int DELIVERY_STATE_TRANSPORT = 2;
     public static final int DELIVERY_STATE_ARCHIVE = 9;
 
-    // Пути где хранятся заказы в зависимости от текущего состояния
+    // Path in DB where stored deliveries
     public static final String CHILD_DELIVERIES_NEW = "deliveries/new";
     public static final String CHILD_DELIVERIES_COOKING = "deliveries/cooking";
     public static final String CHILD_DELIVERIES_TRANSPORT = "deliveries/transport";
     public static final String CHILD_DELIVERIES_ARCHIVE = "deliveries/archive";
-
 
     // Auth mode
     public static final int AUTH_NULL = 0;
     public static final int AUTH_USER = 1;
     public static final int AUTH_COURIER = 2;
     public static final int AUTH_SHOP = 5;
-
 
     // Storage
     public static final String STORAGE = "gs://pizza-7ee24.appspot.com";
@@ -54,8 +50,7 @@ public class Const {
     public static final String NEWS_IMAGES_FOLDER = "news_images";
     public static final String DISHES_IMAGES_FOLDER = "dishes_images";
 
-
-    // Константы для редактирования и создания элементов, запуска активити в различных режимов
+    // const for open other activity in various mode
     public static final String MODE = "mode";
     public static final int MODE_NEW = 0;
     public static final int MODE_EDIT = 1;
@@ -73,23 +68,22 @@ public class Const {
     public static final String DISH_GROUP_KEY = "dish_group_key";
     public static final String DISH_GROUP_VALUE_REMOVED = "removed";
 
-    // Константы для обозначения пунктов в меню екшнбара
+    // Toolbar items
     public static final int ACTION_EDIT = 1;
     public static final int ACTION_REMOVE = 2;
     public static final int ACTION_ARCHIVE = 3;
     public static final int ACTION_BASKET = 4;
 
-    // id используемые при вызовах активити через интент
+    // request for startActivity onResult
     public static final int REQUEST_LOAD_IMG = 1;
     public static final int REQUEST_EDIT_DISH = 11;
     public static final int REQUEST_RESERVE_TABLE = 12;
 
-
-    // Ключ для кастомной пиццы. Эти блюда не попадают в БД, а используются только на клиенте
+    // Key for custom pizza. Use in client only
     public static final String KEY_DISH_MY_PIZZA = "my_pizza";
 
-    //key для настроек
-    public static final String SETTINGS_KEY             = "com.example.gek.pizza";
+    // Keys for settings
+   // public static final String SETTINGS_KEY             = "com.example.gek.pizza";
     public static final String SETTINGS_PHONE_KEY       = "phone";
     public static final String SETTINGS_ADDRESS_KEY     = "address";
     public static final String SETTINGS_EMAIL_KEY       = "email";
@@ -109,7 +103,7 @@ public class Const {
     public static final Integer LOCATION_DISTANCE_UPDATE = 30;
     public static final Integer OFFSET_FROM_EDGES_OF_THE_MAP= 50;
 
-    public static final String OPEN_FROM_NOTIFICATION = "open_from_notification";
+    //public static final String OPEN_FROM_NOTIFICATION = "open_from_notification";
 
     public static final Integer COUNT_OF_NOTIFICATION_REPEAT_ALARM = 2;
     public static final Integer TIME_INTERVAL_NOTIFICATION_START = 10000;  //10 sec

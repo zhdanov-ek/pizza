@@ -129,7 +129,7 @@ public class DishShowActivity extends BaseActivity implements View.OnClickListen
         item.setCheckable(true);
         item.setChecked(true);
 
-        // смотрим в корзине в заказе ли это блюдо
+        // Search dish in basket. Need for set count
         int countDishInOrder = Utils.findInBasket(dishOpen);
         if (countDishInOrder != 0) {
             btnAdd.setVisibility(View.GONE);
@@ -154,7 +154,7 @@ public class DishShowActivity extends BaseActivity implements View.OnClickListen
         }
     }
 
-    /** Следим за изменениями в списках избранного и обновляем ЮАй если это касается нашего блюда */
+    /** Listen favorites of user and update UI */
     ValueEventListener favoritesListener = new ValueEventListener() {
         @Override
         public void onDataChange(DataSnapshot dataSnapshot) {
@@ -198,7 +198,7 @@ public class DishShowActivity extends BaseActivity implements View.OnClickListen
         }
     }
 
-    /** Добавляем или убираем из избранного блюдо */
+    /** Add or remove dish from favorites */
     private void pressFavorites(){
         if (isFavorite){
             Favorites.getInstance().removeDish(dishOpen.getKey());
@@ -208,14 +208,14 @@ public class DishShowActivity extends BaseActivity implements View.OnClickListen
         ivFavorites.setClickable(false);
     }
 
-    /** Увеличиваем количество в заказе на 1 */
+    /** Increase count on 1 */
     private void pressPlus(){
         int count = Integer.parseInt(tvCounter.getText().toString()) + 1;
         tvCounter.setText(String.valueOf(count));
         Basket.getInstance().changeCount(dishOpen.getKey(), count);
     }
 
-    /** Уменьшаем количество в заказе на 1 или удаляем заказ если 0 */
+    /** Decrease count on -1 or show button if 0 */
     private void pressMinus(){
         int count = Integer.parseInt(tvCounter.getText().toString()) - 1;
         Basket.getInstance().changeCount(dishOpen.getKey(), count);
@@ -228,7 +228,7 @@ public class DishShowActivity extends BaseActivity implements View.OnClickListen
     }
 
 
-    /** Добавляем блюдо в корзину, заменяем кнопку на цифру с количеством */
+    /** Add dish to Basket and replace button */
     private void addNewDish(){
         Basket.getInstance().addDish(dishOpen);
         tvCounter.setText("1");
@@ -236,7 +236,7 @@ public class DishShowActivity extends BaseActivity implements View.OnClickListen
         llCounter.setVisibility(View.VISIBLE);
     }
 
-    /** После удачного редактирования карточки обновляем инфу и тут */
+    /** Update Dish after edit */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if ((requestCode == Const.REQUEST_EDIT_DISH) && (resultCode == RESULT_OK) && (data != null)) {
@@ -247,7 +247,6 @@ public class DishShowActivity extends BaseActivity implements View.OnClickListen
     }
 
 
-    /** Заполнение полей активити */
     private void fillValues(Dish dish){
         if ((dish.getPhotoUrl() != null) && (dish.getPhotoUrl().length() > 0)){
             Glide.with(this)
@@ -258,7 +257,8 @@ public class DishShowActivity extends BaseActivity implements View.OnClickListen
         } else {
             ivPhoto.setImageResource(R.drawable.dish_empty);
         }
-        // Не даем удалить блюдо если оно уже в архиве
+
+        // Don't remove if dish in archive
         if (dish.getKeyGroup().contentEquals(Const.DISH_GROUP_VALUE_REMOVED)){
             btnRemove.setVisibility(View.GONE);
         }
@@ -268,7 +268,7 @@ public class DishShowActivity extends BaseActivity implements View.OnClickListen
     }
 
 
-    /** Открываем активити для редактирования текущего блюда */
+    /** Open activity for edit dish */
     private void editDish(Dish dish){
         Intent editIntent = new Intent(this, DishEditActivity.class);
         editIntent.putExtra(Const.MODE, Const.MODE_EDIT);
@@ -280,7 +280,7 @@ public class DishShowActivity extends BaseActivity implements View.OnClickListen
 
 
 
-    /** Перемещение блюда в архив путем присваивания ключа группы REMOVED */
+    /** For remove dish we set group to REMOVED */
     private void removeDish(final Dish dish){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(R.string.remove);
@@ -296,7 +296,6 @@ public class DishShowActivity extends BaseActivity implements View.OnClickListen
         builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                // Заменяем ключ группы, после чего это блюдо не будет возможности выбрать в меню
                 dish.setKeyGroup(Const.DISH_GROUP_VALUE_REMOVED);
                 db.child(Const.CHILD_DISHES).child(dish.getKey()).setValue(dish);
                 finish();

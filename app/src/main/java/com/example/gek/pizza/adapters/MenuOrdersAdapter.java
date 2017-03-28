@@ -21,7 +21,7 @@ import java.util.ArrayList;
 
 
 /**
- * Адаптер для наполнения главного меню категорий блюд
+ * Make list of group menu
  */
 
 public class MenuOrdersAdapter extends RecyclerView.Adapter<MenuOrdersAdapter.ViewHolder> {
@@ -37,7 +37,6 @@ public class MenuOrdersAdapter extends RecyclerView.Adapter<MenuOrdersAdapter.Vi
         this.numColor = 0;
     }
 
-    // Создаем вью которые заполнят экран и будут обновляться данными при прокрутке
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(ctx).inflate(R.layout.item_menu_orders, parent, false);
@@ -85,7 +84,6 @@ public class MenuOrdersAdapter extends RecyclerView.Adapter<MenuOrdersAdapter.Vi
         }
 
 
-        // Запускаем активити с блюдами выбранной категории (передаем сущность группы)
         @Override
         public void onClick(View view) {
             Intent dishGroupOpen = new Intent(ctx, DishesActivity.class);

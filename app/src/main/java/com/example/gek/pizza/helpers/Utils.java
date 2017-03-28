@@ -24,12 +24,12 @@ import java.util.Calendar;
 import java.util.Date;
 
 /**
- * Вспомогательные методы
+ * Helpers methods
  */
 
 public class Utils {
 
-    /** Проверяет есть ли инет */
+    /** Check internet connection */
     public static boolean hasInternet(Context context) {
         if (context == null) {
             return false;
@@ -40,18 +40,21 @@ public class Utils {
         return netInfo != null && netInfo.isConnectedOrConnecting();
     }
 
-    /** Возвращает URI картинки */
+    /** Return URI image */
     public static void choosePhoto(AppCompatActivity apa){
         Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
         photoPickerIntent.setType("image/*");
         if (photoPickerIntent.resolveActivity(apa.getPackageManager()) != null){
             apa.startActivityForResult(photoPickerIntent, Const.REQUEST_LOAD_IMG);
         } else {
-            Toast.makeText(apa, "No program for choose image!", Toast.LENGTH_LONG).show();
+            Toast.makeText(apa,
+                    apa.getResources().getString(R.string.mes_no_soft_for_choose_image),
+                    Toast.LENGTH_LONG).show();
         }
     }
 
-    /** Отбирает блюда по ключу группы */
+    /**
+     * Select dishes with one group */
     public static ArrayList<Dish> selectGroup(ArrayList<Dish> allDishes, String keyGroup){
         ArrayList<Dish> resultList = new ArrayList<>();
         for (Dish dish: allDishes) {
@@ -62,8 +65,9 @@ public class Utils {
         return resultList;
     }
 
-    /** Формируем уникальное имя для фотки на базе входящей строки.
-     *  Убираем нежелательные символы для нормального хранения в файрбейс: . $ [ ] # /  */
+    /** Make name for photo. Need for safe to storage.
+     *  Delete character if found: . $ [ ] # /
+     *  */
     public static String makePhotoName(String name){
         String time = Calendar.getInstance().getTime().toString();
         String nameFile = name + time;
@@ -104,17 +108,10 @@ public class Utils {
     }
 
 
-
-    /** возвращает значение настроек */
-    public static String getSetting(AppCompatActivity app, String settingKey) {
-        SharedPreferences prefs = app.getSharedPreferences(Const.SETTINGS_KEY, Context.MODE_PRIVATE);
-
-        return prefs.getString(settingKey, "");
-    }
-
-
-    // todo перенести этот метод в корзину
-    /** Ищет блюдо в корзине. Возвращает 0 если его там нет и кол-во если блюдо уже в заказе */
+    // todo Move this function to Basket
+    /**
+     * Find dish in basket. Return 0 if not find, or quantity in other case
+     */
     public static int findInBasket(Dish dish){
         for (int i = 0; i < Basket.getInstance().orders.size(); i++) {
             if (dish.getKey().contentEquals(Basket.getInstance().orders.get(i).getKeyDish())){
@@ -124,30 +121,30 @@ public class Utils {
         return 0;
     }
 
+    //todo move " грн" to resources
     /** Convert float "50.2" to string "50.20 usd" */
     public static String toPrice(float f){
-        String s = String.format("%.2f", f) + " грн";
-        return s;
+        return String.format("%.2f", f) + " грн";
+
     }
 
-    /** Формирует строку для доставки в виде: Пельмени (30 грн) х 2 шт = 60 грн */
-    public static String makeOrderString(Dish dish, int count){
+    /** Make text for show in delivery. Example: Tomato (10 usd) х 2 pieces = 20 usd */
+    public static String makeOrderString(Dish dish, int count, Context ctx){
         String s;
         if (dish != null){
             s = dish.getName() + " \n\t\t" + Utils.toPrice(dish.getPrice()) + " x " +
                     count + " = " + Utils.toPrice(dish.getPrice()*count);
         } else {
-            s = "Dish has been removed";
+            s = ctx.getResources().getString(R.string.mes_removed);
         }
         return s;
     }
 
-    /** Формируем строку с временем с учетом сегодняшней даты */
+    /** Format date to human readable style */
     public static String formatDate(Date date){
         SimpleDateFormat formatShort = new SimpleDateFormat("HH:mm");
         SimpleDateFormat formatFull = new SimpleDateFormat();
         SimpleDateFormat fetchDate = new SimpleDateFormat("yyyy.MM.dd");
-
         if (fetchDate.format(new Date()).contentEquals(fetchDate.format(date))){
             return formatShort.format(date);
         } else {
@@ -155,7 +152,7 @@ public class Utils {
         }
     }
 
-    /** Формируем строку с временем отображающую временную цепочку заказа на доставку */
+
     public static String getTimeHistoryDelivery(Delivery delivery, Context ctx){
         SimpleDateFormat formatShort = new SimpleDateFormat(": HH:mm");
         String str = ctx.getResources().getString(R.string.delivery_time_new) +
@@ -186,7 +183,7 @@ public class Utils {
     }
 
 
-    // Запуск окна с настройками разрешения программы
+    // Open system settings of program
     public static void openPermissionSettings(Context ctx) {
         final Intent intent = new Intent();
         intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
@@ -197,10 +194,5 @@ public class Utils {
         intent.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
         ctx.startActivity(intent);
     }
-
-
-//    public static long getTimeCreated(){
-//        return new Date().getTime()/1000;
-//    }
 
 }
