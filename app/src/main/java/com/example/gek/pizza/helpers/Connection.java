@@ -103,6 +103,6 @@ public class Connection {
         return serviceRunning;
     }
     public void setServiceRunning(boolean serviceRunning) {
-        serviceRunning = serviceRunning;
+        this.serviceRunning = serviceRunning;
     }
 }
