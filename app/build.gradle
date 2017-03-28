@@ -5,8 +5,7 @@ buildscript {
 
     dependencies {
         // Crashlytics:
-        classpath 'io.fabric.tools:gradle:1.+'
-        // с самой последней версиее не приходят уведомления 1.21.5
+        classpath 'io.fabric.tools:gradle:1.21.6'
     }
 }
 
@@ -62,7 +61,7 @@ android {
 }
 
 ext.googleVer = '10.0.1'
-ext.supportVer = '25.1.1'
+ext.supportVer = '25.3.1'
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
@@ -70,9 +69,11 @@ dependencies {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
     compile "com.android.support:appcompat-v7:$supportVer"
+    compile "com.android.support:customtabs:$supportVer"
     compile "com.android.support:design:$supportVer"
     compile "com.android.support:cardview-v7:$supportVer"
     compile "com.android.support:support-v4:$supportVer"
+
     compile "com.google.firebase:firebase-auth:$googleVer"
     compile "com.google.firebase:firebase-database:$googleVer"
     compile "com.google.firebase:firebase-storage:$googleVer"
@@ -80,21 +81,25 @@ dependencies {
     compile "com.google.firebase:firebase-config:$googleVer"
     compile "com.google.android.gms:play-services-maps:$googleVer"
     compile "com.google.android.gms:play-services-location:$googleVer"
-    // Google Sign In SDK (only required for Google Sign In)
     compile "com.google.android.gms:play-services-auth:$googleVer"
+
     compile('com.squareup.retrofit2:retrofit:2.1.0') {
         exclude module: 'okhttp'
     }
+
     compile('com.crashlytics.sdk.android:crashlytics:2.6.6@aar') {
         transitive = true;
     }
-    compile 'com.github.bumptech.glide:glide:3.5.2'
+    compile 'com.github.bumptech.glide:glide:3.7.0'
     compile 'com.squareup.retrofit2:converter-gson:2.1.0'
     compile 'com.squareup.okhttp3:okhttp:3.5.0'
+
     compile 'com.sothree.slidinguppanel:library:3.3.0'
+
     compile 'com.facebook.android:facebook-android-sdk:4.19.0'
-    compile 'com.android.support:support-v4:25.2.0'
+
     compile 'com.android.support.constraint:constraint-layout:1.0.1'
+
     testCompile 'junit:junit:4.12'
 }
 
