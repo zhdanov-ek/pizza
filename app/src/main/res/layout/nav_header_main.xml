@@ -17,18 +17,6 @@
         android:layout_height="80dp"
         app:srcCompat="@drawable/logo" />
 
-
-    <TextView
-        android:id="@+id/tvAuthName"
-        style="@style/textDrawerLayoutName"
-        android:textStyle="bold"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="User name"
-        android:layout_above="@+id/tvAuthEmail"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:visibility="invisible"/>
     <TextView
         android:id="@+id/tvAuthEmail"
         style="@style/textDrawerLayoutName"

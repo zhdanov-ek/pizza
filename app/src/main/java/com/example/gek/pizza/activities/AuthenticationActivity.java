@@ -15,6 +15,7 @@ import android.widget.Toast;
 import com.example.gek.pizza.R;
 import com.example.gek.pizza.helpers.Connection;
 import com.example.gek.pizza.data.Const;
+import com.example.gek.pizza.helpers.Utils;
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -188,6 +189,11 @@ public class AuthenticationActivity extends BaseActivity
 
     @Override
     public void onClick(View view) {
+        if (!Utils.hasInternet(getBaseContext())){
+            Toast.makeText(getBaseContext(),
+                    getBaseContext().getString(R.string.mes_no_internet),
+                    Toast.LENGTH_LONG).show();
+        }
         switch (view.getId()) {
             case R.id.btnGoogleSignIn:
                 progressBar.setVisibility(View.VISIBLE);

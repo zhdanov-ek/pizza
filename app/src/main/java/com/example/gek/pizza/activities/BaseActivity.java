@@ -10,6 +10,7 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -36,7 +37,7 @@ public abstract class BaseActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener{
 
     protected DrawerLayout mDrawer;
-    protected TextView tvAuthEmail, tvAuthName;
+    protected TextView tvAuthEmail;
     protected FirebaseAuth.AuthStateListener authListener;
     protected NavigationView navigationView;
 
@@ -55,10 +56,9 @@ public abstract class BaseActivity extends AppCompatActivity
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-
         // Give header and find TextView
         View header = navigationView.getHeaderView(0);
-        tvAuthName = (TextView) header.findViewById(R.id.tvAuthName);
+      //  tvAuthName = (TextView) header.findViewById(R.id.tvAuthName);
         tvAuthEmail = (TextView) header.findViewById(R.id.tvAuthEmail);
         tvAuthEmail.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -72,7 +72,6 @@ public abstract class BaseActivity extends AppCompatActivity
         });
 
 
-
         // Callback change state of auth Firebase.
         // After change state of auth FireBase we update UI in current Activity
         authListener = new FirebaseAuth.AuthStateListener() {
@@ -82,11 +81,12 @@ public abstract class BaseActivity extends AppCompatActivity
                 invalidateOptionsMenu();
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 if(user != null) {
-                    // Check user: is shop or other users
 
-                    tvAuthName.setText(user.getDisplayName());
-                    tvAuthName.setVisibility(View.VISIBLE);
-                    tvAuthEmail.setText(user.getEmail());
+                    // Check user: is shop or other users
+                    tvAuthEmail.setText(Html.fromHtml(
+                            String.format(getString(R.string.sign_status),
+                                user.getDisplayName(),
+                                user.getEmail())));
 
                     // admin
                     if ((user.getEmail() != null) &&
@@ -108,7 +108,7 @@ public abstract class BaseActivity extends AppCompatActivity
                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M &&
                                     checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                                 Toast.makeText(getBaseContext(),
-                                        "Please enable permission for location service and restart program",
+                                        getBaseContext().getString(R.string.mes_enable_permission),
                                         Toast.LENGTH_LONG).show();
                             } else {
                                 startService(new Intent(getBaseContext(), CourierService.class));
@@ -126,7 +126,6 @@ public abstract class BaseActivity extends AppCompatActivity
 
                 // guest client
                 } else {
-                    tvAuthName.setVisibility(View.INVISIBLE);
                     tvAuthEmail.setText(R.string.common_signin_button_text);
                     Connection.getInstance().setCurrentAuthStatus(Const.AUTH_NULL);
                     Log.d(TAG, "FireBase authentication failed ");

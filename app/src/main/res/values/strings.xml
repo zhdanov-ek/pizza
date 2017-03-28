@@ -69,6 +69,7 @@
     <string name="mes_your_order_performed">Your order performed now</string>
     <string name="mes_no_soft_for_choose_image">No program for choose image!</string>
     <string name="mes_error_load_image">Loading image to server: ERROR</string>
+    <string name="mes_enable_permission">Please enable permission for location service and restart program</string>
 
 
     <string name="permission_location_not_granded">No permissions for use locales</string>
@@ -94,9 +95,7 @@
     <string name="comment_delivery">Comment</string>
     <string name="create_delivery">Create delivery</string>
 
-    <!-- AUTHENTICATION -->
-    <string name="button_google">Google+</string>
-    <string name="button_facebook">Facebook</string>
+
 
     <!-- NOTIFICATION -->
     <string name="notification_delivery_title">New orders</string>
@@ -195,7 +194,9 @@
     <string name="facebook_fields">fields</string>
 
 
-    <!--Authentication-->
+    <!-- AUTHENTICATION -->
+    <string name="button_google">Google+</string>
+    <string name="button_facebook">Facebook</string>
     <string name="facebook_sign_in">FACEBOOK</string>
     <string name="google_sign_in">GOOGLE</string>
     <string name="title_auth">Sign in with your account</string>
@@ -204,6 +205,7 @@
     <string name="firebase_current_user">Firebase auth: current user = </string>
     <string name="facebook">Facebook</string>
     <string name="google">Google</string>
+    <string name="sign_status"><![CDATA[<b>%1$s</b><br>%2$s]]></string>
 
 
 
