@@ -70,6 +70,9 @@
     <string name="mes_no_soft_for_choose_image">No program for choose image!</string>
     <string name="mes_error_load_image">Loading image to server: ERROR</string>
     <string name="mes_enable_permission">Please enable permission for location service and restart program</string>
+    <string name="mes_add_to_favorites">%1$s added to favorites</string>
+    <string name="mes_remove_from_favorites">%1$s removed from favorites</string>
+
 
 
     <string name="permission_location_not_granded">No permissions for use locales</string>

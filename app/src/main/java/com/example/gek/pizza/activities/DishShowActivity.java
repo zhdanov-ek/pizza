@@ -2,10 +2,12 @@ package com.example.gek.pizza.activities;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.text.method.ScrollingMovementMethod;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -13,6 +15,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -40,7 +43,6 @@ public class DishShowActivity extends BaseActivity implements View.OnClickListen
     private Button btnEdit;
     private LinearLayout llCounter;
     private TextView tvCounter;
-    private ImageView ivMinus, ivPlus;
     private Dish dishOpen;
     private Boolean isSetListenerFavorites;
 
@@ -104,10 +106,8 @@ public class DishShowActivity extends BaseActivity implements View.OnClickListen
 
         llCounter = (LinearLayout) findViewById(R.id.llCounter);
         tvCounter = (TextView) findViewById(R.id.tvCounter);
-        ivMinus = (ImageView) findViewById(R.id.ivMinus);
-        ivMinus.setOnClickListener(this);
-        ivPlus = (ImageView) findViewById(R.id.ivPlus);
-        ivPlus.setOnClickListener(this);
+        findViewById(R.id.ivMinus).setOnClickListener(this);
+        findViewById(R.id.ivPlus).setOnClickListener(this);
 
         if (getIntent().hasExtra(Const.EXTRA_DISH)){
             dishOpen = getIntent().getParcelableExtra(Const.EXTRA_DISH);
@@ -181,12 +181,15 @@ public class DishShowActivity extends BaseActivity implements View.OnClickListen
                 break;
             case R.id.btnAdd:
                 addNewDish();
+                showInfoOrder();
                 break;
             case R.id.ivMinus:
                 pressMinus();
+                showInfoOrder();
                 break;
             case R.id.ivPlus:
                 pressPlus();
+                showInfoOrder();
                 break;
             case R.id.ivFavorites:
                 pressFavorites();
@@ -194,12 +197,26 @@ public class DishShowActivity extends BaseActivity implements View.OnClickListen
         }
     }
 
+    private void showInfoOrder(){
+        String sum = getResources().getString(R.string.total) + ": " +
+                Utils.toPrice(Basket.getInstance().getTotalSum());
+        Snackbar.make(tvName, sum, Snackbar.LENGTH_SHORT).show();
+    }
+
     /** Add or remove dish from favorites */
     private void pressFavorites(){
         if (isFavorite){
             Favorites.getInstance().removeDish(dishOpen.getKey());
+            Toast.makeText(this,
+                    String.format(getResources().getString(R.string.mes_remove_from_favorites),
+                            dishOpen.getName()),
+                    Toast.LENGTH_SHORT).show();
         } else {
             Favorites.getInstance().addDish(dishOpen.getKey());
+            Toast.makeText(this,
+                    String.format(getResources().getString(R.string.mes_add_to_favorites),
+                            dishOpen.getName()),
+                    Toast.LENGTH_SHORT).show();
         }
         ivFavorites.setClickable(false);
     }
