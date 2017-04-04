@@ -63,11 +63,11 @@ public abstract class BaseActivity extends AppCompatActivity
         tvAuthEmail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (Connection.getInstance().getCurrentAuthStatus() == Const.AUTH_NULL){
+//                if (Connection.getInstance().getCurrentAuthStatus() == Const.AUTH_NULL){
                     startActivity(new Intent(getBaseContext(), AuthenticationActivity.class));
-                } else {
-                    Connection.getInstance().signOut(getBaseContext());
-                }
+//                } else {
+//                    Connection.getInstance().signOut(getBaseContext());
+//                }
             }
         });
 

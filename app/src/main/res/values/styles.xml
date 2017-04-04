@@ -133,6 +133,7 @@
         <item name="android:textSize">@dimen/button_raised_font_size</item>
         <item name="android:background">@drawable/bg_sign_button_google</item>
         <item name="android:textColor">@color/colorDeliveryDishes</item>
+        <item name="android:layout_marginBottom">5dp</item>
     </style>
 
     <style name="SignInButtonFacebook" parent="@android:style/Widget.Button.Small">
@@ -141,6 +142,7 @@
         <item name="android:textSize">@dimen/button_raised_font_size</item>
         <item name="android:background">@drawable/bg_sign_button_facebook</item>
         <item name="android:textColor">@color/colorButtonRaisedText</item>
+        <item name="android:layout_marginBottom">5dp</item>
     </style>
 
     <style name="FullscreenTheme" parent="AppTheme">

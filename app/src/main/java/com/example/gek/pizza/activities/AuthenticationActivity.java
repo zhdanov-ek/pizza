@@ -8,10 +8,13 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.gek.pizza.R;
 import com.example.gek.pizza.helpers.Connection;
 import com.example.gek.pizza.data.Const;
@@ -37,6 +40,7 @@ import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.auth.ProviderQueryResult;
 
@@ -54,37 +58,64 @@ public class AuthenticationActivity extends BaseActivity
     private GoogleApiClient mGoogleApiClient;
     private ProgressBar progressBar;
     private TextView tvStatus;
-    private Button btnGoogleSignIn, btnFacebookSignIn;
+    private Button btnGoogleSignIn, btnFacebookSignIn, btnSignOut;
     private LoginButton btnFacebook;
     private CallbackManager callbackManager;
     private AuthCredential credential;
     private static AuthCredential credentialLink;
     private String currentProvider;
     private static LoginResult loginResultFacebook;
+    private ImageView ivLogo;
 
-    private final String VISIBILITY_BUTTON_GOOGLE = "visibility_button_google";
-    private final String VISIBILITY_BUTTON_FACEBOOK = "visibility_button_facebook";
-    private final String VISIBILITY_TV_STATUS = "visibility_tv_status";
+
+//    private final String VISIBILITY_BUTTON_GOOGLE = "visibility_button_google";
+//    private final String VISIBILITY_BUTTON_FACEBOOK = "visibility_button_facebook";
+   // private final String VISIBILITY_TV_STATUS = "visibility_tv_status";
 
     private boolean isBtnGoogleSignInVisible, isBtnFacebookSignInVisible, isTvStatusVisible;
 
 
     @Override
     public void updateUI() {
-//        if (Connection.getInstance().getCurrentAuthStatus() == Const.AUTH_USER) {
-//            String email = FirebaseAuth.getInstance().getCurrentUser().getEmail();
-//            Toast.makeText(this, getResources().getString(R.string.firebase_current_user) + email, Toast.LENGTH_SHORT).show();
-//        }
+        if (Connection.getInstance().getCurrentAuthStatus() == Const.AUTH_NULL){
+            btnFacebookSignIn.setVisibility(View.VISIBLE);
+            btnGoogleSignIn.setVisibility(View.VISIBLE);
+            btnSignOut.setVisibility(View.GONE);
+            ivLogo.setImageResource(R.drawable.logo);
+            tvStatus.setText(getResources().getString(R.string.title_auth));
+        } else {
+            String status = null;
+            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+            if (user != null){
+               if ((user.getDisplayName() != null) && (user.getDisplayName().length() > 0)){
+                    status = user.getDisplayName();
+               }
+               if (status != null){
+                    tvStatus.setText(status);
+               }
+               if (user.getPhotoUrl() != null){
+                   Glide.with(this)
+                           .load(user.getPhotoUrl())
+                           .diskCacheStrategy(DiskCacheStrategy.RESULT)
+                           .error(R.drawable.logo)
+                           .into(ivLogo);
+               }
+            }
+
+            btnFacebookSignIn.setVisibility(View.GONE);
+            btnGoogleSignIn.setVisibility(View.GONE);
+            btnSignOut.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        if (isBtnGoogleSignInVisible || isBtnFacebookSignInVisible) {
-            outState.putBoolean(VISIBILITY_BUTTON_GOOGLE, isBtnGoogleSignInVisible);
-            outState.putBoolean(VISIBILITY_BUTTON_FACEBOOK, isBtnFacebookSignInVisible);
-            outState.putBoolean(VISIBILITY_TV_STATUS, isTvStatusVisible);
-        }
+//        if (isBtnGoogleSignInVisible || isBtnFacebookSignInVisible) {
+//            outState.putBoolean(VISIBILITY_BUTTON_GOOGLE, isBtnGoogleSignInVisible);
+//            outState.putBoolean(VISIBILITY_BUTTON_FACEBOOK, isBtnFacebookSignInVisible);
+//         //   outState.putBoolean(VISIBILITY_TV_STATUS, isTvStatusVisible);
+//        }
     }
 
     @Override
@@ -92,14 +123,14 @@ public class AuthenticationActivity extends BaseActivity
         super.onRestoreInstanceState(savedInstanceState);
 
         if (savedInstanceState != null) {
-            isBtnGoogleSignInVisible = savedInstanceState.getBoolean(VISIBILITY_BUTTON_GOOGLE, true);
-            btnGoogleSignIn.setVisibility(isBtnGoogleSignInVisible ? View.VISIBLE : View.GONE);
+//            isBtnGoogleSignInVisible = savedInstanceState.getBoolean(VISIBILITY_BUTTON_GOOGLE, true);
+//            btnGoogleSignIn.setVisibility(isBtnGoogleSignInVisible ? View.VISIBLE : View.GONE);
+//
+//            isBtnFacebookSignInVisible = savedInstanceState.getBoolean(VISIBILITY_BUTTON_FACEBOOK, true);
+//            btnFacebookSignIn.setVisibility(isBtnFacebookSignInVisible ? View.VISIBLE : View.GONE);
 
-            isBtnFacebookSignInVisible = savedInstanceState.getBoolean(VISIBILITY_BUTTON_FACEBOOK, true);
-            btnFacebookSignIn.setVisibility(isBtnFacebookSignInVisible ? View.VISIBLE : View.GONE);
-
-            isTvStatusVisible = savedInstanceState.getBoolean(VISIBILITY_TV_STATUS, false);
-            tvStatus.setVisibility(isTvStatusVisible ? View.VISIBLE : View.GONE);
+//            isTvStatusVisible = savedInstanceState.getBoolean(VISIBILITY_TV_STATUS, false);
+//            tvStatus.setVisibility(isTvStatusVisible ? View.VISIBLE : View.GONE);
         }
     }
 
@@ -118,6 +149,7 @@ public class AuthenticationActivity extends BaseActivity
         mDrawer.addDrawerListener(toggle);
         toggle.syncState();
 
+        ivLogo = (ImageView) findViewById(R.id.ivLogo);
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
         tvStatus = (TextView) findViewById(R.id.tvStatus);
         btnGoogleSignIn = (Button) findViewById(R.id.btnGoogleSignIn);
@@ -125,6 +157,9 @@ public class AuthenticationActivity extends BaseActivity
 
         btnGoogleSignIn.setOnClickListener(this);
         btnFacebookSignIn.setOnClickListener(this);
+
+        btnSignOut = (Button) findViewById(R.id.btnSignOut);
+        btnSignOut.setOnClickListener(this);
 
         GoogleSignInOptions gso = new GoogleSignInOptions
                 .Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -203,8 +238,17 @@ public class AuthenticationActivity extends BaseActivity
             case R.id.btnFacebookSignIn:
                 btnFacebook.performClick();
                 break;
+            case R.id.btnSignOut:
+                makeSignOut();
+                break;
         }
 
+    }
+
+    private void makeSignOut(){
+        if (Connection.getInstance().getCurrentAuthStatus() != Const.AUTH_NULL){
+            Connection.getInstance().signOut(getBaseContext());
+        }
     }
 
 
@@ -212,8 +256,6 @@ public class AuthenticationActivity extends BaseActivity
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
-        progressBar.setVisibility(View.INVISIBLE);
         if (requestCode == RC_SIGN_IN_GOOGLE) {
             GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
             if (result.isSuccess()) {
@@ -222,6 +264,7 @@ public class AuthenticationActivity extends BaseActivity
             } else {
                 Toast.makeText(getApplicationContext(), R.string.authentication_failed, Toast.LENGTH_SHORT).show();
                 Log.d(TAG, "Google Login Failed " + result.getStatus().toString());
+                progressBar.setVisibility(View.INVISIBLE);
             }
         } else if (requestCode == CallbackManagerImpl.RequestCodeOffset.Login.toRequestCode()) {
             callbackManager.onActivityResult(requestCode, resultCode, data);

@@ -199,6 +199,7 @@
     <string name="button_facebook">Facebook</string>
     <string name="facebook_sign_in">FACEBOOK</string>
     <string name="google_sign_in">GOOGLE</string>
+    <string name="sign_out">Sign out</string>
     <string name="title_auth">Sign in with your account</string>
     <string name="authentication_failed">Authentication failed</string>
     <string name="msg_link_auth">You have already signed in with %1$s. Please confirm your account, and in future you will be able to sign in with %2$s.</string>

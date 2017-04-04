@@ -10,40 +10,29 @@
 
     <include layout="@layout/toolbar" />
 
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_gravity="center_horizontal"
             android:orientation="horizontal"
-            android:padding="@dimen/activity_padding">
+            android:padding="@dimen/activity_padding"
+            android:background="@color/blue_grey_300">
 
             <ImageView
+                android:id="@+id/ivLogo"
                 android:layout_width="150dp"
                 android:layout_height="150dp"
                 android:layout_gravity="center"
-                android:layout_weight="1"
-                android:src="@drawable/logo" />
+                tools:src="@drawable/logo" />
 
             <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:layout_weight="2"
-                android:orientation="vertical">
-
-                <TextView
-                    style="@style/textBig"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginBottom="@dimen/auth_title_margin_bottom"
-                    android:layout_marginTop="@dimen/auth_title_margin_top"
-                    android:gravity="center"
-                    android:text="@string/title_auth"
-                    android:textSize="@dimen/text_size_middle" />
+                android:gravity="center"
+                android:orientation="vertical"
+                android:background="@color/colorAccent">
 
                 <TextView
                     android:id="@+id/tvStatus"
@@ -53,15 +42,14 @@
                     android:layout_gravity="center"
                     android:layout_marginBottom="@dimen/auth_title_margin_bottom"
                     android:gravity="center"
-                    android:text="@string/msg_link_auth"
-                    android:textColor="@color/delete_toolbar_pink_200"
-                    android:visibility="gone" />
+                    android:text="@string/title_auth"
+                    android:visibility="visible" />
 
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
-                    android:orientation="horizontal">
+                    android:orientation="vertical">
 
                     <com.facebook.login.widget.LoginButton
                         android:id="@+id/btnFacebook"
@@ -74,7 +62,6 @@
                         android:id="@+id/btnGoogleSignIn"
                         style="@style/SignInButtonGoogle"
                         android:layout_width="150dp"
-                        android:layout_marginRight="@dimen/activity_padding"
                         android:drawableLeft="@drawable/btn_google_light"
                         android:text="@string/google_sign_in"
                         android:textSize="@dimen/text_size_small" />
@@ -83,10 +70,18 @@
                         android:id="@+id/btnFacebookSignIn"
                         style="@style/SignInButtonFacebook"
                         android:layout_width="150dp"
-                        android:layout_marginLeft="@dimen/activity_padding"
                         android:drawableLeft="@drawable/com_facebook_button_icon"
                         android:padding="@dimen/floating_button_layout_margin"
                         android:text="@string/facebook_sign_in"
+                        android:textSize="@dimen/text_size_small" />
+
+                    <Button
+                        android:id="@+id/btnSignOut"
+                        style="@style/RaisedButtonPositive"
+                        android:layout_width="150dp"
+                        android:drawableLeft="@drawable/btn_sign_out"
+                        android:padding="@dimen/floating_button_layout_margin"
+                        android:text="@string/sign_out"
                         android:textSize="@dimen/text_size_small" />
                 </LinearLayout>
 
@@ -103,6 +98,6 @@
 
 
         </LinearLayout>
-    </ScrollView>
+
 
 </LinearLayout>
