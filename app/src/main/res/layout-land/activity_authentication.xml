@@ -12,12 +12,11 @@
 
 
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_gravity="center_horizontal"
             android:orientation="horizontal"
-            android:padding="@dimen/activity_padding"
-            android:background="@color/blue_grey_300">
+            android:padding="@dimen/activity_padding">
 
             <ImageView
                 android:id="@+id/ivLogo"
@@ -27,17 +26,16 @@
                 tools:src="@drawable/logo" />
 
             <LinearLayout
-                android:layout_width="match_parent"
+                android:layout_width="250dp"
                 android:layout_height="match_parent"
                 android:layout_weight="2"
                 android:gravity="center"
-                android:orientation="vertical"
-                android:background="@color/colorAccent">
+                android:orientation="vertical">
 
                 <TextView
                     android:id="@+id/tvStatus"
                     style="@style/textMiddle"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_marginBottom="@dimen/auth_title_margin_bottom"

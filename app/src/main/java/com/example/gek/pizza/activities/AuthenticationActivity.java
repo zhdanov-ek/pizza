@@ -68,11 +68,11 @@ public class AuthenticationActivity extends BaseActivity
     private ImageView ivLogo;
 
 
-//    private final String VISIBILITY_BUTTON_GOOGLE = "visibility_button_google";
-//    private final String VISIBILITY_BUTTON_FACEBOOK = "visibility_button_facebook";
-   // private final String VISIBILITY_TV_STATUS = "visibility_tv_status";
+    private final String VISIBILITY_BUTTON_GOOGLE = "visibility_button_google";
+    private final String VISIBILITY_BUTTON_FACEBOOK = "visibility_button_facebook";
+    private final String VALUE_STATUS_TEXT = "value_status";
 
-    private boolean isBtnGoogleSignInVisible, isBtnFacebookSignInVisible, isTvStatusVisible;
+    private boolean isBtnGoogleSignInVisible, isBtnFacebookSignInVisible;
 
 
     @Override
@@ -111,10 +111,11 @@ public class AuthenticationActivity extends BaseActivity
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
+
 //        if (isBtnGoogleSignInVisible || isBtnFacebookSignInVisible) {
-//            outState.putBoolean(VISIBILITY_BUTTON_GOOGLE, isBtnGoogleSignInVisible);
-//            outState.putBoolean(VISIBILITY_BUTTON_FACEBOOK, isBtnFacebookSignInVisible);
-//         //   outState.putBoolean(VISIBILITY_TV_STATUS, isTvStatusVisible);
+            outState.putBoolean(VISIBILITY_BUTTON_GOOGLE, isBtnGoogleSignInVisible);
+            outState.putBoolean(VISIBILITY_BUTTON_FACEBOOK, isBtnFacebookSignInVisible);
+            outState.putString(VALUE_STATUS_TEXT, tvStatus.getText().toString());
 //        }
     }
 
@@ -123,14 +124,13 @@ public class AuthenticationActivity extends BaseActivity
         super.onRestoreInstanceState(savedInstanceState);
 
         if (savedInstanceState != null) {
-//            isBtnGoogleSignInVisible = savedInstanceState.getBoolean(VISIBILITY_BUTTON_GOOGLE, true);
-//            btnGoogleSignIn.setVisibility(isBtnGoogleSignInVisible ? View.VISIBLE : View.GONE);
-//
-//            isBtnFacebookSignInVisible = savedInstanceState.getBoolean(VISIBILITY_BUTTON_FACEBOOK, true);
-//            btnFacebookSignIn.setVisibility(isBtnFacebookSignInVisible ? View.VISIBLE : View.GONE);
+            isBtnGoogleSignInVisible = savedInstanceState.getBoolean(VISIBILITY_BUTTON_GOOGLE, true);
+            btnGoogleSignIn.setVisibility(isBtnGoogleSignInVisible ? View.VISIBLE : View.GONE);
 
-//            isTvStatusVisible = savedInstanceState.getBoolean(VISIBILITY_TV_STATUS, false);
-//            tvStatus.setVisibility(isTvStatusVisible ? View.VISIBLE : View.GONE);
+            isBtnFacebookSignInVisible = savedInstanceState.getBoolean(VISIBILITY_BUTTON_FACEBOOK, true);
+            btnFacebookSignIn.setVisibility(isBtnFacebookSignInVisible ? View.VISIBLE : View.GONE);
+
+            tvStatus.setText(savedInstanceState.getString(VALUE_STATUS_TEXT));
         }
     }
 
@@ -236,6 +236,7 @@ public class AuthenticationActivity extends BaseActivity
                 startActivityForResult(signInIntent, RC_SIGN_IN_GOOGLE);
                 break;
             case R.id.btnFacebookSignIn:
+                progressBar.setVisibility(View.VISIBLE);
                 btnFacebook.performClick();
                 break;
             case R.id.btnSignOut:
@@ -356,8 +357,7 @@ public class AuthenticationActivity extends BaseActivity
     }
 
     private void btnVisible() {
-        tvStatus.setVisibility(View.VISIBLE);
-        isTvStatusVisible = true;
+        progressBar.setVisibility(View.INVISIBLE);
         switch (currentProvider) {
             case Const.GOOGLE_PROVIDER:
                 btnFacebookSignIn.setVisibility(View.VISIBLE);
