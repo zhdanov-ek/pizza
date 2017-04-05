@@ -19,6 +19,7 @@
             android:orientation="vertical">
 
             <LinearLayout
+                android:id="@+id/llRouteInfo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
@@ -62,6 +63,35 @@
 
                 </LinearLayout>
 
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/tvCheckPermission"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="@dimen/activity_padding"
+                android:layout_marginTop="@dimen/activity_padding"
+                android:gravity="center_horizontal"
+                android:text="@string/hint_gps_permission"
+                android:textSize="@dimen/text_size_middle" />
+
+            <LinearLayout
+                android:id="@+id/llCheckPermission"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/btnCheckPermission"
+                    style="@style/RaisedButtonPositive"
+                    android:layout_width="150dp"
+                    android:layout_marginRight="@dimen/activity_padding"
+                    android:text="@string/GivePermission"
+                    android:textSize="@dimen/text_size_small"
+                    android:layout_marginBottom="@dimen/activity_padding"/>
 
             </LinearLayout>
 

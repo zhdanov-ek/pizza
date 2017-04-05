@@ -92,6 +92,11 @@ public class Const {
     public static final String SETTINGS_COURIER_EMAIL_KEY = "courier_email";
     public static final String COURIER_EMAIL_BY_DEFAULT = "nonecourier@gmail.com";
     public static final String ADMIN_EMAIL_BY_DEFAULT   = "noneadmin@gmail.com";
+    public static final String SETTINGS_USER_NAME       = "user_name";
+    public static final String SETTINGS_USER_PHONE      = "user_phone";
+    public static final String SETTINGS_USER_ADDRESS    = "user_address";
+
+
     public static final Integer ZOOM_MAP                = 17;
 
     public static final int REQUEST_CODE_LOCATION  = 20;
@@ -134,4 +139,5 @@ public class Const {
     public static final String FCM_JSON="application/json; charset=utf-8";
 
     public static final int LOCATION_COURIER_INTERVAL_UPDATE = 3;
+
 }
