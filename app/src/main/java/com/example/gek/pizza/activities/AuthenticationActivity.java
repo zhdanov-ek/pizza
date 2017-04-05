@@ -67,56 +67,79 @@ public class AuthenticationActivity extends BaseActivity
     private static LoginResult loginResultFacebook;
     private ImageView ivLogo;
 
+    private Boolean isRestored = false;
 
     private final String VISIBILITY_BUTTON_GOOGLE = "visibility_button_google";
     private final String VISIBILITY_BUTTON_FACEBOOK = "visibility_button_facebook";
+    private final String VISIBILITY_BUTTON_SIGNOUT = "visibility_button_signout";
     private final String VALUE_STATUS_TEXT = "value_status";
+    private final String AVA_URI = "ava_uri";
+    private String avaUri = "";
 
-    private boolean isBtnGoogleSignInVisible, isBtnFacebookSignInVisible;
 
-
+    // execute only if savedInstanceState is null
     @Override
     public void updateUI() {
-        if (Connection.getInstance().getCurrentAuthStatus() == Const.AUTH_NULL){
-            btnFacebookSignIn.setVisibility(View.VISIBLE);
-            btnGoogleSignIn.setVisibility(View.VISIBLE);
-            btnSignOut.setVisibility(View.GONE);
-            ivLogo.setImageResource(R.drawable.logo);
-            tvStatus.setText(getResources().getString(R.string.title_auth));
-        } else {
-            String status = null;
-            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-            if (user != null){
-               if ((user.getDisplayName() != null) && (user.getDisplayName().length() > 0)){
-                    status = user.getDisplayName();
-               }
-               if (status != null){
-                    tvStatus.setText(status);
-               }
-               if (user.getPhotoUrl() != null){
-                   Glide.with(this)
-                           .load(user.getPhotoUrl())
-                           .diskCacheStrategy(DiskCacheStrategy.RESULT)
-                           .error(R.drawable.logo)
-                           .into(ivLogo);
-               }
-            }
+        if (!isRestored){
+            if (Connection.getInstance().getCurrentAuthStatus() == Const.AUTH_NULL){
+                btnFacebookSignIn.setVisibility(View.VISIBLE);
+                btnGoogleSignIn.setVisibility(View.VISIBLE);
+                btnSignOut.setVisibility(View.GONE);
+                ivLogo.setImageResource(R.drawable.logo);
+                tvStatus.setText(getResources().getString(R.string.title_auth));
+            } else {
+                String status = null;
+                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                if (user != null){
+                    if ((user.getDisplayName() != null) && (user.getDisplayName().length() > 0)){
+                        status = user.getDisplayName();
+                    }
+                    if (status != null){
+                        tvStatus.setText(status);
+                    }
+                    if (user.getPhotoUrl() != null){
+                        avaUri = user.getPhotoUrl().toString();
+                        Glide.with(this)
+                                .load(user.getPhotoUrl())
+                                .diskCacheStrategy(DiskCacheStrategy.RESULT)
+                                .error(R.drawable.logo)
+                                .into(ivLogo);
+                    }
+                }
 
-            btnFacebookSignIn.setVisibility(View.GONE);
-            btnGoogleSignIn.setVisibility(View.GONE);
-            btnSignOut.setVisibility(View.VISIBLE);
+                btnFacebookSignIn.setVisibility(View.GONE);
+                btnGoogleSignIn.setVisibility(View.GONE);
+                btnSignOut.setVisibility(View.VISIBLE);
+            }
         }
     }
+
+
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
 
-//        if (isBtnGoogleSignInVisible || isBtnFacebookSignInVisible) {
-            outState.putBoolean(VISIBILITY_BUTTON_GOOGLE, isBtnGoogleSignInVisible);
-            outState.putBoolean(VISIBILITY_BUTTON_FACEBOOK, isBtnFacebookSignInVisible);
-            outState.putString(VALUE_STATUS_TEXT, tvStatus.getText().toString());
-//        }
+        if (btnGoogleSignIn.getVisibility() == View.VISIBLE){
+            outState.putBoolean(VISIBILITY_BUTTON_GOOGLE, true);
+        } else {
+            outState.putBoolean(VISIBILITY_BUTTON_GOOGLE, false);
+        }
+
+        if (btnFacebookSignIn.getVisibility() == View.VISIBLE){
+            outState.putBoolean(VISIBILITY_BUTTON_FACEBOOK, true);
+        } else {
+            outState.putBoolean(VISIBILITY_BUTTON_FACEBOOK, false);
+        }
+
+        if (btnSignOut.getVisibility() == View.VISIBLE){
+            outState.putBoolean(VISIBILITY_BUTTON_SIGNOUT, true);
+        } else {
+            outState.putBoolean(VISIBILITY_BUTTON_SIGNOUT, false);
+        }
+
+        outState.putString(AVA_URI, avaUri);
+        outState.putString(VALUE_STATUS_TEXT, tvStatus.getText().toString());
     }
 
     @Override
@@ -124,12 +147,26 @@ public class AuthenticationActivity extends BaseActivity
         super.onRestoreInstanceState(savedInstanceState);
 
         if (savedInstanceState != null) {
-            isBtnGoogleSignInVisible = savedInstanceState.getBoolean(VISIBILITY_BUTTON_GOOGLE, true);
+            isRestored = true;
+            Boolean isBtnGoogleSignInVisible = savedInstanceState.getBoolean(VISIBILITY_BUTTON_GOOGLE, true);
             btnGoogleSignIn.setVisibility(isBtnGoogleSignInVisible ? View.VISIBLE : View.GONE);
 
-            isBtnFacebookSignInVisible = savedInstanceState.getBoolean(VISIBILITY_BUTTON_FACEBOOK, true);
+            Boolean isBtnFacebookSignInVisible = savedInstanceState.getBoolean(VISIBILITY_BUTTON_FACEBOOK, true);
             btnFacebookSignIn.setVisibility(isBtnFacebookSignInVisible ? View.VISIBLE : View.GONE);
 
+            Boolean isBtnSignOutVisible = savedInstanceState.getBoolean(VISIBILITY_BUTTON_SIGNOUT, false);
+            btnSignOut.setVisibility(isBtnSignOutVisible ? View.VISIBLE : View.GONE);
+
+            avaUri = savedInstanceState.getString(AVA_URI);
+            if ((avaUri != null) && (avaUri.length() > 0)){
+                Glide.with(this)
+                        .load(avaUri)
+                        .diskCacheStrategy(DiskCacheStrategy.RESULT)
+                        .error(R.drawable.logo)
+                        .into(ivLogo);
+            } else {
+                ivLogo.setImageResource(R.drawable.logo);
+            }
             tvStatus.setText(savedInstanceState.getString(VALUE_STATUS_TEXT));
         }
     }
@@ -240,6 +277,8 @@ public class AuthenticationActivity extends BaseActivity
                 btnFacebook.performClick();
                 break;
             case R.id.btnSignOut:
+                isRestored = false;
+                avaUri = "";
                 makeSignOut();
                 break;
         }
@@ -362,8 +401,6 @@ public class AuthenticationActivity extends BaseActivity
             case Const.GOOGLE_PROVIDER:
                 btnFacebookSignIn.setVisibility(View.VISIBLE);
                 btnGoogleSignIn.setVisibility(View.GONE);
-                isBtnGoogleSignInVisible = false;
-                isBtnFacebookSignInVisible = true;
                 tvStatus.setText(String.format(getResources().getString(R.string.msg_link_auth)
                         ,getResources().getString(R.string.facebook)
                         ,getResources().getString(R.string.google)));
@@ -371,8 +408,6 @@ public class AuthenticationActivity extends BaseActivity
             case Const.FACEBOOK_PROVIDER:
                 btnFacebookSignIn.setVisibility(View.GONE);
                 btnGoogleSignIn.setVisibility(View.VISIBLE);
-                isBtnFacebookSignInVisible = false;
-                isBtnGoogleSignInVisible = true;
                 tvStatus.setText(String.format(getResources().getString(R.string.msg_link_auth)
                         , getResources().getString(R.string.google)
                         , getResources().getString(R.string.facebook)));
