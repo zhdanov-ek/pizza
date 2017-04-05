@@ -7,10 +7,12 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Location;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
@@ -21,10 +23,13 @@ import android.view.View;
 import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.gek.pizza.R;
 import com.example.gek.pizza.data.Const;
@@ -73,10 +78,13 @@ public class AboutActivity extends BaseActivity implements
         OnMapReadyCallback,
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
-        LocationListener {
+        LocationListener,
+        View.OnClickListener
+        {
 
-    private TextView tvRouteInformationTime, tvRouteInformationDistance;
+    private TextView tvRouteInformationTime, tvRouteInformationDistance,tvCheckPermission;
     private ImageView ivArrowLeft, ivArrowRight;
+    private LinearLayout llRouteInfo, llCheckPermission;
     private String textPhone, textEmail, textLatitude, textLongitude;
     private LatLng myLatLng;
     private SlidingUpPanelLayout slidingUpPanelLayout;
@@ -89,6 +97,7 @@ public class AboutActivity extends BaseActivity implements
     private final String WALK = "walk";
     private final String DISTANCE_MAP = "distance_map";
     private final String TIME_MAP = "time_map";
+    private final int REQUEST_CODE_GPS_PERMISSION = 1001;
 
     private boolean isOpenedPermissionDialog = false;
     private boolean isPermissionsGranted = false;
@@ -110,6 +119,16 @@ public class AboutActivity extends BaseActivity implements
 
     @Override
     public void updateUI() {
+        if (isPermissionsGranted){
+            llCheckPermission.setVisibility(View.GONE);
+            llRouteInfo.setVisibility(View.VISIBLE);
+            tvCheckPermission.setVisibility(View.GONE);
+        } else{
+            llCheckPermission.setVisibility(View.VISIBLE);
+            llRouteInfo.setVisibility(View.GONE);
+            tvCheckPermission.setVisibility(View.VISIBLE);
+        }
+
     }
 
 
@@ -117,9 +136,11 @@ public class AboutActivity extends BaseActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        Button btnCheckPermission;
         TextView tvPhone, tvEmail, tvAddress;
         RadioButton rbtnDrive;
         RadioGroup rgDriveWalk;
+
         String textAddress;
 
         inflateLayout(R.layout.activity_about);
@@ -149,6 +170,13 @@ public class AboutActivity extends BaseActivity implements
         tvAddress = (TextView) findViewById(R.id.tvAboutAddress);
         tvRouteInformationDistance = (TextView) findViewById(R.id.tvRouteInformationDistance);
         tvRouteInformationTime = (TextView) findViewById(R.id.tvRouteInformationTime);
+        tvCheckPermission = (TextView) findViewById(R.id.tvCheckPermission);
+
+        llRouteInfo = (LinearLayout) findViewById(R.id.llRouteInfo);
+        llCheckPermission = (LinearLayout) findViewById(R.id.llCheckPermission);
+
+        btnCheckPermission = (Button) findViewById(R.id.btnCheckPermission);
+        btnCheckPermission.setOnClickListener(this);
 
         rgDriveWalk = (RadioGroup) findViewById(R.id.rgDriveWalk);
         rbtnDrive = (RadioButton) findViewById(R.id.rbtnDrive);
@@ -228,6 +256,44 @@ public class AboutActivity extends BaseActivity implements
         setSettingsToView(tvEmail, textEmail);
         setSettingsToView(tvAddress, textAddress);
 
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()){
+            case R.id.btnCheckPermission:
+                openSettings();
+                break;
+        }
+    }
+
+    private void openSettings(){
+        Intent intent = new Intent();
+        intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+        intent.addCategory(Intent.CATEGORY_DEFAULT);
+        intent.setData(Uri.parse("package:" + getApplicationContext().getPackageName()));
+//        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//        intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+//        intent.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
+        this.startActivityForResult(intent,REQUEST_CODE_GPS_PERMISSION);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode==REQUEST_CODE_GPS_PERMISSION){
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
+                    && this.checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+
+                isPermissionsGranted = false;
+
+            } else{
+                isPermissionsGranted = true;
+                if (googleMap != null){
+                    googleMap.setMyLocationEnabled(true);
+                }
+            }
+        }
     }
 
     @Override
@@ -375,6 +441,19 @@ public class AboutActivity extends BaseActivity implements
     public void onMapReady(GoogleMap map) {
         if (map != null && !textLatitude.equals("") && !textLongitude.equals("")) {
             googleMap = map;
+
+            googleMap.setOnMyLocationButtonClickListener(new GoogleMap.OnMyLocationButtonClickListener() {
+                @Override
+                public boolean onMyLocationButtonClick() {
+                    final LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+                    if (!manager.isProviderEnabled(LocationManager.GPS_PROVIDER) ) {
+                        Toast.makeText(AboutActivity.this, R.string.mes_enable_gps, Toast.LENGTH_SHORT).show();
+                    } else{
+                        locationAndMapSettings();
+                    }
+                    return false;
+                }
+            });
 
             // check permissions
             verifyLocationPermissions();

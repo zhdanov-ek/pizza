@@ -2,7 +2,9 @@ package com.example.gek.pizza.activities;
 
 import android.app.ActivityManager;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -12,11 +14,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.gek.pizza.R;
-import com.example.gek.pizza.helpers.Connection;
 import com.example.gek.pizza.data.Const;
 import com.example.gek.pizza.data.OrderTable;
 import com.example.gek.pizza.data.StateTableReservation;
 import com.example.gek.pizza.data.Table;
+import com.example.gek.pizza.helpers.Connection;
 import com.example.gek.pizza.helpers.Utils;
 import com.example.gek.pizza.services.MonitoringYourReservationService;
 import com.google.firebase.auth.FirebaseAuth;
@@ -37,11 +39,15 @@ public class ReserveTableCreationActivity extends AppCompatActivity {
     private Table table;
     private String tableKey;
     private EditText etName, etComment, etPhone;
+    private SharedPreferences sharedPreferences;
+    private SharedPreferences.Editor editor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reserve_table_creation);
+
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 
         Button btnReserveTable;
         TextView tvTableReservation;
@@ -70,6 +76,12 @@ public class ReserveTableCreationActivity extends AppCompatActivity {
                 + shortenedDateFormat.format(new Date()));
 
         btnReserveTable.setOnClickListener(reserveTable);
+
+
+        etName.setText(sharedPreferences.getString(Const.SETTINGS_USER_NAME,
+                FirebaseAuth.getInstance().getCurrentUser()==null ? "":FirebaseAuth.getInstance().getCurrentUser().getDisplayName())
+        );
+        etPhone.setText(sharedPreferences.getString(Const.SETTINGS_USER_PHONE, ""));
 
     }
 
@@ -109,10 +121,15 @@ public class ReserveTableCreationActivity extends AppCompatActivity {
                         getIntent().putExtra(Const.EXTRA_TABLE, table);
                         setResult(RESULT_OK, getIntent());
 
+                        editor = sharedPreferences.edit();
+                        editor.putString(Const.SETTINGS_USER_NAME, etName.getText().toString()).apply();
+                        editor.putString(Const.SETTINGS_USER_PHONE, etPhone.getText().toString()).apply();
+
                         if (!isServiceRunning()){
                             startService(new Intent(getBaseContext(), MonitoringYourReservationService.class));
                         }
                         finish();
+
                 }
             }
         }

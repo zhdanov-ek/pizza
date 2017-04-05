@@ -1,23 +1,24 @@
 package com.example.gek.pizza.activities;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.gek.pizza.R;
-import com.example.gek.pizza.helpers.Basket;
-import com.example.gek.pizza.helpers.Connection;
 import com.example.gek.pizza.data.Const;
 import com.example.gek.pizza.data.Delivery;
 import com.example.gek.pizza.data.StateLastDelivery;
+import com.example.gek.pizza.helpers.Basket;
+import com.example.gek.pizza.helpers.Connection;
 import com.example.gek.pizza.helpers.Utils;
 import com.example.gek.pizza.services.MonitoringYourDeliveryService;
 import com.google.firebase.auth.FirebaseAuth;
-
 
 import static com.example.gek.pizza.data.Const.db;
 
@@ -26,10 +27,15 @@ import static com.example.gek.pizza.data.Const.db;
 public class DeliveryCreationActivity extends AppCompatActivity {
     private EditText etName, etPhone, etAddress, etComment;
 
+    private SharedPreferences sharedPreferences;
+    private SharedPreferences.Editor editor;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_delivery_creation);
+
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 
         Toolbar myToolbar = (Toolbar) findViewById(R.id.toolBar);
         myToolbar.setTitle(R.string.title_delivery);
@@ -40,6 +46,12 @@ public class DeliveryCreationActivity extends AppCompatActivity {
         etAddress = (EditText) findViewById(R.id.etAddress);
         etComment = (EditText) findViewById(R.id.etComment);
         findViewById(R.id.btnCreateDelivery).setOnClickListener(createDelivery);
+
+        etName.setText(sharedPreferences.getString(Const.SETTINGS_USER_NAME,
+                FirebaseAuth.getInstance().getCurrentUser()==null ? "":FirebaseAuth.getInstance().getCurrentUser().getDisplayName())
+        );
+        etPhone.setText(sharedPreferences.getString(Const.SETTINGS_USER_PHONE, ""));
+        etAddress.setText(sharedPreferences.getString(Const.SETTINGS_USER_ADDRESS, ""));
 
     }
 
@@ -96,6 +108,11 @@ public class DeliveryCreationActivity extends AppCompatActivity {
                                 .setValue(stateLastDelivery);
 
                         Basket.getInstance().clearOrders();
+
+                        editor = sharedPreferences.edit();
+                        editor.putString(Const.SETTINGS_USER_NAME, etName.getText().toString()).apply();
+                        editor.putString(Const.SETTINGS_USER_PHONE, etPhone.getText().toString()).apply();
+                        editor.putString(Const.SETTINGS_USER_ADDRESS, etAddress.getText().toString()).apply();
 
                         // Start service for trace delivery.
                         // Id need for correct define current delivery and stop service
