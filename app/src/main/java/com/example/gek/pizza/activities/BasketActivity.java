@@ -18,7 +18,6 @@ import com.example.gek.pizza.helpers.Connection;
 import com.example.gek.pizza.data.Const;
 import com.example.gek.pizza.data.StateLastDelivery;
 import com.example.gek.pizza.helpers.Utils;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
@@ -109,7 +108,7 @@ public class BasketActivity extends BaseActivity implements OrdersAdapter.Refres
         rv.addItemDecoration(dividerItemDecoration);
         if (Connection.getInstance().getCurrentAuthStatus() == Const.AUTH_USER) {
             db.child(Const.CHILD_USERS)
-                    .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                    .child(Connection.getInstance().getUserId())
                     .child(Const.CHILD_USER_DELIVERY_STATE)
                     .addValueEventListener(mStateListener);
             mIsSetListener = true;
@@ -153,7 +152,7 @@ public class BasketActivity extends BaseActivity implements OrdersAdapter.Refres
     protected void onPause() {
         if (mIsSetListener) {
             db.child(Const.CHILD_USERS)
-                    .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                    .child(Connection.getInstance().getUserId())
                     .child(Const.CHILD_USER_DELIVERY_STATE)
                     .removeEventListener(mStateListener);
         }

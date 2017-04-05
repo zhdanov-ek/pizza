@@ -77,7 +77,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder>{
         private Button btnRemove;
         private ImageView ivLess;
 
-        public ViewHolder(View itemView) {
+        private ViewHolder(View itemView) {
             super(itemView);
             tvTitle = (TextView) itemView.findViewById(R.id.tvTitle);
             tvDescription = (TextView) itemView.findViewById(R.id.tvDescription);

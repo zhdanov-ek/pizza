@@ -73,12 +73,7 @@ public class MenuGroupEditActivity extends BaseActivity implements View.OnClickL
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        // Content inflate in VIEW and put in DrawerLayout
-        LayoutInflater inflater = (LayoutInflater) this
-                .getSystemService(this.LAYOUT_INFLATER_SERVICE);
-        View contentView = inflater.inflate(R.layout.activity_menu_orders_edit, null, false);
-        mDrawer.addView(contentView, 0);
+        inflateLayout(R.layout.activity_menu_orders_edit);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolBar);
         toolbar.setTitle("");

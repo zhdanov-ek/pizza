@@ -17,7 +17,7 @@ import com.example.gek.pizza.R;
 import com.example.gek.pizza.activities.ReserveTableActivity;
 import com.example.gek.pizza.data.Const;
 import com.example.gek.pizza.data.StateTableReservation;
-import com.google.firebase.auth.FirebaseAuth;
+import com.example.gek.pizza.helpers.Connection;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
@@ -86,7 +86,7 @@ public class MonitoringYourReservationService extends Service {
                             count--;
                             showNotification(state);
                             db.child(Const.CHILD_USERS)
-                                    .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                                    .child(Connection.getInstance().getUserId())
                                     .child(Const.CHILD_USER_RESERVATION_STATE)
                                     .child(child.getKey())
                                     .removeValue();
@@ -105,7 +105,7 @@ public class MonitoringYourReservationService extends Service {
         };
 
         db.child(Const.CHILD_USERS)
-                .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                .child(Connection.getInstance().getUserId())
                 .child(Const.CHILD_USER_RESERVATION_STATE)
                 .addValueEventListener(mStateListener);
         mIsSetListener = true;
@@ -156,7 +156,7 @@ public class MonitoringYourReservationService extends Service {
     public void onDestroy() {
         if (mIsSetListener) {
             db.child(Const.CHILD_USERS)
-                    .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                    .child(Connection.getInstance().getUserId())
                     .child(Const.CHILD_USER_RESERVATION_STATE)
                     .removeEventListener(mStateListener);
         }

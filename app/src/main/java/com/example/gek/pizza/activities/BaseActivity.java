@@ -77,6 +77,9 @@ public abstract class BaseActivity extends AppCompatActivity
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 if(user != null) {
 
+                    // save userId for correct close service and destroy listeners
+                    Connection.getInstance().setUserId(user.getUid());
+
                     // Check user: is shop or other users
                     tvAuthEmail.setText(Html.fromHtml(
                             String.format(getString(R.string.sign_status),

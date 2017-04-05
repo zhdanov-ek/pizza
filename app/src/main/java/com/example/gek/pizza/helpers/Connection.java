@@ -26,6 +26,7 @@ public class Connection {
     private static Connection instance;
     private int currentAuthStatus;
     private boolean serviceRunning;
+    private String userId;
 
     // Еmails for auth as shop and courier of pizzeria
     private SharedPreferences sharedPreferences =
@@ -45,6 +46,7 @@ public class Connection {
     // Constructor
     private Connection(){
         serviceRunning = false;
+        userId = "";
     }
 
 
@@ -104,5 +106,12 @@ public class Connection {
     }
     public void setServiceRunning(boolean serviceRunning) {
         this.serviceRunning = serviceRunning;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 }

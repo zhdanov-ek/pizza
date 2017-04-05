@@ -7,7 +7,6 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.text.method.ScrollingMovementMethod;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -26,7 +25,6 @@ import com.example.gek.pizza.data.Const;
 import com.example.gek.pizza.data.Dish;
 import com.example.gek.pizza.helpers.Favorites;
 import com.example.gek.pizza.helpers.Utils;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
@@ -141,7 +139,7 @@ public class DishShowActivity extends BaseActivity implements View.OnClickListen
         if (Connection.getInstance().getCurrentAuthStatus() == Const.AUTH_USER) {
             ivFavorites.setVisibility(View.VISIBLE);
             db.child(Const.CHILD_USERS)
-                    .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                    .child(Connection.getInstance().getUserId())
                     .child(Const.CHILD_USER_FAVORITES)
                     .addValueEventListener(favoritesListener);
 
@@ -342,7 +340,7 @@ public class DishShowActivity extends BaseActivity implements View.OnClickListen
     protected void onPause() {
         if (isSetListenerFavorites){
             db.child(Const.CHILD_USERS)
-                    .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                    .child(Connection.getInstance().getUserId())
                     .child(Const.CHILD_USER_FAVORITES)
                     .removeEventListener(favoritesListener);
         }

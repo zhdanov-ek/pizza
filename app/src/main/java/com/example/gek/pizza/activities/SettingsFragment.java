@@ -36,7 +36,7 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
     }
 
     public void fillSettings(String settingsKey){
-        String textPhone = sharedPref.getString(settingsKey, "");;
+        String textPhone = sharedPref.getString(settingsKey, "");
         findPreference(settingsKey).setSummary(textPhone);
         findPreference(settingsKey).setDefaultValue(textPhone);
     }

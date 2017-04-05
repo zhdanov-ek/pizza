@@ -75,7 +75,7 @@ public class MenuOrdersAdapter extends RecyclerView.Adapter<MenuOrdersAdapter.Vi
         private TextView tvName;
         private ImageView ivPhoto;
 
-        public ViewHolder(View itemView) {
+        private ViewHolder(View itemView) {
             super(itemView);
             llContainer = (LinearLayout) itemView.findViewById(R.id.llContainer);
             tvName = (TextView) itemView.findViewById(R.id.tvAuthName);

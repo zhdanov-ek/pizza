@@ -178,10 +178,7 @@ public class ReserveTableActivity extends BaseActivity implements RotationGestur
         ValueEventListener tablesListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                long num = dataSnapshot.getChildrenCount();
-
                 allTables.clear();
-
                 for (DataSnapshot child : dataSnapshot.getChildren()) {
                     Table currentTable = child.getValue(Table.class);
                     allTables.add(currentTable);
@@ -200,7 +197,6 @@ public class ReserveTableActivity extends BaseActivity implements RotationGestur
         ValueEventListener tablesReservedListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                long num = dataSnapshot.getChildrenCount();
                 allReservedTables.clear();
                 for (DataSnapshot child : dataSnapshot.getChildren()) {
                     OrderTable orderedTable = child.getValue(OrderTable.class);
@@ -693,7 +689,7 @@ public class ReserveTableActivity extends BaseActivity implements RotationGestur
             if(Connection.getInstance().getCurrentAuthStatus() == Const.AUTH_NULL){
                 userId = "";
             } else{
-                userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+                userId = Connection.getInstance().getUserId();
             }
 
             for (OrderTable orderedTable : allReservedTables) {

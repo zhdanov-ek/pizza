@@ -94,7 +94,7 @@ public class ReserveTableCreationActivity extends AppCompatActivity {
                         startActivity(new Intent(getBaseContext(), AuthenticationActivity.class));
                         break;
                     default:
-                        String id = FirebaseAuth.getInstance().getCurrentUser().getUid();
+                        String id = Connection.getInstance().getUserId();
 
                         OrderTable orderTable = new OrderTable();
                         orderTable.setClientName(etName.getText().toString());

@@ -124,7 +124,7 @@ public class DeliveryStatus extends BaseActivity {
         // If this activity open from Notification and app destroy we will have crash: auth - null
         if (Connection.getInstance().getCurrentAuthStatus() == Const.AUTH_USER){
             db.child(Const.CHILD_USERS)
-                    .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                    .child(Connection.getInstance().getUserId())
                     .child(Const.CHILD_USER_DELIVERY_STATE)
                     .addValueEventListener(mStateListener);
             mIsSetListener = true;
@@ -333,7 +333,7 @@ public class DeliveryStatus extends BaseActivity {
         // if listener not set we will retrieve error
         if ((mIsSetListener) && (FirebaseAuth.getInstance().getCurrentUser() != null)){
             db.child(Const.CHILD_USERS)
-                    .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                    .child(Connection.getInstance().getUserId())
                     .child(Const.CHILD_USER_DELIVERY_STATE)
                     .removeEventListener(mStateListener);
         }

@@ -61,11 +61,18 @@ public class DeliveryCreationActivity extends AppCompatActivity {
         public void onClick(View view) {
             if (checkData()) {
                 switch (Connection.getInstance().getCurrentAuthStatus()){
+
+                    // if add dish how guest and after login as SHOP or COURIER
+                    case Const.AUTH_SHOP:
+                    case Const.AUTH_COURIER:
+                        Basket.getInstance().clearOrders();
+                        finish();
+                        break;
                     case Const.AUTH_NULL:
                         startActivity(new Intent(getBaseContext(), AuthenticationActivity.class));
                         break;
-                    default:
-                        String id = FirebaseAuth.getInstance().getCurrentUser().getUid();
+                    case Const.AUTH_USER:
+                        String id = Connection.getInstance().getUserId();
 
                         Delivery delivery = new Delivery();
                         delivery.setNameClient(etName.getText().toString());

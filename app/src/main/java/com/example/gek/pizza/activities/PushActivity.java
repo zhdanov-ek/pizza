@@ -64,7 +64,7 @@ public class PushActivity extends BaseActivity implements View.OnClickListener {
         etPushTitle = (EditText) findViewById(R.id.etPushTitle);
 
         spinnerTopics = (Spinner) findViewById(R.id.spinnerTopics);
-        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_spinner_item, AllTopics.getInstance().topics);
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerTopics.setAdapter(dataAdapter);

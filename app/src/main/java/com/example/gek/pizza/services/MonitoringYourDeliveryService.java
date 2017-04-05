@@ -17,8 +17,7 @@ import com.example.gek.pizza.R;
 import com.example.gek.pizza.activities.MainActivity;
 import com.example.gek.pizza.data.Const;
 import com.example.gek.pizza.data.StateLastDelivery;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
+import com.example.gek.pizza.helpers.Connection;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
@@ -98,14 +97,13 @@ public class MonitoringYourDeliveryService extends Service {
                 Log.d(TAG, "onCancelled: ");
             }
         };
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        if ((user != null) && (user.getUid() != null)){
-            db.child(Const.CHILD_USERS)
-                    .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
-                    .child(Const.CHILD_USER_DELIVERY_STATE)
-                    .addValueEventListener(mStateListener);
-            mIsSetListener = true;
-        }
+
+        db.child(Const.CHILD_USERS)
+                .child(Connection.getInstance().getUserId())
+                .child(Const.CHILD_USER_DELIVERY_STATE)
+                .addValueEventListener(mStateListener);
+        mIsSetListener = true;
+
 
     }
 
@@ -152,7 +150,7 @@ public class MonitoringYourDeliveryService extends Service {
     public void onTaskRemoved(Intent rootIntent) {
         if (mIsSetListener) {
             db.child(Const.CHILD_USERS)
-                    .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                    .child(Connection.getInstance().getUserId())
                     .child(Const.CHILD_USER_DELIVERY_STATE)
                     .removeEventListener(mStateListener);
         }
@@ -164,7 +162,7 @@ public class MonitoringYourDeliveryService extends Service {
     public void onDestroy() {
         if (mIsSetListener) {
             db.child(Const.CHILD_USERS)
-                    .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                    .child(Connection.getInstance().getUserId())
                     .child(Const.CHILD_USER_DELIVERY_STATE)
                     .removeEventListener(mStateListener);
         }

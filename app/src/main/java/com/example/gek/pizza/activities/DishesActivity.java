@@ -96,7 +96,7 @@ public class DishesActivity extends BaseActivity {
             if (intent.hasExtra(Const.EXTRA_IS_FAVORITE)) {
                 initFavoriteDishesListener();
                 db.child(Const.CHILD_USERS)
-                        .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                        .child(Connection.getInstance().getUserId())
                         .child(Const.CHILD_USER_FAVORITES)
                         .addValueEventListener(mFavoriteDishesListener);
                 Log.d(TAG, "onCreate: set listener FAVORITES");
@@ -282,7 +282,7 @@ public class DishesActivity extends BaseActivity {
         }
         if ((mFavoriteDishesListener != null) && (FirebaseAuth.getInstance().getCurrentUser() != null)) {
             db.child(Const.CHILD_USERS)
-                    .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                    .child(Connection.getInstance().getUserId())
                     .child(Const.CHILD_USER_FAVORITES)
                     .removeEventListener(mFavoriteDishesListener);
             Log.d(TAG, "onDestroy: remove listener FAVORITES");

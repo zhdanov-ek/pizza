@@ -65,7 +65,7 @@ public class DishesAdapter  extends RecyclerView.Adapter<DishesAdapter.ViewHolde
         private TextView tvName;
         private TextView tvPrice;
 
-        public ViewHolder(View itemView) {
+        private ViewHolder(View itemView) {
             super(itemView);
             ivPhoto = (ImageView) itemView.findViewById(R.id.ivPhoto);
             tvName = (TextView) itemView.findViewById(R.id.tvAuthName);
