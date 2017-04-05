@@ -1,5 +1,6 @@
 package com.example.gek.pizza.activities;
 
+import android.content.Context;
 import android.content.Intent;
 import android.support.design.widget.FloatingActionButton;
 import android.os.Bundle;
@@ -34,6 +35,7 @@ public class NewsActivity extends BaseActivity{
     private FloatingActionButton fab;
     private ValueEventListener mNewsValueListener;
     private Query mGetNewsSorted;
+    private Context ctx;
 
     @Override
     public void updateUI() {
@@ -56,6 +58,7 @@ public class NewsActivity extends BaseActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         inflateLayout(R.layout.activity_news);
+        ctx = this;
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolBar);
         toolbar.setTitle(R.string.title_news);
@@ -92,9 +95,9 @@ public class NewsActivity extends BaseActivity{
                     allNews.add(currentNews);
                 }
                 if (allNews.size() == 0) {
-                    Toast.makeText(getBaseContext(), R.string.mes_no_records, Toast.LENGTH_LONG).show();
+                    Toast.makeText(ctx, R.string.mes_no_records, Toast.LENGTH_LONG).show();
                 }
-                newsAdapter = new NewsAdapter(getBaseContext(), allNews);
+                newsAdapter = new NewsAdapter(ctx, allNews);
                 rv.setAdapter(newsAdapter);
             }
 
@@ -109,7 +112,7 @@ public class NewsActivity extends BaseActivity{
     View.OnClickListener fabListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            Intent addNews = new Intent(getBaseContext(), NewsEditActivity.class);
+            Intent addNews = new Intent(ctx, NewsEditActivity.class);
             addNews.putExtra(Const.MODE, Const.MODE_NEW);
             startActivity(addNews);
         }
