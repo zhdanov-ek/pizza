@@ -698,31 +698,33 @@ public class ReserveTableActivity extends BaseActivity implements RotationGestur
 
             for (OrderTable orderedTable : allReservedTables) {
                 for (Table table : allTables) {
-                    if (table.getKey().equals(orderedTable.getTableKey())) {
-                        ImageView reservedTable = (ImageView) findViewById(table.getTableId());
-                        if (reservedTable != null) {
+                    if(table.getKey()!=null){
+                        if (table.getKey().equals(orderedTable.getTableKey())) {
+                            ImageView reservedTable = (ImageView) findViewById(table.getTableId());
+                            if (reservedTable != null) {
 
-                            Drawable[] layers = new Drawable[2];
-                            layers[0] = ContextCompat.getDrawable(getApplicationContext(), getResources().getIdentifier(table.getPictureName(), "drawable", getPackageName()));
+                                Drawable[] layers = new Drawable[2];
+                                layers[0] = ContextCompat.getDrawable(getApplicationContext(), getResources().getIdentifier(table.getPictureName(), "drawable", getPackageName()));
 
-                            hmReservedConfirmed = isReserved(reservedTable.getId(), false);
-                            if (hmReservedConfirmed.get(TABLE_RESERVATION_CONFIRMED)) {
-                                if(userId.equals(orderedTable.getUserId())){
-                                    layers[1] = ContextCompat.getDrawable(getApplicationContext(), R.drawable.my_table_confirmation);
-                                } else{
-                                    layers[1] = ContextCompat.getDrawable(getApplicationContext(), R.drawable.table_confirmation);
+                                hmReservedConfirmed = isReserved(reservedTable.getId(), false);
+                                if (hmReservedConfirmed.get(TABLE_RESERVATION_CONFIRMED)) {
+                                    if(userId.equals(orderedTable.getUserId())){
+                                        layers[1] = ContextCompat.getDrawable(getApplicationContext(), R.drawable.my_table_confirmation);
+                                    } else{
+                                        layers[1] = ContextCompat.getDrawable(getApplicationContext(), R.drawable.table_confirmation);
+                                    }
+                                } else {
+                                    if(userId.equals(orderedTable.getUserId())){
+                                        layers[1] = ContextCompat.getDrawable(getApplicationContext(), R.drawable.my_table_reserved);
+                                    } else{
+                                        layers[1] = ContextCompat.getDrawable(getApplicationContext(), R.drawable.table_reserved);
+                                    }
                                 }
-                            } else {
-                                if(userId.equals(orderedTable.getUserId())){
-                                    layers[1] = ContextCompat.getDrawable(getApplicationContext(), R.drawable.my_table_reserved);
-                                } else{
-                                    layers[1] = ContextCompat.getDrawable(getApplicationContext(), R.drawable.table_reserved);
-                                }
+                                LayerDrawable layerDrawable = new LayerDrawable(layers);
+
+
+                                reservedTable.setImageDrawable(layerDrawable);
                             }
-                            LayerDrawable layerDrawable = new LayerDrawable(layers);
-
-
-                            reservedTable.setImageDrawable(layerDrawable);
                         }
                     }
                 }

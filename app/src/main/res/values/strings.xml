@@ -170,6 +170,11 @@
     <string name="title_button_fullscreen">Fullscreen</string>
     <string name="dist">Dist.:</string>
     <string name="time">Time:</string>
+    <string name="GivePermission">Give permission</string>
+    <string name="hint_gps_permission">You see this text because you do not give permission to use GPS</string>
+    <string name="mes_enable_gps">Please enable GPS</string>
+
+
 
 
     <!-- RESERVE TABLE -->

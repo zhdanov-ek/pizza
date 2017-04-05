@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     tools:context="com.example.gek.pizza.activities.ReserveTableCreationActivity">
 
@@ -41,7 +42,8 @@
 
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                app:hintAnimationEnabled = "false">
 
                 <EditText
                     android:id="@+id/etName"
@@ -54,7 +56,8 @@
 
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                app:hintAnimationEnabled = "false">
 
                 <EditText
                     android:id="@+id/etPhone"
@@ -69,7 +72,8 @@
 
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                app:hintAnimationEnabled = "false">
 
                 <EditText
                     android:id="@+id/etComment"
