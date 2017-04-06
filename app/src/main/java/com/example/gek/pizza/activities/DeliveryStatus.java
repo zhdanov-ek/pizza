@@ -331,7 +331,7 @@ public class DeliveryStatus extends BaseActivity {
     @Override
     protected void onPause() {
         // if listener not set we will retrieve error
-        if ((mIsSetListener) && (FirebaseAuth.getInstance().getCurrentUser() != null)){
+        if (mIsSetListener){
             db.child(Const.CHILD_USERS)
                     .child(Connection.getInstance().getUserId())
                     .child(Const.CHILD_USER_DELIVERY_STATE)

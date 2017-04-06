@@ -14,6 +14,7 @@ import android.support.v7.app.NotificationCompat;
 import android.util.Log;
 
 import com.example.gek.pizza.R;
+import com.example.gek.pizza.activities.DeliveryStatus;
 import com.example.gek.pizza.activities.MainActivity;
 import com.example.gek.pizza.data.Const;
 import com.example.gek.pizza.data.StateLastDelivery;
@@ -131,7 +132,7 @@ public class MonitoringYourDeliveryService extends Service {
         ntfBuilder.setDefaults(Notification.DEFAULT_SOUND | Notification.DEFAULT_VIBRATE);
 
         // Notification pressed action
-        Intent intent = new Intent(ctx, MainActivity.class);
+        Intent intent = new Intent(ctx, DeliveryStatus.class);
 
         PendingIntent pendingIntent = PendingIntent.getActivity(ctx, 0, intent, 0);
         ntfBuilder.setContentIntent(pendingIntent);
