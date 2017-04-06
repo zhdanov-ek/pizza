@@ -13,35 +13,6 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity
-            android:name=".activities.MainActivity"
-            android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-        <activity
-            android:name=".activities.NewsActivity"
-            android:launchMode="singleTask" />
-        <activity android:name=".activities.NewsEditActivity" />
-        <activity
-            android:name=".activities.MenuGroupsActivity"
-            android:launchMode="singleTask" />
-        <activity android:name=".activities.MenuGroupEditActivity" />
-        <activity android:name=".activities.DishesActivity" />
-        <activity android:name=".activities.DishEditActivity" />
-        <activity android:name=".activities.MakePizzaActivity" />
-        <activity
-            android:name=".activities.AboutActivity"
-            android:launchMode="singleTask" />
-        <activity
-            android:name=".activities.SettingsActivity"
-            android:launchMode="singleTask" />
-        <activity android:name=".activities.DishShowActivity" />
-        <activity android:name=".activities.ReserveTableCreationActivity" />
 
         <meta-data
             android:name="com.google.android.gms.version"
@@ -52,9 +23,86 @@
         <meta-data
             android:name="io.fabric.ApiKey"
             android:value="5b9726f0572cec6597951b3c4e7a4b1404aa2062" />
+        <meta-data
+            android:name="com.facebook.sdk.ApplicationId"
+            android:value="@string/facebook_app_id" />
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@drawable/local_pizza_map" />
 
-        <activity android:name=".activities.BasketActivity" />
-        <activity android:name=".activities.DeliveryCreationActivity" />
+        <activity
+            android:name=".activities.AuthenticationActivity" />
+
+        <activity
+            android:name=".activities.MainActivity"
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".activities.MenuGroupsActivity"
+            android:launchMode="singleTask" />
+        <activity android:name=".activities.MenuGroupEditActivity" />
+        <activity android:name=".activities.DishesActivity" />
+        <activity android:name=".activities.DishShowActivity" />
+        <activity android:name=".activities.DishEditActivity" />
+
+        <activity
+            android:name=".activities.NewsActivity"
+            android:launchMode="singleTask" />
+        <activity
+            android:name=".activities.NewsEditActivity" />
+
+        <activity
+            android:name=".activities.ReserveTableCreationActivity"
+            android:launchMode="singleTask"/>
+        <activity
+            android:name=".activities.ReserveTableActivity"
+            android:launchMode="singleTask" />
+
+        <activity
+            android:name=".activities.MakePizzaActivity"
+            android:launchMode="singleTask" />
+
+
+        <activity
+            android:name=".activities.DeliveriesActivity"
+            android:launchMode="singleTask"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".activities.OneGroupDeliveriesActivity" />
+
+        <activity
+            android:name=".activities.BasketActivity"
+            android:launchMode="singleTask"/>
+        <activity
+            android:name=".activities.DeliveryCreationActivity"
+            android:launchMode="singleTask"/>
+        <activity
+            android:name=".activities.DeliveryStatus"
+            android:launchMode="singleTask" />
+        <activity
+            android:name=".activities.CourierActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/title_activity_courier"
+            android:theme="@style/FullscreenTheme"
+            android:launchMode="singleTask"/>
+
+        <activity
+            android:name=".activities.PushActivity" />
+
+        <activity
+            android:name=".activities.SettingsActivity"
+            android:launchMode="singleTask" />
+
+        <activity
+            android:name=".activities.AboutActivity"
+            android:launchMode="singleTask" />
 
         <service android:name=".services.ShopService" />
         <service android:name=".services.CourierService" />
@@ -71,34 +119,6 @@
             </intent-filter>
         </service>
 
-        <activity
-            android:name=".activities.DeliveriesActivity"
-            android:launchMode="singleTask"
-            android:theme="@style/AppTheme" />
-        <activity android:name=".activities.OneGroupDeliveriesActivity" />
-        <activity
-            android:name=".activities.DeliveryStatus"
-            android:launchMode="singleTask" />
-        <activity
-            android:name=".activities.ReserveTableActivity"
-            android:launchMode="singleTask" />
-        <activity android:name=".activities.AuthenticationActivity" />
-        <activity
-            android:name=".activities.PushActivity"
-            android:launchMode="singleTask" />
-
-        <meta-data
-            android:name="com.facebook.sdk.ApplicationId"
-            android:value="@string/facebook_app_id" />
-        <meta-data
-            android:name="com.google.firebase.messaging.default_notification_icon"
-            android:resource="@drawable/local_pizza_map" />
-
-        <activity
-            android:name=".activities.CourierActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:label="@string/title_activity_courier"
-            android:theme="@style/FullscreenTheme" />
     </application>
 
 </manifest>

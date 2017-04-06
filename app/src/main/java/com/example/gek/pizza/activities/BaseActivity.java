@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,6 +29,8 @@ import com.example.gek.pizza.services.ShopService;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import static android.support.v4.content.IntentCompat.FLAG_ACTIVITY_TASK_ON_HOME;
+
 
 /**
  * Basic activity need for implement NavigationDrawer and FirebaseAuth
@@ -38,6 +41,7 @@ public abstract class BaseActivity extends AppCompatActivity
 
     protected DrawerLayout mDrawer;
     protected TextView tvAuthEmail;
+    private ImageView ivLogo;
     protected FirebaseAuth.AuthStateListener authListener;
     protected NavigationView navigationView;
 
@@ -56,8 +60,15 @@ public abstract class BaseActivity extends AppCompatActivity
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        // Give header and find TextView
+        // Give header and find View
         View header = navigationView.getHeaderView(0);
+        ivLogo = (ImageView) header.findViewById(R.id.ivLogo);
+        ivLogo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openActivity(MainActivity.class);
+            }
+        });
         tvAuthEmail = (TextView) header.findViewById(R.id.tvAuthEmail);
         tvAuthEmail.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -212,49 +223,67 @@ public abstract class BaseActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         switch (item.getItemId()){
             case R.id.nav_dishes:
-                startActivity(new Intent(this, MenuGroupsActivity.class));
+                openActivity(MenuGroupsActivity.class);
                 break;
             case R.id.nav_news:
-                startActivity(new Intent(this, NewsActivity.class));
+                openActivity(NewsActivity.class);
                 break;
             case R.id.nav_favorite:
                 Intent favoritesIntent = new Intent(this, DishesActivity.class);
                 favoritesIntent.putExtra(Const.EXTRA_IS_FAVORITE, true);
+                if (getClass() != DishesActivity.class){
+                    favoritesIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK |
+                            Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                }
+
                 startActivity(favoritesIntent);
                 break;
             case R.id.nav_list_addresses:
                 Intent addressesIntent = new Intent(this, OneGroupDeliveriesActivity.class);
                 addressesIntent.putExtra(Const.MODE, Const.MODE_TRANSPORT_DELIVERIES);
+                if (getClass() != OneGroupDeliveriesActivity.class){
+                    addressesIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK |
+                            Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                }
                 startActivity(addressesIntent);
                 break;
             case R.id.nav_map_with_addresses:
                 // TODO: 24.03.17 open map with clients
                 break;
             case R.id.nav_pizza:
-                startActivity(new Intent(this, MakePizzaActivity.class));
+                openActivity(MakePizzaActivity.class);
                 break;
             case R.id.nav_deliveries:
-                startActivity(new Intent(this, DeliveriesActivity.class));
+                openActivity(DeliveriesActivity.class);
                 break;
             case R.id.nav_reservation:
-                startActivity(new Intent(this, ReserveTableActivity.class));
+                openActivity(ReserveTableActivity.class);
                 break;
             case R.id.nav_settings:
-                startActivity(new Intent(this, SettingsActivity.class));
+                openActivity(SettingsActivity.class);
                 break;
             case R.id.nav_delivery_status:
-                startActivity(new Intent(this, DeliveryStatus.class));
+                openActivity(DeliveryStatus.class);
                 break;
             case R.id.nav_about:
-                startActivity(new Intent(this, AboutActivity.class));
+                openActivity(AboutActivity.class);
                 break;
             case R.id.nav_push:
-                startActivity(new Intent(this,PushActivity.class));
+                openActivity(PushActivity.class);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    // if user click in menu item for run current open activity don't change stack
+    private void openActivity(Class<?> c){
+        Intent intent = new Intent(this, c);
+        if (getClass() != c){
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        }
+        startActivity(intent);
     }
 
 }
