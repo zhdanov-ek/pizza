@@ -41,7 +41,6 @@ public abstract class BaseActivity extends AppCompatActivity
 
     protected DrawerLayout mDrawer;
     protected TextView tvAuthEmail;
-    private ImageView ivLogo;
     protected FirebaseAuth.AuthStateListener authListener;
     protected NavigationView navigationView;
 
@@ -62,8 +61,7 @@ public abstract class BaseActivity extends AppCompatActivity
 
         // Give header and find View
         View header = navigationView.getHeaderView(0);
-        ivLogo = (ImageView) header.findViewById(R.id.ivLogo);
-        ivLogo.setOnClickListener(new View.OnClickListener() {
+        header.findViewById(R.id.ivLogo).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 openActivity(MainActivity.class);

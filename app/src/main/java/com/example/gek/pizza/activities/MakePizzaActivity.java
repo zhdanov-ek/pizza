@@ -58,7 +58,8 @@ public class MakePizzaActivity extends BaseActivity {
 
     @Override
     public void updateUI() {
-        if (Connection.getInstance().getCurrentAuthStatus() ==  Const.AUTH_SHOP){
+        if ((Connection.getInstance().getCurrentAuthStatus() == Const.AUTH_SHOP) ||
+            (Connection.getInstance().getCurrentAuthStatus() == Const.AUTH_COURIER)){
             finish();
         }
     }

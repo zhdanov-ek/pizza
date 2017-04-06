@@ -50,6 +50,7 @@ public class DishesActivity extends BaseActivity {
     private final String TAG = "DISHES ACTIVITY";
     private ValueEventListener mFavoriteDishesListener;
     private ValueEventListener mAllDishesListener;
+    private Boolean mIsFavorites = false;
 
     @Override
     public void updateUI() {
@@ -94,6 +95,7 @@ public class DishesActivity extends BaseActivity {
         Intent intent = getIntent();
         if (intent != null) {
             if (intent.hasExtra(Const.EXTRA_IS_FAVORITE)) {
+                mIsFavorites = true;
                 initFavoriteDishesListener();
                 db.child(Const.CHILD_USERS)
                         .child(Connection.getInstance().getUserId())
@@ -116,7 +118,12 @@ public class DishesActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        MenuItem item = navigationView.getMenu().findItem(R.id.nav_dishes);
+        MenuItem item;
+        if (mIsFavorites) {
+            item = navigationView.getMenu().findItem(R.id.nav_favorite);
+        } else {
+            item = navigationView.getMenu().findItem(R.id.nav_dishes);
+        }
         item.setCheckable(true);
         item.setChecked(true);
     }

@@ -18,6 +18,16 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"/>
 
+        <TextView
+            style="@style/textBig"
+            android:id="@+id/tvEmpty"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:visibility="gone"
+            android:text="@string/mes_dont_have_delivery"/>
+
 
         <ScrollView
             android:id="@+id/scrollView"

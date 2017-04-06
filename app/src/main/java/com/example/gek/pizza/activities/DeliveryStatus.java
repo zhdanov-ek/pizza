@@ -37,6 +37,7 @@ public class DeliveryStatus extends BaseActivity {
 
     public static final String TAG = "STATUS_DELIVERY";
     private ScrollView scrollView;
+    private TextView tvEmpty;
     private TextView tvStep1Num, tvStep2Num, tvStep3Num, tvStep4Num;
     private TextView tvStep1Description, tvStep2Description, tvStep3Description, tvStep4Description;
     private ImageView ivStep1, ivStep2, ivStep3, ivStep4;
@@ -93,10 +94,9 @@ public class DeliveryStatus extends BaseActivity {
                 StateLastDelivery stateLastDelivery = dataSnapshot.getValue(StateLastDelivery.class);
                 if (stateLastDelivery == null) {
                     progressBar.setVisibility(View.GONE);
+                    tvEmpty.setVisibility(View.VISIBLE);
                     scrollView.setVisibility(View.GONE);
-                    Toast.makeText(getBaseContext(),
-                            getResources().getString(R.string.mes_dont_have_delivery),
-                            Toast.LENGTH_SHORT).show();
+
                 } else {
                     String childFolder;
                     switch (stateLastDelivery.getDeliveryState()) {
@@ -309,6 +309,7 @@ public class DeliveryStatus extends BaseActivity {
     private void findAllView() {
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
         scrollView = (ScrollView) findViewById(R.id.scrollView);
+        tvEmpty = (TextView) findViewById(R.id.tvEmpty);
 
         tvStep1Num = (TextView) findViewById(R.id.tvStep1Num);
         tvStep2Num = (TextView) findViewById(R.id.tvStep2Num);
