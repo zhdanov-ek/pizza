@@ -93,7 +93,8 @@
             android:launchMode="singleTask"/>
 
         <activity
-            android:name=".activities.PushActivity" />
+            android:name=".activities.PushActivity"
+            android:launchMode="singleTask"/>
 
         <activity
             android:name=".activities.SettingsActivity"
