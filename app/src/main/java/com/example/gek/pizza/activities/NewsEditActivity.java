@@ -58,16 +58,7 @@ public class NewsEditActivity extends BaseActivity implements View.OnClickListen
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         inflateLayout(R.layout.activity_news_edit);
-
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolBar);
-        toolbar.setTitle("");
-        setSupportActionBar(toolbar);
-
-        // add button for open DrawerLayout
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, mDrawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        mDrawer.addDrawerListener(toggle);
-        toggle.syncState();
+        setToolbar("");
 
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
         etTitle = (EditText) findViewById(R.id.etTitle);
@@ -91,11 +82,11 @@ public class NewsEditActivity extends BaseActivity implements View.OnClickListen
             isNewNews = false;
             oldNews = getIntent().getParcelableExtra(Const.EXTRA_NEWS);
             String title = getResources().getString(R.string.edit) + " - " + oldNews.getTitle();
-            toolbar.setTitle(title);
+            mToolbar.setTitle(title);
             fillValues(oldNews);
         } else {
             fillValues(null);
-            toolbar.setTitle(R.string.create_new);
+            mToolbar.setTitle(R.string.create_new);
         }
 
         FirebaseStorage storage = FirebaseStorage.getInstance();

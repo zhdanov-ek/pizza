@@ -77,16 +77,7 @@ public class DishEditActivity extends BaseActivity implements View.OnClickListen
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         inflateLayout(R.layout.activity_dish_edit);
-
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolBar);
-        toolbar.setTitle("");
-        setSupportActionBar(toolbar);
-
-        // add button for open DrawerLayout
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, mDrawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        mDrawer.addDrawerListener(toggle);
-        toggle.syncState();
+        setToolbar("");
 
         ctx = this;
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
@@ -118,14 +109,14 @@ public class DishEditActivity extends BaseActivity implements View.OnClickListen
             oldDish = getIntent().getParcelableExtra(Const.EXTRA_DISH);
             keyGroup = oldDish.getKeyGroup();
             String title = getResources().getString(R.string.edit) + " - " + oldDish.getName();
-            toolbar.setTitle(title);
+            mToolbar.setTitle(title);
             spinnerGroup.setVisibility(View.VISIBLE);
             loadListGroupsMenu();
             fillValues(oldDish);
         } else {
             fillValues(null);
             keyGroup = getIntent().getStringExtra(Const.DISH_GROUP_KEY);
-            toolbar.setTitle(R.string.create_new);
+            mToolbar.setTitle(R.string.create_new);
         }
 
         // get link on storage with images

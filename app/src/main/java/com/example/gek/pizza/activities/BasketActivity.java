@@ -47,16 +47,7 @@ public class BasketActivity extends BaseActivity implements OrdersAdapter.Refres
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         inflateLayout(R.layout.activity_basket);
-
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolBar);
-        toolbar.setTitle(R.string.title_basket);
-        setSupportActionBar(toolbar);
-
-        //add button for open DrawerLayout
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, mDrawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        mDrawer.addDrawerListener(toggle);
-        toggle.syncState();
+        setToolbar(getString(R.string.title_basket));
 
         tvTotal = (TextView) findViewById(R.id.tvTotal);
         rlOrderPanel = (RelativeLayout) findViewById(R.id.rlOrderPanel);

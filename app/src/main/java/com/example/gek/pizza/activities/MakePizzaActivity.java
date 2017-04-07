@@ -68,16 +68,7 @@ public class MakePizzaActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         inflateLayout(R.layout.activity_make_pizza);
-
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolBar);
-        toolbar.setTitle(R.string.title_make_pizza);
-        setSupportActionBar(toolbar);
-
-        //add button for open DrawerLayout
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, mDrawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        mDrawer.addDrawerListener(toggle);
-        toggle.syncState();
+        setToolbar(getString(R.string.title_make_pizza));
 
         animShow = AnimationUtils.loadAnimation(this, R.anim.alpha_show);
         animHide = AnimationUtils.loadAnimation(this, R.anim.alpha_hide);
@@ -266,37 +257,6 @@ public class MakePizzaActivity extends BaseActivity {
                     ivFocus.setVisibility(View.INVISIBLE);
                     Log.d(TAG, "Action is DragEvent.ACTION_DRAG_DROPPED");
                     break;
-
-//                Fatal Exception: java.lang.OutOfMemoryError: (Heap Size=48647KB, Allocated=40072KB)
-//                at android.graphics.Bitmap.nativeCreate(Bitmap.java)
-//                at android.graphics.Bitmap.createBitmap(Bitmap.java:950)
-//                at android.graphics.Bitmap.createBitmap(Bitmap.java:925)
-//                at com.example.gek.pizza.activities.MakePizzaActivity.updatePizza(MakePizzaActivity.java:202)
-//                at com.example.gek.pizza.activities.MakePizzaActivity.access$900(MakePizzaActivity.java:38)
-//                at com.example.gek.pizza.activities.MakePizzaActivity$4.onDrag(MakePizzaActivity.java:269)
-//                at android.view.View.dispatchDragEvent(View.java:16143)
-//                at android.view.ViewGroup.dispatchDragEvent(ViewGroup.java:1251)
-//                at android.view.ViewGroup.dispatchDragEvent(ViewGroup.java:1251)
-//                at android.view.ViewGroup.dispatchDragEvent(ViewGroup.java:1251)
-//                at android.view.ViewGroup.dispatchDragEvent(ViewGroup.java:1251)
-//                at android.view.ViewGroup.dispatchDragEvent(ViewGroup.java:1251)
-//                at android.view.ViewGroup.dispatchDragEvent(ViewGroup.java:1251)
-//                at android.view.ViewGroup.dispatchDragEvent(ViewGroup.java:1251)
-//                at android.view.ViewGroup.dispatchDragEvent(ViewGroup.java:1251)
-//                at android.view.ViewGroup.dispatchDragEvent(ViewGroup.java:1251)
-//                at android.view.ViewGroup.dispatchDragEvent(ViewGroup.java:1251)
-//                at android.view.ViewGroup.dispatchDragEvent(ViewGroup.java:1251)
-//                at android.view.ViewRootImpl.handleDragEvent(ViewRootImpl.java:4157)
-//                at android.view.ViewRootImpl.access$600(ViewRootImpl.java:119)
-//                at android.view.ViewRootImpl$ViewRootHandler.handleMessage(ViewRootImpl.java:3337)
-//                at android.os.Handler.dispatchMessage(Handler.java:99)
-//                at android.os.Looper.loop(Looper.java:155)
-//                at android.app.ActivityThread.main(ActivityThread.java:5520)
-//                at java.lang.reflect.Method.invokeNative(Method.java)
-//                at java.lang.reflect.Method.invoke(Method.java:511)
-//                at com.android.internal.os.ZygoteInit$MethodAndArgsCaller.run(ZygoteInit.java:1029)
-//                at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:796)
-//                at dalvik.system.NativeStart.main(NativeStart.java)
 
                 case DragEvent.ACTION_DRAG_EXITED:
                     ivFocus.startAnimation(animHide);

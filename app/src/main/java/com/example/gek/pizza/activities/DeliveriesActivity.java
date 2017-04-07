@@ -59,16 +59,7 @@ public class DeliveriesActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         activeDeliveriesActivity = false;
         inflateLayout(R.layout.activity_deliveries);
-
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolBar);
-        toolbar.setTitle(R.string.title_orders);
-        setSupportActionBar(toolbar);
-
-        //add button for open DrawerLayout
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, mDrawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        mDrawer.addDrawerListener(toggle);
-        toggle.syncState();
+        setToolbar(getString(R.string.title_orders));
 
         // This adapter generate fragment for each tab of activity
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
