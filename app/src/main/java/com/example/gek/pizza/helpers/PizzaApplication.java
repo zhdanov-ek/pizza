@@ -1,7 +1,6 @@
 package com.example.gek.pizza.helpers;
 
 import android.app.Application;
-
 import com.crashlytics.android.Crashlytics;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -28,6 +27,7 @@ public class PizzaApplication extends Application {
         AllDishes.getInstance();
 
         AllTopics.getInstance();
+
     }
 
 }
