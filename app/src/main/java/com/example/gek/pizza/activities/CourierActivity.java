@@ -1,10 +1,12 @@
 package com.example.gek.pizza.activities;
 
 import android.Manifest;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
@@ -38,6 +40,8 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.prefs.Preferences;
+
 import static com.example.gek.pizza.data.Const.REQUEST_CODE_LOCATION;
 
 public class CourierActivity extends FragmentActivity
@@ -54,13 +58,23 @@ public class CourierActivity extends FragmentActivity
     private LastPosition mPositionCourier;
     private LatLng mClientLocation;
     private BitmapDescriptor bdPizza;
+    private float mZoomMap = Const.ZOOM_MAP_COURIER;
+    private SharedPreferences sharedPreferences;
+    private CameraUpdate mCameraUpdate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_courier);
 
+        // restore saved zoom of camera
+        sharedPreferences = getPreferences(MODE_PRIVATE);
+        if (sharedPreferences.contains(Const.SETTINGS_ZOOM_COURIER)){
+            mZoomMap = sharedPreferences.getFloat(Const.SETTINGS_ZOOM_COURIER, Const.ZOOM_MAP_COURIER);
+        }
+
         llContainer = (LinearLayout) findViewById(R.id.llContainer);
+
         // get location courier from DB
         Const.db.child(Const.CHILD_COURIER).addValueEventListener(mPositionCourierListener);
 
@@ -135,15 +149,26 @@ public class CourierActivity extends FragmentActivity
                 .icon(bdPizza)
                 .title(getResources().getString(R.string.courier)));
 
-        // Make bounderies for our markers
-        LatLngBounds.Builder boundsBuilder = new LatLngBounds.Builder();
-        boundsBuilder.include(mClientLocation);
-        boundsBuilder.include(new LatLng(mPositionCourier.getLatitude(), mPositionCourier.getLongitude()));
-        LatLngBounds bounds = boundsBuilder.build();
+        LatLng latLonCourier = new LatLng(mPositionCourier.getLatitude(), mPositionCourier.getLongitude());
 
-        // Set camera in bounderies and offset from edge
-        CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, Const.OFFSET_FROM_EDGES_OF_THE_MAP);
-        mMap.moveCamera(cu);
+
+        // set current zoom of camera
+        if (mMap.getCameraPosition().zoom > Const.ZOOM_MAP_COURIER){
+            mZoomMap = mMap.getCameraPosition().zoom;
+        } else {
+            if (mZoomMap < mMap.getCameraPosition().zoom){
+                mZoomMap = Const.ZOOM_MAP_COURIER;
+            }
+            mCameraUpdate = CameraUpdateFactory.newLatLngZoom(latLonCourier, mZoomMap);
+            mMap.moveCamera(mCameraUpdate);
+        }
+
+        // If courier out of camera - move camera to courier (courier in centre of screen)
+        LatLngBounds latLngBounds = mMap.getProjection().getVisibleRegion().latLngBounds;
+        if (! latLngBounds.contains(latLonCourier)) {
+            mCameraUpdate = CameraUpdateFactory.newLatLngZoom(latLonCourier, mZoomMap);
+            mMap.moveCamera(mCameraUpdate);
+        }
     }
 
 
@@ -217,6 +242,8 @@ public class CourierActivity extends FragmentActivity
         if (mGoogleApiClient.isConnected()) {
             mGoogleApiClient.disconnect();
         }
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putFloat(Const.SETTINGS_ZOOM_COURIER, mZoomMap).apply();
         super.onStop();
     }
 

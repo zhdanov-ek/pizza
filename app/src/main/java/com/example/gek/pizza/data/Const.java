@@ -95,9 +95,11 @@ public class Const {
     public static final String SETTINGS_USER_NAME       = "user_name";
     public static final String SETTINGS_USER_PHONE      = "user_phone";
     public static final String SETTINGS_USER_ADDRESS    = "user_address";
+    public static final String SETTINGS_ZOOM_COURIER    = "zoom_courier";
 
 
     public static final Integer ZOOM_MAP                = 17;
+    public static final float ZOOM_MAP_COURIER          = 11;
 
     public static final int REQUEST_CODE_LOCATION  = 20;
 
