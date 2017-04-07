@@ -42,7 +42,7 @@ public class DishShowActivity extends BaseActivity implements View.OnClickListen
     private Dish dishOpen;
     private Boolean isSetListenerFavorites;
 
-    private Boolean isOpenDialog;
+    private Boolean isOpenDialog = false;
     private static final String EXTRA_OPEN_DIALOG = "is_open_dialog";
 
     @Override
