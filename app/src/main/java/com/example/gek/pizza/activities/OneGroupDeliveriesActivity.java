@@ -1,5 +1,6 @@
 package com.example.gek.pizza.activities;
 
+import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.os.Bundle;
@@ -35,6 +36,7 @@ public class OneGroupDeliveriesActivity extends BaseActivity {
     private Boolean isArchive;  // true - archive, false - transport
     private ValueEventListener mDeliveriesListener;
     private DeliveriesAdapter mDeliveriesAdapter;
+    private Context ctx;
 
     @Override
     public void updateUI() {
@@ -69,6 +71,7 @@ public class OneGroupDeliveriesActivity extends BaseActivity {
         }
 
 
+        ctx = this;
         rv = (RecyclerView) findViewById(R.id.rv);
         rv.setLayoutManager(new LinearLayoutManager(this));
 
@@ -99,7 +102,7 @@ public class OneGroupDeliveriesActivity extends BaseActivity {
                     } else {
                         group = Const.CHILD_DELIVERIES_TRANSPORT;
                     }
-                    mDeliveriesAdapter = new DeliveriesAdapter(mList, getBaseContext(), group);
+                    mDeliveriesAdapter = new DeliveriesAdapter(mList, ctx, group);
                     rv.setAdapter(mDeliveriesAdapter);
                 } else {
                     mDeliveriesAdapter.notifyDataSetChanged();
