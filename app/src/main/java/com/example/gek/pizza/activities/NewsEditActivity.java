@@ -147,8 +147,11 @@ public class NewsEditActivity extends BaseActivity implements View.OnClickListen
                         .error(R.drawable.news_empty)
                         .into(ivPhoto);
                 ibRemovePhoto.setVisibility(View.VISIBLE);
-            } else
+            } else {
                 ivPhoto.setImageResource(R.drawable.news_empty);
+                ibRemovePhoto.setVisibility(View.INVISIBLE);
+            }
+
         }
     }
 
