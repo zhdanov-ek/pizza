@@ -16,11 +16,9 @@ import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
-import android.view.Display;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
@@ -185,7 +183,7 @@ public class AboutActivity extends BaseActivity implements
 
         //landscape listener
         slidingUpPanelLayout = (SlidingUpPanelLayout) findViewById(R.id.slidingUpPanel);
-        if (isPortraitMode()) {
+        if (slidingUpPanelLayout!=null){
             setSlidingUpPanelLayoutListeners();
         }
 
@@ -354,16 +352,6 @@ public class AboutActivity extends BaseActivity implements
                 slidingUpPanelLayout.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
             }
         });
-    }
-
-    private boolean isPortraitMode() {
-        Display display = ((WindowManager) getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
-        int rotation = display.getRotation();
-        if (rotation == 0) {
-            return true;
-        } else {
-            return false;
-        }
     }
 
     @Override

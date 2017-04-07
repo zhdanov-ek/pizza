@@ -8,7 +8,7 @@ import android.graphics.BitmapFactory;
 import android.support.v7.app.NotificationCompat;
 
 import com.example.gek.pizza.R;
-import com.example.gek.pizza.activities.MainActivity;
+import com.example.gek.pizza.activities.NewsActivity;
 import com.example.gek.pizza.data.Const;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
@@ -43,7 +43,7 @@ public class MessagingService extends FirebaseMessagingService {
         ntfBuilder.setTicker(title + ": " + body);
         ntfBuilder.setDefaults(Notification.DEFAULT_SOUND | Notification.DEFAULT_VIBRATE);
 
-        Intent intent = new Intent(getBaseContext(), MainActivity.class);
+        Intent intent = new Intent(getBaseContext(), NewsActivity.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(getBaseContext(), 0, intent, 0);
         ntfBuilder.setContentIntent(pendingIntent);
         Notification notification = ntfBuilder.build();

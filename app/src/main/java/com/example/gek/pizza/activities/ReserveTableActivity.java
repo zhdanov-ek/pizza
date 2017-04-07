@@ -39,7 +39,6 @@ import com.example.gek.pizza.data.StateTableReservation;
 import com.example.gek.pizza.data.Table;
 import com.example.gek.pizza.helpers.Connection;
 import com.example.gek.pizza.helpers.RotationGestureDetector;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
@@ -49,7 +48,9 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Locale;
+import java.util.Map;
 
 import static com.example.gek.pizza.data.Const.db;
 
@@ -74,7 +75,7 @@ public class ReserveTableActivity extends BaseActivity implements RotationGestur
     private Animation animationArrowRotation;
     private boolean isPanelExpanded = false, isPanelCollapsedDragAndDrop = false;
     private boolean isNewTable;
-    private ArrayList<Table> allTables;
+    private ArrayList<Table> allTables, allTablesOld;
     private ArrayList<OrderTable> allReservedTables;
     private Toolbar myToolbar;
     private ImageButton ibTrash;
@@ -82,10 +83,13 @@ public class ReserveTableActivity extends BaseActivity implements RotationGestur
     private FloatingActionButton fabSaveSchema, fabReserveTable, fabConfirm, fabCancel;
     private Toast toastReserved;
     private HashMap<String, Boolean> hmReservedConfirmed;
+    private HashMap<String, Integer> hmTablesToDelete;
+    private HashSet<Table> allTablesChanged;
 
     private final String IS_PANEL_EXPANDED = "is_panel_expanded";
     private final String IS_PANEL_COLLAPSED_DRAG_AND_DROP = "is_panel_collapsed_drag_and_drop";
     private final String TABLES_MARKERS = "tables_markers";
+    private final String OLD_TABLES_MARKERS = "old_tables_markers";
     private final String TABLE_RESERVED = "table_reserved";
     private final String TABLE_RESERVATION_CONFIRMED = "table_reservation_confirmed";
     private RotationGestureDetector mRotationDetector;
@@ -101,6 +105,9 @@ public class ReserveTableActivity extends BaseActivity implements RotationGestur
         TextView tvPhone, tvEmail, tvAddress;
 
         activeReserveTableActivity = false;
+
+        hmTablesToDelete = new HashMap<>();
+        hmTablesToDelete.clear();
 
         shortenedDateFormat = new SimpleDateFormat("yyyyMMdd", Locale.US);
 
@@ -149,6 +156,26 @@ public class ReserveTableActivity extends BaseActivity implements RotationGestur
         fabCancel.setVisibility(View.GONE);
         fabConfirm.setVisibility(View.GONE);
 
+        allTables = new ArrayList<>();
+        allReservedTables = new ArrayList<>();
+        allTablesOld = new ArrayList<>();
+        allTablesChanged = new HashSet<>();
+        allTablesChanged.clear();
+
+        mRotationDetector = new RotationGestureDetector(this);
+
+        displayMetrics = new DisplayMetrics();
+        WindowManager windowManager = (WindowManager) this.getSystemService(Context.WINDOW_SERVICE);
+        windowManager.getDefaultDisplay().getMetrics(displayMetrics);
+
+        ivAddTable4 = (ImageView) findViewById(R.id.ivAddTable4);
+        ivAddTable6 = (ImageView) findViewById(R.id.ivAddTable6);
+        ivAddTable8 = (ImageView) findViewById(R.id.ivAddTable8);
+        rlReserveTable = (RelativeLayout) findViewById(R.id.activity_reserve_table);
+
+        rlSettingsReserveTable = (RelativeLayout) findViewById(R.id.settings_reserve_table);
+        llAboutUs = (LinearLayout) findViewById(R.id.llAboutUs);
+
         // toolbar delete tables
         myToolbar.setOnDragListener(new View.OnDragListener() {
             @Override
@@ -178,12 +205,16 @@ public class ReserveTableActivity extends BaseActivity implements RotationGestur
         ValueEventListener tablesListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+//                allTablesOld.clear();
+                allTablesOld.addAll(allTables);
                 allTables.clear();
                 for (DataSnapshot child : dataSnapshot.getChildren()) {
                     Table currentTable = child.getValue(Table.class);
                     allTables.add(currentTable);
                 }
+                deleteTables();
                 updateTables();
+                updateOrderedTable();
             }
 
             @Override
@@ -206,6 +237,7 @@ public class ReserveTableActivity extends BaseActivity implements RotationGestur
                         allReservedTables.add(orderedTable);
                     }
                 }
+                updateTables();
                 updateOrderedTable();
             }
 
@@ -216,22 +248,6 @@ public class ReserveTableActivity extends BaseActivity implements RotationGestur
 
         Const.db.child(Const.CHILD_RESERVED_TABLES_NEW).addValueEventListener(tablesReservedListener);
 
-        allTables = new ArrayList<>();
-        allReservedTables = new ArrayList<>();
-
-        mRotationDetector = new RotationGestureDetector(this);
-
-        displayMetrics = new DisplayMetrics();
-        WindowManager windowManager = (WindowManager) this.getSystemService(Context.WINDOW_SERVICE);
-        windowManager.getDefaultDisplay().getMetrics(displayMetrics);
-
-        ivAddTable4 = (ImageView) findViewById(R.id.ivAddTable4);
-        ivAddTable6 = (ImageView) findViewById(R.id.ivAddTable6);
-        ivAddTable8 = (ImageView) findViewById(R.id.ivAddTable8);
-        rlReserveTable = (RelativeLayout) findViewById(R.id.activity_reserve_table);
-        rlSettingsReserveTable = (RelativeLayout) findViewById(R.id.settings_reserve_table);
-        llAboutUs = (LinearLayout) findViewById(R.id.llAboutUs);
-
         // draw table, after screen parametrs avaible
         ViewTreeObserver greenObserver = rlReserveTable.getViewTreeObserver();
         greenObserver.addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
@@ -239,6 +255,7 @@ public class ReserveTableActivity extends BaseActivity implements RotationGestur
             @Override
             public boolean onPreDraw() {
                 rlReserveTable.getViewTreeObserver().removeOnPreDrawListener(this);
+                deleteTables();
                 updateTables();
                 updateOrderedTable();
                 return true;
@@ -254,6 +271,28 @@ public class ReserveTableActivity extends BaseActivity implements RotationGestur
 
         rlSettingsReserveTable.setOnDragListener(onDragListenerSettings);
         rlReserveTable.setOnDragListener(onDragListenerTable);
+    }
+
+    public void deleteTables(){
+        boolean isTableExist;
+        for (Table tableOld : allTablesOld) {
+            isTableExist = false;
+            for (Table table : allTables) {
+                if (table.getKey()!=null && tableOld.getKey()!=null){
+                    if (tableOld.getKey().equals(table.getKey())){
+                        isTableExist = true;
+                        break;
+                    }
+                }
+            }
+            if(!isTableExist && tableOld.getTableId()!=null){
+                ImageView tableToDelete = (ImageView) findViewById(tableOld.getTableId());
+                if (tableToDelete != null) {
+                    rlReserveTable.removeView(tableToDelete);
+
+                }
+            }
+        }
     }
 
     public void setSettingsToView(TextView view, String setting) {
@@ -299,6 +338,7 @@ public class ReserveTableActivity extends BaseActivity implements RotationGestur
     @Override
     protected void onResume() {
         super.onResume();
+        deleteTables();
         updateTables();
         updateOrderedTable();
         MenuItem item = navigationView.getMenu().findItem(R.id.nav_reservation);
@@ -322,6 +362,7 @@ public class ReserveTableActivity extends BaseActivity implements RotationGestur
         outState.putBoolean(IS_PANEL_EXPANDED, isPanelExpanded);
         outState.putBoolean(IS_PANEL_COLLAPSED_DRAG_AND_DROP, isPanelCollapsedDragAndDrop);
         outState.putParcelableArrayList(TABLES_MARKERS, (ArrayList<Table>) allTables);
+        outState.putParcelableArrayList(OLD_TABLES_MARKERS, (ArrayList<Table>) allTablesOld);
     }
 
     @Override
@@ -331,6 +372,12 @@ public class ReserveTableActivity extends BaseActivity implements RotationGestur
             isPanelExpanded = savedInstanceState.getBoolean(IS_PANEL_EXPANDED, false);
             isPanelCollapsedDragAndDrop = savedInstanceState.getBoolean(IS_PANEL_COLLAPSED_DRAG_AND_DROP, false);
             allTables = savedInstanceState.getParcelableArrayList(TABLES_MARKERS);
+            allTablesOld = savedInstanceState.getParcelableArrayList(OLD_TABLES_MARKERS);
+            if (allTablesOld!=null){
+                if (allTablesOld.size() != 0) {
+                    deleteTables();
+                }
+            }
             if (allTables!=null){
                 if (allTables.size() != 0) {
                     updateTables();
@@ -417,8 +464,9 @@ public class ReserveTableActivity extends BaseActivity implements RotationGestur
                         newTable.setId(newId);
                         rlReserveTable.addView(newTable);
 
-
-                        allTables.add(new Table(newId, xCoordinate, yCootdinate, windowWidth, windowHeight, idTable, 0.0f, isPortraitMode(), tableName));
+                        Table addTable = new Table(newId, xCoordinate, yCootdinate, windowWidth, windowHeight, idTable, 0.0f, isPortraitMode(), tableName);
+                        allTables.add(addTable);
+                        allTablesChanged.add(addTable);
 
                         isNewTable = false;
                         newTable.setOnClickListener(onClickListener);
@@ -456,6 +504,7 @@ public class ReserveTableActivity extends BaseActivity implements RotationGestur
                 table.setyCoordinate(yCootdinate);
                 table.setyResolution(windowHeight);
                 table.setPortraitMode(isPortraitMode());
+                allTablesChanged.add(table);
             }
         }
     }
@@ -665,13 +714,14 @@ public class ReserveTableActivity extends BaseActivity implements RotationGestur
     public void deleteTable() {
         if (ivTable != null) {
             for (Table table : allTables) {
-                if (table.getTableId() == ivTable.getId()) {
-                    rlReserveTable.removeView(ivTable);
-                    if (table.getKey() != null) {
-                        Const.db.child(Const.CHILD_TABLES).child(table.getKey()).removeValue();
+                if (table.getTableId()!=null) {
+                    if (table.getTableId() == ivTable.getId()) {
+                        if (hmTablesToDelete.get(table.getKey()) == null) {
+                            hmTablesToDelete.put(table.getKey(),ivTable.getId());
+                        }
+                        allTables.remove(table);
+                        break;
                     }
-                    allTables.remove(table);
-                    break;
                 }
             }
         }
@@ -756,6 +806,26 @@ public class ReserveTableActivity extends BaseActivity implements RotationGestur
                         newTable.setRotation(table.getRotation() + 90);
                     }
                     newTable.setOnClickListener(onClickListener);
+                }else{
+                    if (Connection.getInstance().getCurrentAuthStatus() != Const.AUTH_SHOP){
+                        ImageView newTable = (ImageView) findViewById(table.getTableId());
+                        int pictureId = getResources().getIdentifier(table.getPictureName(), "drawable", getPackageName());
+                        newTable.setImageResource(pictureId);
+                        LayoutParams lp = new LayoutParams(Math.round(120 * displayMetrics.density), Math.round(75 * displayMetrics.density));
+                        if (table.getPortraitMode() == isPortraitMode()) {
+                            lp.leftMargin = findCoordinates(table.getxCoordinate(), windowWidth, table.getxResolution());
+                            lp.topMargin = findCoordinates(table.getyCoordinate(), windowHeight, table.getyResolution());
+                        } else {
+                            lp.leftMargin = findCoordinates(table.getyCoordinate(), windowWidth, table.getyResolution());
+                            lp.topMargin = findCoordinates(table.getxCoordinate(), windowHeight, table.getxResolution());
+                        }
+                        newTable.setLayoutParams(lp);
+                        if (table.getPortraitMode() == isPortraitMode()) {
+                            newTable.setRotation(table.getRotation());
+                        } else {
+                            newTable.setRotation(table.getRotation()+90);
+                        }
+                    }
                 }
             }
         }
@@ -763,23 +833,54 @@ public class ReserveTableActivity extends BaseActivity implements RotationGestur
     }
 
     private void sendToServer() {
+        boolean needSaveTable;
+        Map<String, Object> childUpdates = new HashMap<>();
 
-        for (Table table : allTables) {
+        for(Table table:allTablesChanged){
             String newKey;
+            needSaveTable = true;
             ImageView ivTable = (ImageView) findViewById(table.getTableId());
-            float rotation = ivTable.getRotation();
-            if (table.getKey() == null) {
-                newKey = db.child(Const.CHILD_TABLES).push().getKey();
-                table.setKey(newKey);
-            } else {
-                newKey = table.getKey();
+
+            for (Map.Entry<String, Integer> entry : hmTablesToDelete.entrySet())
+            {
+                if (entry.getValue().equals(table.getTableId())){
+                    needSaveTable = false;
+                    break;
+                }
             }
-            table.setRotation(rotation);
+            if(needSaveTable) {
+                float rotation = ivTable.getRotation();
+                if (table.getKey() == null) {
+                    newKey = db.child(Const.CHILD_TABLES).push().getKey();
+                    table.setKey(newKey);
+                } else {
+                    newKey = table.getKey();
+                }
 
-            db.child(Const.CHILD_TABLES).child(newKey).setValue(table);
+                table.setRotation(rotation);
+                childUpdates.put("/" + Const.CHILD_TABLES + "/" + newKey, table);
+            }
         }
-        fabSaveSchema.setVisibility(View.GONE);
+        allTablesChanged.clear();
 
+
+        for (Map.Entry<String, Integer> entry : hmTablesToDelete.entrySet())
+        {
+            ImageView tableDelete = (ImageView) findViewById(entry.getValue());
+            if (tableDelete!=null){
+                rlReserveTable.removeView(tableDelete);
+                if (entry.getKey() != null) {
+                    childUpdates.put("/"+Const.CHILD_TABLES+"/" + entry.getKey(), null);
+                }
+            }
+        }
+
+        hmTablesToDelete.clear();
+
+
+        db.updateChildren(childUpdates);
+
+        fabSaveSchema.setVisibility(View.GONE);
     }
 
 
@@ -911,6 +1012,12 @@ public class ReserveTableActivity extends BaseActivity implements RotationGestur
                 ivTable.setRotation(ivTable.getRotation() + (-angle));
                 if (Connection.getInstance().getCurrentAuthStatus() == Const.AUTH_SHOP){
                     fabSaveSchema.setVisibility(View.VISIBLE);
+                    for (Table table : allTables) {
+                        if (table.getTableId() == ivTable.getId()) {
+                            allTablesChanged.add(table);
+                            break;
+                        }
+                    }
                 }
             }
         }
