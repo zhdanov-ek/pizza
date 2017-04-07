@@ -11,7 +11,6 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
 import android.view.Display;
@@ -101,6 +100,8 @@ public class ReserveTableActivity extends BaseActivity implements RotationGestur
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         inflateLayout(R.layout.activity_reserve_table);
+        setToolbar(getString(R.string.title_reserve_table));
+
         String textPhone, textEmail, textAddress;
         TextView tvPhone, tvEmail, tvAddress;
 
@@ -138,16 +139,6 @@ public class ReserveTableActivity extends BaseActivity implements RotationGestur
         setSettingsToView(tvEmail, textEmail);
         setSettingsToView(tvAddress, textAddress);
 
-        myToolbar = (Toolbar) findViewById(R.id.toolBar);
-        myToolbar.setTitle(R.string.title_reserve_table);
-        setSupportActionBar(myToolbar);
-
-        //add button for open DrawerLayout
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, mDrawer, myToolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        mDrawer.addDrawerListener(toggle);
-        toggle.syncState();
-
         ibTrash = (ImageButton) findViewById(R.id.ibTrash);
 
         ibTrash.setVisibility(View.GONE);
@@ -177,6 +168,7 @@ public class ReserveTableActivity extends BaseActivity implements RotationGestur
         llAboutUs = (LinearLayout) findViewById(R.id.llAboutUs);
 
         // toolbar delete tables
+        myToolbar = (Toolbar) findViewById(R.id.toolBar);
         myToolbar.setOnDragListener(new View.OnDragListener() {
             @Override
             public boolean onDrag(View view, DragEvent dragEvent) {

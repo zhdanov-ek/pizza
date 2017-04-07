@@ -14,8 +14,6 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
-import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -163,8 +161,7 @@ public class AboutActivity extends BaseActivity implements
         llRouteInfo = (LinearLayout) findViewById(R.id.llRouteInfo);
         llCheckPermission = (LinearLayout) findViewById(R.id.llCheckPermission);
 
-        btnCheckPermission = (Button) findViewById(R.id.btnCheckPermission);
-        btnCheckPermission.setOnClickListener(this);
+        findViewById(R.id.btnCheckPermission).setOnClickListener(this);
 
         rgDriveWalk = (RadioGroup) findViewById(R.id.rgDriveWalk);
         rbtnDrive = (RadioButton) findViewById(R.id.rbtnDrive);
