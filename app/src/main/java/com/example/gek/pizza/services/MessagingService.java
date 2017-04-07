@@ -41,7 +41,8 @@ public class MessagingService extends FirebaseMessagingService {
         ntfBuilder.setAutoCancel(true);
         ntfBuilder.setLargeIcon(BitmapFactory.decodeResource(getBaseContext().getResources(), R.drawable.ic_notification));
         ntfBuilder.setTicker(title + ": " + body);
-        ntfBuilder.setDefaults(Notification.DEFAULT_SOUND | Notification.DEFAULT_VIBRATE);
+        ntfBuilder.setDefaults(Notification.DEFAULT_SOUND | Notification.DEFAULT_VIBRATE |
+                Notification.DEFAULT_LIGHTS);
 
         Intent intent = new Intent(getBaseContext(), NewsActivity.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(getBaseContext(), 0, intent, 0);

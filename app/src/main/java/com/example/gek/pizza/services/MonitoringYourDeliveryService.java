@@ -129,7 +129,8 @@ public class MonitoringYourDeliveryService extends Service {
         ntfBuilder.setTicker(title + ": " + state);
 
         // Set notification properties
-        ntfBuilder.setDefaults(Notification.DEFAULT_SOUND | Notification.DEFAULT_VIBRATE);
+        ntfBuilder.setDefaults(Notification.DEFAULT_SOUND |
+                Notification.DEFAULT_VIBRATE | Notification.DEFAULT_LIGHTS);
 
         // Notification pressed action
         Intent intent = new Intent(ctx, DeliveryStatus.class);
