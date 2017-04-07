@@ -27,6 +27,8 @@ public class Connection {
     private int currentAuthStatus;
     private boolean serviceRunning;
     private String userId;
+    private String userName;
+    private String userPhotoUrl;
 
     // Еmails for auth as shop and courier of pizzeria
     private SharedPreferences sharedPreferences =
@@ -47,6 +49,8 @@ public class Connection {
     private Connection(){
         serviceRunning = false;
         userId = "";
+        userName = "";
+        userPhotoUrl = "";
     }
 
 
@@ -113,5 +117,19 @@ public class Connection {
     }
     public void setUserId(String userId) {
         this.userId = userId;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public String getUserPhotoUrl() {
+        return userPhotoUrl;
+    }
+    public void setUserPhotoUrl(String userPhotoUrl) {
+        this.userPhotoUrl = userPhotoUrl;
     }
 }

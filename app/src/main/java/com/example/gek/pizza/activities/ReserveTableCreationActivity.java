@@ -21,7 +21,6 @@ import com.example.gek.pizza.data.Table;
 import com.example.gek.pizza.helpers.Connection;
 import com.example.gek.pizza.helpers.Utils;
 import com.example.gek.pizza.services.MonitoringYourReservationService;
-import com.google.firebase.auth.FirebaseAuth;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -78,9 +77,7 @@ public class ReserveTableCreationActivity extends AppCompatActivity {
         btnReserveTable.setOnClickListener(reserveTable);
 
 
-        etName.setText(sharedPreferences.getString(Const.SETTINGS_USER_NAME,
-                FirebaseAuth.getInstance().getCurrentUser()==null ? "":FirebaseAuth.getInstance().getCurrentUser().getDisplayName())
-        );
+        etName.setText(sharedPreferences.getString(Const.SETTINGS_USER_NAME, Connection.getInstance().getUserName()));
         etPhone.setText(sharedPreferences.getString(Const.SETTINGS_USER_PHONE, ""));
 
     }

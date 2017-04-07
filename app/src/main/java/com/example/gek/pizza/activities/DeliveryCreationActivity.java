@@ -47,9 +47,7 @@ public class DeliveryCreationActivity extends AppCompatActivity {
         etComment = (EditText) findViewById(R.id.etComment);
         findViewById(R.id.btnCreateDelivery).setOnClickListener(createDelivery);
 
-        etName.setText(sharedPreferences.getString(Const.SETTINGS_USER_NAME,
-                FirebaseAuth.getInstance().getCurrentUser()==null ? "":FirebaseAuth.getInstance().getCurrentUser().getDisplayName())
-        );
+        etName.setText(sharedPreferences.getString(Const.SETTINGS_USER_NAME, Connection.getInstance().getUserName()));
         etPhone.setText(sharedPreferences.getString(Const.SETTINGS_USER_PHONE, ""));
         etAddress.setText(sharedPreferences.getString(Const.SETTINGS_USER_ADDRESS, ""));
 

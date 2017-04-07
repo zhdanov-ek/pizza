@@ -3,8 +3,6 @@ package com.example.gek.pizza.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -16,8 +14,8 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.gek.pizza.R;
-import com.example.gek.pizza.helpers.Connection;
 import com.example.gek.pizza.data.Const;
+import com.example.gek.pizza.helpers.Connection;
 import com.example.gek.pizza.helpers.Utils;
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
@@ -91,16 +89,16 @@ public class AuthenticationActivity extends BaseActivity
                 String status = null;
                 FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
                 if (user != null){
-                    if ((user.getDisplayName() != null) && (user.getDisplayName().length() > 0)){
-                        status = user.getDisplayName();
+                    if ((Connection.getInstance().getUserName().length() > 0)){
+                        status = Connection.getInstance().getUserName();
                     }
                     if (status != null){
                         tvStatus.setText(status);
                     }
-                    if (user.getPhotoUrl() != null){
-                        avaUri = user.getPhotoUrl().toString();
+                    if (!Connection.getInstance().getUserPhotoUrl().equals("")){
+                        avaUri = Connection.getInstance().getUserPhotoUrl();
                         Glide.with(this)
-                                .load(user.getPhotoUrl())
+                                .load(Connection.getInstance().getUserPhotoUrl())
                                 .diskCacheStrategy(DiskCacheStrategy.RESULT)
                                 .error(R.drawable.logo)
                                 .into(ivLogo);

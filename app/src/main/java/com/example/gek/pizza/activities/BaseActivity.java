@@ -17,21 +17,18 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.gek.pizza.R;
-import com.example.gek.pizza.helpers.Connection;
 import com.example.gek.pizza.data.Const;
+import com.example.gek.pizza.helpers.Connection;
 import com.example.gek.pizza.helpers.Favorites;
 import com.example.gek.pizza.helpers.Utils;
 import com.example.gek.pizza.services.CourierService;
 import com.example.gek.pizza.services.ShopService;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-
-import static android.support.v4.content.IntentCompat.FLAG_ACTIVITY_TASK_ON_HOME;
 
 
 /**
@@ -91,11 +88,15 @@ public abstract class BaseActivity extends AppCompatActivity
 
                     // save userId for correct close service and destroy listeners
                     Connection.getInstance().setUserId(user.getUid());
+                    Connection.getInstance().setUserName(user.getDisplayName());
+                    if (user.getPhotoUrl() != null){
+                        Connection.getInstance().setUserPhotoUrl(user.getPhotoUrl().toString());
+                    }
 
                     // Check user: is shop or other users
                     tvAuthEmail.setText(Html.fromHtml(
                             String.format(getString(R.string.sign_status),
-                                user.getDisplayName(),
+                                Connection.getInstance().getUserName(),
                                 user.getEmail())));
 
                     // admin

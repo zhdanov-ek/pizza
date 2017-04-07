@@ -17,6 +17,7 @@ import android.widget.LinearLayout;
 import com.example.gek.pizza.R;
 import com.example.gek.pizza.data.Const;
 import com.example.gek.pizza.data.LastPosition;
+import com.example.gek.pizza.helpers.Connection;
 import com.example.gek.pizza.helpers.Utils;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -33,7 +34,6 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
@@ -129,7 +129,7 @@ public class CourierActivity extends FragmentActivity
         mMap.clear();
         mMap.addMarker(new MarkerOptions()
                 .position(mClientLocation)
-                .title(FirebaseAuth.getInstance().getCurrentUser().getDisplayName()));
+                .title(Connection.getInstance().getUserName()));
         mMap.addMarker(new MarkerOptions()
                 .position(new LatLng(mPositionCourier.getLatitude(), mPositionCourier.getLongitude()))
                 .icon(bdPizza)
