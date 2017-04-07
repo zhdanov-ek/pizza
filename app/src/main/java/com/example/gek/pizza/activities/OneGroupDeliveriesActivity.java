@@ -62,19 +62,12 @@ public class OneGroupDeliveriesActivity extends BaseActivity {
             }
         }
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolBar);
         if (isArchive) {
-            toolbar.setTitle(R.string.title_archive_deliveries);
+            setToolbar(getString(R.string.title_archive_deliveries));
         } else {
-            toolbar.setTitle(R.string.title_transport_deliveries);
+            setToolbar(getString(R.string.title_transport_deliveries));
         }
-        setSupportActionBar(toolbar);
 
-        //add button for open DrawerLayout
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, mDrawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        mDrawer.addDrawerListener(toggle);
-        toggle.syncState();
 
         rv = (RecyclerView) findViewById(R.id.rv);
         rv.setLayoutManager(new LinearLayoutManager(this));

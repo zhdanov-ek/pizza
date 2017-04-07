@@ -74,16 +74,7 @@ public class MenuGroupEditActivity extends BaseActivity implements View.OnClickL
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         inflateLayout(R.layout.activity_menu_orders_edit);
-
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolBar);
-        toolbar.setTitle("");
-        setSupportActionBar(toolbar);
-
-        // Add button for open DrawerLayout
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, mDrawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        mDrawer.addDrawerListener(toggle);
-        toggle.syncState();
+        setToolbar("");
 
         // Random color for background of item
         int[] colors = getResources().getIntArray(R.array.colors);
@@ -119,11 +110,11 @@ public class MenuGroupEditActivity extends BaseActivity implements View.OnClickL
             isSelectPhoto = true;
             oldMenuGroup = getIntent().getParcelableExtra(Const.EXTRA_MENU_GROUP);
             String title = getResources().getString(R.string.edit) + " - " + oldMenuGroup.getName();
-            toolbar.setTitle(title);
+            mToolbar.setTitle(title);
             fillValues(oldMenuGroup);
         } else {
             fillValues(null);
-            toolbar.setTitle(R.string.create_new);
+            mToolbar.setTitle(R.string.create_new);
         }
 
         FirebaseStorage storage = FirebaseStorage.getInstance();

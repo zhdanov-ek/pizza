@@ -3,10 +3,8 @@ package com.example.gek.pizza.activities;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.design.widget.Snackbar;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -44,6 +42,9 @@ public class DishShowActivity extends BaseActivity implements View.OnClickListen
     private Dish dishOpen;
     private Boolean isSetListenerFavorites;
 
+    private Boolean isOpenDialog;
+    private static final String EXTRA_OPEN_DIALOG = "is_open_dialog";
+
     @Override
     public void updateUI() {
         switch (Connection.getInstance().getCurrentAuthStatus()){
@@ -78,16 +79,7 @@ public class DishShowActivity extends BaseActivity implements View.OnClickListen
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         inflateLayout(R.layout.activity_dish_show);
-
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolBar);
-        toolbar.setTitle("");
-        setSupportActionBar(toolbar);
-
-        //add button for open DrawerLayout
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, mDrawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        mDrawer.addDrawerListener(toggle);
-        toggle.syncState();
+        setToolbar("");
 
         tvName = (TextView) findViewById(R.id.tvAuthName);
         tvPrice = (TextView) findViewById(R.id.tvPrice);
@@ -110,11 +102,29 @@ public class DishShowActivity extends BaseActivity implements View.OnClickListen
         if (getIntent().hasExtra(Const.EXTRA_DISH)){
             dishOpen = getIntent().getParcelableExtra(Const.EXTRA_DISH);
             fillValues(dishOpen);
-            toolbar.setTitle(dishOpen.getName());
+            mToolbar.setTitle(dishOpen.getName());
         }
     }
 
 
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        if (isOpenDialog){
+            outState.putBoolean(EXTRA_OPEN_DIALOG, true);
+        }
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        if (savedInstanceState != null){
+            isOpenDialog = savedInstanceState.getBoolean(EXTRA_OPEN_DIALOG);
+            if (isOpenDialog){
+                removeDish(dishOpen);
+            }
+        }
+    }
 
     @Override
     protected void onResume() {
@@ -293,6 +303,7 @@ public class DishShowActivity extends BaseActivity implements View.OnClickListen
 
     /** For remove dish we set group to REMOVED */
     private void removeDish(final Dish dish){
+        isOpenDialog = true;
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(R.string.remove);
         builder.setIcon(R.drawable.ic_warning);
@@ -302,6 +313,7 @@ public class DishShowActivity extends BaseActivity implements View.OnClickListen
         builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
+                isOpenDialog = false;
             }
         });
         builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
@@ -309,6 +321,7 @@ public class DishShowActivity extends BaseActivity implements View.OnClickListen
             public void onClick(DialogInterface dialogInterface, int i) {
                 dish.setKeyGroup(Const.DISH_GROUP_VALUE_REMOVED);
                 db.child(Const.CHILD_DISHES).child(dish.getKey()).setValue(dish);
+                isOpenDialog = false;
                 finish();
             }
         });
@@ -346,4 +359,6 @@ public class DishShowActivity extends BaseActivity implements View.OnClickListen
         }
         super.onPause();
     }
+
+
 }

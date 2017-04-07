@@ -37,6 +37,7 @@ public class DeliveryStatus extends BaseActivity {
 
     public static final String TAG = "STATUS_DELIVERY";
     private ScrollView scrollView;
+    private TextView tvEmpty;
     private TextView tvStep1Num, tvStep2Num, tvStep3Num, tvStep4Num;
     private TextView tvStep1Description, tvStep2Description, tvStep3Description, tvStep4Description;
     private ImageView ivStep1, ivStep2, ivStep3, ivStep4;
@@ -57,16 +58,7 @@ public class DeliveryStatus extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         inflateLayout(R.layout.activity_delivery_status);
-
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolBar);
-        toolbar.setTitle(R.string.title_delivery);
-        setSupportActionBar(toolbar);
-
-        // add button for open DrawerLayout
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, mDrawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        mDrawer.addDrawerListener(toggle);
-        toggle.syncState();
+        setToolbar(getString(R.string.title_delivery));
 
         findAllView();
         btnShowCourier.setOnClickListener(new View.OnClickListener() {
@@ -93,10 +85,9 @@ public class DeliveryStatus extends BaseActivity {
                 StateLastDelivery stateLastDelivery = dataSnapshot.getValue(StateLastDelivery.class);
                 if (stateLastDelivery == null) {
                     progressBar.setVisibility(View.GONE);
+                    tvEmpty.setVisibility(View.VISIBLE);
                     scrollView.setVisibility(View.GONE);
-                    Toast.makeText(getBaseContext(),
-                            getResources().getString(R.string.mes_dont_have_delivery),
-                            Toast.LENGTH_SHORT).show();
+
                 } else {
                     String childFolder;
                     switch (stateLastDelivery.getDeliveryState()) {
@@ -309,6 +300,7 @@ public class DeliveryStatus extends BaseActivity {
     private void findAllView() {
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
         scrollView = (ScrollView) findViewById(R.id.scrollView);
+        tvEmpty = (TextView) findViewById(R.id.tvEmpty);
 
         tvStep1Num = (TextView) findViewById(R.id.tvStep1Num);
         tvStep2Num = (TextView) findViewById(R.id.tvStep2Num);
@@ -331,7 +323,7 @@ public class DeliveryStatus extends BaseActivity {
     @Override
     protected void onPause() {
         // if listener not set we will retrieve error
-        if ((mIsSetListener) && (FirebaseAuth.getInstance().getCurrentUser() != null)){
+        if (mIsSetListener){
             db.child(Const.CHILD_USERS)
                     .child(Connection.getInstance().getUserId())
                     .child(Const.CHILD_USER_DELIVERY_STATE)

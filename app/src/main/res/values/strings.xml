@@ -61,7 +61,7 @@
 
     <!-- GLOBAL MESSAGES -->
     <string name="mes_no_internet">No internet connection</string>
-    <string name="mes_no_records">No data in the program</string>
+    <string name="mes_no_records">It\'s empty</string>
     <string name="mes_check_data">Please check data</string>
     <string name="mes_have_delivery">You have active delivery</string>
     <string name="mes_dont_have_delivery">You don\'t have deliveries</string>

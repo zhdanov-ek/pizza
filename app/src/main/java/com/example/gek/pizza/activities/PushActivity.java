@@ -37,28 +37,15 @@ public class PushActivity extends BaseActivity implements View.OnClickListener {
 
     @Override
     public void updateUI() {
-
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         inflateLayout(R.layout.activity_push);
+        setToolbar(getString(R.string.title_push));
 
-        Toolbar myToolbar;
-        Button btnSendMessage;
-
-        myToolbar = (Toolbar) findViewById(R.id.toolBar);
-        myToolbar.setTitle(R.string.title_push);
-        setSupportActionBar(myToolbar);
-
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, mDrawer, myToolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        mDrawer.addDrawerListener(toggle);
-        toggle.syncState();
-
-        btnSendMessage = (Button) findViewById(R.id.btnSendMessage);
-        btnSendMessage.setOnClickListener(this);
+        findViewById(R.id.btnSendMessage).setOnClickListener(this);
 
         etPushMessage = (EditText) findViewById(R.id.etPushMessage);
         etPushTitle = (EditText) findViewById(R.id.etPushTitle);

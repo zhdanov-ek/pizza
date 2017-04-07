@@ -142,19 +142,9 @@ public class AboutActivity extends BaseActivity implements
         String textAddress;
 
         inflateLayout(R.layout.activity_about);
+        setToolbar(getString(R.string.title_about));
 
         bdPizza = BitmapDescriptorFactory.fromResource(R.drawable.local_pizza_map);
-
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolBar);
-        toolbar.setTitle(R.string.title_about);
-        setSupportActionBar(toolbar);
-
-        //add button for open DrawerLayout
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, mDrawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        mDrawer.addDrawerListener(toggle);
-        toggle.syncState();
-
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 
         textAddress = sharedPreferences.getString(Const.SETTINGS_ADDRESS_KEY, "");

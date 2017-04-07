@@ -50,6 +50,7 @@ public class DishesActivity extends BaseActivity {
     private final String TAG = "DISHES ACTIVITY";
     private ValueEventListener mFavoriteDishesListener;
     private ValueEventListener mAllDishesListener;
+    private Boolean mIsFavorites = false;
 
     @Override
     public void updateUI() {
@@ -62,16 +63,7 @@ public class DishesActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         inflateLayout(R.layout.activity_dishes);
-
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolBar);
-        toolbar.setTitle("");
-        setSupportActionBar(toolbar);
-
-        //add button for open DrawerLayout
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, mDrawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        mDrawer.addDrawerListener(toggle);
-        toggle.syncState();
+        setToolbar("");
 
         tvEmpty = (TextView) findViewById(R.id.tvEmpty);
         rv = (RecyclerView) findViewById(R.id.rv);
@@ -94,17 +86,18 @@ public class DishesActivity extends BaseActivity {
         Intent intent = getIntent();
         if (intent != null) {
             if (intent.hasExtra(Const.EXTRA_IS_FAVORITE)) {
+                mIsFavorites = true;
                 initFavoriteDishesListener();
                 db.child(Const.CHILD_USERS)
                         .child(Connection.getInstance().getUserId())
                         .child(Const.CHILD_USER_FAVORITES)
                         .addValueEventListener(mFavoriteDishesListener);
                 Log.d(TAG, "onCreate: set listener FAVORITES");
-                toolbar.setTitle(R.string.title_favorites);
+                mToolbar.setTitle(R.string.title_favorites);
             } else {
                 initAllDishesListener();
                 menuGroup = intent.getParcelableExtra(Const.EXTRA_MENU_GROUP);
-                toolbar.setTitle(menuGroup.getName());
+                mToolbar.setTitle(menuGroup.getName());
                 db.child(Const.CHILD_DISHES).addValueEventListener(mAllDishesListener);
                 Log.d(TAG, "onCreate: set listener ALL DISHES");
             }
@@ -116,7 +109,12 @@ public class DishesActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        MenuItem item = navigationView.getMenu().findItem(R.id.nav_dishes);
+        MenuItem item;
+        if (mIsFavorites) {
+            item = navigationView.getMenu().findItem(R.id.nav_favorite);
+        } else {
+            item = navigationView.getMenu().findItem(R.id.nav_dishes);
+        }
         item.setCheckable(true);
         item.setChecked(true);
     }
