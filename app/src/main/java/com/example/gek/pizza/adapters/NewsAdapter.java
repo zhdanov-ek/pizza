@@ -30,7 +30,6 @@ import java.util.ArrayList;
  */
 
 public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder>{
-
     private ArrayList<News> listNews;
     private Context ctx;
 
@@ -75,7 +74,6 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder>{
         private LinearLayout llDescription;
         private Button btnEdit;
         private Button btnRemove;
-        private ImageView ivLess;
 
         private ViewHolder(View itemView) {
             super(itemView);
@@ -85,12 +83,10 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder>{
             llDescription = (LinearLayout) itemView.findViewById(R.id.llDescription);
             btnEdit = (Button) itemView.findViewById(R.id.btnEdit);
             btnRemove = (Button) itemView.findViewById(R.id.btnRemove);
-            ivLess = (ImageView) itemView.findViewById(R.id.ivLess);
 
             itemView.setOnClickListener(this);
             btnRemove.setOnClickListener(this);
             btnEdit.setOnClickListener(this);
-            ivLess.setOnClickListener(this);
 
             int state = Connection.getInstance().getCurrentAuthStatus();
             if (state == Const.AUTH_SHOP){
@@ -112,11 +108,13 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder>{
                 case R.id.btnRemove:
                     removeNews(listNews.get(getAdapterPosition()));
                     break;
-                case R.id.ivLess:
-                    llDescription.setVisibility(View.GONE);
-                    break;
                 default:
-                    llDescription.setVisibility(View.VISIBLE);
+                    if (llDescription.getVisibility() == View.GONE){
+                        llDescription.setVisibility(View.VISIBLE);
+                    } else {
+                        llDescription.setVisibility(View.GONE);
+                    }
+                    break;
             }
         }
     }
