@@ -93,6 +93,9 @@ public class AboutActivity extends BaseActivity implements
     private final String WALK = "walk";
     private final String DISTANCE_MAP = "distance_map";
     private final String TIME_MAP = "time_map";
+    private final String LAST_LOCATION_LAT = "last_location_lat";
+    private final String LAST_LOCATION_LONG = "last_location_long";
+
     private final int REQUEST_CODE_GPS_PERMISSION = 1001;
 
     private boolean isOpenedPermissionDialog = false;
@@ -352,6 +355,10 @@ public class AboutActivity extends BaseActivity implements
         outState.putString(DISTANCE_MAP, tvRouteInformationDistance.getText().toString());
         outState.putString(TIME_MAP, tvRouteInformationTime.getText().toString());
         outState.putParcelableArrayList(ROUTE_MARKERS, (ArrayList<LatLng>) listOfMarkers);
+        if(lastLocation!=null){
+            outState.putDouble(LAST_LOCATION_LAT,lastLocation.getLatitude());
+            outState.putDouble(LAST_LOCATION_LONG,lastLocation.getLongitude());
+        }
     }
 
     @Override
@@ -366,6 +373,14 @@ public class AboutActivity extends BaseActivity implements
             listOfMarkers = savedInstanceState.getParcelableArrayList(ROUTE_MARKERS);
             tvRouteInformationDistance.setText(savedInstanceState.getString(DISTANCE_MAP, ""));
             tvRouteInformationTime.setText(savedInstanceState.getString(TIME_MAP, ""));
+
+            Double lastLat = savedInstanceState.getDouble(LAST_LOCATION_LAT,0);
+            Double lastLong = savedInstanceState.getDouble(LAST_LOCATION_LONG,0);
+            if (lastLat!=0 && lastLong!=0){
+                lastLocation = new Location("");
+                lastLocation.setLatitude(lastLat);
+                lastLocation.setLongitude(lastLong);
+            }
         }
     }
 
@@ -439,6 +454,7 @@ public class AboutActivity extends BaseActivity implements
 
     public void addPizzeriaOnMap() {
         googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(pizzeriaLocation, Const.ZOOM_MAP));
+
         // add pizzeria marker
         googleMap.addMarker(new MarkerOptions()
                 .icon(bdPizza)
@@ -468,11 +484,12 @@ public class AboutActivity extends BaseActivity implements
                     CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, Const.OFFSET_FROM_EDGES_OF_THE_MAP);
                     googleMap.moveCamera(cu);
                 }
+
+
             }
         } else {
             isRoutesCalculated = false;
         }
-
     }
 
     public void setSettingsToView(TextView view, String setting) {

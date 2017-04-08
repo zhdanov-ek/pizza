@@ -574,7 +574,9 @@ public class ReserveTableActivity extends BaseActivity implements RotationGestur
                             if (orderedTable.getIsCheckedByAdmin() == 1) {
                                 isConfirmed = true;
                             }
-                            mesReserved = orderedTable.getClientName() + " (" + orderedTable.getPhoneClient() + ")";
+                            mesReserved = orderedTable.getClientName()+ " (" + orderedTable.getPhoneClient() + ")"
+                                    + "\n"
+                                    + orderedTable.getCommentClient();
                             break;
                         }
                     }
