@@ -10,85 +10,93 @@
 
     <include layout="@layout/toolbar" />
 
-    <ScrollView
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <LinearLayout
+        <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_gravity="center"
-            android:orientation="vertical"
-            android:padding="@dimen/activity_padding">
-
-            <ImageView
-                android:id="@+id/ivLogo"
-                android:layout_width="150dp"
-                android:layout_height="150dp"
-                android:layout_gravity="center_horizontal"
-                tools:src="@drawable/logo" />
-
-            <TextView
-                android:id="@+id/tvStatus"
-                style="@style/textMiddle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginBottom="@dimen/auth_title_margin_bottom"
-                android:gravity="center"
-                android:text="@string/title_auth"
-                android:visibility="visible" />
+            android:visibility="visible">
 
             <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:orientation="vertical">
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:orientation="vertical"
+                android:padding="@dimen/activity_padding">
 
-                <com.facebook.login.widget.LoginButton
-                    android:id="@+id/btnFacebook"
+                <ImageView
+                    android:id="@+id/ivLogo"
+                    android:layout_width="150dp"
+                    android:layout_height="150dp"
+                    android:layout_gravity="center_horizontal"
+                    tools:src="@drawable/logo" />
+
+                <TextView
+                    android:id="@+id/tvStatus"
+                    style="@style/textMiddle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginBottom="@dimen/auth_title_margin_bottom"
+                    android:gravity="center"
+                    android:text="@string/title_auth"
+                    android:visibility="visible" />
+
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:visibility="gone"
-                    facebook:com_facebook_login_text="Facebook" />
+                    android:layout_gravity="center_horizontal"
+                    android:orientation="vertical">
 
-                <Button
-                    android:id="@+id/btnGoogleSignIn"
-                    style="@style/SignInButtonGoogle"
-                    android:layout_width="150dp"
-                    android:drawableLeft="@drawable/btn_google_light"
-                    android:text="@string/google_sign_in"
-                    android:textSize="@dimen/text_size_small" />
+                    <com.facebook.login.widget.LoginButton
+                        android:id="@+id/btnFacebook"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:visibility="gone"
+                        facebook:com_facebook_login_text="Facebook" />
 
-                <Button
-                    android:id="@+id/btnFacebookSignIn"
-                    style="@style/SignInButtonFacebook"
-                    android:layout_width="150dp"
-                    android:drawableLeft="@drawable/com_facebook_button_icon"
-                    android:padding="@dimen/floating_button_layout_margin"
-                    android:text="@string/facebook_sign_in"
-                    android:textSize="@dimen/text_size_small" />
-                
-                <Button
-                    android:id="@+id/btnSignOut"
-                    style="@style/RaisedButtonPositive"
-                    android:layout_width="150dp"
-                    android:drawableLeft="@drawable/btn_sign_out"
-                    android:padding="@dimen/floating_button_layout_margin"
-                    android:text="@string/sign_out"
-                    android:textSize="@dimen/text_size_small" />
+                    <Button
+                        android:id="@+id/btnGoogleSignIn"
+                        style="@style/SignInButtonGoogle"
+                        android:layout_width="150dp"
+                        android:drawableLeft="@drawable/btn_google_light"
+                        android:text="@string/google_sign_in"
+                        android:textSize="@dimen/text_size_small" />
+
+                    <Button
+                        android:id="@+id/btnFacebookSignIn"
+                        style="@style/SignInButtonFacebook"
+                        android:layout_width="150dp"
+                        android:drawableLeft="@drawable/com_facebook_button_icon"
+                        android:padding="@dimen/floating_button_layout_margin"
+                        android:text="@string/facebook_sign_in"
+                        android:textSize="@dimen/text_size_small" />
+
+                    <Button
+                        android:id="@+id/btnSignOut"
+                        style="@style/RaisedButtonPositive"
+                        android:layout_width="150dp"
+                        android:drawableLeft="@drawable/btn_sign_out"
+                        android:padding="@dimen/floating_button_layout_margin"
+                        android:text="@string/sign_out"
+                        android:textSize="@dimen/text_size_small" />
+                </LinearLayout>
+
             </LinearLayout>
-
-            <ProgressBar
-                android:id="@+id/progressBar"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="@dimen/counter_margin"
-                android:visibility="invisible" />
+        </ScrollView>
 
 
-        </LinearLayout>
-    </ScrollView>
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:layout_gravity="center"
+            android:visibility="gone" />
+
+    </RelativeLayout>
 
 </LinearLayout>

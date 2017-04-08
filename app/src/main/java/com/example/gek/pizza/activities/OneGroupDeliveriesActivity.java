@@ -9,6 +9,8 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 
 import com.example.gek.pizza.R;
 import com.example.gek.pizza.adapters.DeliveriesAdapter;
@@ -32,6 +34,7 @@ import static com.example.gek.pizza.data.Const.db;
 public class OneGroupDeliveriesActivity extends BaseActivity {
     private static final String TAG = "ONE_GROUP_DELIVERIES";
     private RecyclerView rv;
+    private TextView tvEmpty;
     private ArrayList<Delivery> mList;
     private Boolean isArchive;  // true - archive, false - transport
     private ValueEventListener mDeliveriesListener;
@@ -50,6 +53,7 @@ public class OneGroupDeliveriesActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         inflateLayout(R.layout.activity_group_deliveries);
+        tvEmpty = (TextView) findViewById(R.id.tvEmpty);
 
         // Define mList of deliveries for output from extras from intent
         Intent intent = getIntent();
@@ -95,18 +99,26 @@ public class OneGroupDeliveriesActivity extends BaseActivity {
                 for (DataSnapshot child : dataSnapshot.getChildren()) {
                     mList.add(child.getValue(Delivery.class));
                 }
-                if (mDeliveriesAdapter ==  null){
-                    String group;
-                    if (isArchive) {
-                        group = Const.CHILD_DELIVERIES_ARCHIVE;
-                    } else {
-                        group = Const.CHILD_DELIVERIES_TRANSPORT;
-                    }
-                    mDeliveriesAdapter = new DeliveriesAdapter(mList, ctx, group);
-                    rv.setAdapter(mDeliveriesAdapter);
+                if (mList.size() == 0){
+                    rv.setVisibility(View.GONE);
+                    tvEmpty.setVisibility(View.VISIBLE);
                 } else {
-                    mDeliveriesAdapter.notifyDataSetChanged();
+                    rv.setVisibility(View.VISIBLE);
+                    tvEmpty.setVisibility(View.GONE);
+                    if (mDeliveriesAdapter ==  null){
+                        String group;
+                        if (isArchive) {
+                            group = Const.CHILD_DELIVERIES_ARCHIVE;
+                        } else {
+                            group = Const.CHILD_DELIVERIES_TRANSPORT;
+                        }
+                        mDeliveriesAdapter = new DeliveriesAdapter(mList, ctx, group);
+                        rv.setAdapter(mDeliveriesAdapter);
+                    } else {
+                        mDeliveriesAdapter.notifyDataSetChanged();
+                    }
                 }
+
             }
 
             @Override

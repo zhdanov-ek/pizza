@@ -293,7 +293,7 @@ public class AuthenticationActivity extends BaseActivity
             } else {
                 Toast.makeText(getApplicationContext(), R.string.authentication_failed, Toast.LENGTH_SHORT).show();
                 Log.d(TAG, "Google Login Failed " + result.getStatus().toString());
-                progressBar.setVisibility(View.INVISIBLE);
+                progressBar.setVisibility(View.GONE);
             }
         } else if (requestCode == CallbackManagerImpl.RequestCodeOffset.Login.toRequestCode()) {
             callbackManager.onActivityResult(requestCode, resultCode, data);
@@ -385,7 +385,7 @@ public class AuthenticationActivity extends BaseActivity
     }
 
     private void btnVisible() {
-        progressBar.setVisibility(View.INVISIBLE);
+        progressBar.setVisibility(View.GONE);
         switch (currentProvider) {
             case Const.GOOGLE_PROVIDER:
                 btnFacebookSignIn.setVisibility(View.VISIBLE);

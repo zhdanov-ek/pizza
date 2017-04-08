@@ -63,9 +63,10 @@
     <string name="mes_no_internet">No internet connection</string>
     <string name="mes_no_records">It\'s empty</string>
     <string name="mes_check_data">Please check data</string>
+    <string name="mes_group_not_empty">Group is not empty!</string>
     <string name="mes_have_delivery">You have active delivery</string>
     <string name="mes_dont_have_delivery">You don\'t have deliveries</string>
-    <string name="mes_no_orders">Here is empty. First, you need to add one or more dish.</string>
+    <string name="mes_no_orders">It\'s empty.\n First, you need to add one or more dish.</string>
     <string name="mes_your_order_performed">Your order performed now</string>
     <string name="mes_no_soft_for_choose_image">No program for choose image!</string>
     <string name="mes_error_load_image">Loading image to server: ERROR</string>

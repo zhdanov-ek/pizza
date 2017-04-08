@@ -262,7 +262,7 @@ public class DishesActivity extends BaseActivity {
                 db.child(Const.CHILD_MENU_GROUPS).child(menuGroup.getKey()).setValue(null);
                 Toast.makeText(ctx, "Group " + menuGroup.getName() + " removed", Toast.LENGTH_LONG).show();
             } else {
-                Toast.makeText(ctx, "Group is not empty!", Toast.LENGTH_LONG).show();
+                Toast.makeText(ctx, getString(R.string.mes_group_not_empty), Toast.LENGTH_LONG).show();
             }
         } else {
             Toast.makeText(ctx, R.string.mes_no_internet, Toast.LENGTH_LONG).show();
