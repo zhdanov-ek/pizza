@@ -7,6 +7,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.TaskStackBuilder;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -299,9 +300,14 @@ public abstract class BaseActivity extends AppCompatActivity
     private void openActivity(Class<?> c){
         Intent intent = new Intent(this, c);
         if (getClass() != c){
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            //intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            TaskStackBuilder.create(this)
+                    .addParentStack(c)
+                    .addNextIntent(new Intent(this, c))
+                    .startActivities();
+        } else{
+            startActivity(intent);
         }
-        startActivity(intent);
     }
 
 }
