@@ -51,6 +51,25 @@
         </activity>
 
         <activity
+            android:name=".activities.DishesActivity"
+            android:parentActivityName=".activities.MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activities.MainActivity"/>
+        </activity>
+
+
+        <activity
+            android:name=".activities.OneGroupDeliveriesActivity"
+            android:launchMode="singleTask"
+            android:parentActivityName=".activities.MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activities.MainActivity"/>
+        </activity>
+
+
+        <activity
             android:name=".activities.NewsActivity"
             android:launchMode="singleTask"
             android:parentActivityName=".activities.MainActivity">
@@ -59,9 +78,7 @@
                 android:value=".activities.MainActivity"/>
         </activity>
 
-        <activity
-            android:name=".activities.OneGroupDeliveriesActivity"
-            android:launchMode="singleTask" />
+
 
         <activity
             android:name=".activities.MakePizzaActivity"
@@ -140,7 +157,6 @@
         </activity>
 
         <activity android:name=".activities.MenuGroupEditActivity" />
-        <activity android:name=".activities.DishesActivity" />
         <activity android:name=".activities.DishShowActivity" />
         <activity android:name=".activities.DishEditActivity" />
         <activity android:name=".activities.AuthenticationActivity" />
