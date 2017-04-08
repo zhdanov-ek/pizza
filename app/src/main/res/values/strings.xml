@@ -43,7 +43,7 @@
     <string name="title_orders">Hot orders</string>
     <string name="title_reserve_table">Reserve table</string>
     <string name="title_reserve_table_delete">Delete</string>
-    <string name="title_authentication">Authentication</string>
+    <string name="title_authentication">Autorization</string>
     <string name="title_push">Send notification</string>
 
 
@@ -74,6 +74,8 @@
     <string name="mes_add_to_favorites">%1$s added to favorites</string>
     <string name="mes_remove_from_favorites">%1$s removed from favorites</string>
 
+    <!-- INSTRUCTIONS -->
+    <string name="instructions_custom_pizza">Make long click on ingredients and drag to basis for make your custom pizza</string>
 
 
     <string name="permission_location_not_granded">No permissions for use locales</string>
@@ -90,6 +92,12 @@
 
     <string name="hint_on_map">Pizza</string>
     <string name="snipset_on_map">Best pizza</string>
+
+    <!-- DISH SHOW -->
+    <string name="added_to_basket">added to basket</string>
+    <string name="removed_from_basket">removed from basket</string>
+    <string name="total_sum">Total sum</string>
+
 
     <!-- DELIVERY CREATION -->
     <string name="text_delivery_creation">Please input your data</string>

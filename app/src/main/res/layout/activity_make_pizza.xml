@@ -21,7 +21,9 @@
             <HorizontalScrollView
                 android:id="@+id/horizontal_scroll"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:scrollbars="horizontal"
+                android:fadeScrollbars="false">
 
                 <LinearLayout
                     android:id="@+id/llIngredients"
@@ -63,11 +65,20 @@
 
 
                 <TextView
+                    android:id="@+id/tvInstruction"
+                    style="@style/textBig"
+                    android:gravity="center"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/instructions_custom_pizza"
+                    android:layout_below="@+id/llPizza"/>
+
+                <TextView
                     android:id="@+id/tvListIngredients"
                     style="@style/textMiddle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/llPizza"
+                    android:layout_below="@+id/tvInstruction"
                     android:text="Bacon 3 usd" />
 
                 <TextView

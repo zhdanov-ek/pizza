@@ -17,6 +17,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.example.gek.pizza.R;
 import com.example.gek.pizza.adapters.DeliveriesAdapter;
@@ -85,6 +86,7 @@ public class DeliveriesActivity extends BaseActivity {
         private static final String ARG_SECTION_NUMBER = "section_number";
         private ArrayList<Delivery> listDeliveries = new ArrayList<>();
         private RecyclerView rv;
+        private TextView tvEmpty;
         public PlaceholderFragment() {
         }
 
@@ -103,7 +105,7 @@ public class DeliveriesActivity extends BaseActivity {
                                  Bundle savedInstanceState) {
 
             View rootView = inflater.inflate(R.layout.fragment_deliveries, container, false);
-
+            tvEmpty = (TextView) rootView.findViewById(R.id.tvEmpty);
             rv = (RecyclerView) rootView.findViewById(R.id.rv);
             rv.setLayoutManager(new LinearLayoutManager(container.getContext()));
 
@@ -117,6 +119,13 @@ public class DeliveriesActivity extends BaseActivity {
                     for (DataSnapshot child: dataSnapshot.getChildren()) {
                         Delivery delivery = child.getValue(Delivery.class);
                         listDeliveries.add(delivery);
+                    }
+                    if (listDeliveries.size() == 0) {
+                        tvEmpty.setVisibility(View.VISIBLE);
+                        rv.setVisibility(View.GONE);
+                    } else {
+                        tvEmpty.setVisibility(View.GONE);
+                        rv.setVisibility(View.VISIBLE);
                     }
                     switch (num) {
                         case 1:

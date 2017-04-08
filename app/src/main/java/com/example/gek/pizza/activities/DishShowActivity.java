@@ -189,15 +189,15 @@ public class DishShowActivity extends BaseActivity implements View.OnClickListen
                 break;
             case R.id.btnAdd:
                 addNewDish();
-                showInfoOrder();
+                showInfoOrder(true);
                 break;
             case R.id.ivMinus:
                 pressMinus();
-                showInfoOrder();
+                showInfoOrder(false);
                 break;
             case R.id.ivPlus:
                 pressPlus();
-                showInfoOrder();
+                showInfoOrder(true);
                 break;
             case R.id.ivFavorites:
                 pressFavorites();
@@ -205,8 +205,14 @@ public class DishShowActivity extends BaseActivity implements View.OnClickListen
         }
     }
 
-    private void showInfoOrder(){
-        String sum = getResources().getString(R.string.total) + ": " +
+    private void showInfoOrder(Boolean isOperationAdd){
+        String operation;
+        if (isOperationAdd){
+            operation = dishOpen.getName() + " " + getString(R.string.added_to_basket);
+        } else {
+            operation = dishOpen.getName() + " " + getString(R.string.removed_from_basket);
+        }
+        String sum = operation + "\n" + getResources().getString(R.string.total_sum) + ": " +
                 Utils.toPrice(Basket.getInstance().getTotalSum());
         Snackbar.make(tvName, sum, Snackbar.LENGTH_SHORT).show();
     }

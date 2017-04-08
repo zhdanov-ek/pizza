@@ -44,6 +44,7 @@ public class MakePizzaActivity extends BaseActivity {
     private LinearLayout llIngredients;
     private ImageView ivPizza;
     private ImageView ivFocus;
+    private TextView tvInstruction;
     private TextView tvTotalSum;
     private TextView tvListIngredients;
     private Button btnClear, btnAdd;
@@ -76,6 +77,7 @@ public class MakePizzaActivity extends BaseActivity {
         llIngredients = (LinearLayout) findViewById(R.id.llIngredients);
         ivPizza = (ImageView) findViewById(R.id.ivPizza);
         ivFocus = (ImageView) findViewById(R.id.ivFocus);
+        tvInstruction = (TextView) findViewById(R.id.tvInstruction);
         tvListIngredients = (TextView) findViewById(R.id.tvListIngredients);
         tvTotalSum = (TextView) findViewById(R.id.tvTotal);
         btnClear = (Button) findViewById(R.id.btnClear);
@@ -203,8 +205,10 @@ public class MakePizzaActivity extends BaseActivity {
         if (sbTotal.length() == 0) {
             btnAdd.setVisibility(View.GONE);
             btnClear.setVisibility(View.GONE);
+            tvInstruction.setVisibility(View.VISIBLE);
         } else {
             tvListIngredients.setText(sbTotal);
+            tvInstruction.setVisibility(View.GONE);
             String strTotal = getResources().getString(R.string.total) + " = " +
                     Utils.toPrice(totalSum);
             tvTotalSum.setText(strTotal);
