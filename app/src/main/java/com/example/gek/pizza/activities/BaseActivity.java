@@ -59,6 +59,10 @@ public abstract class BaseActivity extends AppCompatActivity
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+        if (!Utils.hasInternet(this)){
+            Toast.makeText(this, getString(R.string.mes_no_internet), Toast.LENGTH_SHORT).show();
+        }
+
         // Give header and find View
         View header = navigationView.getHeaderView(0);
         header.findViewById(R.id.ivLogo).setOnClickListener(new View.OnClickListener() {
