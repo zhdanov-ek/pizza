@@ -26,6 +26,7 @@
             android:layout_gravity="center"
             android:gravity="center"
             android:visibility="gone"
+            android:layout_margin="@dimen/activity_padding"
             android:text="@string/mes_no_orders"/>
 
 

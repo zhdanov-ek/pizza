@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -41,25 +42,49 @@ public class DeliveryStatus extends BaseActivity {
     private TextView tvStep1Num, tvStep2Num, tvStep3Num, tvStep4Num;
     private TextView tvStep1Description, tvStep2Description, tvStep3Description, tvStep4Description;
     private ImageView ivStep1, ivStep2, ivStep3, ivStep4;
-    private ValueEventListener mStateListener;
     private Boolean mIsSetListener = false;
     private ProgressBar progressBar;
     private Button btnShowCourier;
 
 
-    @Override
-    public void updateUI() {
-        if (Connection.getInstance().getCurrentAuthStatus() != Const.AUTH_USER){
-            finish();
+    // listener for get STATE of delivery
+    private ValueEventListener mStateListener = new ValueEventListener() {
+        @Override
+        public void onDataChange(DataSnapshot dataSnapshot) {
+            StateLastDelivery stateLastDelivery = dataSnapshot.getValue(StateLastDelivery.class);
+            if (stateLastDelivery == null) {
+                progressBar.setVisibility(View.GONE);
+                tvEmpty.setVisibility(View.VISIBLE);
+                scrollView.setVisibility(View.GONE);
+            } else {
+                String childFolder;
+                switch (stateLastDelivery.getDeliveryState()) {
+                    case Const.DELIVERY_STATE_NEW:
+                        childFolder = Const.CHILD_DELIVERIES_NEW;
+                        break;
+                    case Const.DELIVERY_STATE_COOKING:
+                        childFolder = Const.CHILD_DELIVERIES_COOKING;
+                        break;
+                    case Const.DELIVERY_STATE_TRANSPORT:
+                        childFolder = Const.CHILD_DELIVERIES_TRANSPORT;
+                        break;
+                    default:
+                        childFolder = Const.CHILD_DELIVERIES_ARCHIVE;
+                }
+                loadDeliveryInfo(childFolder, stateLastDelivery.getDeliveryId());
+            }
         }
-    }
+
+        @Override
+        public void onCancelled(DatabaseError databaseError) {
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         inflateLayout(R.layout.activity_delivery_status);
         setToolbar(getString(R.string.title_delivery));
-
         findAllView();
         btnShowCourier.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -67,6 +92,21 @@ public class DeliveryStatus extends BaseActivity {
                 startActivity(new Intent(DeliveryStatus.this, CourierActivity.class));
             }
         });
+    }
+
+    @Override
+    public void updateUI() {
+        if (Connection.getInstance().getCurrentAuthStatus() != Const.AUTH_USER){
+            finish();
+        } else {
+            if (Connection.getInstance().getCurrentAuthStatus() == Const.AUTH_USER){
+                db.child(Const.CHILD_USERS)
+                        .child(Connection.getInstance().getUserId())
+                        .child(Const.CHILD_USER_DELIVERY_STATE)
+                        .addValueEventListener(mStateListener);
+                mIsSetListener = true;
+            }
+        }
     }
 
 
@@ -79,47 +119,6 @@ public class DeliveryStatus extends BaseActivity {
         MenuItem item = navigationView.getMenu().findItem(R.id.nav_delivery_status);
         item.setCheckable(true);
         item.setChecked(true);
-        mStateListener = new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                StateLastDelivery stateLastDelivery = dataSnapshot.getValue(StateLastDelivery.class);
-                if (stateLastDelivery == null) {
-                    progressBar.setVisibility(View.GONE);
-                    tvEmpty.setVisibility(View.VISIBLE);
-                    scrollView.setVisibility(View.GONE);
-
-                } else {
-                    String childFolder;
-                    switch (stateLastDelivery.getDeliveryState()) {
-                        case Const.DELIVERY_STATE_NEW:
-                            childFolder = Const.CHILD_DELIVERIES_NEW;
-                            break;
-                        case Const.DELIVERY_STATE_COOKING:
-                            childFolder = Const.CHILD_DELIVERIES_COOKING;
-                            break;
-                        case Const.DELIVERY_STATE_TRANSPORT:
-                            childFolder = Const.CHILD_DELIVERIES_TRANSPORT;
-                            break;
-                        default:
-                            childFolder = Const.CHILD_DELIVERIES_ARCHIVE;
-                    }
-                    loadDeliveryInfo(childFolder, stateLastDelivery.getDeliveryId());
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-            }
-        };
-
-        // If this activity open from Notification and app destroy we will have crash: auth - null
-        if (Connection.getInstance().getCurrentAuthStatus() == Const.AUTH_USER){
-            db.child(Const.CHILD_USERS)
-                    .child(Connection.getInstance().getUserId())
-                    .child(Const.CHILD_USER_DELIVERY_STATE)
-                    .addValueEventListener(mStateListener);
-            mIsSetListener = true;
-        }
     }
 
 
@@ -153,7 +152,6 @@ public class DeliveryStatus extends BaseActivity {
             }
         });
     }
-
 
     /**
      * Show state of current not closed delivery
@@ -321,7 +319,7 @@ public class DeliveryStatus extends BaseActivity {
     }
 
     @Override
-    protected void onPause() {
+    protected void onStop() {
         // if listener not set we will retrieve error
         if (mIsSetListener){
             db.child(Const.CHILD_USERS)
@@ -329,7 +327,6 @@ public class DeliveryStatus extends BaseActivity {
                     .child(Const.CHILD_USER_DELIVERY_STATE)
                     .removeEventListener(mStateListener);
         }
-        super.onPause();
+        super.onStop();
     }
-
 }
