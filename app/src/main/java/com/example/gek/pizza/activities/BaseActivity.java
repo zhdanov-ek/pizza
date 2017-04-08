@@ -7,6 +7,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.TaskStackBuilder;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -249,21 +250,18 @@ public abstract class BaseActivity extends AppCompatActivity
             case R.id.nav_favorite:
                 Intent favoritesIntent = new Intent(this, DishesActivity.class);
                 favoritesIntent.putExtra(Const.EXTRA_IS_FAVORITE, true);
-                if (getClass() != DishesActivity.class){
-                    favoritesIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK |
-                            Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                }
-
-                startActivity(favoritesIntent);
+                TaskStackBuilder.create(this)
+                        .addParentStack(DishesActivity.class)
+                        .addNextIntent(favoritesIntent)
+                        .startActivities();
                 break;
             case R.id.nav_list_addresses:
                 Intent addressesIntent = new Intent(this, OneGroupDeliveriesActivity.class);
                 addressesIntent.putExtra(Const.MODE, Const.MODE_TRANSPORT_DELIVERIES);
-                if (getClass() != OneGroupDeliveriesActivity.class){
-                    addressesIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK |
-                            Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                }
-                startActivity(addressesIntent);
+                TaskStackBuilder.create(this)
+                        .addParentStack(OneGroupDeliveriesActivity.class)
+                        .addNextIntent(addressesIntent)
+                        .startActivities();
                 break;
             case R.id.nav_map_with_addresses:
                 // TODO: 24.03.17 open map with clients
@@ -299,9 +297,13 @@ public abstract class BaseActivity extends AppCompatActivity
     private void openActivity(Class<?> c){
         Intent intent = new Intent(this, c);
         if (getClass() != c){
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            TaskStackBuilder.create(this)
+                    .addParentStack(c)
+                    .addNextIntent(new Intent(this, c))
+                    .startActivities();
+        } else{
+            startActivity(intent);
         }
-        startActivity(intent);
     }
 
 }

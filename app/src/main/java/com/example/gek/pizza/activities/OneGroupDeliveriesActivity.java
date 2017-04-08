@@ -116,7 +116,6 @@ public class OneGroupDeliveriesActivity extends BaseActivity {
         };
     }
 
-
     @Override
     protected void onResume() {
         super.onResume();

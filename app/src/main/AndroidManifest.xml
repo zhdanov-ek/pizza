@@ -31,12 +31,10 @@
             android:resource="@drawable/local_pizza_map" />
 
         <activity
-            android:name=".activities.AuthenticationActivity" />
-
-        <activity
             android:name=".activities.MainActivity"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.NoActionBar"
+            android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -45,64 +43,136 @@
 
         <activity
             android:name=".activities.MenuGroupsActivity"
-            android:launchMode="singleTask" />
-        <activity android:name=".activities.MenuGroupEditActivity" />
-        <activity android:name=".activities.DishesActivity" />
-        <activity android:name=".activities.DishShowActivity" />
-        <activity android:name=".activities.DishEditActivity" />
+            android:launchMode="singleTask"
+            android:parentActivityName=".activities.MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activities.MainActivity"/>
+        </activity>
+
+        <activity
+            android:name=".activities.DishesActivity"
+            android:parentActivityName=".activities.MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activities.MainActivity"/>
+        </activity>
+
+
+        <activity
+            android:name=".activities.OneGroupDeliveriesActivity"
+            android:launchMode="singleTask"
+            android:parentActivityName=".activities.MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activities.MainActivity"/>
+        </activity>
+
 
         <activity
             android:name=".activities.NewsActivity"
-            android:launchMode="singleTask" />
-        <activity
-            android:name=".activities.NewsEditActivity" />
+            android:launchMode="singleTask"
+            android:parentActivityName=".activities.MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activities.MainActivity"/>
+        </activity>
 
-        <activity
-            android:name=".activities.ReserveTableCreationActivity"
-            android:launchMode="singleTask"/>
-        <activity
-            android:name=".activities.ReserveTableActivity"
-            android:launchMode="singleTask" />
+
 
         <activity
             android:name=".activities.MakePizzaActivity"
-            android:launchMode="singleTask" />
-
+            android:launchMode="singleTask"
+            android:parentActivityName=".activities.MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activities.MainActivity"/>
+        </activity>
 
         <activity
             android:name=".activities.DeliveriesActivity"
             android:launchMode="singleTask"
-            android:theme="@style/AppTheme" />
-        <activity
-            android:name=".activities.OneGroupDeliveriesActivity" />
+            android:theme="@style/AppTheme"
+            android:parentActivityName=".activities.MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activities.MainActivity"/>
+        </activity>
 
         <activity
-            android:name=".activities.BasketActivity"
-            android:launchMode="singleTask"/>
+            android:name=".activities.ReserveTableActivity"
+            android:launchMode="singleTask"
+            android:parentActivityName=".activities.MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activities.MainActivity"/>
+        </activity>
+
         <activity
-            android:name=".activities.DeliveryCreationActivity"
-            android:launchMode="singleTask"/>
+            android:name=".activities.SettingsActivity"
+            android:launchMode="singleTask"
+            android:parentActivityName=".activities.MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activities.MainActivity"/>
+        </activity>
+
         <activity
             android:name=".activities.DeliveryStatus"
-            android:launchMode="singleTask" />
+            android:launchMode="singleTask"
+            android:parentActivityName=".activities.MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activities.MainActivity"/>
+        </activity>
+
+        <activity
+            android:name=".activities.AboutActivity"
+            android:launchMode="singleTask"
+            android:parentActivityName=".activities.MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activities.MainActivity"/>
+        </activity>
+
+        <activity
+            android:name=".activities.PushActivity"
+            android:launchMode="singleTask"
+            android:parentActivityName=".activities.MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activities.MainActivity"/>
+        </activity>
+
         <activity
             android:name=".activities.CourierActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/title_activity_courier"
             android:theme="@style/FullscreenTheme"
+            android:launchMode="singleTask"
+            android:parentActivityName=".activities.MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activities.MainActivity"/>
+        </activity>
+
+        <activity android:name=".activities.MenuGroupEditActivity" />
+        <activity android:name=".activities.DishShowActivity" />
+        <activity android:name=".activities.DishEditActivity" />
+        <activity android:name=".activities.AuthenticationActivity" />
+        <activity android:name=".activities.NewsEditActivity" />
+
+        <activity
+            android:name=".activities.ReserveTableCreationActivity"
             android:launchMode="singleTask"/>
 
         <activity
-            android:name=".activities.PushActivity"
+            android:name=".activities.BasketActivity"
             android:launchMode="singleTask"/>
 
         <activity
-            android:name=".activities.SettingsActivity"
-            android:launchMode="singleTask" />
-
-        <activity
-            android:name=".activities.AboutActivity"
-            android:launchMode="singleTask" />
+            android:name=".activities.DeliveryCreationActivity"
+            android:launchMode="singleTask"/>
 
         <service android:name=".services.ShopService" />
         <service android:name=".services.CourierService" />
