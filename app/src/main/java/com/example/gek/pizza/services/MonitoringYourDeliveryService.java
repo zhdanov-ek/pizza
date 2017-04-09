@@ -15,7 +15,6 @@ import android.util.Log;
 
 import com.example.gek.pizza.R;
 import com.example.gek.pizza.activities.DeliveryStatus;
-import com.example.gek.pizza.activities.MainActivity;
 import com.example.gek.pizza.data.Const;
 import com.example.gek.pizza.data.StateLastDelivery;
 import com.example.gek.pizza.helpers.Connection;
