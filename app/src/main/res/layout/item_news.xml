@@ -59,7 +59,7 @@
                     style="@style/FlatButtonPositive"
                     android:layout_gravity="start"
                     android:text="@string/edit"
-                    android:visibility="invisible" />
+                    android:visibility="gone" />
 
 
                 <Button
@@ -70,7 +70,7 @@
                     android:layout_toEndOf="@+id/btnEdit"
                     android:layout_toRightOf="@+id/btnEdit"
                     android:text="@string/remove"
-                    android:visibility="invisible" />
+                    android:visibility="gone" />
 
             </RelativeLayout>
 

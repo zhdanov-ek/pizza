@@ -92,6 +92,9 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder>{
             if (state == Const.AUTH_SHOP){
                 btnRemove.setVisibility(View.VISIBLE);
                 btnEdit.setVisibility(View.VISIBLE);
+            } else {
+                btnRemove.setVisibility(View.GONE);
+                btnEdit.setVisibility(View.GONE);
             }
         }
 

@@ -227,6 +227,11 @@ public class DeliveryStatus extends BaseActivity {
      * Show state if delivery closed (paid or fail)
      */
     private void showStateDeliveryClosed(Delivery d) {
+        if (d.getPaid() == null) {
+            tvEmpty.setVisibility(View.VISIBLE);
+            scrollView.setVisibility(View.GONE);
+            return;
+        }
         String mes;
         btnShowCourier.setVisibility(View.GONE);
         if (d.getPaid()) {

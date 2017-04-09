@@ -109,7 +109,7 @@ public class DeliveriesAdapter extends RecyclerView.Adapter<DeliveriesAdapter.Vi
                 holder.btnNegative.setText(R.string.btn_failure);
                 break;
             case Const.CHILD_DELIVERIES_ARCHIVE:
-                holder.btnPositive.setText(R.string.btn_restore);
+                holder.btnPositive.setVisibility(View.GONE);
                 holder.btnNegative.setText(R.string.remove);
                 if (!delivery.getPaid()){
                     holder.ivFail.setVisibility(View.VISIBLE);
@@ -265,6 +265,7 @@ public class DeliveriesAdapter extends RecyclerView.Adapter<DeliveriesAdapter.Vi
             } else {
                 builder.setTitle(R.string.dialog_title_delivery_reject);
                 delivery.setDateArchive(new Date());
+
                 // Load View in basic dialog and fill his the data
                 View customPart = ((AppCompatActivity) ctx).getLayoutInflater().inflate(R.layout.dialog_reason, null);
                 builder.setView(customPart);
@@ -301,7 +302,7 @@ public class DeliveriesAdapter extends RecyclerView.Adapter<DeliveriesAdapter.Vi
          *  After operations make change in user folder
          *  */
         private void pressPositive(){
-            // Используя ключ доставки переносим ее в другую категорию и меняем состояния заказа в юзерской папке
+            // Use key of delivery for move order to other group. Change state in user folder
             String keyDelivery = listDeliveries.get(getAdapterPosition()).getKey();
             StateLastDelivery stateLastDelivery = new StateLastDelivery();
             stateLastDelivery.setDeliveryId(keyDelivery);
@@ -315,6 +316,7 @@ public class DeliveriesAdapter extends RecyclerView.Adapter<DeliveriesAdapter.Vi
                             .child(keyDelivery)
                             .setValue(listDeliveries.get(getAdapterPosition()));
                     Toast.makeText(ctx, R.string.mes_pass_kitchen, Toast.LENGTH_SHORT).show();
+
                     // change state in user folder
                     stateLastDelivery.setDeliveryState(Const.DELIVERY_STATE_COOKING);
                     db.child(Const.CHILD_USERS)
@@ -332,6 +334,7 @@ public class DeliveriesAdapter extends RecyclerView.Adapter<DeliveriesAdapter.Vi
                             .child(keyDelivery)
                             .setValue(listDeliveries.get(getAdapterPosition()));
                     Toast.makeText(ctx, R.string.mes_pass_courier, Toast.LENGTH_SHORT).show();
+
                     // change state in user folder
                     stateLastDelivery.setDeliveryState(Const.DELIVERY_STATE_TRANSPORT);
                     db.child(Const.CHILD_USERS)
@@ -350,6 +353,7 @@ public class DeliveriesAdapter extends RecyclerView.Adapter<DeliveriesAdapter.Vi
                             .child(keyDelivery)
                             .setValue(listDeliveries.get(getAdapterPosition()));
                     Toast.makeText(ctx, R.string.mes_pass_archive, Toast.LENGTH_LONG).show();
+
                     // change state in user folder
                     stateLastDelivery.setDeliveryState(Const.DELIVERY_STATE_ARCHIVE);
                     db.child(Const.CHILD_USERS)
@@ -357,26 +361,6 @@ public class DeliveriesAdapter extends RecyclerView.Adapter<DeliveriesAdapter.Vi
                             .child(Const.CHILD_USER_DELIVERY_STATE)
                             .setValue(stateLastDelivery);
                     break;
-
-                case Const.CHILD_DELIVERIES_ARCHIVE:
-                    // if restore item from archive need purge old date
-                    listDeliveries.get(getAdapterPosition()).setDateCooking(null);
-                    listDeliveries.get(getAdapterPosition()).setDateTransport(null);
-                    listDeliveries.get(getAdapterPosition()).setDateArchive(null);
-                    listDeliveries.get(getAdapterPosition()).setPaid(false);
-                    db.child(Const.CHILD_DELIVERIES_ARCHIVE)
-                            .child(keyDelivery)
-                            .removeValue();
-                    db.child(Const.CHILD_DELIVERIES_NEW)
-                            .child(keyDelivery)
-                            .setValue(listDeliveries.get(getAdapterPosition()));
-                    Toast.makeText(ctx, R.string.mes_restored, Toast.LENGTH_LONG).show();
-                    // change state in user folder
-                    stateLastDelivery.setDeliveryState(Const.DELIVERY_STATE_NEW);
-                    db.child(Const.CHILD_USERS)
-                            .child(listDeliveries.get(getAdapterPosition()).getUserId())
-                            .child(Const.CHILD_USER_DELIVERY_STATE)
-                            .setValue(stateLastDelivery);
             }
         }
     }
