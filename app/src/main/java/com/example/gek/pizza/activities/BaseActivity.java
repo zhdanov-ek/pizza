@@ -108,7 +108,7 @@ public abstract class BaseActivity extends AppCompatActivity
                     if ((user.getEmail() != null) &&
                             (user.getEmail().contentEquals(Connection.getInstance().getShopEmail()))){
                         // remove subscribe for get message
-                        Connection.getInstance().setCurrentAuthStatus(Const.AUTH_SHOP);
+                        Connection.getInstance().setCurrentAuthStatus(Const.AUTH_SHOP, getApplicationContext());
                         Utils.subscribeOrUnsubscribeFromTopic(false);
                         if (!Connection.getInstance().getServiceRunning()){
                             startService(new Intent(getBaseContext(), ShopService.class));
@@ -117,7 +117,7 @@ public abstract class BaseActivity extends AppCompatActivity
 
                     // courier
                     } else if (user.getEmail().contentEquals(Connection.getInstance().getCourierEmail())){
-                        Connection.getInstance().setCurrentAuthStatus(Const.AUTH_COURIER);
+                        Connection.getInstance().setCurrentAuthStatus(Const.AUTH_COURIER, getApplicationContext());
                         Utils.subscribeOrUnsubscribeFromTopic(true);
                         if (!Connection.getInstance().getServiceRunning()){
                             // todo check permissions
@@ -135,7 +135,7 @@ public abstract class BaseActivity extends AppCompatActivity
 
                     // auth client
                     } else {
-                        Connection.getInstance().setCurrentAuthStatus(Const.AUTH_USER);
+                        Connection.getInstance().setCurrentAuthStatus(Const.AUTH_USER, getApplicationContext());
                         Utils.subscribeOrUnsubscribeFromTopic(true);
                         Log.d(TAG, "FireBase authentication success (USER) " + user.getEmail());
                     }
@@ -143,7 +143,7 @@ public abstract class BaseActivity extends AppCompatActivity
                 // guest client
                 } else {
                     tvAuthEmail.setText(R.string.common_signin_button_text);
-                    Connection.getInstance().setCurrentAuthStatus(Const.AUTH_NULL);
+                    Connection.getInstance().setCurrentAuthStatus(Const.AUTH_NULL, getApplicationContext());
                     Log.d(TAG, "FireBase authentication failed ");
                 }
 

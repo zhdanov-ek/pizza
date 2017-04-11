@@ -96,6 +96,7 @@ public class Const {
     public static final String SETTINGS_USER_PHONE      = "user_phone";
     public static final String SETTINGS_USER_ADDRESS    = "user_address";
     public static final String SETTINGS_ZOOM_COURIER    = "zoom_courier";
+    public static final String SETTINGS_LAST_AUTH_STATE = "last_auth_state";
 
 
     public static final Integer ZOOM_MAP                = 17;

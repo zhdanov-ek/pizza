@@ -24,6 +24,7 @@ import static com.facebook.FacebookSdk.getApplicationContext;
 public class Connection {
     private static final String TAG = "CONNECTION singleton";
     private static Connection instance;
+    private int lastAuthState;
     private int currentAuthStatus;
     private boolean serviceRunning;
     private String userId;
@@ -51,6 +52,11 @@ public class Connection {
         userId = "";
         userName = "";
         userPhotoUrl = "";
+        if (sharedPreferences.contains(Const.SETTINGS_LAST_AUTH_STATE)){
+            lastAuthState = sharedPreferences.getInt(Const.SETTINGS_LAST_AUTH_STATE, Const.AUTH_NULL);
+        } else {
+            lastAuthState = Const.AUTH_NULL;
+        }
     }
 
 
@@ -98,11 +104,20 @@ public class Connection {
         this.courierEmail = courierEmail;
     }
 
+    // if pre state is SHOP or COURIER need do stop services
+    public void setCurrentAuthStatus(int currentAuthStatus, Context ctx) {
+        this.currentAuthStatus = currentAuthStatus;
+        if (lastAuthState != currentAuthStatus){
+            sharedPreferences.edit().putInt(Const.SETTINGS_LAST_AUTH_STATE, currentAuthStatus).apply();
+            if (lastAuthState == Const.AUTH_SHOP){
+                ctx.stopService(new Intent(ctx, ShopService.class));
+            } else if (lastAuthState == Const.AUTH_COURIER){
+                ctx.stopService(new Intent(ctx, CourierService.class));
+            }
+        }
+    }
     public int getCurrentAuthStatus() {
         return currentAuthStatus;
-    }
-    public void setCurrentAuthStatus(int currentAuthStatus) {
-        this.currentAuthStatus = currentAuthStatus;
     }
 
     public boolean getServiceRunning() {
