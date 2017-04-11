@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.util.Log;
 import android.view.DragEvent;
 import android.view.Menu;
@@ -225,6 +226,12 @@ public class MakePizzaActivity extends BaseActivity {
         pizza.setKey(Const.KEY_DISH_MY_PIZZA);
 
         Basket.getInstance().addDish(pizza);
+        String mes = getString(R.string.name_of_pizza) + " (" + Utils.toPrice(totalSum) + ") " +
+                getString(R.string.added_to_basket);
+
+        String sum = mes + "\n" + getResources().getString(R.string.total_sum) + ": " +
+                Utils.toPrice(Basket.getInstance().getTotalSum());
+        Snackbar.make(btnClear, sum, Snackbar.LENGTH_SHORT).show();
         clearPizza();
     }
 
